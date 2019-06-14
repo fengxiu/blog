@@ -87,9 +87,9 @@ deploy:
   type:
 ### 本地搜索
 algolia:
-  applicationID: "AQT4XGM95O"
-  apiKey: "d55e0adb332e8d9ef9023a6b4afd46f1"
-  indexName: "my"
+  applicationID: "M7AL4KWF0X"
+  apiKey: "73569ff3a8c4f5268d189b68828ee13e"
+  indexName: "blog"
   chunkSize: 5000
 admin:
   deployCommand: "./upload.sh"

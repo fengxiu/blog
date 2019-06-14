@@ -42,4 +42,4 @@ notifications:
 
 env:
   global:
-    - GH_REF=github.com/fengxiutianya/blog.git
+    - GH_REF=github.com/fengxiu/blog.git
