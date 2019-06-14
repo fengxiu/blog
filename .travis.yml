@@ -16,15 +16,14 @@ cache:
     - node_modules
 
 before_install:
-  - npm install -g hexo-cli
+  - npm install -g hexo-cli >/dev/null
 
 install:
-  - npm install
+  - npm install >/dev/null
 
 script:
-  - hexo clean
-  - hexo generate
-  - hexo generate
+  - hexo clean >/dev/null
+  - hexo generate >/dev/null
   - export HEXO_ALGOLIA_INDEXING_KEY=$ALGOLIA_KEY && hexo algolia
 
 ## 部署
