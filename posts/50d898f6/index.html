@@ -117,7 +117,9 @@
 <meta property="og:image" content="http://fengxiu.club/images/897247-20160823202253714-555001087.png">
 <meta property="og:image" content="http://fengxiu.club/images/897247-20160823202308245-492044780.png">
 <meta property="og:image" content="http://fengxiu.club/images/897247-20160823202449620-46958750.png">
-<meta property="og:updated_time" content="2019-06-14T01:49:07.700Z">
+<meta property="og:image" content="http://fengxiu.club/images/20161111082043281">
+<meta property="og:image" content="http://fengxiu.club/images/20161111082403755">
+<meta property="og:updated_time" content="2019-06-17T13:34:08.744Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="伪共享（false sharing）并发编程无声的性能杀手">
 <meta name="twitter:description" content="在并发编程过程中，我们大部分的焦点都放在如何控制共享变量的访问控制上（代码层面），但是很少人会关注系统硬件及JVM底层相关的影响因素。前段时间学习了一个牛X的高性能异步处理框架 Disruptor，它被誉为“最快的消息框架”，其LMAX架构能够在一个线程里每秒处理6百万订单！在讲到Disruptor为什么这么快时，接触到了一个概念——伪共享( false sharing )，其中提到：缓存行上的写">
@@ -460,7 +462,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-06-14 09:49:07" itemprop="dateModified" datetime="2019-06-14T09:49:07+08:00">2019-06-14</time>
+                <time title="修改时间：2019-06-17 21:34:08" itemprop="dateModified" datetime="2019-06-17T21:34:08+08:00">2019-06-17</time>
               
             
           </span>
@@ -527,7 +529,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">7.5k</span>
+                <span title="本文字数">9.6k</span>
               
 
               
@@ -541,7 +543,7 @@
                 
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
-                <span title="阅读时长">7 分钟</span>
+                <span title="阅读时长">9 分钟</span>
               
             </div>
           
@@ -561,12 +563,12 @@
       
 
       
-        <p>在并发编程过程中，我们大部分的焦点都放在如何控制共享变量的访问控制上（代码层面），但是很少人会关注系统硬件及JVM底层相关的影响因素。前段时间学习了一个牛X的高性能异步处理框架 Disruptor，它被誉为“最快的消息框架”，其LMAX架构能够在一个线程里每秒处理6百万订单！在讲到Disruptor为什么这么快时，接触到了一个概念——伪共享( false sharing )，其中提到：缓存行上的写竞争是运行在SMP系统中并行线程实现可伸缩性最重要的限制因素。由于从代码中很难看出是否会出现伪共享，有人将其描述成无声的性能杀手。</p>
-<p>如果你对cpu cache不怎么理解可以看这篇文章<a href="/posts/257afb79/">cpu cache结构和缓存一致性(MESI协议)</a><br><a id="more"></a><br>为了高效地存取缓存, 不是简单随意地将单条数据写入缓存的.  缓存是由缓存行组成的, 典型的一行是64字节. 读者可以通过下面的shell命令,查看cherency_line_size就知道知道机器的缓存行是多大. </p>
-<pre><code class="shell"> cat /sys/devices/system/cpu/cpu0/cache/index0/coherency_line_size   
- 64  
+        <p>在并发编程过程中，我们大部分的焦点都放在如何控制共享变量的访问控制上（代码层面），但是很少人会关注系统硬件及JVM底层相关的影响因素。前段时间学习了一个牛X的高性能异步处理框架 Disruptor，它被誉为“最快的消息框架”，其LMAX架构能够在一个线程里每秒处理6百万订单！在讲到Disruptor为什么这么快时，接触到了一个概念——伪共享( false sharing )，其中提到：缓存行上的写竞争是运行在<a href="https://zh.wikipedia.org/wiki/%E5%AF%B9%E7%A7%B0%E5%A4%9A%E5%A4%84%E7%90%86" target="_blank" rel="noopener">SMP</a>系统中并行线程实现可伸缩性最重要的限制因素。由于从代码中很难看出是否会出现伪共享，有人将其描述成无声的性能杀手。<br><a id="more"></a></p>
+<h2 id="CPU缓存简单介绍"><a href="#CPU缓存简单介绍" class="headerlink" title="CPU缓存简单介绍"></a>CPU缓存简单介绍</h2><p>如果你对cpu cache不怎么理解可以看这篇文章<a href="/posts/257afb79/">cpu cache结构和缓存一致性(MESI协议)</a><br>为了高效地存取缓存, 不是简单随意地将单条数据写入缓存的.  缓存是由缓存行组成的, 典型的一行是64字节. 读者可以通过下面的shell命令,查看cherency_line_size就知道知道机器的缓存行是多大. </p>
+<pre><code class="shell">cat /sys/devices/system/cpu/cpu0/cache/index0/coherency_line_size   
+64  
 </code></pre>
-<p>CPU存取缓存都是按行为最小单位操作的. 在这儿我将不提及缓存的associativity问题, 将问题简化一些. 一个Java long型占8字节, 所以从一条缓存行上你可以获取到8个long型变量. 所以如果你访问一个long型数组, 当有一个long被加载到cache中, 你将无消耗地加载了另外7个. 所以你可以非常快地遍历数组.</p>
+<p>CPU存取缓存都是按行为最小单位操作的. 在这儿我将不提及<a href="https://zh.wikipedia.org/wiki/CPU%E7%BC%93%E5%AD%98#%E7%BB%84%E7%9B%B8%E8%81%94" target="_blank" rel="noopener">缓存的associativity问题</a>, 将问题简化一些. 一个Java long型占8字节, 所以从一条缓存行上你可以获取到8个long型变量. 所以如果你访问一个long型数组, 当有一个long被加载到cache中, 你将无消耗地加载了另外7个. 所以你可以非常快地遍历数组.</p>
 <p>下面是利用缓存行来进行的对比实验代码</p>
 <pre><code class="java">public class L1CacheMiss {  
     private static final int RUNS = 10;  
@@ -619,12 +621,10 @@ duration = 8078753353
 <li>cache冲突, 需要通过补齐来解决. </li>
 <li>就是我示例的这种, cache满, 一般情况下我们需要减少操作的数据大小, 尽量按数据的物理顺序访问数据</li>
 </ol>
-<h2 id="伪共享"><a href="#伪共享" class="headerlink" title="伪共享"></a>伪共享</h2><p>在文章开头提到过，缓存系统中是以缓存行（cache line）为单位存储的。缓存行通常是64字节（译注：本文基于 64 字节，其他长度的如 32 字节等不适本文讨论的重点），并且它有效地引用主内存中的一块地址。一个 Java 的 long 类型是8字节，因此在一个缓存行中可以存8个long 类型的变量。所以，如果你访问一个long数组，当数组中的一个值被加载到缓存中，它会额外加载另外7个，以致你能非常快地遍历这个数组。事实上，你可以非常快速的遍历在连续的内存块中分配的任意数据结构。而如果你在数据结构中的项在内存中不是彼此相邻的（如链表），你将得不到免费缓存加载所带来的优势，并且在这些数据结构中的每一个项都可能会出现缓存未命中。</p>
-<p>如果存在这样的场景，有多个线程操作不同的成员变量，但是相同的缓存行，这个时候会发生什么？。没错，伪共享（False Sharing）问题就发生了！有张 Disruptor 项目的经典示例图，如下：</p>
-<p><img src="/images/897247-20160823202002573-736704844.png" alt="897247-20160823202002573-736704844"></p>
-<p>上图中，一个运行在处理器 core1上的线程想要更新变量 X 的值，同时另外一个运行在处理器 core2 上的线程想要更新变量 Y 的值。但是，这两个频繁改动的变量都处于同一条缓存行。两个线程就会轮番发送 RFO 消息，占得此缓存行的拥有权。当 core1 取得了拥有权开始更新 X，则 core2 对应的缓存行需要设为 I 状态。当 core2 取得了拥有权开始更新 Y，则 core1 对应的缓存行需要设为 I 状态(失效态)。轮番夺取拥有权不但带来大量的 RFO 消息，而且如果某个线程需要读此行数据时，L1 和 L2 缓存上都是失效数据，只有 L3 缓存上是同步好的数据。从前一篇我们知道，读 L3 的数据非常影响性能。更坏的情况是跨槽读取，L3 都要 miss，只能从内存上加载。</p>
+<p>在文章开头提到过，缓存系统中是以缓存行（cache line）为单位存储的。缓存行通常是64字节（译注：本文基于 64 字节，其他长度的如 32 字节等不适本文讨论的重点），并且它有效地引用主内存中的一块地址。一个Java的long类型是8字节，因此在一个缓存行中可以存8个long 类型的变量。所以，如果你访问一个long数组，当数组中的一个值被加载到缓存中，它会额外加载另外7个，以致你能非常快地遍历这个数组。事实上，你可以非常快速的遍历在连续的内存块中分配的任意数据结构。而如果你在数据结构中的项在内存中不是彼此相邻的（如链表），你将得不到免费缓存加载所带来的优势，并且在这些数据结构中的每一个项都可能会出现缓存未命中。</p>
+<p>如果存在这样的场景，有多个线程操作不同的成员变量，但是相同的缓存行，这个时候会发生什么？没错，伪共享（False Sharing）问题就发生了！有张Disruptor项目的经典示例图，如下：<br><img src="/images/897247-20160823202002573-736704844.png" alt="897247-20160823202002573-736704844"><br>上图中，一个运行在处理器 core1上的线程想要更新变量 X 的值，同时另外一个运行在处理器 core2 上的线程想要更新变量Y的值。但是，这两个频繁改动的变量都处于同一条缓存行。两个线程就会轮番发送 RFO 消息，占得此缓存行的拥有权。当core1取得了拥有权开始更新X，则 core2 对应的缓存行需要设为 I 状态。当 core2 取得了拥有权开始更新 Y，则 core1 对应的缓存行需要设为 I 状态(失效态)。轮番夺取拥有权不但带来大量的 RFO 消息，而且如果某个线程需要读此行数据时，L1 和 L2 缓存上都是失效数据，只有 L3 缓存上是同步好的数据。从前一篇我们知道，读 L3 的数据非常影响性能。更坏的情况是跨槽读取，L3 都要 miss，只能从内存上加载。</p>
 <p>表面上X和Y都是被独立线程操作的，而且两操作之间也没有任何关系。只不过它们共享了一个缓存行，但所有竞争冲突都是来源于共享。</p>
-<h2 id="五、遭遇伪共享"><a href="#五、遭遇伪共享" class="headerlink" title="五、遭遇伪共享"></a><strong>五、遭遇伪共享</strong></h2><p>好的，那么接下来我们就用 code 来进行实验和佐证。</p>
+<h2 id="遭遇伪共享"><a href="#遭遇伪共享" class="headerlink" title="遭遇伪共享"></a>遭遇伪共享</h2><p>好的，那么接下来我们就用 code 来进行实验和佐证。</p>
 <pre><code class="java">public class FalseShareTest implements Runnable {
     public static int NUM_THREADS = 4;
     public final static long ITERATIONS = 500L * 1000L * 1000L;
@@ -680,39 +680,107 @@ duration = 8078753353
 <p>两个逻辑一模一样的程序，前者的耗时大概是后者的 2.5 倍，这太不可思议了！那么这个时候，我们再用伪共享（False Sharing）的理论来分析一下。前者longs数组的4个元素，由于 VolatileLong只有1个长整型成员，所以整个数组都将被加载至同一缓存行，但有4个线程同时操作这条缓存行，于是伪共享就悄悄地发生了。</p>
 <p>基于此，我们有理由相信，在一定线程数量范围内（注意思考：为什么强调是一定线程数量范围内），随着线程数量的增加，伪共享发生的频率也越大，直观体现就是执行时间越长。为了证实这个观点，本人在同样的机器上分别用单线程、2、4、8个线程，对有填充和无填充两种情况进行测试。执行场景是取 10 次执行的平均时间，结果如下所示：</p>
 <p><img src="/images/897247-20160823202449620-46958750.png" alt="897247-20160823202449620-46958750"></p>
-<h2 id="如何避免伪共享？"><a href="#如何避免伪共享？" class="headerlink" title="如何避免伪共享？"></a>如何避免伪共享？</h2><blockquote>
-<p>其中一个解决思路，就是让不同线程操作的对象处于不同的缓存行即可。</p>
-</blockquote>
-<p>那么该如何做到呢？其实在我们注释的那行代码中就有答案，那就是缓存行填充（Padding） 。现在分析上面的例子，我们知道一条缓存行有 64 字节，而 Java 程序的对象头固定占 8 字节(32位系统)或 12 字节( 64 位系统默认开启压缩, 不开压缩为 16 字节)，所以我们只需要填 6 个无用的长整型补上6*8=48字节，让不同的 VolatileLong 对象处于不同的缓存行，就避免了伪共享( 64 位系统超过缓存行的 64 字节也无所谓，只要保证不同线程不操作同一缓存行就可以)。</p>
-<p>伪共享在多核编程中很容易发生，而且非常隐蔽。例如，在 JDK 的 LinkedBlockingQueue 中，存在指向队列头的引用 head 和指向队列尾的引用 tail 。而这种队列经常在异步编程中使有，这两个引用的值经常的被不同的线程修改，但它们却很可能在同一个缓存行，于是就产生了伪共享。线程越多，核越多，对性能产生的负面效果就越大。</p>
-<p>由于某些 Java 编译器的优化策略，那些没有使用到的补齐数据可能会在编译期间被优化掉，我们可以在程序中加入一些代码防止被编译优化。如下：</p>
-<pre><code class="java">public static long preventFromOptimization(VolatileLong v) {  
-        return v.p1 + v.p2 + v.p3 + v.p4 + v.p5 + v.p6;  
+<h2 id="伪共享解决方案"><a href="#伪共享解决方案" class="headerlink" title="伪共享解决方案"></a>伪共享解决方案</h2><p>处理伪共享的两种方式：</p>
+<ol>
+<li>增大数组元素的间隔使得不同线程存取的元素位于不同的cache line上。典型的空间换时间。（Linux cache机制与之相关）</li>
+<li>在每个线程中创建全局数组各个元素的本地拷贝，然后结束后再写回全局数组。</li>
+</ol>
+<p>在Java类中，最优化的设计是考虑清楚哪些变量是不变的，哪些是经常变化的，哪些变化是完全相互独立的，哪些属性一起变化。举个例子：</p>
+<pre><code class="java">public class Data{
+    long modifyTime;
+    boolean flag;
+    long createTime;
+    char key;
+    int value;
 }
 </code></pre>
-<blockquote>
-<p>另外一种技术是使用编译指示，来强制使每一个变量对齐。</p>
-</blockquote>
-<p>下面的代码显式了编译器使用__declspec( align(n) ) 此处 n=64，按照 cache line 边界对齐。</p>
-<pre><code class="java">__declspec (align(64)) int thread1_global_variable;
-__declspec (align(64)) int thread2_global_variable;
+<p>假如业务场景中，上述的类满足以下几个特点：</p>
+<ol>
+<li>当value变量改变时，modifyTime肯定会改变</li>
+<li>createTime变量和key变量在创建后，就不会再变化。</li>
+<li>flag也经常会变化，不过与modifyTime和value变量毫无关联。</li>
+</ol>
+<p>当上面的对象需要由多个线程同时的访问时，从Cache角度来说，就会有一些有趣的问题。当我们没有加任何措施时，Data对象所有的变量极有可能被加载在L1缓存的一行Cache Line中。在高并发访问下，会出现这种问题：<br><img src="/images/20161111082043281" alt="2016111108204328"><br>如上图所示，每次value变更时，根据MESI协议，对象其他CPU上相关的Cache Line全部被设置为失效。其他的处理器想要访问未变化的数据(key 和 createTime)时，必须从内存中重新拉取数据，增大了数据访问的开销。</p>
+<h3 id="Padding-方式"><a href="#Padding-方式" class="headerlink" title="Padding 方式"></a>Padding 方式</h3><p>正确的方式应该将该对象属性分组，将一起变化的放在一组，与其他属性无关的属性放到一组，将不变的属性放到一组。这样当每次对象变化时，不会带动所有的属性重新加载缓存，提升了读取效率。在JDK1.8以前，我们一般是在属性间增加长整型变量来分隔每一组属性。被操作的每一组属性占的字节数加上前后填充属性所占的字节数，不小于一个cache line的字节数就可以达到要求：</p>
+<pre><code class="java">public class DataPadding{
+    long a1,a2,a3,a4,a5,a6,a7,a8;//防止与前一个对象产生伪共享
+    int value;
+    long modifyTime;
+    long b1,b2,b3,b4,b5,b6,b7,b8;//防止不相关变量伪共享;
+    boolean flag;
+    long c1,c2,c3,c4,c5,c6,c7,c8;//
+    long createTime;
+    char key;
+    long d1,d2,d3,d4,d5,d6,d7,d8;//防止与下一个对象产生伪共享
+}
 </code></pre>
-<p>当使用数组时，在 cache line 尾部填充 padding 来保证数据元素在 cache line 边界开始。如果不能够保证数组按照 cache line 边界对齐，填充数据结构【数组元素】使之是 cache line 大小的两倍。下面的代码显式了填充数据结构使之按照 cache line 对齐。并且通过 __declspec( align(n) ) 语句来保证数组也是对齐的。如果数组是动态分配的，你可以增加分配的大小，并调整指针来对其到 cache line 边界。</p>
-<pre><code class="java">struct ThreadParams
-{
-    // For the following 4 variables: 4*4 = 16 bytes
-    unsigned long thread_id;
-    unsigned long v; // Frequent read/write access variable
-    unsigned long start;
-    unsigned long end;
-    // expand to 64 bytes to avoid false-sharing 
-    // (4 unsigned long variables + 12 padding)*4 = 64
-    int padding[12];
-};
+<p>通过填充变量，使不相关的变量分开</p>
+<h3 id="Contended注解方式"><a href="#Contended注解方式" class="headerlink" title="Contended注解方式"></a>Contended注解方式</h3><p>在JDK1.8中，新增了一种注解<a href="mailto:`@sun.misc.Contended" target="_blank" rel="noopener">`@sun.misc.Contended</a><code>，来使各个变量在Cache line中分隔开。注意，jvm需要添加参数</code>-XX:-RestrictContended`才能开启此功能<br>用时，可以在类前或属性前加上此注释：</p>
+<pre><code class="java">// 类前加上代表整个类的每个变量都会在单独的cache line中
+@sun.misc.Contended
+@SuppressWarnings(&quot;restriction&quot;)
+public class ContendedData {
+    int value;
+    long modifyTime;
+    boolean flag;
+    long createTime;
+    char key;
+}
+或者这种：
+// 属性前加上时需要加上组标签
+@SuppressWarnings(&quot;restriction&quot;)
+public class ContendedGroupData {
+    @sun.misc.Contended(&quot;group1&quot;)
+    int value;
+    @sun.misc.Contended(&quot;group1&quot;)
+    long modifyTime;
+    @sun.misc.Contended(&quot;group2&quot;)
+    boolean flag;
+    @sun.misc.Contended(&quot;group3&quot;)
+    long createTime;
+    @sun.misc.Contended(&quot;group3&quot;)
+    char key;
+}
 </code></pre>
-<p>除此之外，在网上还有很多对伪共享的研究，提出了一些基于数据融合的方案，有兴趣的同学可以了解下。</p>
-<h2 id="对于伪共享，我们在实际开发中该怎么做？"><a href="#对于伪共享，我们在实际开发中该怎么做？" class="headerlink" title="对于伪共享，我们在实际开发中该怎么做？"></a>对于伪共享，我们在实际开发中该怎么做？</h2><p>通过上面大篇幅的介绍，我们已经知道伪共享的对程序的影响。那么，在实际的生产开发过程中，我们一定要通过缓存行填充去解决掉潜在的伪共享问题吗？</p>
-<p>其实并不一定。</p>
+<p>采取上述措施图示：<br><img src="/images/20161111082403755" alt="2016111108240375"></p>
+<h3 id="JDK1-8-ConcurrentHashMap的处理"><a href="#JDK1-8-ConcurrentHashMap的处理" class="headerlink" title="JDK1.8 ConcurrentHashMap的处理"></a>JDK1.8 ConcurrentHashMap的处理</h3><p>java.util.concurrent.ConcurrentHashMap在这个如雷贯耳的Map中，有一个很基本的操作问题，在并发条件下进行++操作。因为++这个操作并不是原子的，而且在连续的Atomic中，很容易产生伪共享（false sharing）。所以在其内部有专门的数据结构来保存long型的数据:</p>
+<pre><code class="java">
+（openjdk\jdk\src\share\classes\java\util\concurrent\ConcurrentHashMap.java line:2506）：
+
+/* ---------------- Counter support -------------- */
+
+/**
+    * A padded cell for distributing counts.  Adapted from LongAdder
+    * and Striped64.  See their internal docs for explanation.
+    */
+@sun.misc.Contended static final class CounterCell {
+    volatile long value;
+    CounterCell(long x) { value = x; }
+}
+</code></pre>
+<p>我们看到该类中，是通过@sun.misc.Contended达到防止false sharing的目的</p>
+<h3 id="JDK1-8-Thread-的处理"><a href="#JDK1-8-Thread-的处理" class="headerlink" title="JDK1.8 Thread 的处理"></a>JDK1.8 Thread 的处理</h3><p>java.lang.Thread在java中，生成随机数是和线程有着关联。而且在很多情况下，多线程下产生随机数的操作是很常见的，JDK为了确保产生随机数的操作不会产生false sharing ,把产生随机数的三个相关值设为独占cache line。</p>
+<pre><code class="java">（openjdk\jdk\src\share\classes\java\lang\Thread.java line:2023）
+
+    // The following three initially uninitialized fields are exclusively
+    // managed by class java.util.concurrent.ThreadLocalRandom. These
+    // fields are used to build the high-performance PRNGs in the
+    // concurrent code, and we can not risk accidental false sharing.
+    // Hence, the fields are isolated with @Contended.
+
+    /** The current seed for a ThreadLocalRandom */
+    @sun.misc.Contended(&quot;tlr&quot;)
+    long threadLocalRandomSeed;
+
+    /** Probe hash value; nonzero if threadLocalRandomSeed initialized */
+    @sun.misc.Contended(&quot;tlr&quot;)
+    int threadLocalRandomProbe;
+
+    /** Secondary seed isolated from public ThreadLocalRandom sequence */
+    @sun.misc.Contended(&quot;tlr&quot;)
+    int threadLocalRandomSecondarySeed;
+</code></pre>
+<h2 id="对于伪共享，我们在实际开发中该怎么做？"><a href="#对于伪共享，我们在实际开发中该怎么做？" class="headerlink" title="对于伪共享，我们在实际开发中该怎么做？"></a>对于伪共享，我们在实际开发中该怎么做？</h2><p>通过上面大篇幅的介绍，我们已经知道伪共享的对程序的影响。那么，在实际的生产开发过程中，我们一定要通过缓存行填充去解决掉潜在的伪共享问题吗？其实并不一定。</p>
 <p>首先就是多次强调的，伪共享是很隐蔽的，我们暂时无法从系统层面上通过工具来探测伪共享事件。其次，不同类型的计算机具有不同的微架构（如 32 位系统和 64 位系统的 java 对象所占自己数就不一样），如果设计到跨平台的设计，那就更难以把握了，一个确切的填充方案只适用于一个特定的操作系统。还有，缓存的资源是有限的，如果填充会浪费珍贵的 cache 资源，并不适合大范围应用。最后，目前主流的 Intel 微架构 CPU 的 L1 缓存，已能够达到 80% 以上的命中率。</p>
 <p>综上所述，并不是每个系统都适合花大量精力去解决潜在的伪共享问题。</p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
@@ -771,7 +839,7 @@ __declspec (align(64)) int thread2_global_variable;
   <p><span>本文标题:</span><a href="/posts/50d898f6/">伪共享（false sharing）并发编程无声的性能杀手</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 枫秀天涯 的个人博客">枫秀天涯</a></p>
   <p><span>发布时间:</span>2018年04月10日 - 19:41</p>
-  <p><span>最后更新:</span>2019年06月14日 - 09:49</p>
+  <p><span>最后更新:</span>2019年06月17日 - 21:34</p>
   <p><span>原始链接:</span>
      <a href="/posts/50d898f6/" title="伪共享（false sharing）并发编程无声的性能杀手">伪共享（false sharing）并发编程无声的性能杀手</a>
     <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://fengxiu.club/posts/50d898f6/" aria-label="复制成功！"></i></span>
@@ -1250,7 +1318,7 @@ __declspec (align(64)) int thread2_global_variable;
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#伪共享"><span class="nav-text">伪共享</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五、遭遇伪共享"><span class="nav-text">五、遭遇伪共享</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何避免伪共享？"><span class="nav-text">如何避免伪共享？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对于伪共享，我们在实际开发中该怎么做？"><span class="nav-text">对于伪共享，我们在实际开发中该怎么做？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-text">参考</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#CPU缓存简单介绍"><span class="nav-text">CPU缓存简单介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#遭遇伪共享"><span class="nav-text">遭遇伪共享</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#伪共享解决方案"><span class="nav-text">伪共享解决方案</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Padding-方式"><span class="nav-text">Padding 方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Contended注解方式"><span class="nav-text">Contended注解方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JDK1-8-ConcurrentHashMap的处理"><span class="nav-text">JDK1.8 ConcurrentHashMap的处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JDK1-8-Thread-的处理"><span class="nav-text">JDK1.8 Thread 的处理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对于伪共享，我们在实际开发中该怎么做？"><span class="nav-text">对于伪共享，我们在实际开发中该怎么做？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-text">参考</span></a></li></ol></div>
             
 
           </div>
@@ -1293,7 +1361,7 @@ __declspec (align(64)) int thread2_global_variable;
       总阅读时长
     </span>
     
-    <span title="站点阅读时长">19:45</span>
+    <span title="站点阅读时长">19:47</span>
   
 </div>
 
