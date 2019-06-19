@@ -113,7 +113,7 @@
 <meta property="og:site_name" content="枫秀天涯">
 <meta property="og:description" content="简单介绍Condition的作用是对锁进行更精确的控制。Condition中的await()方法相当于Object的wait方法，Condition中的signal()方法相当于Object的notify()方法，Condition中的signalAll()相当于Object的notifyAll()方法。不同的是，Object中的wait()、notify()、notifyAll()方法是和同步锁">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-06-19T05:37:41.607Z">
+<meta property="og:updated_time" content="2019-06-19T05:59:59.377Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="java线程系列 JUC锁 05  Condition条件">
 <meta name="twitter:description" content="简单介绍Condition的作用是对锁进行更精确的控制。Condition中的await()方法相当于Object的wait方法，Condition中的signal()方法相当于Object的notify()方法，Condition中的signalAll()相当于Object的notifyAll()方法。不同的是，Object中的wait()、notify()、notifyAll()方法是和同步锁">
@@ -270,23 +270,6 @@
         
         
           
-          <li class="menu-item menu-item-about">
-
-    
-    
-    
-      
-    
-
-    
-
-    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
-
-  </li>
-        
-        
-        
-          
           <li class="menu-item menu-item-时间轴">
 
     
@@ -298,6 +281,23 @@
     
 
     <a href="/timeAxis/" rel="section"><i class="menu-item-icon fa fa-fw fa-calendar"></i> <br>时间轴</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
 
   </li>
 
@@ -363,7 +363,7 @@
 
   
 
-  <a href="https://github.com/fengxiutianya" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewbox="0 0 250 250" style="fill: #222; color: #fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a>
+  <a href="https://github.com/fengxiu" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewbox="0 0 250 250" style="fill: #222; color: #fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a>
 
 
 
@@ -441,22 +441,6 @@
               <time title="创建时间：2019-03-18 11:56:00" itemprop="dateCreated datePublished" datetime="2019-03-18T11:56:00+08:00">2019-03-18</time>
             
 
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-06-19 13:37:41" itemprop="dateModified" datetime="2019-06-19T13:37:41+08:00">2019-06-19</time>
-              
             
           </span>
 
@@ -1124,7 +1108,7 @@ final boolean transferForSignal(Node node) {
   <p><span>本文标题:</span><a href="/posts/d14480c0/">java线程系列 JUC锁 05  Condition条件</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 枫秀天涯 的个人博客">枫秀天涯</a></p>
   <p><span>发布时间:</span>2019年03月18日 - 11:56</p>
-  <p><span>最后更新:</span>2019年06月19日 - 13:37</p>
+  <p><span>最后更新:</span>2019年06月19日 - 13:59</p>
   <p><span>原始链接:</span>
      <a href="/posts/d14480c0/" title="java线程系列 JUC锁 05  Condition条件">java线程系列 JUC锁 05  Condition条件</a>
     <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://fengxiu.club/posts/d14480c0/" aria-label="复制成功！"></i></span>
@@ -1607,7 +1591,7 @@ final boolean transferForSignal(Node node) {
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#简单介绍"><span class="nav-text">简单介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Condition函数示例"><span class="nav-text">Condition函数示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Condition示例"><span class="nav-text">Condition示例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#示例1"><span class="nav-text">示例1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#示例2"><span class="nav-text">示例2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#示例3"><span class="nav-text">示例3</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#源码分析"><span class="nav-text">源码分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#await"><span class="nav-text">await()</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#addConditionWaiter"><span class="nav-text">addConditionWaiter</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#fullyRelease"><span class="nav-text">fullyRelease</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#isOnSyncQueue"><span class="nav-text">isOnSyncQueue</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#checkInterruptWhileWaiting"><span class="nav-text">checkInterruptWhileWaiting</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#signal"><span class="nav-text">signal()</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-text">总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#参考"><span class="nav-text">参考</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#简单介绍"><span class="nav-number">1.</span> <span class="nav-text">简单介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Condition函数示例"><span class="nav-number">1.1.</span> <span class="nav-text">Condition函数示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Condition示例"><span class="nav-number">2.</span> <span class="nav-text">Condition示例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#示例1"><span class="nav-number">2.1.</span> <span class="nav-text">示例1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#示例2"><span class="nav-number">2.2.</span> <span class="nav-text">示例2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#示例3"><span class="nav-number">2.3.</span> <span class="nav-text">示例3</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#源码分析"><span class="nav-number">3.</span> <span class="nav-text">源码分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#await"><span class="nav-number">3.1.</span> <span class="nav-text">await()</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#addConditionWaiter"><span class="nav-number">3.1.1.</span> <span class="nav-text">addConditionWaiter</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#fullyRelease"><span class="nav-number">3.1.2.</span> <span class="nav-text">fullyRelease</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#isOnSyncQueue"><span class="nav-number">3.1.3.</span> <span class="nav-text">isOnSyncQueue</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#checkInterruptWhileWaiting"><span class="nav-number">3.1.4.</span> <span class="nav-text">checkInterruptWhileWaiting</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#signal"><span class="nav-number">3.2.</span> <span class="nav-text">signal()</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#参考"><span class="nav-number">4.1.</span> <span class="nav-text">参考</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -1650,7 +1634,7 @@ final boolean transferForSignal(Node node) {
       总阅读时长
     </span>
     
-    <span title="站点阅读时长">19:59</span>
+    <span title="站点阅读时长">19:58</span>
   
 </div>
 

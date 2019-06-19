@@ -114,7 +114,7 @@
 <meta property="og:description" content="并发队列-有界阻塞队列LinkedBlockingQueue原理探究概述LinkedBlockingQueue是一个单向链表实现的阻塞队列。该队列按 FIFO（先进先出）排序元素，新元素插入到队列的尾部，并且队列获取操作会获得位于队列头部的元素。链接队列的吞吐量通常要高于基于数组的队列，但是在大多数并发应用程序中，其可预知的性能要低。此外，LinkedBlockingQueue还是可选容量的(防止">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://fengxiu.club/images/pasted-166.png">
-<meta property="og:updated_time" content="2019-06-19T05:37:41.603Z">
+<meta property="og:updated_time" content="2019-06-19T05:59:59.377Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="并发队列-有界阻塞队列LinkedBlockingQueue原理探究">
 <meta name="twitter:description" content="并发队列-有界阻塞队列LinkedBlockingQueue原理探究概述LinkedBlockingQueue是一个单向链表实现的阻塞队列。该队列按 FIFO（先进先出）排序元素，新元素插入到队列的尾部，并且队列获取操作会获得位于队列头部的元素。链接队列的吞吐量通常要高于基于数组的队列，但是在大多数并发应用程序中，其可预知的性能要低。此外，LinkedBlockingQueue还是可选容量的(防止">
@@ -272,23 +272,6 @@
         
         
           
-          <li class="menu-item menu-item-about">
-
-    
-    
-    
-      
-    
-
-    
-
-    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
-
-  </li>
-        
-        
-        
-          
           <li class="menu-item menu-item-时间轴">
 
     
@@ -300,6 +283,23 @@
     
 
     <a href="/timeAxis/" rel="section"><i class="menu-item-icon fa fa-fw fa-calendar"></i> <br>时间轴</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
 
   </li>
 
@@ -365,7 +365,7 @@
 
   
 
-  <a href="https://github.com/fengxiutianya" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewbox="0 0 250 250" style="fill: #222; color: #fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a>
+  <a href="https://github.com/fengxiu" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewbox="0 0 250 250" style="fill: #222; color: #fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a>
 
 
 
@@ -443,22 +443,6 @@
               <time title="创建时间：2019-03-06 11:05:00" itemprop="dateCreated datePublished" datetime="2019-03-06T11:05:00+08:00">2019-03-06</time>
             
 
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-06-19 13:37:41" itemprop="dateModified" datetime="2019-06-19T13:37:41+08:00">2019-06-19</time>
-              
             
           </span>
 
@@ -907,7 +891,7 @@ private void signalNotFull() {
   <p><span>本文标题:</span><a href="/posts/ff534434/">并发队列-有界阻塞队列LinkedBlockingQueue原理探究</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 枫秀天涯 的个人博客">枫秀天涯</a></p>
   <p><span>发布时间:</span>2019年03月06日 - 11:05</p>
-  <p><span>最后更新:</span>2019年06月19日 - 13:37</p>
+  <p><span>最后更新:</span>2019年06月19日 - 13:59</p>
   <p><span>原始链接:</span>
      <a href="/posts/ff534434/" title="并发队列-有界阻塞队列LinkedBlockingQueue原理探究">并发队列-有界阻塞队列LinkedBlockingQueue原理探究</a>
     <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://fengxiu.club/posts/ff534434/" aria-label="复制成功！"></i></span>
@@ -1392,7 +1376,7 @@ private void signalNotFull() {
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#并发队列-有界阻塞队列LinkedBlockingQueue原理探究"><span class="nav-text">并发队列-有界阻塞队列LinkedBlockingQueue原理探究</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-LinkedBlockingQueue简介"><span class="nav-text">1. LinkedBlockingQueue简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-LinkedBlockingQueue源码分析"><span class="nav-text">2. LinkedBlockingQueue源码分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#入队"><span class="nav-text">入队</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#出队"><span class="nav-text">出队</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#遍历操作"><span class="nav-text">遍历操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#size"><span class="nav-text">size</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-text">总结</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#并发队列-有界阻塞队列LinkedBlockingQueue原理探究"><span class="nav-number">1.</span> <span class="nav-text">并发队列-有界阻塞队列LinkedBlockingQueue原理探究</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-LinkedBlockingQueue简介"><span class="nav-number">1.2.</span> <span class="nav-text">1. LinkedBlockingQueue简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-LinkedBlockingQueue源码分析"><span class="nav-number">1.3.</span> <span class="nav-text">2. LinkedBlockingQueue源码分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#入队"><span class="nav-number">1.3.1.</span> <span class="nav-text">入队</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#出队"><span class="nav-number">1.4.</span> <span class="nav-text">出队</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#遍历操作"><span class="nav-number">1.5.</span> <span class="nav-text">遍历操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#size"><span class="nav-number">1.5.1.</span> <span class="nav-text">size</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">1.6.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -1435,7 +1419,7 @@ private void signalNotFull() {
       总阅读时长
     </span>
     
-    <span title="站点阅读时长">19:59</span>
+    <span title="站点阅读时长">19:58</span>
   
 </div>
 
