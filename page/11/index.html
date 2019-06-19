@@ -15,7 +15,7 @@
 
 
 <html class="theme-next pisces use-motion" lang="zh-CN">
-<head><meta name="generator" content="Hexo 3.8.0">
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
@@ -393,7 +393,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://fengxiu.club/posts/c51c4fa0/">
+    <link itemprop="mainEntityOfPage" href="http://fengxiu.club/posts/d20aa128/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="枫秀天涯">
@@ -413,7 +413,7 @@
           <h2 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/posts/c51c4fa0/" class="post-title-link" itemprop="url">Spring源码解析之 01环境搭建</a>
+                <a href="/posts/d20aa128/" class="post-title-link" itemprop="url">JVM 垃圾回收算法</a>
               
             
           </h2>
@@ -438,7 +438,7 @@
                 
               
 
-              <time title="创建时间：2019-01-07 03:33:00" itemprop="dateCreated datePublished" datetime="2019-01-07T03:33:00+08:00">2019-01-07</time>
+              <time title="创建时间：2019-03-15 09:05:00" itemprop="dateCreated datePublished" datetime="2019-03-15T09:05:00+08:00">2019-03-15</time>
             
 
             
@@ -455,7 +455,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-06-17 21:34:08" itemprop="dateModified" datetime="2019-06-17T21:34:08+08:00">2019-06-17</time>
+                <time title="修改时间：2019-06-19 13:37:41" itemprop="dateModified" datetime="2019-06-19T13:37:41+08:00">2019-06-19</time>
               
             
           </span>
@@ -479,21 +479,14 @@
                   ，
                 
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/spring/" itemprop="url" rel="index"><span itemprop="name">spring</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/jvm/" itemprop="url" rel="index"><span itemprop="name">jvm</span></a></span>
 
                 
                 
                   ，
                 
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/spring/spring-源码分析/" itemprop="url" rel="index"><span itemprop="name">spring 源码分析</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/spring/spring-源码分析/SpringCore/" itemprop="url" rel="index"><span itemprop="name">SpringCore</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/jvm/GC/" itemprop="url" rel="index"><span itemprop="name">GC</span></a></span>
 
                 
                 
@@ -508,9 +501,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/posts/c51c4fa0/#comments" itemprop="discussionUrl">
+                <a href="/posts/d20aa128/#comments" itemprop="discussionUrl">
                 
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="posts/c51c4fa0/" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="posts/d20aa128/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -518,7 +511,7 @@
 
           
           
-             <span id="/posts/c51c4fa0/" class="leancloud_visitors" data-flag-title="Spring源码解析之 01环境搭建">
+             <span id="/posts/d20aa128/" class="leancloud_visitors" data-flag-title="JVM 垃圾回收算法">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -543,264 +536,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">655</span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">1 分钟</span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="spring源码解析之-01环境搭建"><a href="#spring源码解析之-01环境搭建" class="headerlink" title="spring源码解析之 01环境搭建"></a>spring源码解析之 01环境搭建</h1><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><ol>
-<li>前提条件</li>
-<li>环境搭建</li>
-</ol>
-<h3 id="1-前提条件"><a href="#1-前提条件" class="headerlink" title="1. 前提条件"></a>1. 前提条件</h3><p>Spring采用gradle来进行包管理，因此你需要安装gradle，这个网上面有很多的教程，就不在这里进行介绍。</p>
-<p>另外Spring的源码时放在github上，因此你需要安装git。</p>
-<p>spring 5 默认是jdk1.8以上的java版本 ，因此需要你本地的java环境是为1.8 以上。</p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/posts/c51c4fa0/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-      
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://fengxiu.club/posts/1284c29c/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="枫秀天涯">
-      <meta itemprop="description" content="java,spring,分布式,数据库">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="枫秀天涯">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/posts/1284c29c/" class="post-title-link" itemprop="url">Spring源码分析之 02IOC原理</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-01-07 03:35:00" itemprop="dateCreated datePublished" datetime="2019-01-07T03:35:00+08:00">2019-01-07</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-06-17 21:34:08" itemprop="dateModified" datetime="2019-06-17T21:34:08+08:00">2019-06-17</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/spring/" itemprop="url" rel="index"><span itemprop="name">spring</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/spring/spring-源码分析/" itemprop="url" rel="index"><span itemprop="name">spring 源码分析</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/spring/spring-源码分析/SpringCore/" itemprop="url" rel="index"><span itemprop="name">SpringCore</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/posts/1284c29c/#comments" itemprop="discussionUrl">
-                
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="posts/1284c29c/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-             <span id="/posts/1284c29c/" class="leancloud_visitors" data-flag-title="Spring源码分析之 02IOC原理">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数：</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">3.3k</span>
+                <span title="本文字数">3.4k</span>
               
 
               
@@ -835,276 +571,18 @@
 
       
         
-          <h1 id="Spring源码解析之-02-IOC原理"><a href="#Spring源码解析之-02-IOC原理" class="headerlink" title="Spring源码解析之 02 IOC原理"></a>Spring源码解析之 02 IOC原理</h1><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><ol>
-<li>Ioc理论背景</li>
-<li>什么是控制反转 (IoC)</li>
-<li>Ioc能做什么</li>
-<li>Ioc和DI的关系</li>
-</ol>
-<p>在研究spring源码之前我们首先需要搞明白一个概念，也就是Ioc，中文意思控制反转，从字面是看不出来这是什么，可以用来干嘛。但是spring的基础就是Ioc，如果理解不了Ioc，也就谈不上对spring的源码分析。所以首先我们要搞明白Ioc。</p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/posts/1284c29c/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-      
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://fengxiu.club/posts/a158638e/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="枫秀天涯">
-      <meta itemprop="description" content="java,spring,分布式,数据库">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="枫秀天涯">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/posts/a158638e/" class="post-title-link" itemprop="url">spring源码解析之 03统一资源加载</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-01-14 03:39:00" itemprop="dateCreated datePublished" datetime="2019-01-14T03:39:00+08:00">2019-01-14</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-06-17 21:34:08" itemprop="dateModified" datetime="2019-06-17T21:34:08+08:00">2019-06-17</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/spring/" itemprop="url" rel="index"><span itemprop="name">spring</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/spring/spring-源码分析/" itemprop="url" rel="index"><span itemprop="name">spring 源码分析</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/spring/spring-源码分析/SpringCore/" itemprop="url" rel="index"><span itemprop="name">SpringCore</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/posts/a158638e/#comments" itemprop="discussionUrl">
-                
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="posts/a158638e/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-             <span id="/posts/a158638e/" class="leancloud_visitors" data-flag-title="spring源码解析之 03统一资源加载">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数：</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">26k</span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">24 分钟</span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="spring源码解析之-03统一资源加载"><a href="#spring源码解析之-03统一资源加载" class="headerlink" title="spring源码解析之 03统一资源加载"></a>spring源码解析之 03统一资源加载</h1><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><ol>
-<li>统一资源Resource</li>
-<li>统一资源定位ResourceLoader</li>
-</ol>
-<h3 id="1-统一资源Resource"><a href="#1-统一资源Resource" class="headerlink" title="1. 统一资源Resource"></a>1. 统一资源Resource</h3><p>java中有一个标准类 <code>java.net.URL</code>，该类在 Java SE 中的定位为统一资源定位器（Uniform Resource Locator），但是我们知道它的实现基本只限于网络形式发布的资源的查找和定位。虽然可以通过注册特定的处理器来扩展处理不同的地址前缀，但是这通常比较麻烦，而且不易于使用。另外，实际上资源的定义比较广泛，除了网络形式的资源，还有以二进制形式存在的、以文件形式存在的、以字节流形式存在的等等。而且它可以存在于任何场所，比如网络、文件系统、应用程序中。所以 <code>java.net.URL</code> 的局限性迫使 Spring 必须实现自己的资源加载策略，该资源加载策略需要满足如下要求：</p>
+          <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>通过前面介绍<code>Java</code>内存运行时区域，可以学习到<strong>程序计数器</strong>、<strong>虚拟机栈</strong>、<strong>本地方法栈</strong> 三个区域随线程而生，随线程而灭；栈中的栈帧随着方法的进入和退出而有条不紊地执行着出栈和入栈操作。每一个栈帧中分配多少内存基本上是在类结构确定下来时就已知的，因此这几个区域的<strong>内存分配和回收</strong>都具备<strong>确定性</strong>。在这几个区域内不需要过多考虑回收的问题，<strong>因为方法结束或线程结束时，内存自然就跟随着回收了</strong>。</p>
+<p>而<code>Java</code><strong>堆</strong> 和 <strong>方法区</strong> 则不一样，一个接口中的多个实现类需要的内存可能不一样，一个方法中的多个分支需要的内存也可能不一样。我们只有在程序处于运行期间时才能知道会创建哪些对象，这部分<strong>内存的分配和回收</strong>都是<strong>动态的</strong>，<strong>垃圾收集器</strong> 所关注的是这部分内存。</p>
+<p>接下来我将会用俩篇文章来聊聊这部分内容，这篇文章主要讲解如何确定一个对象可以回收以及垃圾回收算法的种类，属于方法的介绍，下一篇文章则主要介绍<code>JVM</code>中实现的垃圾回收器和内存分配的策略。</p>
 <ol>
-<li><strong>职能划分清楚</strong>：资源的定义和资源的加载应该要有一个清晰的界限；</li>
-<li><strong>统一的抽象</strong>：统一的资源定义和资源加载策略。资源加载后要返回统一的抽象给客户端，客户端要对资源进行怎样的处理，应该由抽象资源接口来界定。</li>
+<li>对象是否可以回收判定</li>
+<li>垃圾回收算法</li>
 </ol>
+<p><strong>注:</strong>后面都是基于java来进行讲解。<br>
           <!--noindex-->
           
             <div class="post-button text-center">
-              <a class="btn" href="/posts/a158638e/#more" rel="contents">
+              <a class="btn" href="/posts/d20aa128/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1112,7 +590,7 @@
           <!--/noindex-->
         
       
-    </div>
+    </p></div>
 
     
 
@@ -1166,7 +644,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://fengxiu.club/posts/f89484e0/">
+    <link itemprop="mainEntityOfPage" href="http://fengxiu.club/posts/f857a2aa/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="枫秀天涯">
@@ -1186,7 +664,7 @@
           <h2 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/posts/f89484e0/" class="post-title-link" itemprop="url">spring 源码解析之 04（上）加载bean</a>
+                <a href="/posts/f857a2aa/" class="post-title-link" itemprop="url">GC日志详解1之serial</a>
               
             
           </h2>
@@ -1211,7 +689,7 @@
                 
               
 
-              <time title="创建时间：2019-01-14 04:46:00" itemprop="dateCreated datePublished" datetime="2019-01-14T04:46:00+08:00">2019-01-14</time>
+              <time title="创建时间：2019-04-17 11:03:00" itemprop="dateCreated datePublished" datetime="2019-04-17T11:03:00+08:00">2019-04-17</time>
             
 
             
@@ -1228,7 +706,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-06-17 21:34:08" itemprop="dateModified" datetime="2019-06-17T21:34:08+08:00">2019-06-17</time>
+                <time title="修改时间：2019-06-19 13:37:41" itemprop="dateModified" datetime="2019-06-19T13:37:41+08:00">2019-06-19</time>
               
             
           </span>
@@ -1252,21 +730,14 @@
                   ，
                 
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/spring/" itemprop="url" rel="index"><span itemprop="name">spring</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/jvm/" itemprop="url" rel="index"><span itemprop="name">jvm</span></a></span>
 
                 
                 
                   ，
                 
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/spring/spring-源码分析/" itemprop="url" rel="index"><span itemprop="name">spring 源码分析</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/spring/spring-源码分析/SpringCore/" itemprop="url" rel="index"><span itemprop="name">SpringCore</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/jvm/GC/" itemprop="url" rel="index"><span itemprop="name">GC</span></a></span>
 
                 
                 
@@ -1281,9 +752,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/posts/f89484e0/#comments" itemprop="discussionUrl">
+                <a href="/posts/f857a2aa/#comments" itemprop="discussionUrl">
                 
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="posts/f89484e0/" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="posts/f857a2aa/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1291,7 +762,7 @@
 
           
           
-             <span id="/posts/f89484e0/" class="leancloud_visitors" data-flag-title="spring 源码解析之 04（上）加载bean">
+             <span id="/posts/f857a2aa/" class="leancloud_visitors" data-flag-title="GC日志详解1之serial">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -1316,7 +787,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">7.8k</span>
+                <span title="本文字数">5k</span>
               
 
               
@@ -1330,7 +801,7 @@
                 
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
-                <span title="阅读时长">7 分钟</span>
+                <span title="阅读时长">5 分钟</span>
               
             </div>
           
@@ -1351,13 +822,11 @@
 
       
         
-          <h1 id="spring-源码解析之-04（上）加载bean"><a href="#spring-源码解析之-04（上）加载bean" class="headerlink" title="spring 源码解析之 04（上）加载bean"></a>spring 源码解析之 04（上）加载bean</h1><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><ol>
-<li>spring 容器基本介绍</li>
-<li>源码分析：loadBeanDefinitions具体实现
+          <p>前面我有写过一篇文章来详细介绍JVM中的各种GC,如果你还不了解，可以看这篇文章<a href="/posts/1d97a19/">JVM 垃圾回收器</a>。本篇文章以及后面几篇文章，将对每种GC产生的日志进行详细的解析，主要是由于写成一篇文章的话，篇幅太长，所以分成几篇文章来写。这篇文章主要介绍Serial垃圾回收器的日志解析。<br>
           <!--noindex-->
           
             <div class="post-button text-center">
-              <a class="btn" href="/posts/f89484e0/#more" rel="contents">
+              <a class="btn" href="/posts/f857a2aa/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1365,7 +834,7 @@
           <!--/noindex-->
         
       
-    </li></ol></div>
+    </p></div>
 
     
 
@@ -1419,7 +888,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://fengxiu.club/posts/e84d4767/">
+    <link itemprop="mainEntityOfPage" href="http://fengxiu.club/posts/5319940a/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="枫秀天涯">
@@ -1439,7 +908,7 @@
           <h2 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/posts/e84d4767/" class="post-title-link" itemprop="url">spring源码解析之 04（下）获取验证模型</a>
+                <a href="/posts/5319940a/" class="post-title-link" itemprop="url">GC日志详解2之Parallel GC</a>
               
             
           </h2>
@@ -1464,7 +933,7 @@
                 
               
 
-              <time title="创建时间：2019-01-14 04:47:00" itemprop="dateCreated datePublished" datetime="2019-01-14T04:47:00+08:00">2019-01-14</time>
+              <time title="创建时间：2019-04-18 11:45:15" itemprop="dateCreated datePublished" datetime="2019-04-18T11:45:15+08:00">2019-04-18</time>
             
 
             
@@ -1481,7 +950,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-06-17 21:34:08" itemprop="dateModified" datetime="2019-06-17T21:34:08+08:00">2019-06-17</time>
+                <time title="修改时间：2019-06-19 13:37:41" itemprop="dateModified" datetime="2019-06-19T13:37:41+08:00">2019-06-19</time>
               
             
           </span>
@@ -1505,21 +974,14 @@
                   ，
                 
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/spring/" itemprop="url" rel="index"><span itemprop="name">spring</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/jvm/" itemprop="url" rel="index"><span itemprop="name">jvm</span></a></span>
 
                 
                 
                   ，
                 
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/spring/spring-源码分析/" itemprop="url" rel="index"><span itemprop="name">spring 源码分析</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/spring/spring-源码分析/SpringCore/" itemprop="url" rel="index"><span itemprop="name">SpringCore</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/jvm/GC/" itemprop="url" rel="index"><span itemprop="name">GC</span></a></span>
 
                 
                 
@@ -1534,9 +996,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/posts/e84d4767/#comments" itemprop="discussionUrl">
+                <a href="/posts/5319940a/#comments" itemprop="discussionUrl">
                 
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="posts/e84d4767/" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="posts/5319940a/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1544,7 +1006,7 @@
 
           
           
-             <span id="/posts/e84d4767/" class="leancloud_visitors" data-flag-title="spring源码解析之 04（下）获取验证模型">
+             <span id="/posts/5319940a/" class="leancloud_visitors" data-flag-title="GC日志详解2之Parallel GC">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -1569,7 +1031,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">4.7k</span>
+                <span title="本文字数">4.3k</span>
               
 
               
@@ -1604,21 +1066,1000 @@
 
       
         
-          <h1 id="spring源码解析之-04-下-获取验证模型"><a href="#spring源码解析之-04-下-获取验证模型" class="headerlink" title="spring源码解析之 04(下)获取验证模型"></a>spring源码解析之 04(下)获取验证模型</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><ol>
-<li>DTD与XSD的区别</li>
-<li>getValidationModeForResource() 分析</li>
-</ol>
-<p>上一篇博客我们已经提到过，在核心逻辑方法 <code>doLoadBeanDefinitions()</code>中主要是做三件事情。</p>
-<ol>
-<li>调用 <code>getValidationModeForResource()</code> 获取 xml 文件的验证模式</li>
-<li>调用 <code>loadDocument()</code> 根据 xml 文件获取相应的 Document 实例。</li>
-<li>调用 <code>registerBeanDefinitions()</code> 注册 Bean 实例。</li>
-</ol>
-<p>这篇博客主要来分析获取xml文件的验证模式</p>
+          <p>前面写了一篇文章<a href="/posts/f857a2aa/">GC日志详解1之serial</a>已经详细介绍了Serial和Serial Old搭配使用时输出日志的解析。这篇文章将详细介绍Parallel Scavenge 和 Parallel Old搭配使用时输出日志的解析。</p>
+<p>Parallel Scavenge在年轻代使用，采用<strong>标记-复制</strong>的方法来进行垃圾回收，而Paralle Old是在老年代进行回收，采用的是<strong>标记-整理</strong>的方法来进行垃圾回收。俩个垃圾回收器都会暂停所用应用程序的线程，也就是STW现象。叫做Parallel是因为，这俩个垃圾回收器都会使用多线程来进行垃圾的回收，通过这种方式，GC执行的时间也因此减少。</p>
+<p>GC在执行的时候，线程的数量是可以配置的。通过参数<code>XX:ParallelGCThreads=NNN</code>来进行配置，如果没有配置，默认的收集线程数等于机器的核心数。</p>
+<p>如果你的目标是提高系统的吞吐量，并且运行应用的机器是多核机器，特别适用于这种搭配。能够提高吞吐量的原因是这种搭配能够更高效的使用系统资源：</p>
+<ul>
+<li>在GC执行的过程中，所有核心都在并行清理垃圾，从而缩短暂停时间</li>
+<li>在GC回收周期之间，也就是在应用执行的过程中，收集者都没有消耗任何资源。（这点我还没搞懂）</li>
+</ul>
+<p>另一方面，由于GC收集器的所有阶段都必须在没有任何中断的情况下发生，因此这组收集器仍然容易受到长时间暂停的影响，在此期间应用程序线程将被停止。因此，如果延迟是您的主要目标，您可以选择我在上一篇文章里面提到的后俩种搭配。<br>
           <!--noindex-->
           
             <div class="post-button text-center">
-              <a class="btn" href="/posts/e84d4767/#more" rel="contents">
+              <a class="btn" href="/posts/5319940a/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </p></div>
+
+    
+
+    
+    
+    
+
+      
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://fengxiu.club/posts/f38ed32c/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="枫秀天涯">
+      <meta itemprop="description" content="java,spring,分布式,数据库">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="枫秀天涯">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/posts/f38ed32c/" class="post-title-link" itemprop="url">GC日志详解3之CMS</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-04-18 15:14:47" itemprop="dateCreated datePublished" datetime="2019-04-18T15:14:47+08:00">2019-04-18</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-06-19 13:37:41" itemprop="dateModified" datetime="2019-06-19T13:37:41+08:00">2019-06-19</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/jvm/" itemprop="url" rel="index"><span itemprop="name">jvm</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/jvm/GC/" itemprop="url" rel="index"><span itemprop="name">GC</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/posts/f38ed32c/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="posts/f38ed32c/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/posts/f38ed32c/" class="leancloud_visitors" data-flag-title="GC日志详解3之CMS">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数：</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">12k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">11 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>本篇文章将要介绍的是ParNew和CMS搭配使用的垃圾回收器组合。CMS和其他老年代收集器不同的地点是，它使用的是<strong>标记-清除</strong>算法。</p>
+<p>CMS收集器设计的目的是避免在老年代收集时长时间停顿。它通过两种方式实现这一目标。首先，它不是采用<strong>标记-拷贝</strong>来回收老年代，而是使用可被回收链表来管理回收空间。其次，整个垃圾回收器的执行期间，绝大部分是可以和应用程序并发执行。这意味着垃圾收器不会显式停止应用程序线程执行来执行。但是应该注意，它仍然与应用程序线程竞争CPU时间。默认情况下，此GC算法使用的线程数等于计算机物理核心数的1/4。</p>
+<p>如果您的主要目标是延迟，这种组合在多核机器上是一个不错的选择。减少单个GC暂停的持续时间会直接影响终端用户使用应用程序的感受，从而使他们感觉应用程序响应更快。由于大多数时候GC消耗了一些CPU资源而没有执行应用程序的代码，因此CMS垃圾回收器通常比只运行Parallel GC的垃圾回收器的吞吐量要差一些。<br>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/posts/f38ed32c/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </p></div>
+
+    
+
+    
+    
+    
+
+      
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://fengxiu.club/posts/1d97a19/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="枫秀天涯">
+      <meta itemprop="description" content="java,spring,分布式,数据库">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="枫秀天涯">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/posts/1d97a19/" class="post-title-link" itemprop="url">JVM 垃圾回收器</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-03-15 10:02:00" itemprop="dateCreated datePublished" datetime="2019-03-15T10:02:00+08:00">2019-03-15</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-06-19 13:37:41" itemprop="dateModified" datetime="2019-06-19T13:37:41+08:00">2019-06-19</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/jvm/" itemprop="url" rel="index"><span itemprop="name">jvm</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/jvm/GC/" itemprop="url" rel="index"><span itemprop="name">GC</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/posts/1d97a19/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="posts/1d97a19/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/posts/1d97a19/" class="leancloud_visitors" data-flag-title="JVM 垃圾回收器">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数：</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">8k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">7 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="JVM-垃圾回收器"><a href="#JVM-垃圾回收器" class="headerlink" title="JVM 垃圾回收器"></a>JVM 垃圾回收器</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>在之前的博客中，我们大致介绍了，常见的 <strong>垃圾回收算法</strong> 及 <code>JVM</code> 中常见的分类回收算法。本篇我们主要介绍在 <code>oracle JVM</code> 中，垃圾回收的具体实现:<strong>垃圾回收器</strong>（<code>Garbage Collector</code>）。<br>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/posts/1d97a19/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </p></div>
+
+    
+
+    
+    
+    
+
+      
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://fengxiu.club/posts/f1158e94/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="枫秀天涯">
+      <meta itemprop="description" content="java,spring,分布式,数据库">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="枫秀天涯">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/posts/f1158e94/" class="post-title-link" itemprop="url">什么是GC</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-04-19 15:03:49" itemprop="dateCreated datePublished" datetime="2019-04-19T15:03:49+08:00">2019-04-19</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-06-19 13:37:41" itemprop="dateModified" datetime="2019-06-19T13:37:41+08:00">2019-06-19</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/jvm/" itemprop="url" rel="index"><span itemprop="name">jvm</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/jvm/GC/" itemprop="url" rel="index"><span itemprop="name">GC</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/posts/f1158e94/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="posts/f1158e94/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/posts/f1158e94/" class="leancloud_visitors" data-flag-title="什么是GC">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数：</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">2.5k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">2 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>本篇文章主要讨论什么是GC，为什么要有GC？</p>
+<h2 id="什么是GC-Garbage-Collection"><a href="#什么是GC-Garbage-Collection" class="headerlink" title="什么是GC(Garbage Collection)"></a>什么是GC(Garbage Collection)</h2><p>乍一看，垃圾收集应该处理名称所暗示的 —-找到并扔掉垃圾。实际上它恰恰相反。垃圾收集器追踪仍在使用的所有对象，并将其余对象标记为垃圾。考虑到这一点，我们开始深入研究Java虚拟机是如何实现内存的自动回收，在Java中这个过程叫做GC。</p>
+<p> 这篇文章不会一开始就深入GC的细节，而是先介绍垃圾收集器的一般性质，然后介绍核心概念和方法。</p>
+<p>免责声明：此内容侧重于Oracle Hotspot和OpenJDK。在其他JVM（例如jRockit或IBM J9）上，本文中涉及的某些方面可能表现不同。<br>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/posts/f1158e94/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </p></div>
+
+    
+
+    
+    
+    
+
+      
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://fengxiu.club/posts/56bd0dd8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="枫秀天涯">
+      <meta itemprop="description" content="java,spring,分布式,数据库">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="枫秀天涯">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/posts/56bd0dd8/" class="post-title-link" itemprop="url">JVM 内存区域简介</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-03-23 08:01:51" itemprop="dateCreated datePublished" datetime="2019-03-23T08:01:51+08:00">2019-03-23</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-06-19 13:37:41" itemprop="dateModified" datetime="2019-06-19T13:37:41+08:00">2019-06-19</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/jvm/" itemprop="url" rel="index"><span itemprop="name">jvm</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/jvm/内存/" itemprop="url" rel="index"><span itemprop="name">内存</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/posts/56bd0dd8/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="posts/56bd0dd8/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/posts/56bd0dd8/" class="leancloud_visitors" data-flag-title="JVM 内存区域简介">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数：</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">11k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">10 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>JVM内存区域包括计数器、Java虚拟机栈、本地方法栈、堆、方法区。本文主要是介绍各个内存区域的作用性和特性，同时分别阐述各个区域发生内存溢出的可能性和异常类型。</p>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/posts/56bd0dd8/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1680,7 +2121,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://fengxiu.club/posts/dd7af934/">
+    <link itemprop="mainEntityOfPage" href="http://fengxiu.club/posts/bda9e2c7/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="枫秀天涯">
@@ -1700,7 +2141,7 @@
           <h2 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/posts/dd7af934/" class="post-title-link" itemprop="url">spring源码分析之 05获取Document对象</a>
+                <a href="/posts/bda9e2c7/" class="post-title-link" itemprop="url">Java 8元空间</a>
               
             
           </h2>
@@ -1725,7 +2166,7 @@
                 
               
 
-              <time title="创建时间：2019-01-14 04:52:00" itemprop="dateCreated datePublished" datetime="2019-01-14T04:52:00+08:00">2019-01-14</time>
+              <time title="创建时间：2019-04-22 16:50:11" itemprop="dateCreated datePublished" datetime="2019-04-22T16:50:11+08:00">2019-04-22</time>
             
 
             
@@ -1742,7 +2183,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-06-17 21:34:08" itemprop="dateModified" datetime="2019-06-17T21:34:08+08:00">2019-06-17</time>
+                <time title="修改时间：2019-06-19 13:37:41" itemprop="dateModified" datetime="2019-06-19T13:37:41+08:00">2019-06-19</time>
               
             
           </span>
@@ -1766,21 +2207,14 @@
                   ，
                 
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/spring/" itemprop="url" rel="index"><span itemprop="name">spring</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/jvm/" itemprop="url" rel="index"><span itemprop="name">jvm</span></a></span>
 
                 
                 
                   ，
                 
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/spring/spring-源码分析/" itemprop="url" rel="index"><span itemprop="name">spring 源码分析</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/spring/spring-源码分析/SpringCore/" itemprop="url" rel="index"><span itemprop="name">SpringCore</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/jvm/内存/" itemprop="url" rel="index"><span itemprop="name">内存</span></a></span>
 
                 
                 
@@ -1795,9 +2229,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/posts/dd7af934/#comments" itemprop="discussionUrl">
+                <a href="/posts/bda9e2c7/#comments" itemprop="discussionUrl">
                 
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="posts/dd7af934/" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="posts/bda9e2c7/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1805,7 +2239,7 @@
 
           
           
-             <span id="/posts/dd7af934/" class="leancloud_visitors" data-flag-title="spring源码分析之 05获取Document对象">
+             <span id="/posts/bda9e2c7/" class="leancloud_visitors" data-flag-title="Java 8元空间">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -1830,7 +2264,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">10k</span>
+                <span title="本文字数">3.8k</span>
               
 
               
@@ -1844,7 +2278,7 @@
                 
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
-                <span title="阅读时长">9 分钟</span>
+                <span title="阅读时长">3 分钟</span>
               
             </div>
           
@@ -1865,15 +2299,22 @@
 
       
         
-          <h1 id="spring源码解析之-05获取Document对象"><a href="#spring源码解析之-05获取Document对象" class="headerlink" title="spring源码解析之 05获取Document对象"></a>spring源码解析之 05获取Document对象</h1><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><ol>
-<li>LoadDocument源码分析</li>
-<li>EntityResolver分析</li>
-</ol>
-<h3 id="LoadDocument源码分析"><a href="#LoadDocument源码分析" class="headerlink" title="LoadDocument源码分析:"></a>LoadDocument源码分析:</h3><p>在 <code>XmlBeanDefinitionReader.doLoadDocument()</code> 方法中做了两件事情，一是调用 <code>getValidationModeForResource()</code> 获取 XML 的验证模式，二是调用 <code>DocumentLoader.loadDocument()</code> 获取 Document 对象。上篇博客已经分析了获取 XML 验证模式，这篇我们分析获取 Document 对象。<br>
+          <p>本文主要讲解Java8中JVM的一个更新，就是持久代的移除。将会介绍为什么需要移除持久代以及它的替代者：元空间(Metaspace)。</p>
+<h2 id="持久代"><a href="#持久代" class="headerlink" title="持久代"></a>持久代</h2><p>java 6中JVM的内存结构如下：<br><img src="/images/java_memory_permGen.png" alt="java_memory_permGen"></p>
+<p>持久代中包含了虚拟机中所有可通过反射获取到的数据，比如Class和Method对象。不同的Java虚拟机之间可能会进行类共享，因此持久代又分为只读区和读写区。</p>
+<p>JVM用于描述应用程序中用到的类和方法的元数据也存储在持久代中。JVM运行时会用到多少持久代的空间取决于应用程序用到了多少类。除此之外，Java SE库中的类和方法也都存储在这里。</p>
+<p>如果JVM发现有的类已经不再需要了，它会去回收（卸载）这些类，将它们的空间释放出来给其它类使用。Full GC会进行持久代的回收。</p>
+<ul>
+<li>JVM中类的元数据在Java堆中的存储区域。</li>
+<li>Java类对应的HotSpot虚拟机中的内部表示也存储在这里。</li>
+<li>类的层级信息，字段，名字。</li>
+<li>方法的编译信息及字节码。</li>
+<li>变量</li>
+<li>常量池和符号解析
           <!--noindex-->
           
             <div class="post-button text-center">
-              <a class="btn" href="/posts/dd7af934/#more" rel="contents">
+              <a class="btn" href="/posts/bda9e2c7/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1881,7 +2322,7 @@
           <!--/noindex-->
         
       
-    </p></div>
+    </li></ul></div>
 
     
 
@@ -1935,7 +2376,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://fengxiu.club/posts/e5ebb89c/">
+    <link itemprop="mainEntityOfPage" href="http://fengxiu.club/posts/499b414/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="枫秀天涯">
@@ -1955,7 +2396,7 @@
           <h2 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/posts/e5ebb89c/" class="post-title-link" itemprop="url">spring 源码分析之 06注册BeanDefinition</a>
+                <a href="/posts/499b414/" class="post-title-link" itemprop="url">java 内存模型</a>
               
             
           </h2>
@@ -1980,7 +2421,7 @@
                 
               
 
-              <time title="创建时间：2019-01-14 04:58:00" itemprop="dateCreated datePublished" datetime="2019-01-14T04:58:00+08:00">2019-01-14</time>
+              <time title="创建时间：2019-03-23 07:55:50" itemprop="dateCreated datePublished" datetime="2019-03-23T07:55:50+08:00">2019-03-23</time>
             
 
             
@@ -1997,7 +2438,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-06-17 21:34:08" itemprop="dateModified" datetime="2019-06-17T21:34:08+08:00">2019-06-17</time>
+                <time title="修改时间：2019-06-19 13:37:41" itemprop="dateModified" datetime="2019-06-19T13:37:41+08:00">2019-06-19</time>
               
             
           </span>
@@ -2021,21 +2462,14 @@
                   ，
                 
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/spring/" itemprop="url" rel="index"><span itemprop="name">spring</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/jvm/" itemprop="url" rel="index"><span itemprop="name">jvm</span></a></span>
 
                 
                 
                   ，
                 
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/spring/spring-源码分析/" itemprop="url" rel="index"><span itemprop="name">spring 源码分析</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/spring/spring-源码分析/SpringCore/" itemprop="url" rel="index"><span itemprop="name">SpringCore</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/jvm/内存/" itemprop="url" rel="index"><span itemprop="name">内存</span></a></span>
 
                 
                 
@@ -2050,9 +2484,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/posts/e5ebb89c/#comments" itemprop="discussionUrl">
+                <a href="/posts/499b414/#comments" itemprop="discussionUrl">
                 
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="posts/e5ebb89c/" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="posts/499b414/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -2060,7 +2494,7 @@
 
           
           
-             <span id="/posts/e5ebb89c/" class="leancloud_visitors" data-flag-title="spring 源码分析之 06注册BeanDefinition">
+             <span id="/posts/499b414/" class="leancloud_visitors" data-flag-title="java 内存模型">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -2085,7 +2519,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">7.2k</span>
+                <span title="本文字数">11k</span>
               
 
               
@@ -2099,7 +2533,7 @@
                 
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
-                <span title="阅读时长">7 分钟</span>
+                <span title="阅读时长">10 分钟</span>
               
             </div>
           
@@ -2120,11 +2554,18 @@
 
       
         
-          <h1 id="spring-源码解析之-06注册BeanDefinition"><a href="#spring-源码解析之-06注册BeanDefinition" class="headerlink" title="spring 源码解析之 06注册BeanDefinition"></a>spring 源码解析之 06注册BeanDefinition</h1><h4 id="registerBeanDefinitions"><a href="#registerBeanDefinitions" class="headerlink" title="registerBeanDefinitions"></a>registerBeanDefinitions</h4><p>获取 Document 对象后，会根据该对象和 Resource 资源对象调用 <code>registerBeanDefinitions()</code> 方法，开启注册BeanDefinition之旅。如下：<br>
+          <h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><blockquote>
+<ol>
+<li>Java 内存模型</li>
+<li>内存间间的交互工作</li>
+<li>volatile关键字</li>
+<li>原子性、可见性和有序性</li>
+<li>volatile 原理</li>
+<li>volatile应用场景
           <!--noindex-->
           
             <div class="post-button text-center">
-              <a class="btn" href="/posts/e5ebb89c/#more" rel="contents">
+              <a class="btn" href="/posts/499b414/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -2132,7 +2573,7 @@
           <!--/noindex-->
         
       
-    </p></div>
+    </li></ol></blockquote></div>
 
     
 
@@ -2186,7 +2627,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://fengxiu.club/posts/6a25672f/">
+    <link itemprop="mainEntityOfPage" href="http://fengxiu.club/posts/53c15109/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="枫秀天涯">
@@ -2206,7 +2647,7 @@
           <h2 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/posts/6a25672f/" class="post-title-link" itemprop="url">spring源码解析之 07bean标签:开启解析进程</a>
+                <a href="/posts/53c15109/" class="post-title-link" itemprop="url">JVM源码分析之 FinalReference 完全解读</a>
               
             
           </h2>
@@ -2231,7 +2672,7 @@
                 
               
 
-              <time title="创建时间：2019-01-14 05:11:00" itemprop="dateCreated datePublished" datetime="2019-01-14T05:11:00+08:00">2019-01-14</time>
+              <time title="创建时间：2019-01-04 10:24:00" itemprop="dateCreated datePublished" datetime="2019-01-04T10:24:00+08:00">2019-01-04</time>
             
 
             
@@ -2248,7 +2689,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-06-17 21:34:08" itemprop="dateModified" datetime="2019-06-17T21:34:08+08:00">2019-06-17</time>
+                <time title="修改时间：2019-06-19 13:37:41" itemprop="dateModified" datetime="2019-06-19T13:37:41+08:00">2019-06-19</time>
               
             
           </span>
@@ -2272,21 +2713,14 @@
                   ，
                 
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/spring/" itemprop="url" rel="index"><span itemprop="name">spring</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/jvm/" itemprop="url" rel="index"><span itemprop="name">jvm</span></a></span>
 
                 
                 
                   ，
                 
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/spring/spring-源码分析/" itemprop="url" rel="index"><span itemprop="name">spring 源码分析</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/spring/spring-源码分析/SpringCore/" itemprop="url" rel="index"><span itemprop="name">SpringCore</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/jvm/引用/" itemprop="url" rel="index"><span itemprop="name">引用</span></a></span>
 
                 
                 
@@ -2301,9 +2735,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/posts/6a25672f/#comments" itemprop="discussionUrl">
+                <a href="/posts/53c15109/#comments" itemprop="discussionUrl">
                 
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="posts/6a25672f/" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="posts/53c15109/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -2311,261 +2745,7 @@
 
           
           
-             <span id="/posts/6a25672f/" class="leancloud_visitors" data-flag-title="spring源码解析之 07bean标签:开启解析进程">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数：</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">8.1k</span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">7 分钟</span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="spring-源码解析之bean标签-开启解析进程"><a href="#spring-源码解析之bean标签-开启解析进程" class="headerlink" title="spring 源码解析之bean标签:开启解析进程"></a>spring 源码解析之bean标签:开启解析进程</h1><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><ol>
-<li>parseDefaultElement</li>
-<li>processBeanDefinition (bean标签的解析即注册)</li>
-<li>解析BeanDefinition
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/posts/6a25672f/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </li></ol></div>
-
-    
-
-    
-    
-    
-
-      
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://fengxiu.club/posts/2b388fc7/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="枫秀天涯">
-      <meta itemprop="description" content="java,spring,分布式,数据库">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="枫秀天涯">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/posts/2b388fc7/" class="post-title-link" itemprop="url">spring源码解析之 09bean 标签：meta、lookup-method、replace-method</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-01-14 05:19:00" itemprop="dateCreated datePublished" datetime="2019-01-14T05:19:00+08:00">2019-01-14</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-06-17 21:34:08" itemprop="dateModified" datetime="2019-06-17T21:34:08+08:00">2019-06-17</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/spring/" itemprop="url" rel="index"><span itemprop="name">spring</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/spring/spring-源码分析/" itemprop="url" rel="index"><span itemprop="name">spring 源码分析</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/spring/spring-源码分析/SpringCore/" itemprop="url" rel="index"><span itemprop="name">SpringCore</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/posts/2b388fc7/#comments" itemprop="discussionUrl">
-                
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="posts/2b388fc7/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-             <span id="/posts/2b388fc7/" class="leancloud_visitors" data-flag-title="spring源码解析之 09bean 标签：meta、lookup-method、replace-method">
+             <span id="/posts/53c15109/" class="leancloud_visitors" data-flag-title="JVM源码分析之 FinalReference 完全解读">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -2625,14 +2805,19 @@
 
       
         
-          <h1 id="spring源码解析之-09bean-标签：meta、lookup-method、replace-method"><a href="#spring源码解析之-09bean-标签：meta、lookup-method、replace-method" class="headerlink" title="spring源码解析之 09bean 标签：meta、lookup-method、replace-method"></a>spring源码解析之 09bean 标签：meta、lookup-method、replace-method</h1><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><ol>
-<li>meta 子元素解析</li>
-<li>lookup-method 子元素解析</li>
-<li>replace-method子元素解析
+          <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>Java对象引用体系除了强引用之外，出于对性能、可扩展性等方面考虑还特地实现了4种其他引用：<code>SoftReference</code>、<code>WeakReference</code>、<code>PhantomReference</code>、<code>FinalReference</code>，本文主要想讲的是<code>FinalReference</code>，因为当使用内存分析工具，比如zprofiler、mat等，分析一些oom的heap时，经常能看到 <code>java.lang.ref.Finalizer</code>占用的内存大小远远排在前面，而这个类占用的内存大小又和我们这次的主角<code>FinalReference</code>有着密不可分的关系。</p>
+<p><code>FinalReference</code>及关联的内容可能给我们留下如下印象：</p>
+<ul>
+<li>自己代码里从没有使用过；</li>
+<li>线程dump之后，会看到一个叫做<code>Finalizer</code>的Java线程；</li>
+<li>偶尔能注意到<code>java.lang.ref.Finalizer</code>的存在；</li>
+<li>在类里可能会写<code>finalize</code>方法。</li>
+</ul>
+<p>那<code>FinalReference</code>到底存在的意义是什么，以怎样的形式和我们的代码相关联呢？这是本文要理清的问题。<br>
           <!--noindex-->
           
             <div class="post-button text-center">
-              <a class="btn" href="/posts/2b388fc7/#more" rel="contents">
+              <a class="btn" href="/posts/53c15109/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -2640,260 +2825,7 @@
           <!--/noindex-->
         
       
-    </li></ol></div>
-
-    
-
-    
-    
-    
-
-      
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://fengxiu.club/posts/1f68182f/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="枫秀天涯">
-      <meta itemprop="description" content="java,spring,分布式,数据库">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="枫秀天涯">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/posts/1f68182f/" class="post-title-link" itemprop="url">spring 源码解析之 10bean标签：constructor-arg、property子元素</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-01-14 05:21:00" itemprop="dateCreated datePublished" datetime="2019-01-14T05:21:00+08:00">2019-01-14</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-06-17 21:34:08" itemprop="dateModified" datetime="2019-06-17T21:34:08+08:00">2019-06-17</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/spring/" itemprop="url" rel="index"><span itemprop="name">spring</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/spring/spring-源码分析/" itemprop="url" rel="index"><span itemprop="name">spring 源码分析</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/spring/spring-源码分析/SpringCore/" itemprop="url" rel="index"><span itemprop="name">SpringCore</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/posts/1f68182f/#comments" itemprop="discussionUrl">
-                
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="posts/1f68182f/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-             <span id="/posts/1f68182f/" class="leancloud_visitors" data-flag-title="spring 源码解析之 10bean标签：constructor-arg、property子元素">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数：</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">14k</span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">13 分钟</span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="spring-源码解析之-10bean标签：constructor-arg、property子元素"><a href="#spring-源码解析之-10bean标签：constructor-arg、property子元素" class="headerlink" title="spring 源码解析之 10bean标签：constructor-arg、property子元素"></a>spring 源码解析之 10bean标签：constructor-arg、property子元素</h1><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><ol>
-<li>Constructor-arg子元素解析</li>
-<li>property子元素解析
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/posts/1f68182f/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </li></ol></div>
+    </p></div>
 
     
 
@@ -2981,7 +2913,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">158</span>
+                    <span class="site-state-item-count">159</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -3261,7 +3193,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">83</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">85</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -3345,7 +3281,7 @@
       总阅读时长
     </span>
     
-    <span title="站点阅读时长">19:47</span>
+    <span title="站点阅读时长">19:59</span>
   
 </div>
 
