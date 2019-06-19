@@ -12,25 +12,8 @@ tags:
   - LongAdder
 ---
 `java.util.concurrency.atomic.LongAdder`是Java8新增的一个类，提供了原子累计值的方法。根据文档的描述其性能要优于AtomicLong，下面是一个简单的测试对比demo(平台:MBP):
+<!-- more -->
 ``` java
-package com.zhangke.basic;
-
-import org.openjdk.jmh.annotations.*;
-import org.openjdk.jmh.runner.Runner;
-import org.openjdk.jmh.runner.RunnerException;
-import org.openjdk.jmh.runner.options.Options;
-import org.openjdk.jmh.runner.options.OptionsBuilder;
-
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.LongAdder;
-
-/**************************************
- *      Author : zhangke
- *      Date   : 2019-06-19 10:53
- *      email  : 398757724@qq.com
- *      Desc   : 对比AtomicInteger和LongAdder性能
- ***************************************/
 @State(Scope.Group)
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
