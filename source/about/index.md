@@ -11,10 +11,9 @@ date: 2019-03-11 02:40:00
 5. [MappedByteBuffer VS FileChannel 孰强孰弱](https://juejin.im/post/5cd82323f265da038932b1e6)
 6. [堆外内存 之 DirectByteBuffer 详解](https://www.jianshu.com/p/007052ee3773)
 #### JUC
-1. [Java并发工具类之LongAdder原理总结](https://juejin.im/entry/5a5b7e8a51882573443ca7ee)
-4. [JAVA并发编程J.U.C学习总结](https://www.cnblogs.com/chenpi/p/5614290.html)
-5. [Java多线程进阶（一）—— J.U.C并发包概述](https://segmentfault.com/a/1190000015558984)
-6. [Java并发编程从入门到精通](http://ifeve.com/%E3%80%8A-java%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A%E3%80%8B%E7%9B%AE%E5%BD%95%E5%92%8C%E5%BA%8F%E8%A8%80/)
+1. [JAVA并发编程J.U.C学习总结](https://www.cnblogs.com/chenpi/p/5614290.html)
+2. [Java多线程进阶（一）—— J.U.C并发包概述](https://segmentfault.com/a/1190000015558984)
+3. [Java并发编程从入门到精通](http://ifeve.com/%E3%80%8A-java%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A%E3%80%8B%E7%9B%AE%E5%BD%95%E5%92%8C%E5%BA%8F%E8%A8%80/)
 ##### spring
 1. [Spring 框架的设计理念与设计模式分析](https://www.ibm.com/developerworks/cn/java/j-lo-spring-principle/index.html)
 2. [spring boot](http://www.importnew.com/tag/spring-boot)
