@@ -22,10 +22,11 @@ date: 2019-03-11 02:40:00
 5. [聊一聊Spring中的线程安全性](https://juejin.im/post/5a0045ef5188254de169968e)
 6. [Spring中循环引用的处理-3](https://www.iflym.com/index.php/code/201208280003.html)
 7. [SpringBoot2 | SpringBoot启动流程](https://blog.csdn.net/woshilijiuyi/article/details/82350057)
-#### http
+#### 网络
 1. [TCP IP 底层队列](https://segmentfault.com/a/1190000018448806)
 2. [金融通信框架实践](https://mp.weixin.qq.com/s/JRsbK1Un2av9GKmJ8DK7IQ)
 3. [高性能网络编程](https://blog.csdn.net/russell_tao/column/info/high-perf-network)
+4. [Linux TCP Backlog机制分析](http://codefine.site/2918.html)
 #### go
 1. [go 常量](https://blog.golang.org/constants)
 2. [go iota](https://segmentfault.com/a/1190000000656284#articleHeader4)

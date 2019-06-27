@@ -19,19 +19,14 @@ date: 2019-04-08 15:17:04
 <!--  more  -->
 ## 指令讲解
 下面分别看看上面的每个指令：
-
 ### break
-
 停止执行 ngx_http_rewrite_module 的指令集，但是其他模块指令是不受影响的。
-
 ```nginx
 Syntax:	break;
 Default:	—
 Context:	server, location, if
 ```
-
 例子：
-
 ```nginx
 server {
     listen 8080;
@@ -60,9 +55,7 @@ curl 127.0.0.1:8080/testbreak
 可以看到 返回 `/other` 而不是 `/testbreak`，说明 `proxy_pass` 指令还是被执行了，也就是说 其他模块的指令是不会被 break 中断执行的(proxy_pass是ngx_http_proxy_module的指令)
 
 ### if
-
 依据指定的条件决定是否执行 if 块语句中的内容。里面可以设置其他模块的指令，但是必须是if指令所在上下文中存在的指令。
-
 ```nginx
 Syntax:	if (condition) { ... }
 Default:	—
@@ -70,7 +63,6 @@ Context:	server, location
 ```
 
 #### if 中的几种 判断条件
-
 1. 一个`变量名`，如果变量 $variable 的值为空字符串或者字符串"0"，则为false
 2. `变量`与一个字符串的比较相等为(=) 不相等为(!=) 
 3. `变量`与一个正则表达式的模式匹配 操作符可以是(`~` 区分大小写的正则匹配， `~*`不区分大小写的正则匹配，` !~``!~*`，前面两者的非)

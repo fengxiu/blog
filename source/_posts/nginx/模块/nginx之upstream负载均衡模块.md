@@ -10,11 +10,10 @@ tags:
   - upstream
 date: 2019-04-08 19:23:16
 ---
-ngx_http_upstream_module模块用于定义服务器组，可以在proxy_pass, fastcgi_pass, uwsgi_pass, scgi_pass以及memcached_pass指令中引用。
-
-示例如下
+`ngx_http_upstream_module`模块用于定义服务器组，可以在`proxy_pass, fastcgi_pass, uwsgi_pass, scgi_pass`以及`memcached_pass`指令中引用。
+示例如下:
 ``` nginx
- upstream backend {
+upstream backend {
     server backend1.example.com       weight=5;
     server backend2.example.com:8080;
     server unix:/tmp/backend3;
@@ -35,7 +34,7 @@ server {
 ``` nginx
     Syntax:	upstream name { ... }
     Default:	—
-    Context:	http
+    Context:  http
 ```
 定义一组服务器。服务器可以监听不同的端口。此外，服务器可以混合的监听TCP和UNIX-domain socket。
 
@@ -51,7 +50,6 @@ upstream backend {
 }
 ```
 默认情况下，请求在服务器之间的分配使用带权重的轮询负载均衡方式。上面的例子中，每7个请求会按如下方式分配：5个请求分配到backend1.example.com，第二个和第三个服务器分别分配1个请求。如果在与一个服务器通信时发生了错误，请求将会传递给下一个服务器，直到所有的服务器都尝试了。如果从任何一个服务器都得不到成功的响应，客户端将会收到与最后一个服务器通信的结果。
-
 ### server
 ``` nginx
     Syntax:	server address [parameters];
