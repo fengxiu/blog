@@ -2127,9 +2127,8 @@ sys     0m0.000s
 
       
         
-          <p>ngx_http_upstream_module模块用于定义服务器组，可以在proxy_pass, fastcgi_pass, uwsgi_pass, scgi_pass以及memcached_pass指令中引用。</p>
-<p>示例如下</p>
-<pre><code class="nginx"> upstream backend {
+          <p><code>ngx_http_upstream_module</code>模块用于定义服务器组，可以在<code>proxy_pass, fastcgi_pass, uwsgi_pass, scgi_pass</code>以及<code>memcached_pass</code>指令中引用。<br>示例如下:</p>
+<pre><code class="nginx">upstream backend {
     server backend1.example.com       weight=5;
     server backend2.example.com:8080;
     server unix:/tmp/backend3;
@@ -2796,6 +2795,10 @@ server {
                 <div class="site-state-item site-state-tags">
                   <a href="/tags/index.html">
                     
+                    
+                      
+                    
+                      
                     
                       
                     

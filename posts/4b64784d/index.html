@@ -105,19 +105,19 @@
 
 
 
-  <meta name="description" content="ngx_http_upstream_module模块用于定义服务器组，可以在proxy_pass, fastcgi_pass, uwsgi_pass, scgi_pass以及memcached_pass指令中引用。 示例如下  upstream backend {     server backend1.example.com       weight=5;     server backend2">
+  <meta name="description" content="ngx_http_upstream_module模块用于定义服务器组，可以在proxy_pass, fastcgi_pass, uwsgi_pass, scgi_pass以及memcached_pass指令中引用。示例如下: upstream backend {     server backend1.example.com       weight=5;     server backend2.">
 <meta name="keywords" content="nginx,upstream,负载均衡">
 <meta property="og:type" content="article">
 <meta property="og:title" content="nginx之upstream(负载均衡)模块">
 <meta property="og:url" content="http://fengxiu.club/posts/4b64784d/index.html">
 <meta property="og:site_name" content="枫秀天涯">
-<meta property="og:description" content="ngx_http_upstream_module模块用于定义服务器组，可以在proxy_pass, fastcgi_pass, uwsgi_pass, scgi_pass以及memcached_pass指令中引用。 示例如下  upstream backend {     server backend1.example.com       weight=5;     server backend2">
+<meta property="og:description" content="ngx_http_upstream_module模块用于定义服务器组，可以在proxy_pass, fastcgi_pass, uwsgi_pass, scgi_pass以及memcached_pass指令中引用。示例如下: upstream backend {     server backend1.example.com       weight=5;     server backend2.">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://fengxiu.club/images/pasted-344.png">
-<meta property="og:updated_time" content="2019-06-19T05:59:59.385Z">
+<meta property="og:updated_time" content="2019-06-27T04:05:25.225Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="nginx之upstream(负载均衡)模块">
-<meta name="twitter:description" content="ngx_http_upstream_module模块用于定义服务器组，可以在proxy_pass, fastcgi_pass, uwsgi_pass, scgi_pass以及memcached_pass指令中引用。 示例如下  upstream backend {     server backend1.example.com       weight=5;     server backend2">
+<meta name="twitter:description" content="ngx_http_upstream_module模块用于定义服务器组，可以在proxy_pass, fastcgi_pass, uwsgi_pass, scgi_pass以及memcached_pass指令中引用。示例如下: upstream backend {     server backend1.example.com       weight=5;     server backend2.">
 <meta name="twitter:image" content="http://fengxiu.club/images/pasted-344.png">
 
 
@@ -549,9 +549,8 @@
       
 
       
-        <p>ngx_http_upstream_module模块用于定义服务器组，可以在proxy_pass, fastcgi_pass, uwsgi_pass, scgi_pass以及memcached_pass指令中引用。</p>
-<p>示例如下</p>
-<pre><code class="nginx"> upstream backend {
+        <p><code>ngx_http_upstream_module</code>模块用于定义服务器组，可以在<code>proxy_pass, fastcgi_pass, uwsgi_pass, scgi_pass</code>以及<code>memcached_pass</code>指令中引用。<br>示例如下:</p>
+<pre><code class="nginx">upstream backend {
     server backend1.example.com       weight=5;
     server backend2.example.com:8080;
     server unix:/tmp/backend3;
@@ -569,7 +568,7 @@ server {
 <a id="more"></a>
 <h2 id="指令集"><a href="#指令集" class="headerlink" title="指令集"></a>指令集</h2><h3 id="upstream"><a href="#upstream" class="headerlink" title="upstream"></a>upstream</h3><pre><code class="nginx">    Syntax:    upstream name { ... }
     Default:    —
-    Context:    http
+    Context:  http
 </code></pre>
 <p>定义一组服务器。服务器可以监听不同的端口。此外，服务器可以混合的监听TCP和UNIX-domain socket。</p>
 <p>示例如下,至于使用的参数，下面会讲解：</p>
@@ -872,7 +871,7 @@ $upstream_http_name
   <p><span>本文标题:</span><a href="/posts/4b64784d/">nginx之upstream(负载均衡)模块</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 枫秀天涯 的个人博客">枫秀天涯</a></p>
   <p><span>发布时间:</span>2019年04月08日 - 19:23</p>
-  <p><span>最后更新:</span>2019年06月19日 - 13:59</p>
+  <p><span>最后更新:</span>2019年06月27日 - 12:05</p>
   <p><span>原始链接:</span>
      <a href="/posts/4b64784d/" title="nginx之upstream(负载均衡)模块">nginx之upstream(负载均衡)模块</a>
     <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://fengxiu.club/posts/4b64784d/" aria-label="复制成功！"></i></span>
@@ -1124,6 +1123,10 @@ $upstream_http_name
                 <div class="site-state-item site-state-tags">
                   <a href="/tags/index.html">
                     
+                    
+                      
+                    
+                      
                     
                       
                     
