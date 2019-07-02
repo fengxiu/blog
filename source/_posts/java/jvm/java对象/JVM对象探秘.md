@@ -5,6 +5,7 @@ tags:
 categories:
   - java
   - jvm
+  - java对象
 copyright: false
 abbrlink: 7fe71378
 date: 2019-03-24 17:25:00
