@@ -10,8 +10,6 @@ categories:
 abbrlink: d4c4bc29
 date: 2018-07-24 15:12:00
 ---
-# java多线程系列-JUC线程池之04 Future、Callable和FutureTask分析
-
 ### 概要
 
 1. Callable和Future简介
