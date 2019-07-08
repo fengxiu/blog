@@ -105,25 +105,25 @@
 
 
 
-  <meta name="description" content="javaspring分布式数据库">
-<meta name="keywords" content="lock">
+  <meta name="description" content="简介前面提过，如果Future集合用于存放执行结果，执行任务，最后遍历Future集合获取结果；因为Future.get()方法是阻塞的，因此不能及时获取已完成任务的执行结果。所以JUC提供了一个ExecutorService来结果结果的取出，使得任务的提交和结果的获取都能做到异步，从而实现真正的异步。">
+<meta name="keywords" content="JUC,线程池">
 <meta property="og:type" content="article">
-<meta property="og:title" content=" java线程系列 JUC锁 02 互斥锁ReentrantLock">
-<meta property="og:url" content="http://fengxiu.club/posts/4b320d61/index.html">
+<meta property="og:title" content="java多线程系列-JUC线程池之06 CompletionService">
+<meta property="og:url" content="http://fengxiu.club/posts/fac740ad/index.html">
 <meta property="og:site_name" content="枫秀天涯">
-<meta property="og:description" content="javaspring分布式数据库">
+<meta property="og:description" content="简介前面提过，如果Future集合用于存放执行结果，执行任务，最后遍历Future集合获取结果；因为Future.get()方法是阻塞的，因此不能及时获取已完成任务的执行结果。所以JUC提供了一个ExecutorService来结果结果的取出，使得任务的提交和结果的获取都能做到异步，从而实现真正的异步。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-07-08T13:25:36.405Z">
+<meta property="og:updated_time" content="2019-07-08T13:25:36.401Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content=" java线程系列 JUC锁 02 互斥锁ReentrantLock">
-<meta name="twitter:description" content="javaspring分布式数据库">
+<meta name="twitter:title" content="java多线程系列-JUC线程池之06 CompletionService">
+<meta name="twitter:description" content="简介前面提过，如果Future集合用于存放执行结果，执行任务，最后遍历Future集合获取结果；因为Future.get()方法是阻塞的，因此不能及时获取已完成任务的执行结果。所以JUC提供了一个ExecutorService来结果结果的取出，使得任务的提交和结果的获取都能做到异步，从而实现真正的异步。">
 
 
 
 
 
 
-  <link rel="canonical" href="http://fengxiu.club/posts/4b320d61/">
+  <link rel="canonical" href="http://fengxiu.club/posts/fac740ad/">
 
 
 
@@ -133,7 +133,7 @@
   };
 </script>
 
-  <title> java线程系列 JUC锁 02 互斥锁ReentrantLock | 枫秀天涯</title>
+  <title>java多线程系列-JUC线程池之06 CompletionService | 枫秀天涯</title>
   
 
 
@@ -395,7 +395,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://fengxiu.club/posts/4b320d61/">
+    <link itemprop="mainEntityOfPage" href="http://fengxiu.club/posts/fac740ad/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="枫秀天涯">
@@ -412,7 +412,7 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline"> java线程系列 JUC锁 02 互斥锁ReentrantLock
+          <h2 class="post-title" itemprop="name headline">java多线程系列-JUC线程池之06 CompletionService
 
               
             
@@ -438,7 +438,7 @@
                 
               
 
-              <time title="创建时间：2019-03-17 22:27:00" itemprop="dateCreated datePublished" datetime="2019-03-17T22:27:00+08:00">2019-03-17</time>
+              <time title="创建时间：2019-07-08 20:09:20" itemprop="dateCreated datePublished" datetime="2019-07-08T20:09:20+08:00">2019-07-08</time>
             
 
             
@@ -470,7 +470,7 @@
                   ，
                 
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/juc/lock/" itemprop="url" rel="index"><span itemprop="name">lock</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/juc/Executors/" itemprop="url" rel="index"><span itemprop="name">Executors</span></a></span>
 
                 
                 
@@ -485,9 +485,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/posts/4b320d61/#comments" itemprop="discussionUrl">
+                <a href="/posts/fac740ad/#comments" itemprop="discussionUrl">
                 
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="posts/4b320d61/" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="posts/fac740ad/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -495,7 +495,7 @@
 
           
           
-             <span id="/posts/4b320d61/" class="leancloud_visitors" data-flag-title=" java线程系列 JUC锁 02 互斥锁ReentrantLock">
+             <span id="/posts/fac740ad/" class="leancloud_visitors" data-flag-title="java多线程系列-JUC线程池之06 CompletionService">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -520,7 +520,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">0</span>
+                <span title="本文字数">4.3k</span>
               
 
               
@@ -534,7 +534,7 @@
                 
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
-                <span title="阅读时长">1 分钟</span>
+                <span title="阅读时长">4 分钟</span>
               
             </div>
           
@@ -554,7 +554,116 @@
       
 
       
-        
+        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>前面提过，如果Future集合用于存放执行结果，执行任务，最后遍历Future集合获取结果；因为<code>Future.get()</code>方法是阻塞的，因此不能及时获取已完成任务的执行结果。所以JUC提供了一个<code>ExecutorService</code>来结果结果的取出，使得任务的提交和结果的获取都能做到异步，从而实现真正的异步。<br><a id="more"></a></p>
+<h2 id="简单示例"><a href="#简单示例" class="headerlink" title="简单示例"></a>简单示例</h2><p>下面是一个使用ExecutorService的简单demo，这个例子演示了<code>poll</code>方法的使用，方法poll的作用是获取并移除表示下一个已完成任务的Future，如果不存在这样的任务，则返回null，方法poll是无阻塞的。</p>
+<pre><code class="java">public class ExecutorServiceStudy {
+    public static void main(String[] args) throws Exception {
+        ExecutorService executorService = Executors.newCachedThreadPool();
+        CompletionService&lt;String&gt; service = new ExecutorCompletionService&lt;String&gt;(executorService);
+        service.submit(new Callable&lt;String&gt;() {
+            @Override
+            public String call() throws Exception {
+                TimeUnit.SECONDS.sleep(3);
+                System.out.println(&quot;3 seconds pass.&quot;);
+                return &quot;3秒&quot;;
+            }
+        });
+        System.out.println(service.poll());
+        executorService.shutdown();
+    }
+}
+</code></pre>
+<h2 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h2><p>下面是我从javaDoc，翻译的ExecutorService的官方解释，如果您的英文比较好，可以直接看英文原文，毕竟我的英语也只是个二把刀</p>
+<pre><code class="txt">一个Service用于解耦任务的异步提交和任务完成结果的获取。生产者提交任务执行。消费者取出完成的任务并按照完成的顺序来获取结果。（注意这里的完成顺序不一定是任务的提交顺序）。例如，CompletionService可用于管理异步I / O，其中执行读取的任务在程序或系统的某个部分中提交，然后在读取完成时在程序的不同部分中执行，可能在不同于他们提交的顺序。通常，CompletiongService依赖一个单独饿线程池去执行任务，所有，CompletionService仅仅管理内部的任务完成队列。ExecutorCompletionService是它的一个默认实现。
+</code></pre>
+<p>我们首先看看ExecutorService这个接口的定义：</p>
+<pre><code class="java">public interface CompletionService&lt;V&gt; {
+    // 提交任务
+    Future&lt;V&gt; submit(Callable&lt;V&gt; task);
+
+    // 提交任务
+    Future&lt;V&gt; submit(Runnable task, V result);
+
+    // 检索并移除Future代表的接下来完成任务，如果没有完成的任务则阻塞
+    Future&lt;V&gt; take() throws InterruptedException;
+
+     // 检索和移除Future代表的接下来完成的任务，如果没有完成的则返回null
+    Future&lt;V&gt; poll();
+
+     // 检索和移除Future代表的接下来完成的任务，等待指定的时间，如果没有完成的则返回null
+    Future&lt;V&gt; poll(long timeout, TimeUnit unit) throws InterruptedException;
+}
+
+</code></pre>
+<p>从上面看，接口的定义相对来说比较简单，定义了来个提交任务的方法，和三个获取任务结果的方法，其中一个会阻塞等待直到有任务完成，另俩个非阻塞获取任务结果的方法。</p>
+<h3 id="具体实现：ExecutorCompletionService"><a href="#具体实现：ExecutorCompletionService" class="headerlink" title="具体实现：ExecutorCompletionService"></a>具体实现：ExecutorCompletionService</h3><p>首先谈谈我还没看这个类时的想法，我一看这个类的功能，想着实现这个接口肯定需要大量的代码，而且也会超级复杂。但是当我看到代码的时候，真的不得不佩服doug lea大师的抽象能力。</p>
+<p>这里首先看下属性和一个内部类，这个后面都会用到：</p>
+<pre><code class="java">    // 线程池，用于执行任务
+    private final Executor executor;
+    // 存储是AbstractExecutorService的线程池，用于创建任务
+    private final AbstractExecutorService aes;
+
+    // 存储完成任务的队列
+    private final BlockingQueue&lt;Future&lt;V&gt;&gt; completionQueue;
+
+     // 下面这个方法只是简单的继承FutureTask，然后扩展了任务完成时的方法
+    private class QueueingFuture extends FutureTask&lt;Void&gt; {
+        QueueingFuture(RunnableFuture&lt;V&gt; task) {
+            super(task, null);
+            this.task = task;
+        }
+        protected void done() { completionQueue.add(task); }
+        private final Future&lt;V&gt; task;
+    }
+
+</code></pre>
+<h3 id="任务的提交：submit"><a href="#任务的提交：submit" class="headerlink" title="任务的提交：submit"></a>任务的提交：submit</h3><pre><code class="java">
+    public Future&lt;V&gt; submit(Callable&lt;V&gt; task) {
+        if (task == null) throw new NullPointerException();
+        RunnableFuture&lt;V&gt; f = newTaskFor(task);
+        executor.execute(new QueueingFuture(f));
+        return f;
+    }
+
+    public Future&lt;V&gt; submit(Runnable task, V result) {
+        if (task == null) throw new NullPointerException();
+        RunnableFuture&lt;V&gt; f = newTaskFor(task, result);
+        executor.execute(new QueueingFuture(f));
+        return f;
+    }
+
+    private RunnableFuture&lt;V&gt; newTaskFor(Callable&lt;V&gt; task) {
+        if (aes == null)
+            return new FutureTask&lt;V&gt;(task);
+        else
+            return aes.newTaskFor(task);
+    }
+
+    private RunnableFuture&lt;V&gt; newTaskFor(Runnable task, V result) {
+        if (aes == null)
+            return new FutureTask&lt;V&gt;(task, result);
+        else
+            return aes.newTaskFor(task, result);
+    }
+
+</code></pre>
+<p>整体代码还是比较简单，使用newTaskFor对提交的任务进行同意封装，然后提交到线程池中运行，不过这里需要对任务进一步封装，使用QueueingFuture来进行包装一层，而这个类前面已经说过就是个简单的扩展了FutureTask方法done的类。</p>
+<h3 id="完成任务的获取"><a href="#完成任务的获取" class="headerlink" title="完成任务的获取"></a>完成任务的获取</h3><pre><code class="java">    public Future&lt;V&gt; take() throws InterruptedException {
+        return completionQueue.take();
+    }
+
+    public Future&lt;V&gt; poll() {
+        return completionQueue.poll();
+    }
+
+    public Future&lt;V&gt; poll(long timeout, TimeUnit unit)
+            throws InterruptedException {
+        return completionQueue.poll(timeout, unit);
+    }
+</code></pre>
+<p>这个我觉得都不需要解释，就是对队列的操作。队列可以是JUC里面的任意队列类，这里默认使用的是LinkedBlockQueue。我觉得构造方法比较简单，就没有在这里列出，里面定义了如何传入BlockQueue。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>从这个其实我们可以看出，类的实现非常简单，基本上都是在复用JUC中已经存在的类，但是这个是因为JUC的整体抽象设计的非常好，所以这里才会做的那么简单，但功能实现却很完美，这个真的值得我们去思考，如何才能设计出这样的工具类。</p>
+
       
     </div>
 
@@ -567,14 +676,35 @@
     <li class="popular-posts-item">
       
       
-      <div class="popular-posts-title"><a href="/posts/cb19bcd7/" rel="bookmark">java线程系列 JUC锁 03 ReentrantLock公平锁</a></div>
+      <div class="popular-posts-title"><a href="/posts/984191f2/" rel="bookmark">java多线程系列-JUC线程池之 01 线程池架构</a></div>
       
     </li>
   
     <li class="popular-posts-item">
       
       
-      <div class="popular-posts-title"><a href="/posts/b95fbd38/" rel="bookmark">java线程系列 JUC锁 04 ReentrantLock 非公平锁</a></div>
+      <div class="popular-posts-title"><a href="/posts/ca60f1d2/" rel="bookmark">Java多线程系列-JUC线程池之02 ThreadPoolExecutor 执行流程分析</a></div>
+      
+    </li>
+  
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="/posts/a1d13062/" rel="bookmark">java多线程系列-JUC线程池之03 ThreadPoolExecutor 线程池的创建</a></div>
+      
+    </li>
+  
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="/posts/d4c4bc29/" rel="bookmark">java多线程系列-JUC线程池之04 Future 和Callable</a></div>
+      
+    </li>
+  
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="/posts/931a340/" rel="bookmark">Java CompletableFuture 详解</a></div>
       
     </li>
   
@@ -596,13 +726,13 @@
   <!-- JS库 sweetalert 可修改路径 -->
   <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-  <p><span>本文标题:</span><a href="/posts/4b320d61/"> java线程系列 JUC锁 02 互斥锁ReentrantLock</a></p>
+  <p><span>本文标题:</span><a href="/posts/fac740ad/">java多线程系列-JUC线程池之06 CompletionService</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 枫秀天涯 的个人博客">枫秀天涯</a></p>
-  <p><span>发布时间:</span>2019年03月17日 - 22:27</p>
+  <p><span>发布时间:</span>2019年07月08日 - 20:09</p>
   <p><span>最后更新:</span>2019年07月08日 - 21:25</p>
   <p><span>原始链接:</span>
-     <a href="/posts/4b320d61/" title=" java线程系列 JUC锁 02 互斥锁ReentrantLock"> java线程系列 JUC锁 02 互斥锁ReentrantLock</a>
-    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://fengxiu.club/posts/4b320d61/" aria-label="复制成功！"></i></span>
+     <a href="/posts/fac740ad/" title="java多线程系列-JUC线程池之06 CompletionService">java多线程系列-JUC线程池之06 CompletionService</a>
+    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://fengxiu.club/posts/fac740ad/" aria-label="复制成功！"></i></span>
   </p>
   <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
 </div>
@@ -636,7 +766,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/lock/" rel="tag">  <i class="fa fa-tag"></i> lock</a>
+            <a href="/tags/JUC/" rel="tag">  <i class="fa fa-tag"></i> JUC</a>
+          
+            <a href="/tags/线程池/" rel="tag">  <i class="fa fa-tag"></i> 线程池</a>
           
         </div>
       
@@ -649,8 +781,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/posts/1d97a19/" rel="next" title="JVM 垃圾回收器">
-                <i class="fa fa-chevron-left"></i> JVM 垃圾回收器
+              <a href="/posts/59504c8e/" rel="next" title="Java并发编程JUC总结">
+                <i class="fa fa-chevron-left"></i> Java并发编程JUC总结
               </a>
             
           </div>
@@ -658,10 +790,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/posts/cb19bcd7/" rel="prev" title="java线程系列 JUC锁 03 ReentrantLock公平锁">
-                java线程系列 JUC锁 03 ReentrantLock公平锁 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -713,8 +841,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <div class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -1075,6 +1212,23 @@
       </div>
 
       
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#简单示例"><span class="nav-number">2.</span> <span class="nav-text">简单示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#源码分析"><span class="nav-number">3.</span> <span class="nav-text">源码分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#具体实现：ExecutorCompletionService"><span class="nav-number">3.1.</span> <span class="nav-text">具体实现：ExecutorCompletionService</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#任务的提交：submit"><span class="nav-number">3.2.</span> <span class="nav-text">任务的提交：submit</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#完成任务的获取"><span class="nav-number">3.3.</span> <span class="nav-text">完成任务的获取</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
 
       
 
@@ -1251,9 +1405,9 @@
   
     <script>
       var disqus_config = function () {
-        this.page.url = "http://fengxiu.club/posts/4b320d61/";
-        this.page.identifier = "posts/4b320d61/";
-        this.page.title = ' java线程系列 JUC锁 02 互斥锁ReentrantLock';
+        this.page.url = "http://fengxiu.club/posts/fac740ad/";
+        this.page.identifier = "posts/fac740ad/";
+        this.page.title = 'java多线程系列-JUC线程池之06 CompletionService';
         };
       function loadComments () {
         var d = document, s = d.createElement('script');
