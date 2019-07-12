@@ -108,15 +108,18 @@
   <meta name="description" content="概念区分在Java进行类加载时，一般会有多个ClassLoader可以使用，包括当前类加载器，制定类加载器，上下文类加载器三个，可以用多种方式进行类型加载，以下面这段代码来对这个三个概念进行说明：">
 <meta name="keywords" content="类加载">
 <meta property="og:type" content="article">
-<meta property="og:title" content="系统，当前，线程上下文类加载概念介绍？">
+<meta property="og:title" content="系统、当前、线程上下文类加载概念介绍？">
 <meta property="og:url" content="http://fengxiu.club/posts/338e9034/index.html">
 <meta property="og:site_name" content="枫秀天涯">
 <meta property="og:description" content="概念区分在Java进行类加载时，一般会有多个ClassLoader可以使用，包括当前类加载器，制定类加载器，上下文类加载器三个，可以用多种方式进行类型加载，以下面这段代码来对这个三个概念进行说明：">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-07-08T13:25:36.409Z">
+<meta property="og:image" content="http://fengxiu.club/images/20170625143404387.png">
+<meta property="og:image" content="http://fengxiu.club/images/20170625164611435.png">
+<meta property="og:updated_time" content="2019-07-12T03:30:03.343Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="系统，当前，线程上下文类加载概念介绍？">
+<meta name="twitter:title" content="系统、当前、线程上下文类加载概念介绍？">
 <meta name="twitter:description" content="概念区分在Java进行类加载时，一般会有多个ClassLoader可以使用，包括当前类加载器，制定类加载器，上下文类加载器三个，可以用多种方式进行类型加载，以下面这段代码来对这个三个概念进行说明：">
+<meta name="twitter:image" content="http://fengxiu.club/images/20170625143404387.png">
 
 
 
@@ -133,7 +136,7 @@
   };
 </script>
 
-  <title>系统，当前，线程上下文类加载概念介绍？ | 枫秀天涯</title>
+  <title>系统、当前、线程上下文类加载概念介绍？ | 枫秀天涯</title>
   
 
 
@@ -412,7 +415,7 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">系统，当前，线程上下文类加载概念介绍？
+          <h2 class="post-title" itemprop="name headline">系统、当前、线程上下文类加载概念介绍？
 
               
             
@@ -495,7 +498,7 @@
 
           
           
-             <span id="/posts/338e9034/" class="leancloud_visitors" data-flag-title="系统，当前，线程上下文类加载概念介绍？">
+             <span id="/posts/338e9034/" class="leancloud_visitors" data-flag-title="系统、当前、线程上下文类加载概念介绍？">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -520,7 +523,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">6.1k</span>
+                <span title="本文字数">7.7k</span>
               
 
               
@@ -534,7 +537,7 @@
                 
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
-                <span title="阅读时长">6 分钟</span>
+                <span title="阅读时长">7 分钟</span>
               
             </div>
           
@@ -568,25 +571,27 @@
 <li>ThreadContextClassLoader，称之为线程上下文类加载器，简称TCCL：每个线程都可以通过<code>Thread.currentThread().setContextClassLoader(ClassLoader)</code>来进行切换。</li>
 </ul>
 <p>SCL和TCCL都可以理解为在代码中使用CLassLoader的引用进行类加载，我们可以自定义。但是CCL的加载过程是由JVM运行时来控制的，是无法通过Java编程来更改的。<br><!-- more --></p>
-<h2 id="系统、当前、线程上下文类加载器，该如何使用？"><a href="#系统、当前、线程上下文类加载器，该如何使用？" class="headerlink" title="系统、当前、线程上下文类加载器，该如何使用？"></a>系统、当前、线程上下文类加载器，该如何使用？</h2><p>这个问题虽然不经常问到，但是这个问题却很难有一个正确的答案。一般来说，这个问题都来自于框架编程过程中需要动态的加载资源。一般来说，加载一个资源的时候，你会有至少三个CLassLoader可以用来加载资源，系统ClassLoader（AppClassLoader），当前CLassLoader和线程上下文ThreadContextClassLoader。如何去选择使用哪个CLassLoader呢？<br>首先应该被排除掉的应该是系统ClassLoader，这个就是main的入口，通过载入<code>-classPath</code>的资源来加载类，这段代码是从sun.mis.Launcher.AppClassLoader中摘抄：</p>
+<h2 id="系统、当前、线程上下文类加载器，该如何选择"><a href="#系统、当前、线程上下文类加载器，该如何选择" class="headerlink" title="系统、当前、线程上下文类加载器，该如何选择"></a>系统、当前、线程上下文类加载器，该如何选择</h2><p>这个问题虽然不经常问到，但是这个问题却很难有一个正确的答案。一般来说，这个问题都来自于框架编程过程中需要动态的加载资源。一般来说，加载一个资源的时候，你会有至少三个CLassLoader可以用来加载资源，系统ClassLoader（AppClassLoader），当前CLassLoader和线程上下文ThreadContextClassLoader。如何去选择使用哪个CLassLoader呢？<br>首先应该被排除掉的应该是系统ClassLoader，这个就是main的入口，通过载入<code>-classPath</code>的资源来加载类，这段代码是从sun.mis.Launcher.AppClassLoader中摘抄：</p>
 <pre><code class="java">public static ClassLoader getAppClassLoader(final ClassLoader var0) 
     throws IOException {
 
     final String var1 = System.getProperty(&quot;java.class.path&quot;);
     final File[] var2 = var1 == null ? new File[0] : Launcher.getClassPath(var1);
-    return (ClassLoader)AccessController.doPrivileged(new PrivilegedAction&lt;Launcher.AppClassLoader&gt;() {
-        public Launcher.AppClassLoader run() {
-            URL[] var1x = var1 == null ? new URL[0] : Launcher.pathToURLs(var2);
-            return new Launcher.AppClassLoader(var1x, var0);
-        }
-    });
+
+    return (ClassLoader)AccessController
+        .doPrivileged(new PrivilegedAction&lt;Launcher.AppClassLoader&gt;() {
+            public Launcher.AppClassLoader run() {
+                URL[] var1x = var1 == null ? new URL[0] : Launcher.pathToURLs(var2);
+                return new Launcher.AppClassLoader(var1x, var0);
+            }
+        });
 }
 </code></pre>
-<p>其实AppClassLoader继承了URLClassLoader，它所做的工作，就是将java.class.path下的资源，转换为URL，然后加入到AppClassLoader中，除此没有别的特殊的地方。</p>
+<p>其实AppClassLoader继承了URLClassLoader，它所做的工作，就是将<code>java.class.path</code>下的资源，转换为URL，然后加入到AppClassLoader中，除此没有别的特殊的地方。</p>
 <p>能够通过静态方法<code>ClassLoader.getSystemClassLoader()</code>来获取到这个AppClassLoader。一般来说非常少的需求，需要获取到AppClassLoader，然后用它来加载一个类，因为都会使用其他的ClassLoader来加载类，并通过委派的方式到达AppClassLoader。</p>
-<p>如果你编写的程序运行在ClassLoader是AppClassLoader的情况下，那么你的程序就只能在命令行下运行，因为你的程序需要依赖均在classpath下设置好，而如果将程序直接部署在WebApp容器中，那么肯定会出问题。</p>
+<p>如果你编写的程序运行在ClassLoader是AppClassLoader的情况下，那么你的程序就只能在命令行下运行，因为你的程序需要依赖均在<code>classpath</code>下设置好，而如果将程序直接部署在WebApp容器中，那么肯定会出问题，因为webApp的一些资源并不在<code>classPath</code>下面。</p>
 <p>接下来，只有两个选择了，当前ClassLoader和线程上下文ClassLoader，以下简称：CurrentClassLoader（CCL）和ThreadContextClassLoader（TCCL）。</p>
-<h3 id="当前类加载器"><a href="#当前类加载器" class="headerlink" title="当前类加载器"></a>当前类加载器</h3><p> 这里简单介绍一下这个仿佛看不到的CurrentClassLoader是如何出现的。 在如下这段代码中：</p>
+<h3 id="当前类加载器"><a href="#当前类加载器" class="headerlink" title="当前类加载器"></a>当前类加载器</h3><p>这里简单介绍一下这个仿佛看不到的CurrentClassLoader是如何出现的。在如下这段代码中：</p>
 <pre><code class="java">class A {
      public void m() {
           B b = new B();
@@ -606,52 +611,72 @@
     return forName0(className, true, ClassLoader.getClassLoader(Reflection.getCallerClass()));
 }
 </code></pre>
-<p>Class.forName运作时，通过Reflection.getCallerClass()，能够获取是谁调用了<code>Class.forName</code>，这时 <code>ClassLoader.getClassLoader()</code>返回的就是当前ClassLoader，这就符合原有含义了。可以通过观察，通过Java的rt.jar中的API，返回给客户端时，都是使用了获取调用者的ClassLoader的特性，因为在rt.jar中，是无法找到自定义类型的。</p>
+<p><code>Class.forName</code>运作时，通过<code>Reflection.getCallerClass()</code>，能够获取是谁调用了<code>Class.forName</code>，这时 <code>ClassLoader.getClassLoader()</code>返回的就是当前ClassLoader，这就符合原有含义了。<br><!-- 可以通过观察，通过Java的rt.jar中的API，返回给客户端时，都是使用了获取调用者的ClassLoader的特性，因为在rt.jar中，是无法找到自定义类型的。 --></p>
 <p>通过<code>Reflection.getCallerClass()</code>可以获取到调用<code>Class.forName</code>的类的ClassLoader，从而虽然中间涉及到了bootstrap加载的类（Class），但是依旧能够维护<strong>当前</strong>这个语义。</p>
-<p>Java自身除了通过<code>Reflection.getCallerClass</code>来获取调用的类的类型，在deSerialization中也需要知道类型的信息。在序列化后的内容中，已经包含了当前用户自定义类的类型信息，那么如何在ObjectInputStream调用中，能够拿到客户端的类型呢？通过调用Class.forName？肯定不可以，因为在ObjectInputStream中调用这个，会使用bootstrap来加载，那么它肯定加载不到所需要的类。</p>
-<p>答案是通过查询栈信息，通过<code>sun.misc.VM.latestUserDefinedLoader()</code>; 获取从栈上开始计算，第一个不为空（bootstrap classloader是空）的ClassLoader便返回。</p>
-<p>可以试想，在ObjectInputStream运作中，通过直接获取当前调用栈中，第一个非空的ClassLoader，这种做法能够非常便捷的定位用户的ClassLoader，也就是用户在进行：</p>
+<p>Java自身除了通过<code>Reflection.getCallerClass</code>来获取调用的类的类型，在deSerialization中也需要知道类型的信息。在序列化后的内容中，已经包含了当前用户自定义类的类型信息，那么如何在ObjectInputStream调用中，能够拿到客户端的类型呢？通过调用Class.forName？肯定不可以，因为在ObjectInputStream中调用这个，会使用bootstrap来加载，那么它肯定加载不到所需要的类。<br>答案是通过查询栈信息，通过<code>sun.misc.VM.latestUserDefinedLoader()</code>; 获取从栈上开始计算，第一个不为空（bootstrap classloader是空）的ClassLoader便返回。<br>可以试想，在ObjectInputStream运作中，通过直接获取当前调用栈中，第一个非空的ClassLoader，这种做法能够非常便捷的定位用户的ClassLoader，也就是用户在进行：</p>
 <pre><code class="java">ObjectInputStream ois = new ObjectInputStream(new FileInputStream(“xx.dat”));
 B b = (B) ois.readObject();
 </code></pre>
 <p>这种调用的时候，依旧能够通过<strong>当前</strong>的ClassLoader正确的加载用户的类。</p>
 <p>可以说<code>Reflection.getCallerClass</code>和<code>sun.misc.VM.latestuserDefinedLoader</code>都是用来突破双亲委派模型的一种解决方式，它能让Java在bootstrap加载的代码中运行时，能够获取到外界（用户）使用的子ClassLoader。</p>
-<h3 id="线程上下文类加载器"><a href="#线程上下文类加载器" class="headerlink" title="线程上下文类加载器"></a>线程上下文类加载器</h3><p>ThreadContextClassLoader是作为Thread的一个成员变量出现的，一个线程在构造的时候，它会从parent线程中继承这个ClassLoader，但是Java的文档中对这个ClassLoader描述非常有限，但是它对于理解JNDI以及JAXP等技术有非常大的帮助，不过它是应用服务器，或者框架需要特别关注的一种ClassLoader。</p>
-<p>在介绍CurrentClassLoader中，已经说明它用来突破双亲委派模型的目的，而ThreadContextClassLoader也是为了完成这个工作。试想： 如果一个JNDI的提供方，或者JAXP的提供方，他们的SPI是通过bootstrap加载的，但是他们的实现类必须通过应用ClassLoader甚至是更下层的ClassLoader来加载。那么在其初始化的过程中，需要考虑如果获取到部署了SPI实现的ClassLoader，而给出的方案是使用ContextClassLoader。 在javax.xml.parsers.DocumentBuilderFactory中，进行创建SPI实现的方法：</p>
-<pre><code class="java">public static DocumentBuilderFactory newInstance() {
-        try {
-            return (DocumentBuilderFactory) FactoryFinder.find(
-                /* The default property name according to the JAXP spec */
-                &quot;javax.xml.parsers.DocumentBuilderFactory&quot;,
-                /* The fallback implementation class name */
-                &quot;com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl&quot;);
-        } catch (FactoryFinder.ConfigurationError e) {
-            throw new FactoryConfigurationError(e.getException(),
-                                                e.getMessage());
-        }
+<h3 id="线程上下文类加载器"><a href="#线程上下文类加载器" class="headerlink" title="线程上下文类加载器"></a>线程上下文类加载器</h3><p>线程上下文类加载器（ThreadContextClassLoader）是从 JDK 1.2 开始引入的，我们可以通过java.lang.Thread类中的getContextClassLoader()和 setContextClassLoader(ClassLoader cl)方法来获取和设置线程的上下文类加载器。如果没有手动设置上下文类加载器，线程将继承其父线程的上下文类加载器，初始线程的上下文类加载器是系统类加载器（AppClassLoader）,在线程中运行的代码可以通过此类加载器来加载类和资源，<br>在介绍CurrentClassLoader中，已经说明它用来突破双亲委派模型的目的，而ThreadContextClassLoader也是为了完成这个工作。<br>在Java应用中存在着很多服务提供者接口（Service Provider Interface，SPI），这些接口允许第三方为它们提供实现，如常见的SPI有JDBC、JNDI等，这些SPI的接口属于Java核心库，一般存在rt.jar包中，由Bootstrap类加载器加载，而SPI的第三方实现代码则是作为Java应用所依赖的jar包被存放在classpath路径下，由于SPI接口中的代码经常需要加载具体的第三方实现类并调用其相关方法，但SPI的核心接口类是由引导类加载器来加载的，而Bootstrap类加载器无法直接加载SPI的实现类，同时由于双亲委派模式的存在，Bootstrap类加载器也无法反向委托AppClassLoader加载器SPI的实现类。在这种情况下，我们就需要一种特殊的类加载器来加载第三方的类库，而线程上下文类加载器就是很好的选择。</p>
+<p>以jdbc.jar加载为例,类的加载如下图所示，<br><img src="/images/20170625143404387.png" alt="20170625143404387"></p>
+<p>从图可知rt.jar核心包是有Bootstrap类加载器加载的，其内包含SPI核心接口类，由于SPI中的类经常需要调用外部实现类的方法，而jdbc.jar包含外部实现类(jdbc.jar存在于classpath路径)无法通过Bootstrap类加载器加载，因此只能委派线程上下文类加载器把jdbc.jar中的实现类加载到内存以便SPI相关类使用。显然这种线程上下文类加载器的加载方式破坏了“双亲委派模型”，它在执行过程中抛弃双亲委派加载链模式，使程序可以逆向使用类加载器，当然这也使得Java类加载器变得更加灵活。为了进一步证实这种场景，不妨看看DriverManager类的源码，DriverManager是Java核心rt.jar包中的类，该类用来管理不同数据库的实现驱动即Driver，它们都实现了Java核心包中的java.sql.Driver接口，如mysql驱动包中的<code>com.mysql.jdbc.Driver</code>，这里主要看看如何加载外部实现类，在DriverManager初始化时会执行如下代码</p>
+<pre><code class="java">//DriverManager是Java核心包rt.jar的类
+public class DriverManager {
+    //省略不必要的代码
+    static {
+        loadInitialDrivers();//执行该方法
+        println(&quot;JDBC DriverManager initialized&quot;);
+    }
 
+//loadInitialDrivers方法
+ private static void loadInitialDrivers() {
+     sun.misc.Providers()
+     AccessController.doPrivileged(new PrivilegedAction&lt;Void&gt;() {
+            public Void run() {
+                //加载外部的Driver的实现类
+                ServiceLoader&lt;Driver&gt; loadedDrivers = ServiceLoader.load(Driver.class);
+              //省略不必要的代码......
+            }
+        });
     }
 </code></pre>
-<p>可以看到通过查询一个property的Key来定位客户端的实现者，或者在找不到时，默认使用<code>com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl</code>。 而在FactoryFinder中，find方法通过如下的方式定位实现者：</p>
-<pre><code class="java">String serviceId = &quot;META-INF/services/&quot; + factoryId;
-        InputStream is = null;
-        ClassLoader cl = ss.getContextClassLoader();
-        boolean useBSClsLoader = false;
-        if (cl != null) {
-            is = ss.getResourceAsStream(cl, serviceId);
-            if (is == null) {
-                cl = FactoryFinder.class.getClassLoader();
-                is = ss.getResourceAsStream(cl, serviceId);
-                useBSClsLoader = true;
-            }
-        } else {
-            cl = FactoryFinder.class.getClassLoader();
-            is = ss.getResourceAsStream(cl, serviceId);
-            useBSClsLoader = true;
-        }
+<p>在DriverManager类初始化时执行了loadInitialDrivers()方法,在该方法中通过<code>ServiceLoader.load(Driver.class)</code>;去加载外部实现的驱动类，ServiceLoader类会去读取mysql的jdbc.jar下META-INF文件的内容，如下所示</p>
+<p><img src="/images/20170625164611435.png" alt="20170625164611435"></p>
+<p>而com.mysql.jdbc.Driver继承类如下：</p>
+<pre><code class="java">public class Driver extends com.mysql.cj.jdbc.Driver {
+    public Driver() throws SQLException {
+        super();
+    }
+
+    static {
+        System.err.println(&quot;Loading class `com.mysql.jdbc.Driver&#39;. This is deprecated. The new driver class is `com.mysql.cj.jdbc.Driver&#39;. &quot;
+                + &quot;The driver is automatically registered via the SPI and manual loading of the driver class is generally unnecessary.&quot;);
+    }
+}
 </code></pre>
-<p>可以看到<strong>cl</strong>变量，就是当前线程的ThreadContextClassLoader，选择使用这种方式，是因为不同的部署（通过classpath启动的控制台程序，通过Webapp部署的程序）方式不同，最终都需要有一个用户ClassLoder来查找到客户端的实现，通过前面的<code>Reflection.getCallerClass</code>或者<code>sun.misc.VM</code>中获取最近一个不为空的ClassLoder的方式都不能很好的满足要求，那么就利用一个指定的ClassLoder来完成，也就是接口实现者能够很明确的被这个ClassLorder加载，这个选择就是ContextClassLoader。</p>
-<p>可以看出来CurrentClassLoader对用户来说是自动的，隐式的，而ThreadContextClassLoader需要显示的使用，先进行设置然后再进行使用。</p>
+<p>从注释可以看出平常我们使用<code>com.mysql.jdbc.Driver</code>已被丢弃了，取而代之的是<code>com.mysql.cj.jdbc.Driver</code>，也就是说官方不再建议我们使用如下代码注册mysql驱动</p>
+<pre><code class="java">//不建议使用该方式注册驱动类
+Class.forName(&quot;com.mysql.jdbc.Driver&quot;);
+String url = &quot;jdbc:mysql://localhost:3306/cm-storylocker?characterEncoding=UTF-8&quot;;
+// 通过java库获取数据库连接
+Connection conn = java.sql.DriverManager.getConnection(url, &quot;root&quot;, &quot;root@555&quot;);
+</code></pre>
+<p>而是直接去掉注册步骤，如下即可</p>
+<pre><code class="java">String url = &quot;jdbc:mysql://localhost:3306/cm-storylocker?characterEncoding=UTF-8&quot;;
+// 通过java库获取数据库连接
+Connection conn = java.sql.DriverManager.getConnection(url, &quot;root&quot;, &quot;root@555&quot;);
+</code></pre>
+<p>这样ServiceLoader会帮助我们处理一切，并最终通过load()方法加载，看看load()方法实现</p>
+<pre><code class="java">public static &lt;S&gt; ServiceLoader&lt;S&gt; load(Class&lt;S&gt; service) {
+      //通过线程上下文类加载器加载
+      ClassLoader cl = Thread.currentThread().getContextClassLoader();
+      return ServiceLoader.load(service, cl);
+  }
+</code></pre>
+<p>很明显了确实通过线程上下文类加载器加载的，实际上核心包的SPI类对外部实现类的加载都是基于线程上下文类加载器执行的，通过这种方式实现了Java核心代码内部去调用外部实现类。我们知道线程上下文类加载器默认情况下就是AppClassLoader，那为什么不直接通过getSystemClassLoader()获取类加载器来加载classpath路径下的类的呢？其实是可行的，但这种直接使用getSystemClassLoader()方法获取AppClassLoader加载类有一个缺点，那就是代码部署到不同服务时会出现问题，如把代码部署到Java Web应用服务或者EJB之类的服务将会出问题，因为这些服务使用的线程上下文类加载器并非AppClassLoader，而是Java Web应用服自家的类加载器，类加载器不同。所以我们应用该少用getSystemClassLoader()。总之不同的服务使用的可能默认ClassLoader是不同的，但使用线程上下文类加载器总能获取到与当前程序执行相同的ClassLoader，从而避免不必要的问题。ok~.关于线程上下文类加载器暂且聊到这，前面阐述的DriverManager类，大家可以自行看看源码，相信会有更多的体会，另外关于ServiceLoader本篇并没有过多的阐述，毕竟我们主题是类加载器，但ServiceLoader是个很不错的解耦机制，大家可以自行查阅其相关用法。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>从上面可以得出，CurrentClassLoader对用户来说是自动的，隐式的，而ThreadContextClassLoader需要显示的使用，先进行设置然后再进行使用。</p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
 <li><a href="http://www.javaworld.com/article/2077344/core-java/find-a-way-out-of-the-classloader-maze.html" target="_blank" rel="noopener">Find a way out of the ClassLoader maze</a></li>
 </ol>
@@ -668,6 +693,13 @@ B b = (B) ois.readObject();
     <li class="popular-posts-item">
       
       
+      <div class="popular-posts-title"><a href="/posts/2735b28b/" rel="bookmark">深入理解ClassLoader及双亲委派模型</a></div>
+      
+    </li>
+  
+    <li class="popular-posts-item">
+      
+      
       <div class="popular-posts-title"><a href="/posts/a064c1bf/" rel="bookmark">类加载实战</a></div>
       
     </li>
@@ -675,7 +707,7 @@ B b = (B) ois.readObject();
     <li class="popular-posts-item">
       
       
-      <div class="popular-posts-title"><a href="/posts/53cf9979/" rel="bookmark">SystemDictionary:系统字典</a></div>
+      <div class="popular-posts-title"><a href="/posts/53cf9979/" rel="bookmark">类加载之SystemDictionary:系统字典</a></div>
       
     </li>
   
@@ -697,12 +729,12 @@ B b = (B) ois.readObject();
   <!-- JS库 sweetalert 可修改路径 -->
   <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-  <p><span>本文标题:</span><a href="/posts/338e9034/">系统，当前，线程上下文类加载概念介绍？</a></p>
+  <p><span>本文标题:</span><a href="/posts/338e9034/">系统、当前、线程上下文类加载概念介绍？</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 枫秀天涯 的个人博客">枫秀天涯</a></p>
   <p><span>发布时间:</span>2019年07月02日 - 13:25</p>
-  <p><span>最后更新:</span>2019年07月08日 - 21:25</p>
+  <p><span>最后更新:</span>2019年07月12日 - 11:30</p>
   <p><span>原始链接:</span>
-     <a href="/posts/338e9034/" title="系统，当前，线程上下文类加载概念介绍？">系统，当前，线程上下文类加载概念介绍？</a>
+     <a href="/posts/338e9034/" title="系统、当前、线程上下文类加载概念介绍？">系统、当前、线程上下文类加载概念介绍？</a>
     <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://fengxiu.club/posts/338e9034/" aria-label="复制成功！"></i></span>
   </p>
   <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
@@ -760,8 +792,8 @@ B b = (B) ois.readObject();
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/posts/53cf9979/" rel="prev" title="SystemDictionary:系统字典">
-                SystemDictionary:系统字典 <i class="fa fa-chevron-right"></i>
+              <a href="/posts/53cf9979/" rel="prev" title="类加载之SystemDictionary:系统字典">
+                类加载之SystemDictionary:系统字典 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -841,7 +873,7 @@ B b = (B) ois.readObject();
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">164</span>
+                    <span class="site-state-item-count">166</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -940,7 +972,9 @@ B b = (B) ois.readObject();
                     
                       
                     
-                    <span class="site-state-item-count">43</span>
+                      
+                    
+                    <span class="site-state-item-count">44</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -1137,7 +1171,9 @@ B b = (B) ois.readObject();
                     
                       
                     
-                    <span class="site-state-item-count">87</span>
+                      
+                    
+                    <span class="site-state-item-count">88</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -1195,7 +1231,7 @@ B b = (B) ois.readObject();
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概念区分"><span class="nav-number">1.</span> <span class="nav-text">概念区分</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#系统、当前、线程上下文类加载器，该如何使用？"><span class="nav-number">2.</span> <span class="nav-text">系统、当前、线程上下文类加载器，该如何使用？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#当前类加载器"><span class="nav-number">2.1.</span> <span class="nav-text">当前类加载器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线程上下文类加载器"><span class="nav-number">2.2.</span> <span class="nav-text">线程上下文类加载器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">3.</span> <span class="nav-text">参考</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概念区分"><span class="nav-number">1.</span> <span class="nav-text">概念区分</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#系统、当前、线程上下文类加载器，该如何选择"><span class="nav-number">2.</span> <span class="nav-text">系统、当前、线程上下文类加载器，该如何选择</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#当前类加载器"><span class="nav-number">2.1.</span> <span class="nav-text">当前类加载器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线程上下文类加载器"><span class="nav-number">2.2.</span> <span class="nav-text">线程上下文类加载器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">4.</span> <span class="nav-text">参考</span></a></li></ol></div>
             
 
           </div>
@@ -1228,7 +1264,7 @@ B b = (B) ois.readObject();
       网站总字数
     </span>
     
-    <span title="站点总字数">1.3m</span>
+    <span title="站点总字数">1.4m</span>
   
 
   
@@ -1238,7 +1274,7 @@ B b = (B) ois.readObject();
       总阅读时长
     </span>
     
-    <span title="站点阅读时长">20:23</span>
+    <span title="站点阅读时长">20:37</span>
   
 </div>
 
@@ -1380,7 +1416,7 @@ B b = (B) ois.readObject();
       var disqus_config = function () {
         this.page.url = "http://fengxiu.club/posts/338e9034/";
         this.page.identifier = "posts/338e9034/";
-        this.page.title = '系统，当前，线程上下文类加载概念介绍？';
+        this.page.title = '系统、当前、线程上下文类加载概念介绍？';
         };
       function loadComments () {
         var d = document, s = d.createElement('script');

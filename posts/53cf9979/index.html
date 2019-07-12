@@ -108,16 +108,16 @@
   <meta name="description" content="本篇文章主要是通过介绍Class.forName和ClassLoader.loadClass这俩个方法，来引入一个重要的概念，系统字典（SystemDictionary），这里会有一些名词，我在前面的一篇文章系统，当前，线程上下文类加载概念介绍？中已经详细介绍过，具体的可以看前面的文章。">
 <meta name="keywords" content="类加载">
 <meta property="og:type" content="article">
-<meta property="og:title" content="SystemDictionary:系统字典">
+<meta property="og:title" content="类加载之SystemDictionary:系统字典">
 <meta property="og:url" content="http://fengxiu.club/posts/53cf9979/index.html">
 <meta property="og:site_name" content="枫秀天涯">
 <meta property="og:description" content="本篇文章主要是通过介绍Class.forName和ClassLoader.loadClass这俩个方法，来引入一个重要的概念，系统字典（SystemDictionary），这里会有一些名词，我在前面的一篇文章系统，当前，线程上下文类加载概念介绍？中已经详细介绍过，具体的可以看前面的文章。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://fengxiu.club/images/pandora-system-dictionary.png">
 <meta property="og:image" content="http://fengxiu.club/images/pandora-class-forname-and-java-code.png">
-<meta property="og:updated_time" content="2019-07-08T13:25:36.409Z">
+<meta property="og:updated_time" content="2019-07-12T03:30:03.343Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="SystemDictionary:系统字典">
+<meta name="twitter:title" content="类加载之SystemDictionary:系统字典">
 <meta name="twitter:description" content="本篇文章主要是通过介绍Class.forName和ClassLoader.loadClass这俩个方法，来引入一个重要的概念，系统字典（SystemDictionary），这里会有一些名词，我在前面的一篇文章系统，当前，线程上下文类加载概念介绍？中已经详细介绍过，具体的可以看前面的文章。">
 <meta name="twitter:image" content="http://fengxiu.club/images/pandora-system-dictionary.png">
 
@@ -136,7 +136,7 @@
   };
 </script>
 
-  <title>SystemDictionary:系统字典 | 枫秀天涯</title>
+  <title>类加载之SystemDictionary:系统字典 | 枫秀天涯</title>
   
 
 
@@ -415,7 +415,7 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">SystemDictionary:系统字典
+          <h2 class="post-title" itemprop="name headline">类加载之SystemDictionary:系统字典
 
               
             
@@ -498,7 +498,7 @@
 
           
           
-             <span id="/posts/53cf9979/" class="leancloud_visitors" data-flag-title="SystemDictionary:系统字典">
+             <span id="/posts/53cf9979/" class="leancloud_visitors" data-flag-title="类加载之SystemDictionary:系统字典">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -643,6 +643,13 @@ Java_java_lang_Class_forName0(JNIEnv *env, jclass this, jstring classname,
     <li class="popular-posts-item">
       
       
+      <div class="popular-posts-title"><a href="/posts/2735b28b/" rel="bookmark">深入理解ClassLoader及双亲委派模型</a></div>
+      
+    </li>
+  
+    <li class="popular-posts-item">
+      
+      
       <div class="popular-posts-title"><a href="/posts/a064c1bf/" rel="bookmark">类加载实战</a></div>
       
     </li>
@@ -650,7 +657,7 @@ Java_java_lang_Class_forName0(JNIEnv *env, jclass this, jstring classname,
     <li class="popular-posts-item">
       
       
-      <div class="popular-posts-title"><a href="/posts/338e9034/" rel="bookmark">系统，当前，线程上下文类加载概念介绍？</a></div>
+      <div class="popular-posts-title"><a href="/posts/338e9034/" rel="bookmark">系统、当前、线程上下文类加载概念介绍？</a></div>
       
     </li>
   
@@ -672,12 +679,12 @@ Java_java_lang_Class_forName0(JNIEnv *env, jclass this, jstring classname,
   <!-- JS库 sweetalert 可修改路径 -->
   <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-  <p><span>本文标题:</span><a href="/posts/53cf9979/">SystemDictionary:系统字典</a></p>
+  <p><span>本文标题:</span><a href="/posts/53cf9979/">类加载之SystemDictionary:系统字典</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 枫秀天涯 的个人博客">枫秀天涯</a></p>
   <p><span>发布时间:</span>2019年07月07日 - 01:26</p>
-  <p><span>最后更新:</span>2019年07月08日 - 21:25</p>
+  <p><span>最后更新:</span>2019年07月12日 - 11:30</p>
   <p><span>原始链接:</span>
-     <a href="/posts/53cf9979/" title="SystemDictionary:系统字典">SystemDictionary:系统字典</a>
+     <a href="/posts/53cf9979/" title="类加载之SystemDictionary:系统字典">类加载之SystemDictionary:系统字典</a>
     <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://fengxiu.club/posts/53cf9979/" aria-label="复制成功！"></i></span>
   </p>
   <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
@@ -725,8 +732,8 @@ Java_java_lang_Class_forName0(JNIEnv *env, jclass this, jstring classname,
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/posts/338e9034/" rel="next" title="系统，当前，线程上下文类加载概念介绍？">
-                <i class="fa fa-chevron-left"></i> 系统，当前，线程上下文类加载概念介绍？
+              <a href="/posts/338e9034/" rel="next" title="系统、当前、线程上下文类加载概念介绍？">
+                <i class="fa fa-chevron-left"></i> 系统、当前、线程上下文类加载概念介绍？
               </a>
             
           </div>
@@ -816,7 +823,7 @@ Java_java_lang_Class_forName0(JNIEnv *env, jclass this, jstring classname,
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">164</span>
+                    <span class="site-state-item-count">166</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -915,7 +922,9 @@ Java_java_lang_Class_forName0(JNIEnv *env, jclass this, jstring classname,
                     
                       
                     
-                    <span class="site-state-item-count">43</span>
+                      
+                    
+                    <span class="site-state-item-count">44</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -1112,7 +1121,9 @@ Java_java_lang_Class_forName0(JNIEnv *env, jclass this, jstring classname,
                     
                       
                     
-                    <span class="site-state-item-count">87</span>
+                      
+                    
+                    <span class="site-state-item-count">88</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -1203,7 +1214,7 @@ Java_java_lang_Class_forName0(JNIEnv *env, jclass this, jstring classname,
       网站总字数
     </span>
     
-    <span title="站点总字数">1.3m</span>
+    <span title="站点总字数">1.4m</span>
   
 
   
@@ -1213,7 +1224,7 @@ Java_java_lang_Class_forName0(JNIEnv *env, jclass this, jstring classname,
       总阅读时长
     </span>
     
-    <span title="站点阅读时长">20:23</span>
+    <span title="站点阅读时长">20:37</span>
   
 </div>
 
@@ -1355,7 +1366,7 @@ Java_java_lang_Class_forName0(JNIEnv *env, jclass this, jstring classname,
       var disqus_config = function () {
         this.page.url = "http://fengxiu.club/posts/53cf9979/";
         this.page.identifier = "posts/53cf9979/";
-        this.page.title = 'SystemDictionary:系统字典';
+        this.page.title = '类加载之SystemDictionary:系统字典';
         };
       function loadComments () {
         var d = document, s = d.createElement('script');
