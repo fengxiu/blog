@@ -110,7 +110,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java 8元空间">
 <meta property="og:url" content="http://fengxiu.club/posts/bda9e2c7/index.html">
-<meta property="og:site_name" content="枫秀天涯">
+<meta property="og:site_name" content="枫秀">
 <meta property="og:description" content="本文主要讲解Java8中JVM的一个更新，就是持久代的移除。将会介绍为什么需要移除持久代以及它的替代者：元空间(Metaspace)。 持久代java 6中JVM的内存结构如下： 持久代中包含了虚拟机中所有可通过反射获取到的数据，比如Class和Method对象。不同的Java虚拟机之间可能会进行类共享，因此持久代又分为只读区和读写区。 JVM用于描述应用程序中用到的类和方法的元数据也存储在持久代">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://fengxiu.club/images/java_memory_permGen.png">
@@ -119,7 +119,7 @@
 <meta property="og:image" content="http://fengxiu.club/images/java_object_layout_java_latte.png">
 <meta property="og:image" content="http://fengxiu.club/images/compressed_class_pointer_space_java_latte.png">
 <meta property="og:image" content="http://fengxiu.club/images/java_object_layout_compressed_java_latte.png">
-<meta property="og:updated_time" content="2019-07-12T09:11:39.684Z">
+<meta property="og:updated_time" content="2019-07-12T09:28:41.947Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java 8元空间">
 <meta name="twitter:description" content="本文主要讲解Java8中JVM的一个更新，就是持久代的移除。将会介绍为什么需要移除持久代以及它的替代者：元空间(Metaspace)。 持久代java 6中JVM的内存结构如下： 持久代中包含了虚拟机中所有可通过反射获取到的数据，比如Class和Method对象。不同的Java虚拟机之间可能会进行类共享，因此持久代又分为只读区和读写区。 JVM用于描述应用程序中用到的类和方法的元数据也存储在持久代">
@@ -140,7 +140,7 @@
   };
 </script>
 
-  <title>Java 8元空间 | 枫秀天涯</title>
+  <title>Java 8元空间 | 枫秀</title>
   
 
 
@@ -199,7 +199,7 @@
     <div class="custom-logo-site-title">
       <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">枫秀天涯</span>
+        <span class="site-title">枫秀</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
@@ -405,13 +405,13 @@
     <link itemprop="mainEntityOfPage" href="http://fengxiu.club/posts/bda9e2c7/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="枫秀天涯">
+      <meta itemprop="name" content="fengxiu">
       <meta itemprop="description" content="java,spring,分布式,数据库">
       <meta itemprop="image" content="/images/avatar.jpg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="枫秀天涯">
+      <meta itemprop="name" content="枫秀">
     </span>
 
     
@@ -527,7 +527,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">3.8k</span>
+                <span title="本文字数">3.9k</span>
               
 
               
@@ -541,7 +541,7 @@
                 
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
-                <span title="阅读时长">3 分钟</span>
+                <span title="阅读时长">4 分钟</span>
               
             </div>
           
@@ -649,11 +649,12 @@
 <li>Hotspot中的元数据现在存储到了元空间里。mmap中的内存块的生命周期与类加载器的一致。</li>
 <li>类指针压缩空间（Compressed class pointer space）目前仍然是固定大小的，但它的空间较大</li>
 <li>可以进行参数的调优，不过这不是必需的。</li>
-<li>未来可能会增加其它的优化及新特性。比如， 应用程序类数据共享；新生代GC优化，G1回收器进行类的回收；减少元数据的大小，以及JVM内部对象的内存占用量。<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2></li>
+<li>未来可能会增加其它的优化及新特性。比如， 应用程序类数据共享；新生代GC优化，G1回收器进行类的回收；减少元数据的大小，以及JVM内部对象的内存占用量。</li>
 </ul>
-<ol>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
 <li><a href="http://it.deepinmind.com/gc/2014/05/14/metaspace-in-java-8.html" target="_blank" rel="noopener">Java 8的元空间</a></li>
 <li><a href="http://java-latte.blogspot.com/2014/03/metaspace-in-java-8.html" target="_blank" rel="noopener">Metaspace in Java 8</a></li>
+<li><a href="https://www.cnblogs.com/xrq730/p/8688203.html" target="_blank" rel="noopener">Java虚拟机16：Metaspace</a></li>
 </ol>
 
       
@@ -679,9 +680,9 @@
   <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
   <p><span>本文标题:</span><a href="/posts/bda9e2c7/">Java 8元空间</a></p>
-  <p><span>文章作者:</span><a href="/" title="访问 枫秀天涯 的个人博客">枫秀天涯</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 fengxiu 的个人博客">fengxiu</a></p>
   <p><span>发布时间:</span>2019年04月22日 - 16:50</p>
-  <p><span>最后更新:</span>2019年07月12日 - 17:11</p>
+  <p><span>最后更新:</span>2019年07月12日 - 17:28</p>
   <p><span>原始链接:</span>
      <a href="/posts/bda9e2c7/" title="Java 8元空间">Java 8元空间</a>
     <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://fengxiu.club/posts/bda9e2c7/" aria-label="复制成功！"></i></span>
@@ -813,9 +814,9 @@
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="枫秀天涯">
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="fengxiu">
             
-              <p class="site-author-name" itemprop="name">枫秀天涯</p>
+              <p class="site-author-name" itemprop="name">fengxiu</p>
               <p class="site-description motion-element" itemprop="description">java,spring,分布式,数据库</p>
           </div>
 
@@ -1212,7 +1213,7 @@
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>
-  <span class="author" itemprop="copyrightHolder">枫秀天涯</span>
+  <span class="author" itemprop="copyrightHolder">fengxiu</span>
 
   
     <span class="post-meta-divider">|</span>
