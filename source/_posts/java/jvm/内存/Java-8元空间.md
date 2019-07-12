@@ -134,6 +134,10 @@ _klass: 指向类的8字节的指针
 * 类指针压缩空间（Compressed class pointer space）目前仍然是固定大小的，但它的空间较大
 * 可以进行参数的调优，不过这不是必需的。
 * 未来可能会增加其它的优化及新特性。比如， 应用程序类数据共享；新生代GC优化，G1回收器进行类的回收；减少元数据的大小，以及JVM内部对象的内存占用量。
+
 ## 参考
+
 1. [Java 8的元空间](http://it.deepinmind.com/gc/2014/05/14/metaspace-in-java-8.html)
 2. [Metaspace in Java 8](http://java-latte.blogspot.com/2014/03/metaspace-in-java-8.html)
+3. [Java虚拟机16：Metaspace](https://www.cnblogs.com/xrq730/p/8688203.html)
+
