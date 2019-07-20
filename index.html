@@ -393,6 +393,820 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://fengxiu.club/posts/3c2eb649/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="fengxiu">
+      <meta itemprop="description" content="java,spring,分布式,数据库">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="枫秀">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/posts/3c2eb649/" class="post-title-link" itemprop="url">LVS、Nginx及HAProxy工作原理简介</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-07-20 12:22:32" itemprop="dateCreated datePublished" datetime="2019-07-20T12:22:32+08:00">2019-07-20</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/架构/" itemprop="url" rel="index"><span itemprop="name">架构</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/posts/3c2eb649/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="posts/3c2eb649/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/posts/3c2eb649/" class="leancloud_visitors" data-flag-title="LVS、Nginx及HAProxy工作原理简介">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数：</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">4.9k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">4 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>当前大多数的互联网系统都使用了服务器集群技术，集群是将相同服务部署在多台服务器上构成一个集群整体对外提供服务，这些集群可以是 Web 应用服务器集群，也可以是数据库服务器集群，还可以是分布式缓存服务器集群等等。<br><img src="/images/640.webp" alt="640"><br>在实际应用中，在 Web服务器集群之前总会有一台负载均衡服务器，负载均衡设备的任务就是作为Web 服务器流量的入口，挑选最合适的一台 Web 服务器，将客户端的请求转发给它处理，实现客户端到真实服务端的透明转发。</p>
+<p>最近几年很火的「云计算」以及分布式架构，本质上也是将后端服务器作为计算资源、存储资源，由某台管理服务器封装成一个服务对外提供，客户端不需要关心真正提供服务的是哪台机器，在它看来，就好像它面对的是一台拥有近乎无限能力的服务器，而本质上，真正提供服务的，是后端的集群。<br>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/posts/3c2eb649/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </p></div>
+
+    
+
+    
+    
+    
+
+      
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://fengxiu.club/posts/a8dee644/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="fengxiu">
+      <meta itemprop="description" content="java,spring,分布式,数据库">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="枫秀">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/posts/a8dee644/" class="post-title-link" itemprop="url">spring AOP一世</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-07-14 18:04:15" itemprop="dateCreated datePublished" datetime="2019-07-14T18:04:15+08:00">2019-07-14</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/spring/" itemprop="url" rel="index"><span itemprop="name">spring</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/spring/spring-源码分析/" itemprop="url" rel="index"><span itemprop="name">spring 源码分析</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/spring/spring-源码分析/Aop/" itemprop="url" rel="index"><span itemprop="name">Aop</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/posts/a8dee644/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="posts/a8dee644/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/posts/a8dee644/" class="leancloud_visitors" data-flag-title="spring AOP一世">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数：</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">2.1k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">2 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>在动态代理和CGLIB的支持下，Spring AOP框架的实现经过了两代。虽然划分成了两代，但是底层实现机制确一直没变。唯一改变的，是各种AOP概念实体的表现形式以及Spring AOP的使用方式。<br>下面，我们先从第一代的Spring AOP相关的概念实体说起。</p>
+<h2 id="Spring-AOP中的Joinpoint"><a href="#Spring-AOP中的Joinpoint" class="headerlink" title="Spring AOP中的Joinpoint"></a>Spring AOP中的Joinpoint</h2><p>之前我们已经提到，AOP的JoinPoint可以有许多种类型，如构造方法调用、字段的设置及获取、方法调用、方法执行等。但是，在Spring AOP中，仅支持方法级别的Joinpoint。更确切的说，只支持方法执行类型的Joinpoint。</p>
+<p>虽然Spring AOP仅提供方法拦截，但是在实际的开发过程中，这已经可以满足80%的开发需求了。Spring AOP之所以如此，主要由以下几个原因。</p>
+<ol>
+<li>前面已经提到过，Spring AOP要提供一个简单而强大的AOP框架，并不想因大二全使得框架本身过于臃肿。</li>
+<li>对于属性级别的Joinpoint，如果提供这个级别的拦截支持，那么就破坏了面向对象的封装，而且，完全可以通过对setter和getter方法的拦截达到同样的目的。</li>
+<li>如果应用需求非常特殊，完全超出了Spring AOP提供的那80%的需求支持，不放求助于现有的其他AOP实现产品。目前看来，AspectJ是Java平台对AOP铲平支持最完整的产品。因此，Spring AOP也提供了对AspectJ的支持。</li>
+</ol>
+<h2 id="Spring-AOP中的Pointcut"><a href="#Spring-AOP中的Pointcut" class="headerlink" title="Spring AOP中的Pointcut"></a>Spring AOP中的Pointcut</h2><p>Spring中以接口定义<code>org.springframework.aop.Pointcut</code>作为其AOP框架中所有Pointcut的最顶层抽象，该接口定义了俩个方法用来帮助捕捉系统中的相应Joinpoint，并提供一个TruePoint，默认会对系统中的所有对象，以及对象上所有被支持的Joinpoint进行匹配。接口具体定义如下：</p>
+<pre><code class="java">public interface Pointcut {
+    Pointcut TRUE = TruePointcut.INSTANCE;
+
+    ClassFilter getClassFilter();
+
+    MethodMatcher getMethodMatcher();
+}
+</code></pre>
+<p>ClassFilter和MethodMatcher分别用于匹配将执行织入操作的对象以及相应的方法。之所以将类型匹配和方法匹配分开定义，是因为可以重用不同级别的匹配定义，并且可以在不同的级别或者相同的级别上进行组合操作，或者只强制让某个子类只覆写相应的方法定义等。<br>ClassFilter接口的作用是对Joinpoint所处的对象进行Class级别的类型匹配，其定义如下：</p>
+<pre><code class="java">@FunctionalInterface
+public interface ClassFilter {
+
+    boolean matches(Class&lt;?&gt; clazz);
+
+    ClassFilter TRUE = TrueClassFilter.INSTANCE;
+}
+</code></pre>
+<p>当织入的目标对象的class类型与Pointcut所规定的类型相符时，matches方法将会返回true，否则，返回false，即意味着不会对这个类型的目标对象进行织入操作。比如，如果我们仅希望对系统的Foo类型进行织入，则可以如下这样定义ClassFilter：</p>
+<pre><code class="java">public class FooclassFilter{
+    public boolean matchs(Class clazz){
+        return Foo.class.equals(clazz);
+    }
+}
+</code></pre>
+<p>当然如果类型对我们所捕捉的Joinpoint无所谓，那么PointCut中使用的ClassFilter可以直接使用<code>ClassFilter TRUE = TrueClassFilter.INSTANCE</code>。当Pointcut中返回的ClassFilter类型为该类型实例时，Pointcut的匹配将会只对系统中所有的目标类以及他们的实例进行。</p>
+<p>相对于ClassFilter的简单定义，MethodMatcher则要复杂得多。毕竟spring主要支持的就是方法级别的额拦截。MethodMatcher定义如下：</p>
+<pre><code class="java">public interface MethodMatcher {
+
+    boolean matches(Method method, @Nullable Class&lt;?&gt; targetClass);
+
+    boolean isRuntime();
+
+    boolean matches(Method method, @Nullable Class&lt;?&gt; targetClass, Object... args);
+
+    MethodMatcher TRUE = TrueMethodMatcher.INSTANCE;
+}
+</code></pre>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+      
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://fengxiu.club/posts/32045bf1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="fengxiu">
+      <meta itemprop="description" content="java,spring,分布式,数据库">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="枫秀">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/posts/32045bf1/" class="post-title-link" itemprop="url">Spring AOP概述及其实现机制</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-07-14 16:27:41" itemprop="dateCreated datePublished" datetime="2019-07-14T16:27:41+08:00">2019-07-14</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/spring/" itemprop="url" rel="index"><span itemprop="name">spring</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/spring/spring-源码分析/" itemprop="url" rel="index"><span itemprop="name">spring 源码分析</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/spring/spring-源码分析/Aop/" itemprop="url" rel="index"><span itemprop="name">Aop</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/posts/32045bf1/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="posts/32045bf1/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/posts/32045bf1/" class="leancloud_visitors" data-flag-title="Spring AOP概述及其实现机制">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数：</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">6.4k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">6 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>上一篇文章中已经详细介绍了AOP是什么和AOP中重要的概念。因此，本篇文章将进入我们的正题，来对Spring AOP进行概述和介绍器实现的原理。</p>
+<h2 id="spring-AOP-概述"><a href="#spring-AOP-概述" class="headerlink" title="spring AOP 概述"></a>spring AOP 概述</h2><p>Spring AOP采用Java作为AOP的实现语言（AOL），SPring AOP可以更快捷地融入开发过程，学习曲线相对要平滑得多。而且，Spring AOP的设计哲学也是简单而强大，他不打算将所有的AOP需求全部囊括在内，而是要以有限的20%的AOP支持，来满足80%的AOP需求。如果Spring AOP无法满足需求，可以求助于AspectJ，Spring AOP对AspectJ也提供了很好的集成。</p>
+<p>Spring AOP的AOL语言为Java。在此基础上，Spring AOP对AOP概念进行了适当的抽象和实现，使得每个AOP概念都可以落到实处，这些概念的抽象和实现，都以我们所熟悉的JAva语言的结构呈现在我们眼前。</p>
+<h2 id="Spring-AOP实现机制"><a href="#Spring-AOP实现机制" class="headerlink" title="Spring AOP实现机制"></a>Spring AOP实现机制</h2><p>Spring AOP属于第二代AOP，代用动态代理机制和字节码生成技术实现。动态代理机制和字节码生成都是在运行期间为目标对象生成一个代理对象，而将横切逻辑织入到这个代理对象中，系统最终使用的是织入了横切逻辑的代理对象，而不是真正的目标对象。</p>
+<p>下面为了理解这种差别以及最中国可以达到的想过，我们这有必要先从动态代理机制的根源–代理模式开始说起</p>
+<h3 id="设计模式之代理模式"><a href="#设计模式之代理模式" class="headerlink" title="设计模式之代理模式"></a>设计模式之代理模式</h3><p>说到代理，我们大家应该都不会陌生。类如房产中介就是一种代理，我们偶尔也会使用到网络代理，等等。代理处于访问者与被访问者之间，可以隔离这俩者之间的直接交互，访问者与代理打交道就好像在跟被访问者在打交道一样，因为代理通常几乎会全权拥有被代理者的职能。<br>在软件系统中，代理机制的实现有现成的设计模式支持，就叫代理模式。在代理模式中，通常涉及4中角色，如下图所示：<br><img src="/images/Xnip2019-07-14_16-51-26.jpg" alt="Xnip2019-07-14_16-51-26"></p>
+<ul>
+<li><strong>ISubject</strong>:该接口是对被访问者或被访问资源的抽象。在严格的设计模式中，这样的抽象接口是必须的，但往宽了说，某些场景下不使用类似的统一抽象接口也是可以的。</li>
+<li><strong>SubjectImpl</strong>：被访问者或被访问资源的具体实现类。</li>
+<li><strong>SubjectProxy</strong>：被访问者或被访问资源的代理实现类，该类持有一个ISubject接口的具体事例。</li>
+<li><strong>Client</strong>：代表访问者的抽象角色，Client将会访问ISubject类型的对象或者资源。在这个场景中，Client将无法请求具体的SubjectImpl，而是必须通过ISubject资源的访问代理类SubjectProxy进行。</li>
+</ul>
+<p>在将请求转发给被代理对象SubjectImpl之前或者之后，都可以根据情况插入其他处理逻辑，比如在转发之前记录方法执行开始时间，在转发之后记录结束时间，这样就能够对SubjectImpl的request执行的时间进行检测。当然也可以做其他的事情。甚至也可以不做请求转发。具体的调用关系如下图所示<br><img src="/images/Xnip2019-07-14_16-57-55.jpg" alt="Xnip2019-07-14_16-57-55"><br>代理对象SubjectProxy就像是SubjectImpl的影子，只不过这个影子通常拥有更多功能。如果SubjectImpl是系统中的Joinpoint所在的对象，即目标对象，那么就可以为这个目标对象创建一个代理对象，然后将横切逻辑添加到这个代理对象中。当系统使用这个代理对象运行的时候，原有逻辑实现和横切逻辑完全融合到一个系统中。<br>Spring AOP本质上就是采用这种代理机制实现的。但是，具体实现细节有所不同。<br>假设对系统中所有的request方法进行拦截，在每天午夜0点到次日6点之间，request调用不被接受，那么我们应该WieSubjectImpl提供一个ServiceControlSubjectProxy，已添加这样横切逻辑。这样就有了下面这份代码清单：</p>
+<pre><code class="java">public class ServiceControlSubjectProxy implements ISubject{
+    private ISubject subject;
+
+    public ServiceControlSubjectProxy(ISubject s){
+        this.subject = s;
+    }
+    public String request(){
+        TimeOfDay startTime = new TimeOfDay(0,0,0);
+        TimeOfDay endTime = new TimeOfDay(5,59,59);
+        TImeOfDay currentTime = new TimeOfDay();
+        if(currentTime.isAfter(startTime) &amp;&amp; 
+                currentTime.isBefore(endTime)){
+                    return null;
+                }
+        String originResult = subject.request;
+        return originResut;
+    }
+}
+</code></pre>
+<p>有了这个代理类之后，就可以像使用SUbjectImpl一样使用这个类。<br>但是系统中可不一定就ISubject的实现类有request方法，IRequestable接口以及相应实现类可能也有request方法，他们也是我们需要横切的关注点。IRequestable及其实现类的代理如同上面ServiceControlSubjectProxy的代码差不多，只不过将接口换成了Irequest。<br>这里就会出现一个问题，虽然JoinPoint相同（request方法的执行），但是对应的目标对象类型是不一样的。针对不一样的目标对象类型，我们要为器单独实现一个代理对象。而实际上，这些代理对象所要添加的横切逻辑是一样的。当系统中存在成百上千的复合Pointcut匹配条件的目标对象时，我们就要为这成百上千的目标单独创建成百上千的代理对象，。<br>这种为对应的目标对象创建静态代理的方法，原理上是可行的，但具体应用上存在问题，所以要找到一种办法，来解决这种困境。</p>
+<h3 id="动态代理"><a href="#动态代理" class="headerlink" title="动态代理"></a>动态代理</h3><p>JDK1.3之后引入了一种称之为动态代理的机制。使用该机制，我们可以为指定的接口在系统运行期间动态地生成代理对象，从而帮助我们走出最初使用静态代理实现AOP的窘境。<br>动态代理机制的实现主要是有一个类和一个接口组成，即java.lang.reflect.Proxy和java..lang.reflect.InvocationHandler接口。下面，我们看一下如何使用动态代理来实现之前的<strong>request访问时间控制</strong>功能。虽然要为ISubject和IRequestable俩种类型提供代理对象，但因为代理对象要添加的横切逻辑是一样的，所以，我们只需要实现一个InvocationHAndler就可以了，实现代码如下：</p>
+<pre><code class="java"> public class ReuqestCtrlInvocationHandler implements InvocationHandler{
+    private Object target;
+    public ReuqestCtrlInvocationHandler(Object target){
+        this.target = target;
+    }
+
+    public Object invoke(Object proxy,Method method,Object[] args)
+    throws Throwable{
+        if(method.getName().equals(&quot;request&quot;)){
+               TimeOfDay startTime = new TimeOfDay(0,0,0);
+                TimeOfDay endTime = new TimeOfDay(5,59,59);
+                TImeOfDay currentTime = new TimeOfDay();
+                if(currentTime.isAfter(startTime) &amp;&amp; 
+                        currentTime.isBefore(endTime)){
+                            return null;
+                        }
+                String originResult = subject.request;
+                return originResut;  
+        }
+    }
+ }
+</code></pre>
+<p>然后，我们就可以使用Proxy类，根据RequestCtrlinvocationHandler的逻辑，为ISubject和IRequestable俩种类型生成相应的代理对象实例。代码如下：</p>
+<pre><code class="java">ISubject subject = (ISubject)Proxy.newProxyInstance(ProxyRunner.class.getClassLoader(),new Class[]{ISubject.class},
+new ReuqestCtrlInvocationHandler());
+
+IRequstable requestable .....大体上与上面类似
+</code></pre>
+<p>即使还有更多的目标对象类型，只要他们依然织入的横切逻辑相同，用ReuqestCtrlInvocationHandler一个类并通过Proxy为他们生成响应的动态代理实例就可以满足要求。当Proxy动态生成的代理对象上相应的接口方法被调用时，对应的InvocationHandler就会拦截响应的方法调用，并进行逻辑处理。</p>
+<p>InvocationHandler就是我们实现横切逻辑的地方，它是横切逻辑的载体，作用跟Advice是一样的。所以，在使用动态代理机制实现AOP的过程中，我们可以在InnvocationHandler的基础上细化程序结构，并根据Advice的类型，分化出对应不同Advice类型的程序结构。<br>动态代理虽然好，但不能满足所有的需求。因为动态代理机制只能对实现了相应Interface的类使用。因此对于没有实现任何Interface的目标对象，我们需要寻找其他方式为其动态的生成代理对象。<br>默认情况下，如果Spring AOP发现目标对象实现了相应Interface，则采用动态代理机制为其生成代理对象实例。而如果目标对象没有实现任何Interface，Spring AOP会尝试使用一个称谓CGLIB的开源的动态字节码生成类库，为目标对象生成动态的代理对象实例。</p>
+<h3 id="动态字节码生成"><a href="#动态字节码生成" class="headerlink" title="动态字节码生成"></a>动态字节码生成</h3><p>使用动态字节码生成技术扩展对象行为的原理是，我们可以对目标对象进行继承扩展，为其生成相应的子类，而子类可以通过覆写来扩展父类的行为，只要将横切逻辑的实现放到子类中，然后让系统使用扩展后的目标对象的子类，就可以达到与代理模式相同的效果。<br>但是，使用继承的方式来扩展对象定义，也不能像静态代理模式那样，为每个不同类型目标对象都单独创建相应的扩展子类。所以，我们要借助于CGLIB这样的同台字节码生成库，在系统运行期间动态地为目标对象生成相应的扩展子类。<br>为了演示CGLIB的使用以及最终可以达到的效果，我们定义的目标类如下所示：</p>
+<pre><code class="java">public class Requestable{
+    public void request(){
+        System.out.println(&quot;rg in Requestable without inplement any interface&quot;)
+    }
+}
+</code></pre>
+<p>CGLIB可以对实现了某种接口的类，或者没有实现任何接口的类进行扩展。但我们已经说过，可以使用动态dialing机制来扩展实现了某种接口的饿目标类，所以，这里主要演示没有实现任何接口的目标类是如何使用CGLIB来进行扩展。</p>
+<p>要对Requestable类进行扩展，首先要实现一个net.sf.cglib.proxy.Callback。不过更多的时候，我们会直接使用net.sf.cglin.proxy.MethodInterceptor接口（MethodInterceptor扩展了Callback接口）。代码清单8-6给出了针对我们的Requestable所提供的Callback实现。</p>
+<pre><code class="java">public class RequestCtrlCallback implements MethodInterceptor{
+    public object intercept(Object object,Method method,Object[] args,MethodProxy proxy) throws Throwable{
+        if(method.getName().equals(&quot;request&quot;)){
+                TimeOfDay startTime = new TimeOfDay(0,0,0);
+                TimeOfDay endTime = new TimeOfDay(5,59,59);
+                TImeOfDay currentTime = new TimeOfDay();
+                if(currentTime.isAfter(startTime) &amp;&amp; 
+                        currentTime.isBefore(endTime)){
+                            return null;
+                }
+                String originResult = proxy.invokeSuper(object,args);
+                return originResut;  
+        }
+    }
+}
+</code></pre>
+<p>这样，RequestCtrlCallback就实现了对Request方法请求进行访问扩展的逻辑。想在我们要通过CGLIB的Enchaner为目标对象动态地生成一个子类，并将RequestCtrlCallback中的横切逻辑附加到该子类中，代码如下所示：</p>
+<pre><code class="java">Enchacner enchacner = new Enchacner();
+enchancer.setSuperClass(Requestable.class);
+enchancer.setCallback(new RequestCtrlCallback() );
+Requestable proxy = (Requestable)enchancer.create();
+proxy.request();
+</code></pre>
+<p>通过为enchancer指定需要生成的子类对应的父类，以及Callback实现，enhancer最终为我们生成了需要的代理对象示例。使用CGLIB对类进行扩展的唯一限制就是无法对final方法进行覆写。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+      
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://fengxiu.club/posts/ad8701ca/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1963,677 +2777,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://fengxiu.club/posts/338e9034/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="fengxiu">
-      <meta itemprop="description" content="java,spring,分布式,数据库">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="枫秀">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/posts/338e9034/" class="post-title-link" itemprop="url">系统、当前、线程上下文类加载概念介绍？</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-07-02 13:25:00" itemprop="dateCreated datePublished" datetime="2019-07-02T13:25:00+08:00">2019-07-02</time>
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/jvm/" itemprop="url" rel="index"><span itemprop="name">jvm</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/jvm/类加载/" itemprop="url" rel="index"><span itemprop="name">类加载</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/posts/338e9034/#comments" itemprop="discussionUrl">
-                
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="posts/338e9034/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-             <span id="/posts/338e9034/" class="leancloud_visitors" data-flag-title="系统、当前、线程上下文类加载概念介绍？">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数：</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">7.7k</span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">7 分钟</span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="概念区分"><a href="#概念区分" class="headerlink" title="概念区分"></a>概念区分</h2><p>在Java进行类加载时，一般会有多个ClassLoader可以使用，包括当前类加载器，制定类加载器，上下文类加载器三个，可以用多种方式进行类型加载，以下面这段代码来对这个三个概念进行说明：<br>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/posts/338e9034/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </p></div>
-
-    
-
-    
-    
-    
-
-      
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://fengxiu.club/posts/3ade2f8f/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="fengxiu">
-      <meta itemprop="description" content="java,spring,分布式,数据库">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="枫秀">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/posts/3ade2f8f/" class="post-title-link" itemprop="url">Java并发工具类之LongAdder原理总结</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-06-17 21:38:22" itemprop="dateCreated datePublished" datetime="2019-06-17T21:38:22+08:00">2019-06-17</time>
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/juc/" itemprop="url" rel="index"><span itemprop="name">juc</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/juc/atomic/" itemprop="url" rel="index"><span itemprop="name">atomic</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/posts/3ade2f8f/#comments" itemprop="discussionUrl">
-                
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="posts/3ade2f8f/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-             <span id="/posts/3ade2f8f/" class="leancloud_visitors" data-flag-title="Java并发工具类之LongAdder原理总结">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数：</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">13k</span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">12 分钟</span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p><code>java.util.concurrency.atomic.LongAdder</code>是Java8新增的一个类，提供了原子累计值的方法。根据文档的描述其性能要优于AtomicLong，下面是一个简单的测试对比demo(平台:MBP):<br>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/posts/3ade2f8f/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </p></div>
-
-    
-
-    
-    
-    
-
-      
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://fengxiu.club/posts/6ebbfb41/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="fengxiu">
-      <meta itemprop="description" content="java,spring,分布式,数据库">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="枫秀">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/posts/6ebbfb41/" class="post-title-link" itemprop="url">零拷贝</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-06-11 14:49:58" itemprop="dateCreated datePublished" datetime="2019-06-11T14:49:58+08:00">2019-06-11</time>
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/操作系统/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/posts/6ebbfb41/#comments" itemprop="discussionUrl">
-                
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="posts/6ebbfb41/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-             <span id="/posts/6ebbfb41/" class="leancloud_visitors" data-flag-title="零拷贝">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数：</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">3.6k</span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">3 分钟</span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>本文翻译自:<a href="http://www.linuxjournal.com/article/6345" target="_blank" rel="noopener">Zero Copy I: User-Mode Perspective</a><br>本文解释了Linux的零拷贝作用是什么，为什么它非常有用和在哪些地方可以使用该功能。</p>
-<p>到目前为止，几乎每个人都听说过在Linux下的所谓的零拷贝功能，但我经常遇到对这个主题没有完全理解的人。 正因为如此，我决定写一些文章，深入探讨这件事，希望揭开这个有用的功能。 在本文中，我们从用户应用程序的角度看待零拷贝，因此故意省略了内核级别的详细信息。<br>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/posts/6ebbfb41/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </p></div>
-
-    
-
-    
-    
-    
-
-      
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2683,7 +2826,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">167</span>
+                    <span class="site-state-item-count">170</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -2987,7 +3130,7 @@
                     
                       
                     
-                    <span class="site-state-item-count">89</span>
+                    <span class="site-state-item-count">90</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -3071,7 +3214,7 @@
       总阅读时长
     </span>
     
-    <span title="站点阅读时长">20:41</span>
+    <span title="站点阅读时长">20:53</span>
   
 </div>
 
