@@ -8,8 +8,6 @@ categories:
 abbrlink: 2d62f277
 date: 2019-03-04 09:08:00
 ---
-# java 集合系列 01 之 总体框架
-
 Java集合是java提供的工具包，包含了常用的数据结构：集合、链表、队列、栈、数组、映射等。Java集合工具包位置是java.util.*
 Java集合主要可以划分为4个部分：List列表、Set集合、Map映射、工具类(Iterator迭代器、Enumeration枚举类、Arrays和Collections)、。
 Java集合工具包框架图(如下)：

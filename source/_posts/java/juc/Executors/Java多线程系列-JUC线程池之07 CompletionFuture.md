@@ -1,11 +1,12 @@
 ---
-title: Java CompletableFuture 详解
+title: Java多线程系列-JUC线程池之07 CompletionFuture
 tags:
   - JUC
   - Future
 categories:
   - java
-  - java8
+  - juc
+  - Executors
 author: zhangke
 abbrlink: 931a340
 date: 2019-01-04 16:49:00
