@@ -114,7 +114,7 @@
 <meta property="og:description" content="概要 Callable和Future简介 ThreadPoolExecutor中submit分析 FutureTask源码分析  1. Callable 和 Future 简介Executor框架使用Runnable作为其基本的任务表示形式。Runnable是一种有很大局限的抽象，虽然run能写入到日志文件或者将结果放入某个共享的数据结构，但它不能返回一个值或抛出一个受检查的异常。 许多任务实际上">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://fengxiu.club/images/pasted-170.png">
-<meta property="og:updated_time" content="2019-07-20T09:58:22.888Z">
+<meta property="og:updated_time" content="2019-07-28T07:10:46.901Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="java多线程系列-JUC线程池之04 Future 和Callable">
 <meta name="twitter:description" content="概要 Callable和Future简介 ThreadPoolExecutor中submit分析 FutureTask源码分析  1. Callable 和 Future 简介Executor框架使用Runnable作为其基本的任务表示形式。Runnable是一种有很大局限的抽象，虽然run能写入到日志文件或者将结果放入某个共享的数据结构，但它不能返回一个值或抛出一个受检查的异常。 许多任务实际上">
@@ -914,14 +914,14 @@ public class ExecutorStudy {
     <li class="popular-posts-item">
       
       
-      <div class="popular-posts-title"><a href="/posts/ca60f1d2/" rel="bookmark">Java多线程系列-JUC线程池之02 ThreadPoolExecutor 执行流程分析</a></div>
+      <div class="popular-posts-title"><a href="/posts/a1d13062/" rel="bookmark">java多线程系列-JUC线程池之03 ThreadPoolExecutor 线程池的创建</a></div>
       
     </li>
   
     <li class="popular-posts-item">
       
       
-      <div class="popular-posts-title"><a href="/posts/a1d13062/" rel="bookmark">java多线程系列-JUC线程池之03 ThreadPoolExecutor 线程池的创建</a></div>
+      <div class="popular-posts-title"><a href="/posts/ca60f1d2/" rel="bookmark">Java多线程系列-JUC线程池之02 ThreadPoolExecutor 执行流程分析</a></div>
       
     </li>
   
@@ -935,7 +935,7 @@ public class ExecutorStudy {
     <li class="popular-posts-item">
       
       
-      <div class="popular-posts-title"><a href="/posts/931a340/" rel="bookmark">Java CompletableFuture 详解</a></div>
+      <div class="popular-posts-title"><a href="/posts/931a340/" rel="bookmark">Java多线程系列-JUC线程池之07 CompletionFuture</a></div>
       
     </li>
   
@@ -960,7 +960,7 @@ public class ExecutorStudy {
   <p><span>本文标题:</span><a href="/posts/d4c4bc29/">java多线程系列-JUC线程池之04 Future 和Callable</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 fengxiu 的个人博客">fengxiu</a></p>
   <p><span>发布时间:</span>2018年07月24日 - 15:12</p>
-  <p><span>最后更新:</span>2019年07月20日 - 17:58</p>
+  <p><span>最后更新:</span>2019年07月28日 - 15:10</p>
   <p><span>原始链接:</span>
      <a href="/posts/d4c4bc29/" title="java多线程系列-JUC线程池之04 Future 和Callable">java多线程系列-JUC线程池之04 Future 和Callable</a>
     <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://fengxiu.club/posts/d4c4bc29/" aria-label="复制成功！"></i></span>
@@ -1202,9 +1202,7 @@ public class ExecutorStudy {
                     
                       
                     
-                      
-                    
-                    <span class="site-state-item-count">44</span>
+                    <span class="site-state-item-count">43</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
