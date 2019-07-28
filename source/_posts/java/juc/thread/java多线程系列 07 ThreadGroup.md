@@ -6,7 +6,7 @@ tags:
 categories:
   - java
   - juc
-  - threads
+  - thread
 author: zhangke
 abbrlink: d232e74d
 date: 2018-07-13 15:27:00

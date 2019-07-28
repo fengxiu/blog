@@ -8,7 +8,7 @@ tags:
 categories:
   - java
   - juc
-  - threads
+  - thread
 date: 2018-09-12 10:28:00
 ---
 ###  概述
