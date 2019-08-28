@@ -113,7 +113,7 @@
 <meta property="og:site_name" content="枫秀">
 <meta property="og:description" content="原文 为何废弃 Thread.stop因为它本质上是不安全的。stop线程将导致释放其持有的全部monitor（ThreadDeath异常在栈中传播时，monitor被解锁），若在当前线程中，这些monitor保护的对象处于不一致状态，则stop后这种不一致状态对其他线程可见。我们视为这种不一致状态的对象被“损坏”，当线程操作“损坏”对象时，可能发生任意（无法预测）行为，它们可能非常微妙且难以检测">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-07-28T08:13:44.860Z">
+<meta property="og:updated_time" content="2019-08-28T02:09:12.476Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="译|Java Thread Primitive Deprecation">
 <meta name="twitter:description" content="原文 为何废弃 Thread.stop因为它本质上是不安全的。stop线程将导致释放其持有的全部monitor（ThreadDeath异常在栈中传播时，monitor被解锁），若在当前线程中，这些monitor保护的对象处于不一致状态，则stop后这种不一致状态对其他线程可见。我们视为这种不一致状态的对象被“损坏”，当线程操作“损坏”对象时，可能发生任意（无法预测）行为，它们可能非常微妙且难以检测">
@@ -555,7 +555,7 @@
 
       
         <p><a href="https://docs.oracle.com/javase/8/docs/technotes/guides/concurrency/threadPrimitiveDeprecation.html" target="_blank" rel="noopener">原文</a></p>
-<h2 id="为何废弃-Thread-stop"><a href="#为何废弃-Thread-stop" class="headerlink" title="为何废弃 Thread.stop"></a>为何废弃 Thread.stop</h2><p>因为它本质上是不安全的。stop线程将导致释放其持有的全部monitor（ThreadDeath异常在栈中传播时，monitor被解锁），若在当前线程中，这些monitor保护的对象处于不一致状态，则stop后这种不一致状态对其他线程可见。我们视为这种不一致状态的对象被“损坏”，当线程操作“损坏”对象时，可能发生任意（无法预测）行为，它们可能非常微妙且难以检测，也可能抛出这些异常。与其他非检查异常不同，ThreadDeath悄悄杀死线程，用户无法收到任何警告，用户可能到几个小时，或几天会才能发现问题。</p>
+<h2 id="为何废弃-Thread-stop"><a href="#为何废弃-Thread-stop" class="headerlink" title="为何废弃 Thread.stop"></a>为何废弃 Thread.stop</h2><p>因为它本质上是不安全的。stop线程将导致释放其持有的全部monitor（ThreadDeath异常在栈中传播时，monitor被解锁），若在当前线程中，这些monitor保护的对象处于不一致状态，则stop后这种不一致状态对其他线程可见。我们视为这种不一致状态的对象被“损坏”，当线程操作“损坏”对象时，可能发生任意（无法预测）行为，它们可能非常微妙且难以检测，也可能抛出这些异常。与其他非检查异常不同，ThreadDeath悄悄杀死线程，用户无法收到任何警告，用户可能到几个小时，或几天会才能发现问题。<br><a id="more"></a></p>
 <h2 id="是否可以捕获ThreadDeath并修复“损坏”对象"><a href="#是否可以捕获ThreadDeath并修复“损坏”对象" class="headerlink" title="是否可以捕获ThreadDeath并修复“损坏”对象"></a>是否可以捕获ThreadDeath并修复“损坏”对象</h2><p>理论上可行，但这将极大地使编写正确的多线程代码的任务复杂化。由于两个原因几乎不可能做到：</p>
 <ol>
 <li>线程几乎可以在任何地方抛出ThreadDeath，因此所有同步方法、同步代码块都需要仔细设计；并且时刻记住这点。</li>
@@ -766,7 +766,7 @@ public synchronized void stop() {
   <p><span>本文标题:</span><a href="/posts/837ff6d6/">译|Java Thread Primitive Deprecation</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 fengxiu 的个人博客">fengxiu</a></p>
   <p><span>发布时间:</span>2019年07月28日 - 15:36</p>
-  <p><span>最后更新:</span>2019年07月28日 - 16:13</p>
+  <p><span>最后更新:</span>2019年08月28日 - 10:09</p>
   <p><span>原始链接:</span>
      <a href="/posts/837ff6d6/" title="译|Java Thread Primitive Deprecation">译|Java Thread Primitive Deprecation</a>
     <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://fengxiu.club/posts/837ff6d6/" aria-label="复制成功！"></i></span>
