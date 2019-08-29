@@ -7,5 +7,7 @@ else
     hexo clean
     git add --all
     git commit -m $1
+    git remote rm origin
+    git remote add origin git@github.com:fengxiu/blog.git
     git push origin master:master
 fi
