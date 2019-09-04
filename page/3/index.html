@@ -520,7 +520,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">3.9k</span>
+                <span title="本文字数">5.3k</span>
               
 
               
@@ -534,7 +534,7 @@
                 
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
-                <span title="阅读时长">4 分钟</span>
+                <span title="阅读时长">5 分钟</span>
               
             </div>
           
@@ -556,17 +556,31 @@
       
         
           <p>本文主要讲解Java8中JVM的一个更新，就是持久代的移除。将会介绍为什么需要移除持久代以及它的替代者：元空间(Metaspace)。</p>
-<h2 id="持久代"><a href="#持久代" class="headerlink" title="持久代"></a>持久代</h2><p>java 6中JVM的内存结构如下：<br><img src="/images/java_memory_permGen.png" alt="java_memory_permGen"></p>
-<p>持久代中包含了虚拟机中所有可通过反射获取到的数据，比如Class和Method对象。不同的Java虚拟机之间可能会进行类共享，因此持久代又分为只读区和读写区。</p>
-<p>JVM用于描述应用程序中用到的类和方法的元数据也存储在持久代中。JVM运行时会用到多少持久代的空间取决于应用程序用到了多少类。除此之外，Java SE库中的类和方法也都存储在这里。</p>
-<p>如果JVM发现有的类已经不再需要了，它会去回收（卸载）这些类，将它们的空间释放出来给其它类使用。Full GC会进行持久代的回收。</p>
-<ul>
-<li>JVM中类的元数据在Java堆中的存储区域。</li>
-<li>Java类对应的HotSpot虚拟机中的内部表示也存储在这里。</li>
-<li>类的层级信息，字段，名字。</li>
-<li>方法的编译信息及字节码。</li>
-<li>变量</li>
-<li>常量池和符号解析
+<h2 id="持久代"><a href="#持久代" class="headerlink" title="持久代"></a>持久代</h2><p>绝大部分Java程序员应该都见过 “java.lang.OutOfMemoryError: PermGen space “这个异常。这里的 “PermGen space”其实指的就是方法区。不过方法区和“PermGen space”又有着本质的区别。前者是JVM规范，而后者则是JVM规范的一种实现，并且只有HotSpot才有 “PermGen space”，而对于其他类型的虚拟机，如JRockit（Oracle）、J9（IBM）并没有“PermGen space”。由于方法区主要存储类的相关信息，所以对于动态生成类的情况比较容易出现永久代的内存溢出。最典型的场景就是，在jsp页面比较多的情况，容易出现永久代内存溢出。我们现在通过动态生成类来模拟 “PermGen space”的内存溢出：</p>
+<pre><code class="java">// 代码段1
+public class Test {
+}
+
+// 持续创建新的class
+public class PermGenOomMock{
+    public static void main(String[] args) {
+        URL url = null;
+        List&lt;ClassLoader&gt; classLoaderList = new ArrayList&lt;ClassLoader&gt;();
+        try {
+            url = new File(&quot;/tmp&quot;).toURI().toURL();
+            URL[] urls = {url};
+            while (true){
+                ClassLoader loader = new URLClassLoader(urls);
+                classLoaderList.add(loader);
+                loader.loadClass(&quot;com.paddx.test.memory.Test&quot;);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+</code></pre>
+<p>运行结果如下<br><img src="/images/820406-20160327005846979-1124627174.png" alt="820406-20160327005846979-1124627174"><br>本例中使用的JDK版本是1.7，指定的PermGen区的大小为8M。通过每次生成不同URLClassLoader对象来加载Test类，从而生成不同的类对象，这样就能看到我们熟悉的 “java.lang.OutOfMemoryError: PermGen space “异常。这里之所以采用JDK 1.7，是因为在JDK1.8 中， HotSpot已经没有 “PermGen space”这个区间了，取而代之是一个叫做Metaspace（元空间）的东西。<br>其实，移除永久代的工作从JDK1.7就开始了。JDK1.7中，存储在永久代的部分数据就已经转移到了Java Heap或者是 Native Heap。但永久代仍存在于JDK1.7中，并没完全移除，譬如符号引用(Symbols)转移到了native heap；字面量(interned strings)转移到了java heap；类的静态变量(class statics)转移到了java heap。<br>
           <!--noindex-->
           
             <div class="post-button text-center">
@@ -578,7 +592,7 @@
           <!--/noindex-->
         
       
-    </li></ul></div>
+    </p></div>
 
     
 
@@ -3096,7 +3110,7 @@ sys     0m0.000s
       总阅读时长
     </span>
     
-    <span title="站点阅读时长">21:01</span>
+    <span title="站点阅读时长">21:02</span>
   
 </div>
 

@@ -783,7 +783,7 @@
 
       
         
-          <p>JVM内存区域包括计数器、Java虚拟机栈、本地方法栈、堆、方法区。本文主要是介绍各个内存区域的作用性和特性，同时分别阐述各个区域发生内存溢出的可能性和异常类型。</p>
+          <p>JVM内存区域包括计数器、Java虚拟机栈、本地方法栈、堆、方法区。本文主要是介绍各个内存区域的作用和特性，同时分别阐述各个区域发生内存溢出的可能性和异常类型。</p>
           <!--noindex-->
           
             <div class="post-button text-center">
@@ -869,7 +869,7 @@
           <h2 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/posts/499b414/" class="post-title-link" itemprop="url">java 内存模型</a>
+                <a href="/posts/499b414/" class="post-title-link" itemprop="url">Java内存模型简介与Voliate关键字</a>
               
             
           </h2>
@@ -951,7 +951,7 @@
 
           
           
-             <span id="/posts/499b414/" class="leancloud_visitors" data-flag-title="java 内存模型">
+             <span id="/posts/499b414/" class="leancloud_visitors" data-flag-title="Java内存模型简介与Voliate关键字">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -1011,14 +1011,8 @@
 
       
         
-          <h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><blockquote>
-<ol>
-<li>Java 内存模型</li>
-<li>内存间间的交互工作</li>
-<li>volatile关键字</li>
-<li>原子性、可见性和有序性</li>
-<li>volatile 原理</li>
-<li>volatile应用场景
+          <h2 id="Java-内存模型"><a href="#Java-内存模型" class="headerlink" title="Java 内存模型"></a>Java 内存模型</h2><p>Java内存模型的主要目标就是定义程序中各个变量的访问规则，即在虚拟机中将变量存储到内存中和从内存中取出变量这样的细节。此处的变量与java编程中所说的变量有所区别，它包括了实例字段、静态字段和构成数组对象的元素，但不包括局部变量与方法参数，因为这些是线程私有的，不会被共享自然也就不存在竞争问题。</p>
+<p>每个线程中有自己的工作内存，线程的工作内存中保存了被该线程所使用到的变量（这些变量是从主内存中拷贝而来）。线程对变量的所有操作（读取，赋值）都必须在工作内存中进行。不同线程之间也无法直接访问对方工作内存中的变量，线程间变量值的传递均需要通过主内存来完成。<br><img src="/images/3985563-8a3d9a1b94b97e83.png" alt="3985563-8a3d9a1b94b97e83"></p>
           <!--noindex-->
           
             <div class="post-button text-center">
@@ -1030,7 +1024,7 @@
           <!--/noindex-->
         
       
-    </li></ol></blockquote></div>
+    </div>
 
     
 
@@ -3098,7 +3092,7 @@
       总阅读时长
     </span>
     
-    <span title="站点阅读时长">21:01</span>
+    <span title="站点阅读时长">21:02</span>
   
 </div>
 
