@@ -105,22 +105,18 @@
 
 
 
-  <meta name="description" content="java 注解 01：基本介绍以及用法概述本篇主要对java Annotation进行了整理。理解 Annotation 的关键，是理解Annotation的语法和用法。下面也单独对此进行了详细的介绍。  Annotation 架构 Annotation 组成部分 Annotation 基本语法和java自带注解介绍 Annotation 的作用">
+  <meta name="description" content="什么是注解注解的定义：一种元数据形式，可以添加到Java代码中。因此从定义可以看出注解仅仅是在源码中添加的一些标记，即元数据，对代码的运行没有任何影响。那注解能用来干嘛呢？一种技术的出现肯定是有其存在意义。注解本身是表示元数据，但是java为注解提供了单独的注解处理器，因此我们可以通过注解处理器来实现一些有意义的功能，比如编译检查，如@Override，生成文档@Document当然不止这些简单的">
 <meta name="keywords" content="注解">
 <meta property="og:type" content="article">
-<meta property="og:title" content="java 注解 01：基本介绍以及用法">
+<meta property="og:title" content="注解基本介绍">
 <meta property="og:url" content="http://fengxiu.club/posts/c87fd2e2/index.html">
 <meta property="og:site_name" content="枫秀">
-<meta property="og:description" content="java 注解 01：基本介绍以及用法概述本篇主要对java Annotation进行了整理。理解 Annotation 的关键，是理解Annotation的语法和用法。下面也单独对此进行了详细的介绍。  Annotation 架构 Annotation 组成部分 Annotation 基本语法和java自带注解介绍 Annotation 的作用">
+<meta property="og:description" content="什么是注解注解的定义：一种元数据形式，可以添加到Java代码中。因此从定义可以看出注解仅仅是在源码中添加的一些标记，即元数据，对代码的运行没有任何影响。那注解能用来干嘛呢？一种技术的出现肯定是有其存在意义。注解本身是表示元数据，但是java为注解提供了单独的注解处理器，因此我们可以通过注解处理器来实现一些有意义的功能，比如编译检查，如@Override，生成文档@Document当然不止这些简单的">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://fengxiu.club/images/pasted-131.png">
-<meta property="og:image" content="http://fengxiu.club/images/pasted-132.png">
-<meta property="og:image" content="http://fengxiu.club/images/pasted-133.png">
-<meta property="og:updated_time" content="2019-08-31T04:04:36.922Z">
+<meta property="og:updated_time" content="2019-09-04T02:43:43.909Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="java 注解 01：基本介绍以及用法">
-<meta name="twitter:description" content="java 注解 01：基本介绍以及用法概述本篇主要对java Annotation进行了整理。理解 Annotation 的关键，是理解Annotation的语法和用法。下面也单独对此进行了详细的介绍。  Annotation 架构 Annotation 组成部分 Annotation 基本语法和java自带注解介绍 Annotation 的作用">
-<meta name="twitter:image" content="http://fengxiu.club/images/pasted-131.png">
+<meta name="twitter:title" content="注解基本介绍">
+<meta name="twitter:description" content="什么是注解注解的定义：一种元数据形式，可以添加到Java代码中。因此从定义可以看出注解仅仅是在源码中添加的一些标记，即元数据，对代码的运行没有任何影响。那注解能用来干嘛呢？一种技术的出现肯定是有其存在意义。注解本身是表示元数据，但是java为注解提供了单独的注解处理器，因此我们可以通过注解处理器来实现一些有意义的功能，比如编译检查，如@Override，生成文档@Document当然不止这些简单的">
 
 
 
@@ -137,7 +133,7 @@
   };
 </script>
 
-  <title>java 注解 01：基本介绍以及用法 | 枫秀</title>
+  <title>注解基本介绍 | 枫秀</title>
   
 
 
@@ -416,7 +412,7 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">java 注解 01：基本介绍以及用法
+          <h2 class="post-title" itemprop="name headline">注解基本介绍
 
               
             
@@ -471,6 +467,13 @@
 
                 
                 
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/基础/注解/" itemprop="url" rel="index"><span itemprop="name">注解</span></a></span>
+
+                
+                
               
             </span>
           
@@ -492,7 +495,7 @@
 
           
           
-             <span id="/posts/c87fd2e2/" class="leancloud_visitors" data-flag-title="java 注解 01：基本介绍以及用法">
+             <span id="/posts/c87fd2e2/" class="leancloud_visitors" data-flag-title="注解基本介绍">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -517,7 +520,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">6.4k</span>
+                <span title="本文字数">2.4k</span>
               
 
               
@@ -531,7 +534,7 @@
                 
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
-                <span title="阅读时长">6 分钟</span>
+                <span title="阅读时长">2 分钟</span>
               
             </div>
           
@@ -551,160 +554,63 @@
       
 
       
-        <h1 id="java-注解-01：基本介绍以及用法"><a href="#java-注解-01：基本介绍以及用法" class="headerlink" title="java 注解 01：基本介绍以及用法"></a>java 注解 01：基本介绍以及用法</h1><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>本篇主要对java Annotation进行了整理。理解 Annotation 的关键，是理解Annotation的语法和用法。下面也单独对此进行了详细的介绍。</p>
+        <h2 id="什么是注解"><a href="#什么是注解" class="headerlink" title="什么是注解"></a>什么是注解</h2><p>注解的定义：一种元数据形式，可以添加到Java代码中。因此从定义可以看出注解仅仅是在源码中添加的一些标记，即元数据，对代码的运行没有任何影响。那注解能用来干嘛呢？一种技术的出现肯定是有其存在意义。注解本身是表示元数据，但是java为注解提供了单独的注解处理器，因此我们可以通过注解处理器来实现一些有意义的功能，比如编译检查，如@Override，生成文档@Document当然不止这些简单的功能，Spring中利用注解实现了AOP，事务等功能。</p>
+<h2 id="注解分类"><a href="#注解分类" class="headerlink" title="注解分类"></a>注解分类</h2><p>我按照使用方式，将注解分成三类，元注解（meta-annoation），系统注解，自定义注解。<br>下面先介绍元注解和系统注解。<br><a id="more"></a></p>
+<h3 id="元注解"><a href="#元注解" class="headerlink" title="元注解"></a>元注解</h3><p>用于注解其他注解的注解，这些注解的主要作用类似于class，Interface等关键字，帮助我们实现自定义注解。java提供了下面几种元注解。</p>
+<h4 id="Retention"><a href="#Retention" class="headerlink" title="@Retention"></a>@Retention</h4><p>用来指定注解保留到什么时机，有以下三个可选。</p>
 <ol>
-<li>Annotation 架构</li>
-<li>Annotation 组成部分</li>
-<li>Annotation 基本语法和java自带注解介绍</li>
-<li>Annotation 的作用</li>
+<li>RetentionPolicy.SOURCE:仅在源码中显示，class文件中不存在</li>
+<li>RetentionPolicy.CLASS ：class文件中存在，但是运行时不存在。如果没有指定，则为默认值。</li>
+<li>RetentionPolicy.RUNTIME：在运行时存在，可以通过反射获取。</li>
 </ol>
-<a id="more"></a>
-<h3 id="Annotation架构"><a href="#Annotation架构" class="headerlink" title="Annotation架构"></a><strong>Annotation架构</strong></h3><p>下面是Annotation整体的架构图，如果你对这个图感到迷惑，可以跳过这一节直接看Annotation的基本语法，然后回来再看。</p>
-<p><img src="/images/pasted-131.png" alt="upload successful"></p>
-<p>下面，我先介绍框架图的左半边(如下图)，即Annotation, RetentionPolicy, ElementType；然后在就Annotation的实现类进行举例说明。</p>
-<p><img src="/images/pasted-132.png" alt="upload successful"></p>
-<h3 id="Annotation组成部分"><a href="#Annotation组成部分" class="headerlink" title="Annotation组成部分"></a>Annotation组成部分</h3><p>java annotation 的组成中，有3个非常重要的主干类。它们分别是：</p>
-<p>(01) Annotation.java</p>
-<pre><code class="java">package java.lang.annotation;
-public interface Annotation {
-
-    boolean equals(Object obj);
-
-    int hashCode();
-
-    String toString();
-
-    Class&lt;? extends Annotation&gt; annotationType();
-}
-</code></pre>
-<p>(02) ElementType.java</p>
-<pre><code class="java">package java.lang.annotation;
-
-public enum ElementType {
-    TYPE,               /* 类、接口（包括注释类型）或枚举声明  */
-
-    FIELD,              /* 字段声明（包括枚举常量）  */
-
-    METHOD,             /* 方法声明  */
-
-    PARAMETER,          /* 参数声明  */
-
-    CONSTRUCTOR,        /* 构造方法声明  */
-
-    LOCAL_VARIABLE,     /* 局部变量声明  */
-
-    ANNOTATION_TYPE,    /* 注释类型声明  */
-
-    PACKAGE             /* 包声明  */
-}
-</code></pre>
-<p>(03) RetentionPolicy.java</p>
-<pre><code class="java">package java.lang.annotation;
-public enum RetentionPolicy {
-    SOURCE,            /* Annotation信息仅存在于编译器处理期间，编译器处理完之后就没有该Annotation信息了  */
-
-    CLASS,             /* 编译器将Annotation存储于类对应的.class文件中。默认行为  */
-
-    RUNTIME            /* 编译器将Annotation存储于class文件中，并且可由JVM读入 */
-}
-</code></pre>
-<p>说明：</p>
+<h4 id="Target"><a href="#Target" class="headerlink" title="@Target"></a>@Target</h4><p>用来指定注解用在什么元素上，有下面多个值可选，注意这里Target的值可以同时指定多个，但是每个值只能出现一次，否则会抛出异常。</p>
 <ol>
-<li><p><strong>Annotation</strong> 是个接口：<br>​      <strong>每1个Annotation</strong> 都与 <strong>1个RetentionPolicy</strong>关联，并且与 <strong>1～n个ElementType</strong>关联。可以通俗的理解为：每1个Annotation对象，都会有唯一的RetentionPolicy属性；至于ElementType属性，则有1~n个。</p>
-</li>
-<li><p><strong>ElementType</strong> 是个枚举类型，它用来指定Annotation的类型，说明Annotation可以在哪里使用。<br> <strong>每1个Annotation</strong> 都与 <strong>1～n个ElementType</strong>关联。</p>
-<p>当Annotation与某个ElementType关联时，就意味着：Annotation有了某种用途。例如，若一个Annotation对象是METHOD类型，则该Annotation只能用来修饰方法。</p>
-</li>
-<li><p><strong>RetentionPolicy</strong> 是枚举类型，它用来指定Annotation的策略。通俗点说，就是不同RetentionPolicy类型的Annotation的作用域不同。<br>​     <strong>每1个Annotation</strong>都与 <strong>1个RetentionPolicy</strong>关联。</p>
-<ul>
-<li>若Annotation的类型为 <strong>SOURCE</strong>，则意味着：Annotation仅存在于编译器处理期间，编译器处理完之后，该Annotation就没用了。<br>​          例如，<code>@Override</code>标志就是一个Annotation。当它修饰一个方法的时候，就意味着该方法覆盖父类的方法；并且在编译期间会进行语法检查！编译器处理完后，<code>@Override</code>就没有任何作用了。</li>
-<li>若Annotation的类型为 <strong>CLASS</strong>，则意味着：编译器将Annotation存储于类对应的.class文件中，它是Annotation的默认行 为。</li>
-<li>若Annotation的类型为 <strong>RUNTIME</strong>，则意味着：编译器将Annotation存储于class文件中，并且可由JVM读入。</li>
-</ul>
-</li>
+<li>ElementType.TYPE :类、接口、注解或者枚举</li>
+<li>ElementType.FIELD：属性、枚举常量上</li>
+<li>ElementType.FIELD：方法</li>
+<li>ElementType.PARAMETER：方法参数上</li>
+<li>ElementType.PARAMETER：构造器上</li>
+<li>ElementType.LOCAL_VARIABLE：本地变量</li>
+<li>ElementType.ANNOTATION_TYPE：注解</li>
+<li>ElementType.PACKAGE：包</li>
+<li>ElementType.TYPE_PARAMETER：可以在任何类型的参数上使用，包括泛型</li>
+<li>ElementType.TYPE_USE：等于TYPE+TYPE_PARAMETER</li>
 </ol>
-<p>这时，只需要记住<em>“每1个Annotation” 都与 “1个RetentionPolicy”关联，并且与 “1～n个ElementType”关联</em>。学完后面的内容之后，再回头看这些内容，会更容易理解。</p>
-<h3 id="Annoation基本语法和java自带注解介绍"><a href="#Annoation基本语法和java自带注解介绍" class="headerlink" title="Annoation基本语法和java自带注解介绍"></a>Annoation基本语法和java自带注解介绍</h3><p>理解了上面的3个类的作用之后，我们接下来可以讲解Annotation实现类的语法定义了。</p>
-<h4 id="1-Annotation基本语法"><a href="#1-Annotation基本语法" class="headerlink" title="1 Annotation基本语法"></a><strong>1 Annotation基本语法</strong></h4><pre><code class="java">@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface MyAnnotation1 {
-
-}
-</code></pre>
-<p>说明：</p>
-<p>上面的作用是定义一个Annotation，它的名字是MyAnnotation1。定义了MyAnnotation1之后，我们可以在代码中通过<code>@MyAnnotation1</code>来使用它。<br>其它的， @Target, @Retention, @interface都是来修饰MyAnnotation1的。下面分别说说它们的含义：</p>
-<ol>
-<li><p><code>@interface</code><br>使用@interface定义注解时，意味着它实现了java.lang.annotation.Annotation接口，即该注解就是一个Annotation。<strong>定义Annotation时，@interface是必须的</strong><br>注意：它和我们通常的implemented实现接口的方法不同。Annotation接口的实现细节都由编译器完成。通过@interface定义注解后，该注解不能继承其他的注解或接口。</p>
-</li>
-<li><p><code>@Target(ElementType.TYPE)</code><br>​      前面我们说过，ElementType 是Annotation的类型属性。而@Target的作用，就是来指定Annotation的类型属性。 <code>@Target(ElementType.TYPE)</code> 的意思就是指定该Annotation的类型是<code>ElementType.TYPE</code>。这就意味着，MyAnnotation1是来修饰<strong>类、接口（包括注释类型）或枚举</strong>声明的注解。<br>注意： 定义Annotation时，@Target可有可无。若有@Target，则该Annotation只能用于它所指定的地方；若没有@Target，则该Annotation可以用于任何地方。</p>
-</li>
-<li><p><code>@Retention(RetentionPolicy.RUNTIME)</code><br>​      前面我们说过，RetentionPolicy 是Annotation的策略属性，而<code>@Retention</code>的作用，就是指定Annotation的策略属性。<code>@Retention(RetentionPolicy.RUNTIME)</code>的意思就是指定该Annotation的策略是<code>RetentionPolicy.RUNTIME</code>。这就意味着，编译器会将该Annotation信息保留在.class文件中，并且能被虚拟机读取。</p>
-<p>注意：定义Annotation时，<code>@Retention</code>可有可无。若没有<code>@Retention</code>，则默认是<code>RetentionPolicy.CLASS</code>。</p>
-</li>
+<h4 id="Documented"><a href="#Documented" class="headerlink" title="@Documented"></a>@Documented</h4><p>@Documented 所标注内容，可以出现在javadoc中。</p>
+<h4 id="Inherited"><a href="#Inherited" class="headerlink" title="@Inherited"></a>@Inherited</h4><p>@Inherited只能被用来标注“Annotation类型”，它所标注的Annotation具有继承性。</p>
+<h4 id="Repeatable"><a href="#Repeatable" class="headerlink" title="@Repeatable"></a>@Repeatable</h4><p>表示注解可以在同一个元素上重复使用</p>
+<h3 id="系统注解"><a href="#系统注解" class="headerlink" title="系统注解"></a>系统注解</h3><ol>
+<li>@Deprecated  – @Deprecated 所标注内容，不再被建议使用。</li>
+<li>@Override    – @Override 只能标注方法，表示该方法覆盖父类中的方法。</li>
+<li>@SuppressWarnings – @SuppressWarnings 所标注内容产生的警告，编译器会对这些警告保持静默。</li>
 </ol>
-<h4 id="2-java-中自带的注解"><a href="#2-java-中自带的注解" class="headerlink" title="2 .java 中自带的注解"></a>2 .java 中自带的注解</h4><p>理解了上面java注解的基本语法之后，我们就很容易理解java中自带的Annotation的实现类，即Annotation架构图的右半边。如下图：</p>
-<p><img src="/images/pasted-133.png" alt="upload successful"></p>
-<p><strong>java 常用的Annotation：</strong></p>
-<pre><code class="txt">@Deprecated  -- @Deprecated 所标注内容，不再被建议使用。
-@Override    -- @Override 只能标注方法，表示该方法覆盖父类中的方法。
-@Documented  -- @Documented 所标注内容，可以出现在javadoc中。
-@Inherited   -- @Inherited只能被用来标注“Annotation类型”，它所标注的Annotation具有继承性。
-@Retention   -- @Retention只能被用来标注“Annotation类型”，而且它被用来指定Annotation的RetentionPolicy属性。
-@Target      -- @Target只能被用来标注“Annotation类型”，而且它被用来指定Annotation的ElementType属性。
-@SuppressWarnings -- @SuppressWarnings 所标注内容产生的警告，编译器会对这些警告保持静默。
-</code></pre>
-<p>由于<code>@Deprecated和@Override</code>类似，<code>@Documented, @Inherited, @Retention, @Target</code>类似；下面，我们只对<code>@Deprecated, @SuppressWarnings</code>这2个Annotation进行说明，另外我会单独用一篇文章对<code>@Inherited</code>进行介绍</p>
-<p><strong>@Deprecated</strong></p>
-<p>@Deprecated 的定义如下：</p>
-<pre><code class="java">@Documented
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Deprecated {
-}
-</code></pre>
-<p><strong>说明</strong>：</p>
-<ul>
-<li>@interface – 它的用来修饰Deprecated，意味着Deprecated实现了java.lang.annotation.Annotation接口；即Deprecated就是一个注解。</li>
-<li>@Documented – 它的作用是说明该注解能出现在javadoc中。</li>
-<li>@Retention(RetentionPolicy.RUNTIME) – 它的作用是指定Deprecated的策略是          RetentionPolicy.RUNTIME。这就意味着，编译器会将Deprecated的信息保留在.class文件中，并且能被虚拟机读取。</li>
-</ul>
-<p>@Deprecated 注解的作用是：被其所标注内容，不再被建议使用。</p>
-<p><strong>@SuppressWarnings</strong></p>
-<p>@SuppressWarnings 的定义如下：</p>
-<pre><code class="java">@Target({TYPE, FIELD, METHOD, PARAMETER, CONSTRUCTOR, LOCAL_VARIABLE})
-@Retention(RetentionPolicy.SOURCE)
-public @interface SuppressWarnings {
-
-    String[] value();
-
-}
-</code></pre>
-<p><strong>说明</strong>：</p>
-<ul>
-<li>@interface – 它的用来修饰SuppressWarnings，意味着SuppressWarnings实现了java.lang.annotation.Annotation接口；即SuppressWarnings就是一个注解。</li>
-<li>@Retention(RetentionPolicy.SOURCE) – 它的作用是指定SuppressWarnings的策略是RetentionPolicy.SOURCE。这就意味着，SuppressWarnings信息仅存在于编译器处理期间，编译器处理完之后SuppressWarnings就没有作用了。</li>
-<li>@Target({TYPE, FIELD, METHOD, PARAMETER, CONSTRUCTOR, LOCAL_VARIABLE}) – 它的作用是指定SuppressWarnings的类型同时包括<code>TYPE, FIELD, METHOD, PARAMETER, CONSTRUCTOR,LOCAL_VARIABLE。</code><br>​       TYPE意味着，它能标注“类、接口（包括注释类型）或枚举声明”。<br>​       FIELD意味着，它能标注“字段声明”。<br>​       METHOD意味着，它能标注“方法”。<br>​       PARAMETER意味着，它能标注“参数”。<br>​       CONSTRUCTOR意味着，它能标注“构造方法”。<br>​       LOCAL_VARIABLE意味着，它能标注“局部变量”。</li>
-<li><p>String[] value(); 意味着，SuppressWarnings能指定参数</p>
-<p>SuppressWarnings 的作用是，让编译器对<strong>它所标注的内容”的某些警告保持静默</strong>。例如，<code>@SuppressWarnings(value={&quot;deprecation&quot;, &quot;unchecked&quot;})</code>表示对它所标注的内容中的 “deprecation不再建议使用警告”和“未检查的转换时的警告”保持沉默。</p>
-</li>
-</ul>
-<p>补充：<strong>SuppressWarnings 常用的关键字的表格</strong></p>
-<pre><code>deprecation  -- 使用了不赞成使用的类或方法时的警告
+<p><strong>SuppressWarnings 常用的关键字的表格</strong></p>
+<pre><code class="txt">deprecation  -- 使用了不赞成使用的类或方法时的警告
 unchecked    -- 执行了未检查的转换时的警告，例如当使用集合时没有用泛型 (Generics) 来指定集合保存的类型。
 fallthrough  -- 当 Switch 程序块直接通往下一种情况而没有 Break 时的警告。
 path         -- 在类路径、源文件路径等中有不存在的路径时的警告。
 serial       -- 当在可序列化的类上缺少 serialVersionUID 定义时的警告。
 finally      -- 任何 finally 子句不能正常完成时的警告。
 all          -- 关于以上所有情况的警告。
-</code></pre><h3 id="Annotation-的作用"><a href="#Annotation-的作用" class="headerlink" title="Annotation 的作用"></a><strong>Annotation 的作用</strong></h3><ol>
-<li><p><strong>编译检查</strong>:</p>
-<p>通过代码里标识的元数据让编译器能实现基本的编译检查。</p>
-<p>例如，@SuppressWarnings, @Deprecated和@Override都具有编译检查作用。<br>关于@SuppressWarnings和@Deprecated，已经在“第3部分”中详细介绍过了。这里就不再举例说明了。<br>若某个方法被 @Override的 标注，则意味着该方法会覆盖父类中的同名方法。如果有方法被@Override标示，但父类中却没有“被@Override标注”的同名方法，则编译器会报错。</p>
+</code></pre>
+<h2 id="自定义注解"><a href="#自定义注解" class="headerlink" title="自定义注解"></a>自定义注解</h2><p>上面我们已经知道了java提供的元注解和系统注解，下面就来介绍如何自定义注解，下面是一个简单注解的示例：</p>
+<pre><code class="java">@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface MyAnnotation {
+   String value();
+
+   int[]  intValue();
+}
+</code></pre>
+<p>说明：上面的作用是定义一个Annotation，它的名字是MyAnnotation。并且定义了俩个元素，分别定义了来个属性，一个是不同的String类型，另一个是字符串数组类型。定义了MyAnnotation1之后，我们可以在代码中通过<code>@MyAnnotation(value=&#39;annoation&#39;,intValue={1,2,3})</code>来使用它。</p>
+<p>从上面可以看出，自定义注解和接口很相似，就是在接口前加<code>@</code>符号即可。其他的就和接口的形式相同。不过定义注解的时候，一般都会要求加上@Target和@Retention来个注解，来表示注解保留的时机和注解使用的地点。</p>
+<p>注意：定义Annotation时，<code>@Retention</code>可有可无。若没有<code>@Retention</code>，则默认是<code>RetentionPolicy.CLASS</code>。</p>
+<h2 id="注解作用"><a href="#注解作用" class="headerlink" title="注解作用"></a>注解作用</h2><ol>
+<li><p><strong>编译检查</strong>：通过代码里标识的元数据让编译器能实现基本的编译检查。例如，@SuppressWarnings, @Deprecated和@Override都具有编译检查作用。</p>
 </li>
-<li><p><strong>根据Annotation生成帮助文档</strong></p>
-<p>通过给Annotation注解加上@Documented标签，能使该Annotation标签出现在javadoc中。</p>
+<li><p><strong>根据Annotation生成帮助文档</strong>： 通过给Annotation注解加上@Documented标签，能使该Annotation标签出现在javadoc中。</p>
 </li>
-<li><p><strong>在反射中使用Annotation</strong></p>
-<p>通过代码里标识的注解对代码进行分析。跟踪代码依赖性，实现替代配置文件功能。比较常见的是spring开始的基于注解配置。作用就是减少配置。现在的框架基本都使用了这种配置来减少配置文件的数量。</p>
+<li><p><strong>在反射中使用Annotation</strong>： 通过代码里标识的注解对代码进行分析。跟踪代码依赖性，实现替代配置文件功能。比较常见的是spring开始的基于注解配置。作用就是减少配置。现在的框架基本都使用了这种配置来减少配置文件的数量。</p>
 </li>
 </ol>
 
@@ -720,7 +626,7 @@ all          -- 关于以上所有情况的警告。
     <li class="popular-posts-item">
       
       
-      <div class="popular-posts-title"><a href="/posts/ca158b7a/" rel="bookmark">java 注解 02：@Inherited </a></div>
+      <div class="popular-posts-title"><a href="/posts/ca158b7a/" rel="bookmark">注解之@Inherited和@Repeatable</a></div>
       
     </li>
   
@@ -742,12 +648,12 @@ all          -- 关于以上所有情况的警告。
   <!-- JS库 sweetalert 可修改路径 -->
   <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-  <p><span>本文标题:</span><a href="/posts/c87fd2e2/">java 注解 01：基本介绍以及用法</a></p>
+  <p><span>本文标题:</span><a href="/posts/c87fd2e2/">注解基本介绍</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 fengxiu 的个人博客">fengxiu</a></p>
   <p><span>发布时间:</span>2019年03月04日 - 07:20</p>
-  <p><span>最后更新:</span>2019年08月31日 - 12:04</p>
+  <p><span>最后更新:</span>2019年09月04日 - 10:43</p>
   <p><span>原始链接:</span>
-     <a href="/posts/c87fd2e2/" title="java 注解 01：基本介绍以及用法">java 注解 01：基本介绍以及用法</a>
+     <a href="/posts/c87fd2e2/" title="注解基本介绍">注解基本介绍</a>
     <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://fengxiu.club/posts/c87fd2e2/" aria-label="复制成功！"></i></span>
   </p>
   <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
@@ -805,8 +711,8 @@ all          -- 关于以上所有情况的警告。
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/posts/ca158b7a/" rel="prev" title="java 注解 02：@Inherited ">
-                java 注解 02：@Inherited  <i class="fa fa-chevron-right"></i>
+              <a href="/posts/ca158b7a/" rel="prev" title="注解之@Inherited和@Repeatable">
+                注解之@Inherited和@Repeatable <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -985,7 +891,9 @@ all          -- 关于以上所有情况的警告。
                     
                       
                     
-                    <span class="site-state-item-count">43</span>
+                      
+                    
+                    <span class="site-state-item-count">44</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -1248,7 +1156,7 @@ all          -- 关于以上所有情况的警告。
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#java-注解-01：基本介绍以及用法"><span class="nav-number">1.</span> <span class="nav-text">java 注解 01：基本介绍以及用法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#概述"><span class="nav-number">1.0.1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Annotation架构"><span class="nav-number">1.0.2.</span> <span class="nav-text">Annotation架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Annotation组成部分"><span class="nav-number">1.0.3.</span> <span class="nav-text">Annotation组成部分</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Annoation基本语法和java自带注解介绍"><span class="nav-number">1.0.4.</span> <span class="nav-text">Annoation基本语法和java自带注解介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-Annotation基本语法"><span class="nav-number">1.0.4.1.</span> <span class="nav-text">1 Annotation基本语法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-java-中自带的注解"><span class="nav-number">1.0.4.2.</span> <span class="nav-text">2 .java 中自带的注解</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Annotation-的作用"><span class="nav-number">1.0.5.</span> <span class="nav-text">Annotation 的作用</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是注解"><span class="nav-number">1.</span> <span class="nav-text">什么是注解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注解分类"><span class="nav-number">2.</span> <span class="nav-text">注解分类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#元注解"><span class="nav-number">2.1.</span> <span class="nav-text">元注解</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Retention"><span class="nav-number">2.1.1.</span> <span class="nav-text">@Retention</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Target"><span class="nav-number">2.1.2.</span> <span class="nav-text">@Target</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Documented"><span class="nav-number">2.1.3.</span> <span class="nav-text">@Documented</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Inherited"><span class="nav-number">2.1.4.</span> <span class="nav-text">@Inherited</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Repeatable"><span class="nav-number">2.1.5.</span> <span class="nav-text">@Repeatable</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#系统注解"><span class="nav-number">2.2.</span> <span class="nav-text">系统注解</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义注解"><span class="nav-number">3.</span> <span class="nav-text">自定义注解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注解作用"><span class="nav-number">4.</span> <span class="nav-text">注解作用</span></a></li></ol></div>
             
 
           </div>
@@ -1291,7 +1199,7 @@ all          -- 关于以上所有情况的警告。
       总阅读时长
     </span>
     
-    <span title="站点阅读时长">21:05</span>
+    <span title="站点阅读时长">21:01</span>
   
 </div>
 
@@ -1375,7 +1283,7 @@ all          -- 关于以上所有情况的警告。
 
 
   
-  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@2/dist/jquery.min.js"></script>
 
   
   <script src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
@@ -1433,7 +1341,7 @@ all          -- 关于以上所有情况的警告。
       var disqus_config = function () {
         this.page.url = "http://fengxiu.club/posts/c87fd2e2/";
         this.page.identifier = "posts/c87fd2e2/";
-        this.page.title = 'java 注解 01：基本介绍以及用法';
+        this.page.title = '注解基本介绍';
         };
       function loadComments () {
         var d = document, s = d.createElement('script');

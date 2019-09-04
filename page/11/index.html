@@ -1677,17 +1677,19 @@
 
       
         
-          <h2 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h2><p>本篇博客我们将继续学习集合框架。这一篇我们接着学习List的另一种实现类<code>LinkedList</code>。</p>
-<p>主要内容</p>
-<ol>
-<li>LinkedList介绍</li>
-<li>Queue 介绍</li>
-<li>Deque介绍</li>
-<li>LinkedList数据结构</li>
-<li>LinkedList源码分析</li>
-<li>LinkedList遍历方式</li>
-<li>LinkedList使用示例</li>
-</ol>
+          <h2 id="LinkedList介绍"><a href="#LinkedList介绍" class="headerlink" title="LinkedList介绍"></a>LinkedList介绍</h2><p>LinkedList的类图如下<br><img src="/source/images/Xnip2019-09-04_10-35-20.jpg" alt="Xnip2019-09-04_10-35-20"></p>
+<p>LinkedList是一个继承于AbstractSequentialList双向链表。他可以被当做栈、队列和双端队列来使用。</p>
+<p>LinkedList实现了List接口，能对他进行队列操作。这个是因为。在LinkedList的默认实现时就是按照队列实现的。</p>
+<p>LinkedList是实现Deque接口，能对他进行双端队列操作。<br><strong>LinkedList不是线程安全的集合</strong></p>
+<p>LinkedList包含三个比较重要的成员：<strong>first、last和size</strong></p>
+<ul>
+<li><p>first指向双向链表的表头。</p>
+</li>
+<li><p>last指向双向链表的尾部。</p>
+</li>
+<li><p>size是双向链表中节点的个数。</p>
+</li>
+</ul>
           <!--noindex-->
           
             <div class="post-button text-center">
@@ -1773,7 +1775,7 @@
           <h2 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/posts/4dcbcf5f/" class="post-title-link" itemprop="url">Java 集合系列03之ArrayList源码解析和使用示例</a>
+                <a href="/posts/4dcbcf5f/" class="post-title-link" itemprop="url">Java 集合系列03之ArrayList</a>
               
             
           </h2>
@@ -1848,7 +1850,7 @@
 
           
           
-             <span id="/posts/4dcbcf5f/" class="leancloud_visitors" data-flag-title="Java 集合系列03之ArrayList源码解析和使用示例">
+             <span id="/posts/4dcbcf5f/" class="leancloud_visitors" data-flag-title="Java 集合系列03之ArrayList">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -1908,22 +1910,11 @@
 
       
         
-          <h3 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h3><p>本篇博客主要的内容是介绍ArrayList的使用和对其源码进行分析，并比较ArrayList不同迭代器之间的性能</p>
-<p>内容包括：</p>
-<ol>
-<li>ArrayList 简介</li>
-<li>ArrayList数据结构</li>
-<li>ArrayList源码分析</li>
-<li>ArrayList遍历方式分析</li>
-<li>toArray 异常</li>
-<li>ArrayList 基本使用示例</li>
-</ol>
-<h2 id="1-ArrayList-简介"><a href="#1-ArrayList-简介" class="headerlink" title="1. ArrayList 简介"></a>1. ArrayList 简介</h2><p>ArrayList 是一个数组队列，可以动态的改变大小，相当于动态数组。与Java中的数组相比，它的容量能动态增长。他继承于AbstractList，实现了List，RandomAccess，Cloneable，java.io.Serializable接口。</p>
-<p>ArrayList 继承了AbstractList，实现了List。因此就具有相关的添加、删除、修改、遍历等功能。</p>
-<p>ArrayList 实现了RandmoAccess接口，即提供了随机访问功能。RandmoAccess是java中用来被List实现，为List提供快速访问功能的。在ArrayList中，我们即可以通过元素的序号快速获取元素对象；这就是快速随机访问。稍后，我们会比较List的“快速随机访问”和“通过Iterator迭代器访问”的效率。</p>
-<p>ArrayList 实现了Cloneable接口，即覆盖了函数clone()，能被克隆。</p>
-<p>ArrayList 实现java.io.Serializable接口，这意味着ArrayList支持序列化，能通过序列化去传输。</p>
-<p><strong>注意的一点是：ArrayList不是线程安全的！所以不要再并发程序中使用</strong></p>
+          <p>本篇博客主要的内容是介绍ArrayList的使用和对其源码进行分析，并比较ArrayList不同迭代器之间的性能</p>
+<h2 id="1-ArrayList-简介"><a href="#1-ArrayList-简介" class="headerlink" title="1. ArrayList 简介"></a>1. ArrayList 简介</h2><p>ArrayList是一个有序集合，底层是通过数组来实现的，可以动态的改变大小，相当于动态数组。与Java中的数组相比，它的容量能动态增长。他继承于AbstractList，实现了List，RandomAccess，Cloneable，java.io.Serializable接口。<br>类如如下：<br><img src="/images/Xnip2019-09-04_10-04-56.jpg" alt="Xnip2019-09-04_10-04-56"><br>ArrayList继承AbstractList，实现List接口。因此就具有相关的添加、删除、修改、遍历等功能。</p>
+<p>ArrayList实现RandmoAccess接口，即提供随机访问功能，注意这个接口内部并没有任何方法，只是起到标记的作用。</p>
+<p>ArrayList实现Cloneable接口，即覆盖了函数clone()，能被克隆。</p>
+<p>ArrayList实现java.io.Serializable接口，这意味着ArrayList支持序列化，能通过序列化去传输。<br><strong>注意的一点是：ArrayList不是线程安全的！所以不要再并发程序中使用</strong></p>
           <!--noindex-->
           
             <div class="post-button text-center">
@@ -2034,7 +2025,7 @@
                 
               
 
-              <time title="创建时间：2019-03-04 10:12:00" itemprop="dateCreated datePublished" datetime="2019-03-04T10:12:00+08:00">2019-03-04</time>
+              <time title="创建时间：2019-03-04 12:02:00" itemprop="dateCreated datePublished" datetime="2019-03-04T12:02:00+08:00">2019-03-04</time>
             
 
             
@@ -2109,7 +2100,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">7.2k</span>
+                <span title="本文字数">6.8k</span>
               
 
               
@@ -2123,7 +2114,7 @@
                 
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
-                <span title="阅读时长">7 分钟</span>
+                <span title="阅读时长">6 分钟</span>
               
             </div>
           
@@ -2144,15 +2135,13 @@
 
       
         
-          <h3 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h3><p>前面已经讲解了Arraylist，但是留下了一个知识点没有说明，Iterator的fail-fast机制。本篇博客主要讲解一下这个机制。</p>
-<p>主要内容：</p>
-<ol>
-<li>Fail-fast简介</li>
-<li>fail-fast示例</li>
-<li>fail-fast解决办法</li>
-<li>fail-fast原理</li>
-<li>解决fail-fast的原理</li>
-</ol>
+          <p>前面已经讲解了Arraylist，但是留下了一个知识点没有说明，Iterator的fail-fast机制。本篇博客主要讲解一下这个机制。</p>
+<h2 id="Fail-fast简介"><a href="#Fail-fast简介" class="headerlink" title="Fail-fast简介"></a>Fail-fast简介</h2><p>下面是Java官方在Arraylist的介绍中一段描述fail-fast的话</p>
+<pre><code class="txt">if the list is structurally modified at any time after the iterator is created, in any way except through the iterator&#39;s own remove or add methods, the iterator will throw a ConcurrentModificationException. Thus, in the face of concurrent modification, the iterator fails quickly and cleanly, rather than risking arbitrary, non-deterministic behavior at an undetermined time in the future.
+</code></pre>
+<p>大概的意思就是说：当通过list返回一个Iterator或者ListIterator对象之后，除了Iterator和ListIterator对象自己对集合的修改之外的其他任何修改集合的行为，都会报ConcurrentModificationException。因此在面对并发修改时，迭代器会快速而干净的失败，也就是不对List对象的状态有任何的修改，同时不会再未来某个不确定的时间产生任意的风险和不确定的行为。</p>
+<p>用下面通俗的话来说就是：</p>
+<p><strong>fail-fast 机制是java集合(Collection)中的一种错误机制。</strong>当多个线程对同一个集合的内容进行操作时，就可能会产生fail-fast事件。<br>例如：当某一个线程A通过iterator去遍历某集合的过程中，若该集合的内容被其他线程所改变了；那么线程A访问集合时，就会抛出ConcurrentModificationException异常，产生fail-fast事件。<br>
           <!--noindex-->
           
             <div class="post-button text-center">
@@ -2164,7 +2153,7 @@
           <!--/noindex-->
         
       
-    </div>
+    </p></div>
 
     
 
@@ -2379,9 +2368,9 @@
 <p><strong>List</strong>和<strong>Set</strong>都是接口，他们继承于Collection。</p>
 <p>List是有序队列，这里所说的有序队列是指，按照什么顺序添加，可以以相同的顺序取出来，List中可以有相同的元素。</p>
 <p>Set可以和数学概念中的集合类比，Set中不允许有重复的元素。</p>
-<p>由上面的类图可以看出，首先抽象出了一个AbstractCollection抽象类，实现了Collection接口中的大部分方法，方便后面代码的编写。接着AbstractList 和 AbstractSet继承了AbstractCollection。其中AbstraList实现了List中特有的一写方法，AbstractSet实现了对于Set来说通用的一些方法。这样做可以方便子类的编写。这很好的体现了面向对象的思想。</p>
-<p>另外要说明的一点是，Collection继承了Iterator接口，所以每一个实现了Collection接口的类中，都可以使用迭代器遍历。List系列的集合实现了一个特有的ListIterator接口，在这个接口中增加了一些添加，删除等方法。</p>
-<p>通过上面的介绍可以发现，Collection体系中的集合并不是特别的复杂，所以只要细心的理一下，还是很容易理解和使用的。java 8新增加了default方法，还有流（Stream），因为我们关注的是集合的使用，因此在这里就省略这部分内容。后面我会专门写一系列的博客来讲解java8中的流。</p>
+<p>由上面的类图可以看出，首先抽象出了一个AbstractCollection抽象类，实现了Collection接口中的大部分方法，方便代码的编写。接着AbstractList和AbstractSet继承了AbstractCollection。其中AbstraList实现了List中特有的一写方法，AbstractSet实现了对于Set来说通用的一些方法。这样做可以方便子类的编写。这很好的体现了面向对象的思想。</p>
+<p>另外要说明的一点是，Collection继承了Iterable接口，所以每一个实现了Collection接口的类中，都可以使用迭代器遍历。List系列的集合实现了一个特有的ListIterator接口，在这个接口中增加了一些添加，删除等方法。</p>
+<p>通过上面的介绍可以发现，Collection体系中的集合并不是特别的复杂，所以只要细心的理一下，还是很容易理解和使用的。java8新增加了default方法，还有流（Stream），我们关注的是集合的使用，因此在这里就省略这部分内容。</p>
           <!--noindex-->
           
             <div class="post-button text-center">
@@ -2567,7 +2556,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">1.1k</span>
+                <span title="本文字数">863</span>
               
 
               
@@ -2602,8 +2591,10 @@
 
       
         
-          <p>Java集合是java提供的工具包，包含了常用的数据结构：集合、链表、队列、栈、数组、映射等。Java集合工具包位置是java.util.*<br>Java集合主要可以划分为4个部分：List列表、Set集合、Map映射、工具类(Iterator迭代器、Enumeration枚举类、Arrays和Collections)、。<br>Java集合工具包框架图(如下)：</p>
-<p><img src="/images/pasted-154.png" alt="upload successful"></p>
+          <p>集合框架是Java提供的工具包，包含了一些常用的数据结构：集合、链表、队列、栈、数组、映射等，方便我们日常开发。Java集合工具包位置是java.util.*。</p>
+<p>Java集合主要可以划分为4个部分：列表（List）、集合（Set）、映射（Map）、工具类。</p>
+<p>下图是java集合的整体框架图：</p>
+<p><img src="/images/Collection.png" alt="Collection"><br><!-- ![upload successful](/images/pasted-154.png) --></p>
 <p><a href="https://docs.oracle.com/javase/tutorial/collections/index.html" target="_blank" rel="noopener">java 集合具体的官方描述在这</a></p>
           <!--noindex-->
           
@@ -2803,7 +2794,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">43</span>
+                      
+                    
+                    <span class="site-state-item-count">44</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -3092,7 +3085,7 @@
       总阅读时长
     </span>
     
-    <span title="站点阅读时长">21:05</span>
+    <span title="站点阅读时长">21:01</span>
   
 </div>
 
@@ -3176,7 +3169,7 @@
 
 
   
-  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@2/dist/jquery.min.js"></script>
 
   
   <script src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>

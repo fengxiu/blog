@@ -105,18 +105,18 @@
 
 
 
-  <meta name="description" content="@Inherited 作用：注解继承声明，是否允许子类继承该注解 下面看具体示例 自定义注解标记在类上的继承情况1、自定义注解 @Inherited // 可以被继承 @Retention(java.lang.annotation.RetentionPolicy.RUNTIME) // 可以通过反射读取注解 public @interface BatchExec {     String valu">
+  <meta name="description" content="Inherited前面也介绍过，这个注解作用是注解其他注解，让注解具有继承的特性。但是继承是有条件的。下面是摘自javaDOC上的一段话 Note that this meta-annotation type has no effect if the annotated type is used to annotate anything other than a class. Note also">
 <meta name="keywords" content="注解">
 <meta property="og:type" content="article">
-<meta property="og:title" content="java 注解 02：@Inherited ">
+<meta property="og:title" content="注解之@Inherited和@Repeatable">
 <meta property="og:url" content="http://fengxiu.club/posts/ca158b7a/index.html">
 <meta property="og:site_name" content="枫秀">
-<meta property="og:description" content="@Inherited 作用：注解继承声明，是否允许子类继承该注解 下面看具体示例 自定义注解标记在类上的继承情况1、自定义注解 @Inherited // 可以被继承 @Retention(java.lang.annotation.RetentionPolicy.RUNTIME) // 可以通过反射读取注解 public @interface BatchExec {     String valu">
+<meta property="og:description" content="Inherited前面也介绍过，这个注解作用是注解其他注解，让注解具有继承的特性。但是继承是有条件的。下面是摘自javaDOC上的一段话 Note that this meta-annotation type has no effect if the annotated type is used to annotate anything other than a class. Note also">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-08-31T04:04:36.922Z">
+<meta property="og:updated_time" content="2019-09-04T02:43:43.909Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="java 注解 02：@Inherited ">
-<meta name="twitter:description" content="@Inherited 作用：注解继承声明，是否允许子类继承该注解 下面看具体示例 自定义注解标记在类上的继承情况1、自定义注解 @Inherited // 可以被继承 @Retention(java.lang.annotation.RetentionPolicy.RUNTIME) // 可以通过反射读取注解 public @interface BatchExec {     String valu">
+<meta name="twitter:title" content="注解之@Inherited和@Repeatable">
+<meta name="twitter:description" content="Inherited前面也介绍过，这个注解作用是注解其他注解，让注解具有继承的特性。但是继承是有条件的。下面是摘自javaDOC上的一段话 Note that this meta-annotation type has no effect if the annotated type is used to annotate anything other than a class. Note also">
 
 
 
@@ -133,7 +133,7 @@
   };
 </script>
 
-  <title>java 注解 02：@Inherited  | 枫秀</title>
+  <title>注解之@Inherited和@Repeatable | 枫秀</title>
   
 
 
@@ -412,7 +412,7 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">java 注解 02：@Inherited 
+          <h2 class="post-title" itemprop="name headline">注解之@Inherited和@Repeatable
 
               
             
@@ -467,6 +467,13 @@
 
                 
                 
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/基础/注解/" itemprop="url" rel="index"><span itemprop="name">注解</span></a></span>
+
+                
+                
               
             </span>
           
@@ -488,7 +495,7 @@
 
           
           
-             <span id="/posts/ca158b7a/" class="leancloud_visitors" data-flag-title="java 注解 02：@Inherited ">
+             <span id="/posts/ca158b7a/" class="leancloud_visitors" data-flag-title="注解之@Inherited和@Repeatable">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -513,7 +520,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">6.9k</span>
+                <span title="本文字数">8.1k</span>
               
 
               
@@ -527,7 +534,7 @@
                 
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
-                <span title="阅读时长">6 分钟</span>
+                <span title="阅读时长">7 分钟</span>
               
             </div>
           
@@ -547,9 +554,13 @@
       
 
       
-        <p><code>@Inherited</code> 作用：<strong>注解继承声明，是否允许子类继承该注解</strong></p>
-<p>下面看具体示例</p>
-<h3 id="自定义注解标记在类上的继承情况"><a href="#自定义注解标记在类上的继承情况" class="headerlink" title="自定义注解标记在类上的继承情况"></a><strong>自定义注解标记在类上的继承情况</strong></h3><p><strong>1、自定义注解</strong></p>
+        <h2 id="Inherited"><a href="#Inherited" class="headerlink" title="Inherited"></a>Inherited</h2><p>前面也介绍过，这个注解作用是注解其他注解，让注解具有继承的特性。但是继承是有条件的。<br>下面是摘自javaDOC上的一段话</p>
+<pre><code class="txt">Note that this meta-annotation type has no effect if the annotated type is used to annotate anything other than a class. Note also that this meta-annotation only causes annotations to be inherited from superclasses; annotations on implemented interfaces have no effect.
+</code></pre>
+<p>中文意思如下</p>
+<pre><code class="txt">请注意，如果带有继承特性的注解使用在其他元素而不是类上，则注解的继承特性是没有效果的。还要注意，这个元注解只会从父类继承注解;实现接口上的注解没有作用。
+</code></pre>
+<h3 id="具体示例"><a href="#具体示例" class="headerlink" title="具体示例"></a>具体示例</h3><h4 id="标记在类上的继承情况"><a href="#标记在类上的继承情况" class="headerlink" title="标记在类上的继承情况"></a>标记在类上的继承情况</h4><p>自定义一个带有继承特性的注解</p>
 <pre><code class="java">@Inherited // 可以被继承
 @Retention(java.lang.annotation.RetentionPolicy.RUNTIME) // 可以通过反射读取注解
 public @interface BatchExec {
@@ -557,7 +568,7 @@ public @interface BatchExec {
 }
 </code></pre>
 <a id="more"></a>
-<p>2、被注解的父类</p>
+<p>被注解的父类</p>
 <pre><code class="java">@BatchExec(value = &quot;类名上的注解&quot;)
 public abstract class ParentClass {
 
@@ -573,7 +584,6 @@ public abstract class ParentClass {
     public void doHandle() {
         System.out.println(&quot; ParentClass doHandle ...&quot;);
     }
-
 }
 </code></pre>
 <p>子类：</p>
@@ -584,7 +594,6 @@ public abstract class ParentClass {
     public void abstractMethod() {
         System.out.println(&quot;子类实现父类的abstractMethod抽象方法&quot;);
     }
-
     //子类继承父类的doExtends方法
 
     // 子类覆盖父类的doHandle方法
@@ -592,16 +601,15 @@ public abstract class ParentClass {
     public void doHandle() {
         System.out.println(&quot;子类覆盖父类的doHandle方法&quot;);
     }
-
 }
 </code></pre>
-<p>测试类：</p>
+<p>使用反射来测试子类是否继承了父类的注解，测试代码如下：</p>
 <pre><code class="java">public class MainTest1 {
-    public static void main(String[] args) 
-                throws SecurityException, NoSuchMethodException {
+    public static void main(String[] args) throws SecurityException, NoSuchMethodException {
 
         Class&lt;SubClass1&gt; clazz = SubClass1.class;
 
+        // 类上注解测试
         if (clazz.isAnnotationPresent(BatchExec.class)) {
             BatchExec cla = clazz.getAnnotation(BatchExec.class);
             System.out.println(&quot;类：子类可继承&quot;);
@@ -648,18 +656,19 @@ public abstract class ParentClass {
 }
 </code></pre>
 <p>结果：</p>
-<pre><code>类：子类可继承，
+<pre><code class="txt">类：子类可继承，
 子类实现抽象方法：没有继承到父类抽象方法中的Annotation
 子类未实现方法：  子类可继承
 子类覆盖父类的方法:没有继承到父类doHandle方法中的Annotation
 子类未实现方法doHandle2：没有继承到父类doHandle2方法中的Annotation
-</code></pre><h3 id="自定义注解标记在接口上的继承情况"><a href="#自定义注解标记在接口上的继承情况" class="headerlink" title="自定义注解标记在接口上的继承情况"></a><strong>自定义注解标记在接口上的继承情况</strong></h3><pre><code class="java">@BatchExec(value = &quot;接口上的注解&quot;)
+</code></pre>
+<h4 id="标记在接口上的继承情况"><a href="#标记在接口上的继承情况" class="headerlink" title="标记在接口上的继承情况"></a>标记在接口上的继承情况</h4><pre><code class="java">@BatchExec(value = &quot;接口上的注解&quot;)
 public interface Parent {
     void abstractMethod();
 }
 </code></pre>
 <p>接口的继承类</p>
-<pre><code class="java">public abstract class ParentClass3  {
+<pre><code class="java">public  class ParentClass3  {
 
     public void abstractMethod() {
         System.out.println(&quot;ParentClass3&quot;);    
@@ -673,8 +682,7 @@ public interface Parent {
 </code></pre>
 <p>该继承类的注解可见测试：</p>
 <pre><code class="java">public class MainTest3 {
-    public static void main(String[] args) 
-            throws SecurityException, NoSuchMethodException {
+    public static void main(String[] args) throws SecurityException, NoSuchMethodException {
 
         Class&lt;ParentClass3&gt; clazz = ParentClass3.class;
 
@@ -707,11 +715,11 @@ public interface Parent {
 }
 </code></pre>
 <p>结果：</p>
-<pre><code>类：子类不能继承到接口类上Annotation
+<pre><code class="txt">类：子类不能继承到接口类上Annotation
 子类实现抽象方法：没有继承到接口抽象方法中的Annotation
 子类中新增方法：注解读取=&#39;父类中新增的doExtends方法
-</code></pre><p>子类的子类注解继承情况：</p>
-<pre><code class="java">public class SubClass3 extends ParentClass3 {
+</code></pre>
+<h4 id="子类的子类注解继承情况"><a href="#子类的子类注解继承情况" class="headerlink" title="子类的子类注解继承情况"></a>子类的子类注解继承情况</h4><pre><code class="java">public class SubClass3 extends ParentClass3 {
 
     // 子类实现父类的抽象方法
     @Override
@@ -757,10 +765,45 @@ public interface Parent {
 }
 </code></pre>
 <p>结果：</p>
-<pre><code>类：子类不能继承到父类类上Annotation
+<pre><code class="txt">类：子类不能继承到父类类上Annotation
 子类实现抽象方法：没有继承到父类抽象方法中的Annotation
 子类未实现方法：子类可继承
-</code></pre><h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>从上面可以看出，被<code>@Inherited</code>标记过的注解，标记在类上面可以被子类继承，标记在方法上，如果子类实现了此方法，则不能继承此注解，如果子类是继承了方法，而没有重新实现方法则可以继承此方法的注解。</p>
+</code></pre>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>从上面可以看出，被<code>@Inherited</code>标记过的注解，标记在类上面可以被子类继承，标记在方法上，如果子类实现了此方法，则不能继承此注解，如果子类是继承了方法，而没有重新实现方法则可以继承此方法的注解。</p>
+<h2 id="Repetable"><a href="#Repetable" class="headerlink" title="Repetable"></a>Repetable</h2><p>允许在同一申明类型（类，属性，或方法）的多次使用同一个注解</p>
+<p>一个简单的例子<br>java 8之前也有重复使用注解的解决方案，但可读性不是很好，比如下面的代码：</p>
+<pre><code class="java">public @interface Authority {
+     String role();
+}
+
+public @interface Authorities {
+    Authority[] value();
+}
+
+public class RepeatAnnotationUseOldVersion {
+
+    @Authorities({@Authority(role=&quot;Admin&quot;),@Authority(role=&quot;Manager&quot;)})
+    public void doSomeThing(){
+    }
+}
+</code></pre>
+<p>由另一个注解来存储重复注解，在使用时候，用存储注解Authorities来扩展重复注解，我们再来看看java 8里面的做法：</p>
+<pre><code class="java">@Repeatable(Authorities.class)
+public @interface Authority {
+     String role();
+}
+
+public @interface Authorities {
+    Authority[] value();
+}
+
+public class RepeatAnnotationUseNewVersion {
+    @Authority(role=&quot;Admin&quot;)
+    @Authority(role=&quot;Manager&quot;)
+    public void doSomeThing(){ }
+}
+</code></pre>
+<p>不同的地方是，创建重复注解Authority时，加上@Repeatable,指向存储注解Authorities，在使用时候，直接可以重复使用Authority注解。从上面例子看出，java 8里面做法更适合常规的思维，可读性强一点</p>
 
       
     </div>
@@ -774,7 +817,7 @@ public interface Parent {
     <li class="popular-posts-item">
       
       
-      <div class="popular-posts-title"><a href="/posts/c87fd2e2/" rel="bookmark">java 注解 01：基本介绍以及用法</a></div>
+      <div class="popular-posts-title"><a href="/posts/c87fd2e2/" rel="bookmark">注解基本介绍</a></div>
       
     </li>
   
@@ -796,12 +839,12 @@ public interface Parent {
   <!-- JS库 sweetalert 可修改路径 -->
   <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-  <p><span>本文标题:</span><a href="/posts/ca158b7a/">java 注解 02：@Inherited </a></p>
+  <p><span>本文标题:</span><a href="/posts/ca158b7a/">注解之@Inherited和@Repeatable</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 fengxiu 的个人博客">fengxiu</a></p>
   <p><span>发布时间:</span>2019年03月04日 - 07:22</p>
-  <p><span>最后更新:</span>2019年08月31日 - 12:04</p>
+  <p><span>最后更新:</span>2019年09月04日 - 10:43</p>
   <p><span>原始链接:</span>
-     <a href="/posts/ca158b7a/" title="java 注解 02：@Inherited ">java 注解 02：@Inherited </a>
+     <a href="/posts/ca158b7a/" title="注解之@Inherited和@Repeatable">注解之@Inherited和@Repeatable</a>
     <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://fengxiu.club/posts/ca158b7a/" aria-label="复制成功！"></i></span>
   </p>
   <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
@@ -849,8 +892,8 @@ public interface Parent {
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/posts/c87fd2e2/" rel="next" title="java 注解 01：基本介绍以及用法">
-                <i class="fa fa-chevron-left"></i> java 注解 01：基本介绍以及用法
+              <a href="/posts/c87fd2e2/" rel="next" title="注解基本介绍">
+                <i class="fa fa-chevron-left"></i> 注解基本介绍
               </a>
             
           </div>
@@ -1039,7 +1082,9 @@ public interface Parent {
                     
                       
                     
-                    <span class="site-state-item-count">43</span>
+                      
+                    
+                    <span class="site-state-item-count">44</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -1302,7 +1347,7 @@ public interface Parent {
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#自定义注解标记在类上的继承情况"><span class="nav-number">1.</span> <span class="nav-text">自定义注解标记在类上的继承情况</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自定义注解标记在接口上的继承情况"><span class="nav-number">2.</span> <span class="nav-text">自定义注解标记在接口上的继承情况</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Inherited"><span class="nav-number">1.</span> <span class="nav-text">Inherited</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#具体示例"><span class="nav-number">1.1.</span> <span class="nav-text">具体示例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#标记在类上的继承情况"><span class="nav-number">1.1.1.</span> <span class="nav-text">标记在类上的继承情况</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#标记在接口上的继承情况"><span class="nav-number">1.1.2.</span> <span class="nav-text">标记在接口上的继承情况</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#子类的子类注解继承情况"><span class="nav-number">1.1.3.</span> <span class="nav-text">子类的子类注解继承情况</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">1.2.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Repetable"><span class="nav-number">2.</span> <span class="nav-text">Repetable</span></a></li></ol></div>
             
 
           </div>
@@ -1345,7 +1390,7 @@ public interface Parent {
       总阅读时长
     </span>
     
-    <span title="站点阅读时长">21:05</span>
+    <span title="站点阅读时长">21:01</span>
   
 </div>
 
@@ -1429,7 +1474,7 @@ public interface Parent {
 
 
   
-  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@2/dist/jquery.min.js"></script>
 
   
   <script src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
@@ -1487,7 +1532,7 @@ public interface Parent {
       var disqus_config = function () {
         this.page.url = "http://fengxiu.club/posts/ca158b7a/";
         this.page.identifier = "posts/ca158b7a/";
-        this.page.title = 'java 注解 02：@Inherited ';
+        this.page.title = '注解之@Inherited和@Repeatable';
         };
       function loadComments () {
         var d = document, s = d.createElement('script');

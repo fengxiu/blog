@@ -105,20 +105,20 @@
 
 
 
-  <meta name="description" content="概要本篇博客主要的内容是介绍ArrayList的使用和对其源码进行分析，并比较ArrayList不同迭代器之间的性能 内容包括：  ArrayList 简介 ArrayList数据结构 ArrayList源码分析 ArrayList遍历方式分析 toArray 异常 ArrayList 基本使用示例  1. ArrayList 简介ArrayList 是一个数组队列，可以动态的改变大小，相当于动态">
+  <meta name="description" content="本篇博客主要的内容是介绍ArrayList的使用和对其源码进行分析，并比较ArrayList不同迭代器之间的性能 1. ArrayList 简介ArrayList是一个有序集合，底层是通过数组来实现的，可以动态的改变大小，相当于动态数组。与Java中的数组相比，它的容量能动态增长。他继承于AbstractList，实现了List，RandomAccess，Cloneable，java.io.Ser">
 <meta name="keywords" content="集合">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Java 集合系列03之ArrayList源码解析和使用示例">
+<meta property="og:title" content="Java 集合系列03之ArrayList">
 <meta property="og:url" content="http://fengxiu.club/posts/4dcbcf5f/index.html">
 <meta property="og:site_name" content="枫秀">
-<meta property="og:description" content="概要本篇博客主要的内容是介绍ArrayList的使用和对其源码进行分析，并比较ArrayList不同迭代器之间的性能 内容包括：  ArrayList 简介 ArrayList数据结构 ArrayList源码分析 ArrayList遍历方式分析 toArray 异常 ArrayList 基本使用示例  1. ArrayList 简介ArrayList 是一个数组队列，可以动态的改变大小，相当于动态">
+<meta property="og:description" content="本篇博客主要的内容是介绍ArrayList的使用和对其源码进行分析，并比较ArrayList不同迭代器之间的性能 1. ArrayList 简介ArrayList是一个有序集合，底层是通过数组来实现的，可以动态的改变大小，相当于动态数组。与Java中的数组相比，它的容量能动态增长。他继承于AbstractList，实现了List，RandomAccess，Cloneable，java.io.Ser">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://fengxiu.club/images/pasted-156.png">
-<meta property="og:updated_time" content="2019-08-31T04:04:36.910Z">
+<meta property="og:image" content="http://fengxiu.club/images/Xnip2019-09-04_10-04-56.jpg">
+<meta property="og:updated_time" content="2019-09-04T02:43:43.897Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Java 集合系列03之ArrayList源码解析和使用示例">
-<meta name="twitter:description" content="概要本篇博客主要的内容是介绍ArrayList的使用和对其源码进行分析，并比较ArrayList不同迭代器之间的性能 内容包括：  ArrayList 简介 ArrayList数据结构 ArrayList源码分析 ArrayList遍历方式分析 toArray 异常 ArrayList 基本使用示例  1. ArrayList 简介ArrayList 是一个数组队列，可以动态的改变大小，相当于动态">
-<meta name="twitter:image" content="http://fengxiu.club/images/pasted-156.png">
+<meta name="twitter:title" content="Java 集合系列03之ArrayList">
+<meta name="twitter:description" content="本篇博客主要的内容是介绍ArrayList的使用和对其源码进行分析，并比较ArrayList不同迭代器之间的性能 1. ArrayList 简介ArrayList是一个有序集合，底层是通过数组来实现的，可以动态的改变大小，相当于动态数组。与Java中的数组相比，它的容量能动态增长。他继承于AbstractList，实现了List，RandomAccess，Cloneable，java.io.Ser">
+<meta name="twitter:image" content="http://fengxiu.club/images/Xnip2019-09-04_10-04-56.jpg">
 
 
 
@@ -135,7 +135,7 @@
   };
 </script>
 
-  <title>Java 集合系列03之ArrayList源码解析和使用示例 | 枫秀</title>
+  <title>Java 集合系列03之ArrayList | 枫秀</title>
   
 
 
@@ -414,7 +414,7 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">Java 集合系列03之ArrayList源码解析和使用示例
+          <h2 class="post-title" itemprop="name headline">Java 集合系列03之ArrayList
 
               
             
@@ -490,7 +490,7 @@
 
           
           
-             <span id="/posts/4dcbcf5f/" class="leancloud_visitors" data-flag-title="Java 集合系列03之ArrayList源码解析和使用示例">
+             <span id="/posts/4dcbcf5f/" class="leancloud_visitors" data-flag-title="Java 集合系列03之ArrayList">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -549,31 +549,13 @@
       
 
       
-        <h3 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h3><p>本篇博客主要的内容是介绍ArrayList的使用和对其源码进行分析，并比较ArrayList不同迭代器之间的性能</p>
-<p>内容包括：</p>
-<ol>
-<li>ArrayList 简介</li>
-<li>ArrayList数据结构</li>
-<li>ArrayList源码分析</li>
-<li>ArrayList遍历方式分析</li>
-<li>toArray 异常</li>
-<li>ArrayList 基本使用示例</li>
-</ol>
-<h2 id="1-ArrayList-简介"><a href="#1-ArrayList-简介" class="headerlink" title="1. ArrayList 简介"></a>1. ArrayList 简介</h2><p>ArrayList 是一个数组队列，可以动态的改变大小，相当于动态数组。与Java中的数组相比，它的容量能动态增长。他继承于AbstractList，实现了List，RandomAccess，Cloneable，java.io.Serializable接口。</p>
-<p>ArrayList 继承了AbstractList，实现了List。因此就具有相关的添加、删除、修改、遍历等功能。</p>
-<p>ArrayList 实现了RandmoAccess接口，即提供了随机访问功能。RandmoAccess是java中用来被List实现，为List提供快速访问功能的。在ArrayList中，我们即可以通过元素的序号快速获取元素对象；这就是快速随机访问。稍后，我们会比较List的“快速随机访问”和“通过Iterator迭代器访问”的效率。</p>
-<p>ArrayList 实现了Cloneable接口，即覆盖了函数clone()，能被克隆。</p>
-<p>ArrayList 实现java.io.Serializable接口，这意味着ArrayList支持序列化，能通过序列化去传输。</p>
-<p><strong>注意的一点是：ArrayList不是线程安全的！所以不要再并发程序中使用</strong></p>
+        <p>本篇博客主要的内容是介绍ArrayList的使用和对其源码进行分析，并比较ArrayList不同迭代器之间的性能</p>
+<h2 id="1-ArrayList-简介"><a href="#1-ArrayList-简介" class="headerlink" title="1. ArrayList 简介"></a>1. ArrayList 简介</h2><p>ArrayList是一个有序集合，底层是通过数组来实现的，可以动态的改变大小，相当于动态数组。与Java中的数组相比，它的容量能动态增长。他继承于AbstractList，实现了List，RandomAccess，Cloneable，java.io.Serializable接口。<br>类如如下：<br><img src="/images/Xnip2019-09-04_10-04-56.jpg" alt="Xnip2019-09-04_10-04-56"><br>ArrayList继承AbstractList，实现List接口。因此就具有相关的添加、删除、修改、遍历等功能。</p>
+<p>ArrayList实现RandmoAccess接口，即提供随机访问功能，注意这个接口内部并没有任何方法，只是起到标记的作用。</p>
+<p>ArrayList实现Cloneable接口，即覆盖了函数clone()，能被克隆。</p>
+<p>ArrayList实现java.io.Serializable接口，这意味着ArrayList支持序列化，能通过序列化去传输。<br><strong>注意的一点是：ArrayList不是线程安全的！所以不要再并发程序中使用</strong></p>
 <a id="more"></a>
-<h2 id="2-ArrayList-数据结构"><a href="#2-ArrayList-数据结构" class="headerlink" title="2. ArrayList 数据结构"></a>2. ArrayList 数据结构</h2><p>Arraylist的类图如下</p>
-<p><img src="/images/pasted-156.png" alt="upload successful"></p>
-<p>ArrayList包含了两个重要的对象：elementData 和 size。</p>
-<ol>
-<li>elementData 是”Object[]类型的数组”，它保存了添加到ArrayList中的元素。实际上，elementData是个动态数组，我们能通过构造函数 ArrayList(int initialCapacity)来执行它的初始容量为initialCapacity；如果通过不含参数的构造函数ArrayList()来创建ArrayList，则elementData的容量默认是10。elementData数组的大小会根据ArrayList容量的增长而动态的增长，具体的增长方式，请参考源码分析中的ensureCapacity()函数。</li>
-<li>size 则是动态数组的实际大小。</li>
-</ol>
-<h2 id="3-ArrayList源码分析"><a href="#3-ArrayList源码分析" class="headerlink" title="3. ArrayList源码分析"></a>3. ArrayList源码分析</h2><p>下面所有源码都是基于<strong>java 8</strong> 来进行的分析：按照add，remove，get，Iterator，ListIterator的顺序来进行源码分析</p>
+<h2 id="ArrayList源码分析"><a href="#ArrayList源码分析" class="headerlink" title="ArrayList源码分析"></a>ArrayList源码分析</h2><p>下面所有源码都是基于Java8来进行的分析：按照add，remove，get，Iterator，ListIterator的顺序来进行源码分析</p>
 <p>首先看一下一些比较重要的属性，可以方便后面理解源码：</p>
 <pre><code class="java">//默认初始容量
 private static final int DEFAULT_CAPACITY = 10;
@@ -590,6 +572,10 @@ transient Object[] elementData;
 //集合包含元素的数量
 private int size;
 </code></pre>
+<ol>
+<li>elementData 是”Object[]类型的数组”，它保存了添加到ArrayList中的元素。实际上，elementData是个动态数组，我们能通过构造函数 ArrayList(int initialCapacity)来执行它的初始容量为initialCapacity；如果通过不含参数的构造函数来创建ArrayList，则elementData的容量默认是10。elementData数组的大小会根据ArrayList容量的增长而动态的增长，具体的增长方式，请参考源码分析中的ensureCapacity()函数。</li>
+<li>size 则是动态数组的实际大小。</li>
+</ol>
 <p><strong>构造函数</strong></p>
 <pre><code class="java">//设置ArrayList的初始容量，当时负数时抛出错误
 public ArrayList(int initialCapacity) {
@@ -625,16 +611,23 @@ public ArrayList(Collection&lt;? extends E&gt; c) {
 }
 </code></pre>
 <p>从上面可知，提供了三个默认构造函数，分别是默认构造函数，将会初始化一个空数组，指定长度的构造函数，根据指定的长度来初始化数组，添加一个集合来初始化数组，这个会初始化一个和集合长度相等的数组，并把数据添加进去。</p>
-<h3 id="添加：add"><a href="#添加：add" class="headerlink" title="添加：add"></a><strong>添加：add</strong></h3><p>我们先了解一下具体的添加过程首先会检测数组是否还能添加元素，如果已经满了，则创建一个更长的数组，将原先数组的数据拷贝过来，然后在添加元素。具体源码如下</p>
+<h3 id="添加（add）"><a href="#添加（add）" class="headerlink" title="添加（add）"></a>添加（add）</h3><p>这里先总结下具体的添加过程</p>
+<ol>
+<li>添加元素时，首先会检测数组是否已满，如果为满，则直接添加元素。否则进入下一步。</li>
+<li>如果已经满了，则创建一个更长的数组，将原先数组的数据拷贝过来，然后在添加元素。</li>
+</ol>
+<p>具体源码如下</p>
 <pre><code class="java"> public boolean add(E e) {
      // 确认数组是否已满
-     ensureCapacityInternal(size + 1);  // Increments modCount!!
+     ensureCapacityInternal(size + 1); 
      // 在集合的末尾添加元素
      elementData[size++] = e;
      return true;
 }
 
-
+/**
+ * 确保数组有空间放置元素
+ */
 private void ensureCapacityInternal(int minCapacity) {
     // 判断数组是否为空，如果为空，比较DEFAULT_CAPACITY
     // 和minCapacity大小，使用较大的那个来初始化数组
@@ -646,6 +639,9 @@ private void ensureCapacityInternal(int minCapacity) {
 }
 
 
+/**
+ * 初始化一个指定长度的数组
+ */
 private void ensureExplicitCapacity(int minCapacity) {
     // 修改modCount 防止出现fail-fast
     modCount++;
@@ -656,7 +652,7 @@ private void ensureExplicitCapacity(int minCapacity) {
         grow(minCapacity);
 }
 
-// 初始化一个更大的数组
+// 初始化特定长度的数组，并将原来数组元素拷贝到当前数组中去
 private void grow(int minCapacity) {
 
     int oldCapacity = elementData.length;
@@ -666,18 +662,14 @@ private void grow(int minCapacity) {
     if (newCapacity - minCapacity &lt; 0)
         newCapacity = minCapacity;
     if (newCapacity - MAX_ARRAY_SIZE &gt; 0)
+        // 超过最大值，值抛出异常
         newCapacity = hugeCapacity(minCapacity);
    // 初始化newCapacity长度的数组，并拷贝旧数据
     elementData = Arrays.copyOf(elementData, newCapacity);
 }
 </code></pre>
-<p>在上面已经将添加过程注释的很清楚，下面主要介绍一下添加过程：</p>
-<ol>
-<li>首先判断数组是否为null，如果为null然后判断指定的下标位置和默认长度谁大则使用谁，若使用默认构造函数，则ArrayList的<strong>默认容量大小是10</strong>。</li>
-<li>判断当钱ArrayList容量是否足以容纳指定下标的元素，不足ArrayList会重新设置容量：<strong>新的容量=原始容量*3</strong>。然后初始化新容量的数组，然后将旧的数组数据拷贝到新数组中去</li>
-<li>在指定下标添加元素</li>
-</ol>
-<p>至于<code>add(int index, E element)</code>,大体上差不多，不过在指定位置添加元素后，需要将原先位置的元素以及后面的元素往后順移一位，大概过程如下</p>
+<p>这里需要注意的一点是，重新设置容量大小按照下面这个公式来设置的：<strong>新的容量=原始容量*3</strong>。并且如果数组长度超过整型的最大值，则会抛出异常。</p>
+<p><strong>指定下标添加元素</strong><br>即<code>add(int index, E element)</code>,大体上和add差不多。在指定位置添加元素，需要将原先位置的元素以及后面的元素往后順移一位，大概过程如下</p>
 <pre><code class="java">public void add(int index, E element) {
     // 检查范围是否合适，如果小于0和大于size则抛出错误
     rangeCheckForAdd(index);
@@ -691,7 +683,7 @@ private void grow(int minCapacity) {
     size++;
 }
 </code></pre>
-<h3 id="删除-remove"><a href="#删除-remove" class="headerlink" title="删除 remove"></a><strong>删除 remove</strong></h3><p>具体源码如下</p>
+<h3 id="删除（remove）"><a href="#删除（remove）" class="headerlink" title="删除（remove）"></a>删除（remove）</h3><p>具体源码如下</p>
 <pre><code class="java"> public E remove(int index) {
      // 判断下标是否合适
      rangeCheck(index);
@@ -703,8 +695,7 @@ private void grow(int minCapacity) {
     int numMoved = size - index - 1;
     // 下标之后的数据向前移动一位
     if (numMoved &gt; 0)
-        System.arraycopy(elementData, index+1, elementData, index,
-    numMoved);
+        System.arraycopy(elementData, index+1, elementData, index, numMoved);
      // 设置最后一个元素为空，方便GC
     elementData[--size] = null; // clear to let GC do its work
 
@@ -713,7 +704,7 @@ private void grow(int minCapacity) {
 </code></pre>
 <p><strong>remove(object)</strong></p>
 <pre><code class="java"> public boolean remove(Object o) {
-         // 查找到素有和o相同的对象，并删除
+        // 查找到素有和o相同的对象，并删除
         if (o == null) {
             for (int index = 0; index &lt; size; index++)
                 if (elementData[index] == null) {
@@ -730,8 +721,7 @@ private void grow(int minCapacity) {
         return false;
     }
 
-     // 这个相对于上面的remove(index),省略了异步索引的校验，因此比上面删除少一次检查，
-    // 其他一样
+    // 这个相对于上面的remove(index),省略了异步索引的校验，因此比上面删除少一次检查，
     private void fastRemove(int index) {
         modCount++;
         int numMoved = size - index - 1;
@@ -757,7 +747,7 @@ private void grow(int minCapacity) {
         }
 </code></pre>
 <p>会检测modCounrt和迭代器保存的modCount是否相等，如果相同，则说明有其他线程修改了集合，会抛出并发修改异常。</p>
-<h2 id="4-ArrayList-遍历方式"><a href="#4-ArrayList-遍历方式" class="headerlink" title="4. ArrayList 遍历方式"></a>4. ArrayList 遍历方式</h2><blockquote>
+<h2 id="ArrayList-遍历方式"><a href="#ArrayList-遍历方式" class="headerlink" title="ArrayList 遍历方式"></a>ArrayList 遍历方式</h2><blockquote>
 <p>(01) 第一种，<strong>通过迭代器遍历</strong>。即通过Iterator去遍历。</p>
 <pre><code>Integer value = null;
 Iterator iter = list.iterator();
@@ -840,14 +830,12 @@ iteractorfor2 interval: 4
 iteractorRandomAccess interval: 4
 </code></pre><p>我测试了几次，感觉java8里面随机访问和foreach访问比较快，不过相差也不是太大。不过数据量大的话，还是推介使用随机访问。</p>
 </blockquote>
-<h2 id="5-toArray-异常"><a href="#5-toArray-异常" class="headerlink" title="5. toArray 异常"></a>5. toArray 异常</h2><blockquote>
-<pre><code class="java">Object[] toArray()
+<h2 id="toArray-异常"><a href="#toArray-异常" class="headerlink" title="toArray 异常"></a>toArray 异常</h2><pre><code class="java">Object[] toArray()
 &lt;T&gt; T[] toArray(T[] arr)
 </code></pre>
-<p>调用 toArray() 函数会抛出“java.lang.ClassCastException”异常，但是调用 toArray(T[] contents) 能正常返回 T[]。</p>
-<p>toArray() 会抛出异常是因为 toArray() 返回的是 Object[] 数组，将 Object[] 转换为其它类型(类如，将Object[]转换为的Integer[])则会抛出“java.lang.ClassCastException”异常，因为<strong>Java不支持向下转型</strong>。具体的可以参考前面ArrayList.java的源码介绍部分的toArray()。<br>解决该问题的办法是调用 &lt; T &gt; T[] toArray(T[] contents) ， 而不是 Object[] toArray()。</p>
-</blockquote>
-<h2 id="6-ArrayList基本使用"><a href="#6-ArrayList基本使用" class="headerlink" title="6. ArrayList基本使用"></a>6. ArrayList基本使用</h2><blockquote>
+<p>有时调用toArray() 函数会抛出“java.lang.ClassCastException”异常，这时就需要调用toArray(T[] contents)来解决这中异常。</p>
+<p>toArray() 会抛出异常是因为toArray()返回的是Object[]数组，将 Object[] 转换为其它类型(类如，将Object[]转换为的Integer [])则会抛出“java.lang.ClassCastException”异常，因为<strong>Java不支持向下转型</strong>。具体的可以参考前面ArrayList.java的源码介绍部分的toArray()。<br>解决该问题的办法是调用 <code>&lt;T&gt; T[] toArray(T[] contents)</code> 。</p>
+<h2 id="ArrayList基本使用"><a href="#ArrayList基本使用" class="headerlink" title="ArrayList基本使用"></a>ArrayList基本使用</h2><blockquote>
 <pre><code class="java">import java.util.*;
 
 public class ArrayListTest {
@@ -914,20 +902,6 @@ public class ArrayListTest {
     <li class="popular-posts-item">
       
       
-      <div class="popular-posts-title"><a href="/posts/6ad3883/" rel="bookmark">Java 集合系列04之 fail-fast总结</a></div>
-      
-    </li>
-  
-    <li class="popular-posts-item">
-      
-      
-      <div class="popular-posts-title"><a href="/posts/dd7bc7f8/" rel="bookmark">Java 集合系列05之 LinkedList源码解析和使用示例</a></div>
-      
-    </li>
-  
-    <li class="popular-posts-item">
-      
-      
       <div class="popular-posts-title"><a href="/posts/3ac019a5/" rel="bookmark">Java 集合系列06之 Vector源码解析和使用示例</a></div>
       
     </li>
@@ -936,6 +910,20 @@ public class ArrayListTest {
       
       
       <div class="popular-posts-title"><a href="/posts/ab3cc2a5/" rel="bookmark">Java 集合系列07之 Stack源码解析和使用示例</a></div>
+      
+    </li>
+  
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="/posts/719892b8/" rel="bookmark">Java 集合系列09之 Map架构</a></div>
+      
+    </li>
+  
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="/posts/c4403926/" rel="bookmark">Java 集合系列10 之HashMap详细介绍和使用示例</a></div>
       
     </li>
   
@@ -957,12 +945,12 @@ public class ArrayListTest {
   <!-- JS库 sweetalert 可修改路径 -->
   <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-  <p><span>本文标题:</span><a href="/posts/4dcbcf5f/">Java 集合系列03之ArrayList源码解析和使用示例</a></p>
+  <p><span>本文标题:</span><a href="/posts/4dcbcf5f/">Java 集合系列03之ArrayList</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 fengxiu 的个人博客">fengxiu</a></p>
   <p><span>发布时间:</span>2019年03月04日 - 12:09</p>
-  <p><span>最后更新:</span>2019年08月31日 - 12:04</p>
+  <p><span>最后更新:</span>2019年09月04日 - 10:43</p>
   <p><span>原始链接:</span>
-     <a href="/posts/4dcbcf5f/" title="Java 集合系列03之ArrayList源码解析和使用示例">Java 集合系列03之ArrayList源码解析和使用示例</a>
+     <a href="/posts/4dcbcf5f/" title="Java 集合系列03之ArrayList">Java 集合系列03之ArrayList</a>
     <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://fengxiu.club/posts/4dcbcf5f/" aria-label="复制成功！"></i></span>
   </p>
   <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
@@ -1200,7 +1188,9 @@ public class ArrayListTest {
                     
                       
                     
-                    <span class="site-state-item-count">43</span>
+                      
+                    
+                    <span class="site-state-item-count">44</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -1463,7 +1453,7 @@ public class ArrayListTest {
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#概要"><span class="nav-number">1.</span> <span class="nav-text">概要</span></a></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#1-ArrayList-简介"><span class="nav-number"></span> <span class="nav-text">1. ArrayList 简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-ArrayList-数据结构"><span class="nav-number"></span> <span class="nav-text">2. ArrayList 数据结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-ArrayList源码分析"><span class="nav-number"></span> <span class="nav-text">3. ArrayList源码分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#添加：add"><span class="nav-number">1.</span> <span class="nav-text">添加：add</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除-remove"><span class="nav-number">2.</span> <span class="nav-text">删除 remove</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#get"><span class="nav-number">3.</span> <span class="nav-text">get</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Iterator和ListIterator"><span class="nav-number">4.</span> <span class="nav-text">Iterator和ListIterator</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-ArrayList-遍历方式"><span class="nav-number"></span> <span class="nav-text">4. ArrayList 遍历方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-toArray-异常"><span class="nav-number"></span> <span class="nav-text">5. toArray 异常</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-ArrayList基本使用"><span class="nav-number"></span> <span class="nav-text">6. ArrayList基本使用</span></a></li></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-ArrayList-简介"><span class="nav-number">1.</span> <span class="nav-text">1. ArrayList 简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ArrayList源码分析"><span class="nav-number">2.</span> <span class="nav-text">ArrayList源码分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#添加（add）"><span class="nav-number">2.1.</span> <span class="nav-text">添加（add）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除（remove）"><span class="nav-number">2.2.</span> <span class="nav-text">删除（remove）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#get"><span class="nav-number">2.3.</span> <span class="nav-text">get</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Iterator和ListIterator"><span class="nav-number">2.4.</span> <span class="nav-text">Iterator和ListIterator</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ArrayList-遍历方式"><span class="nav-number">3.</span> <span class="nav-text">ArrayList 遍历方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#toArray-异常"><span class="nav-number">4.</span> <span class="nav-text">toArray 异常</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ArrayList基本使用"><span class="nav-number">5.</span> <span class="nav-text">ArrayList基本使用</span></a></li></ol></div>
             
 
           </div>
@@ -1506,7 +1496,7 @@ public class ArrayListTest {
       总阅读时长
     </span>
     
-    <span title="站点阅读时长">21:05</span>
+    <span title="站点阅读时长">21:01</span>
   
 </div>
 
@@ -1590,7 +1580,7 @@ public class ArrayListTest {
 
 
   
-  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@2/dist/jquery.min.js"></script>
 
   
   <script src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
@@ -1648,7 +1638,7 @@ public class ArrayListTest {
       var disqus_config = function () {
         this.page.url = "http://fengxiu.club/posts/4dcbcf5f/";
         this.page.identifier = "posts/4dcbcf5f/";
-        this.page.title = 'Java 集合系列03之ArrayList源码解析和使用示例';
+        this.page.title = 'Java 集合系列03之ArrayList';
         };
       function loadComments () {
         var d = document, s = d.createElement('script');

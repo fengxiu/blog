@@ -114,7 +114,7 @@
 <meta property="og:description" content="概要首先，对Collection进行说明。下面是Collection的继承关系的主要类图，（这里只列举了抽象类和接口，来说明Collection的整体结构）  Collection是一个接口，它主要的俩个分支是：List 和Set。 List和Set都是接口，他们继承于Collection。 List是有序队列，这里所说的有序队列是指，按照什么顺序添加，可以以相同的顺序取出来，List中可以有相同">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://fengxiu.club/images/pasted-155.png">
-<meta property="og:updated_time" content="2019-08-31T04:04:36.910Z">
+<meta property="og:updated_time" content="2019-09-04T02:43:43.897Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java 集合系列02之 Collection">
 <meta name="twitter:description" content="概要首先，对Collection进行说明。下面是Collection的继承关系的主要类图，（这里只列举了抽象类和接口，来说明Collection的整体结构）  Collection是一个接口，它主要的俩个分支是：List 和Set。 List和Set都是接口，他们继承于Collection。 List是有序队列，这里所说的有序队列是指，按照什么顺序添加，可以以相同的顺序取出来，List中可以有相同">
@@ -555,39 +555,21 @@
 <p><strong>List</strong>和<strong>Set</strong>都是接口，他们继承于Collection。</p>
 <p>List是有序队列，这里所说的有序队列是指，按照什么顺序添加，可以以相同的顺序取出来，List中可以有相同的元素。</p>
 <p>Set可以和数学概念中的集合类比，Set中不允许有重复的元素。</p>
-<p>由上面的类图可以看出，首先抽象出了一个AbstractCollection抽象类，实现了Collection接口中的大部分方法，方便后面代码的编写。接着AbstractList 和 AbstractSet继承了AbstractCollection。其中AbstraList实现了List中特有的一写方法，AbstractSet实现了对于Set来说通用的一些方法。这样做可以方便子类的编写。这很好的体现了面向对象的思想。</p>
-<p>另外要说明的一点是，Collection继承了Iterator接口，所以每一个实现了Collection接口的类中，都可以使用迭代器遍历。List系列的集合实现了一个特有的ListIterator接口，在这个接口中增加了一些添加，删除等方法。</p>
-<p>通过上面的介绍可以发现，Collection体系中的集合并不是特别的复杂，所以只要细心的理一下，还是很容易理解和使用的。java 8新增加了default方法，还有流（Stream），因为我们关注的是集合的使用，因此在这里就省略这部分内容。后面我会专门写一系列的博客来讲解java8中的流。</p>
+<p>由上面的类图可以看出，首先抽象出了一个AbstractCollection抽象类，实现了Collection接口中的大部分方法，方便代码的编写。接着AbstractList和AbstractSet继承了AbstractCollection。其中AbstraList实现了List中特有的一写方法，AbstractSet实现了对于Set来说通用的一些方法。这样做可以方便子类的编写。这很好的体现了面向对象的思想。</p>
+<p>另外要说明的一点是，Collection继承了Iterable接口，所以每一个实现了Collection接口的类中，都可以使用迭代器遍历。List系列的集合实现了一个特有的ListIterator接口，在这个接口中增加了一些添加，删除等方法。</p>
+<p>通过上面的介绍可以发现，Collection体系中的集合并不是特别的复杂，所以只要细心的理一下，还是很容易理解和使用的。java8新增加了default方法，还有流（Stream），我们关注的是集合的使用，因此在这里就省略这部分内容。</p>
 <a id="more"></a>
-<h2 id="主要内容"><a href="#主要内容" class="headerlink" title="主要内容"></a>主要内容</h2><ol>
-<li><p>Collection 简介</p>
-</li>
-<li><p>List 简介</p>
-</li>
-<li><p>Set 简介</p>
-</li>
-<li><p>AbstractCollection 源码分析</p>
-</li>
-<li><p>AbstractList    源码分析 </p>
-</li>
-<li><p>AbstractSet    源码分析</p>
-</li>
-<li><p>ListIterator</p>
-<p>注：Iterator 请看我的另一篇博客<a href="http://blog.csdn.net/u014569188/article/details/78881952" target="_blank" rel="noopener">Iterator 和 iterable 区别</a></p>
-</li>
-</ol>
-<h3 id="1-Collection-简介"><a href="#1-Collection-简介" class="headerlink" title="1. Collection 简介"></a>1. Collection 简介</h3><p>Collection 定义如下</p>
+<h2 id="Collection-简介"><a href="#Collection-简介" class="headerlink" title="Collection 简介"></a>Collection 简介</h2><p>Collection 定义如下</p>
 <pre><code class="java">public interface Collection&lt;E&gt; extends Iterable&lt;E&gt;{}
 </code></pre>
-<p>本身是一个接口，高度抽象出来集合，它包含了集合的基本操作：添加、删除、清空、遍历、是否为空、获取大小、是否保护某元素等等。</p>
+<p>本身是一个高度抽象出来的接口，包含集合的基本操作：添加、删除、清空、遍历、是否为空、获取大小等等。</p>
 <p>在Java API规定，所有实现Collection接口的子类（直接子类和间接子类）都必须实现俩种构造参数：不带参数的构造参数（为了创建出一个空的集合类）和带参数的构造参数（用参数创建出一个新的集合类，也就是可以转换集合类）。</p>
 <pre><code class="java">//Collection 接口
 public abstract boolean add(E e)  //添加元素
 public abstract boolean add(Collection&lt;? extend E&gt; c) //添加集合
 public abstract void clear()   //清空集合
 public abstract boolean contains(Object o) //判断集合是否包含此元素
-public abstract boolean containsAll(Collection&lt;?&gt; c)
-                                  //判断集合中是否包含参数集合中所有的元素
+public abstract boolean containsAll(Collection&lt;?&gt; c)//判断集合中是否包含参数集合中所有的元素
 public abstract boolean  equals(Object object)  //比较俩个是否相同
 public abstract int     hashCode()   //返回hash值
 public abstract boolean         isEmpty()    //是否为空
@@ -599,53 +581,48 @@ public abstract int             size()  //返回集合的大小
 public abstract &lt;T&gt; T[]         toArray(T[] array) //返回T类型的数组
 public abstract Object[]        toArray()  //返回包含集合所有元素的集，是Object类型
 </code></pre>
-<h3 id="2-List-简介"><a href="#2-List-简介" class="headerlink" title="2. List 简介"></a>2. List 简介</h3><p>List 定义如下：</p>
-<pre><code>public interface List&lt;E&gt; extends Collection&lt;E&gt; {}
-</code></pre><p>List 是一个继承了Collection的接口，是集合的一种，是一个有序集合。List中的每一个集合都有一个索引，第一个元素的索引是0，往后的元素一次加1，List中允许有重复的元素</p>
-<p>关于API方面。既然List是继承于Collection接口，它自然就包含了Collection中的全部函数接口；由于List是有序队列，它也额外的有自己的API接口。主要有“添加、删除、获取、修改指定位置的元素”、“获取List中的子队列”等。</p>
+<h2 id="List-简介"><a href="#List-简介" class="headerlink" title="List 简介"></a>List 简介</h2><p>List 定义如下：</p>
+<pre><code class="java">public interface List&lt;E&gt; extends Collection&lt;E&gt; {}
+</code></pre>
+<p>List是一个有序集合，List中的每一个集合都有一个整数索引，第一个元素的索引是0，往后的元素一次加1，List中允许有重复的元素</p>
+<p>关于API方面，既然List是继承于Collection接口，它自然就包含了Collection中的全部函数接口；由于List是有序队列，它也额外的有自己的API接口。主要有“添加、删除、获取、修改指定位置的元素”、“获取List中的子队列”等。</p>
 <pre><code class="java">// 相比与Collection，List新增的API：
 abstract void                add(int location, E object) //在指定的位置增加元素
-                                  //在指定的位置开始增加元素
-abstract boolean             addAll(int location, Collection&lt;? extends E&gt; c)
+abstract boolean             addAll(int location, Collection&lt;? extends E&gt; c)//在指定的位置开始增加元素
 abstract E                   get(int location) //得到指定位置的元素
 abstract int                 indexOf(Object object)  //返回第一个出现出现元素的索引
 abstract int                 lastIndexOf(Object object) //返回最后一个出现出现元素的索引
 abstract ListIterator&lt;E&gt;     listIterator(int location)  //从location位置开始返回
 abstract ListIterator&lt;E&gt;     listIterator()//返回listIterator对象
-abstract E                   remove(int location)
+abstract E                   remove(int location) // 删除指定元素
 abstract E                   set(int location, E object) //替换某个位置的元素
 abstract List&lt;E&gt;             subList(int start, int end) //返回当前List的子集
 </code></pre>
-<h3 id="3-Set-简介"><a href="#3-Set-简介" class="headerlink" title="3. Set 简介"></a>3. Set 简介</h3><p>Set的定义如下：</p>
+<h2 id="Set-简介"><a href="#Set-简介" class="headerlink" title="Set 简介"></a>Set 简介</h2><p>Set的定义如下：</p>
 <pre><code class="java">public interface Set&lt;E&gt; extends Collection&lt;E&gt; {}
 </code></pre>
-<p>Set是一个继承与Collection的接口，也是集合中的一种。Set是不允许有重复元素的集合</p>
-<p>在API上，和Collection完全一样</p>
-<h3 id="4-AbstractCollection"><a href="#4-AbstractCollection" class="headerlink" title="4. AbstractCollection"></a>4. AbstractCollection</h3><p>AbstractCollection 定义如下：</p>
+<p>Set是不允许有重复元素的集合。在API上，和Collection完全一样</p>
+<h2 id="AbstractCollection"><a href="#AbstractCollection" class="headerlink" title="AbstractCollection"></a>AbstractCollection</h2><p>AbstractCollection实现了Collection接口的抽象类，方便代码的编写，将一些基本的操作进行了实现。定义如下：</p>
 <pre><code class="Java">public abstract class AbstractCollection&lt;E&gt; implements Collection&lt;E&gt; {}
 </code></pre>
-<p>AbstractCollection 是一个抽象类，他实现了Collection中除Iterator()和size()之外的函数</p>
+<p>AbstractCollection是一个抽象类，他实现了Collection中除Iterator()和size()之外的函数</p>
 <p>AbstractCollection的主要作用：它实现了Collection接口中的大部分函数。从而方便其它类实现Collection，比如ArrayList、LinkedList等，它们这些类想要实现Collection接口，通过继承AbstractCollection就已经实现了大部分的接口了。</p>
 <p>另外在集合中，很多的操作都是依赖于迭代器。而不同类型的集合迭代器的实现方式可能不同，因此实现迭代器一般都会放在子类中实现。</p>
-<pre><code class="Java">//对AbstractCollection的源码分析
-package java.util;
-public abstract class AbstractCollection&lt;E&gt; implements Collection&lt;E&gt; {
+<p>源码如下：</p>
+<pre><code class="Java">public abstract class AbstractCollection&lt;E&gt; implements Collection&lt;E&gt; {
 
     protected AbstractCollection() {
-
     }
 
     // 查询操作
 
-    //有collection的子类有不同的种类
-    //因此不同种类的迭代器可能不相同，这里就没有实现
+    //collection的子类有不同的种类，因此不同种类的迭代器可能不相同，这里就没有实现
     public abstract Iterator&lt;E&gt; iterator();
 
     //返回当前集合的大小
     public abstract int size();
 
-    //判断当前集合是否为空，
-    //只要size等于0说明没有元素
+    //判断当前集合是否为空，只要size等于0说明没有元素
     public boolean isEmpty() {
         return size() == 0;
     }
@@ -845,20 +822,13 @@ public abstract class AbstractCollection&lt;E&gt; implements Collection&lt;E&gt;
     }
 }
 </code></pre>
-<h3 id="5-AbstractList"><a href="#5-AbstractList" class="headerlink" title="5. AbstractList"></a>5. AbstractList</h3><p>AbstractList的定义如下：</p>
+<h2 id="AbstractList"><a href="#AbstractList" class="headerlink" title="AbstractList"></a>AbstractList</h2><p>AbstractList的定义如下：</p>
 <pre><code class="Java">public abstract class AbstractList&lt;E&gt; extends AbstractCollection&lt;E&gt; implements List&lt;E&gt; {}
 </code></pre>
-<p>AbstractList是一个继承于AbstractCollection，并且实现List接口的抽象类。</p>
-<p>AbstractList的主要作用：它实现了List接口中的大部分函数。从而方便其它集合类继承List。</p>
-<p>另外，和AbstractCollection相比，AbstractList抽象类中，实现了iterator()接口。</p>
-<p>有以下的方法没有实现</p>
-<pre><code>1. public abstract E get(int var1)
-2. public E set(int var1, E var2)
-3. public void add(int var1, E var2)
-4. public E remove(int var1)
-</code></pre><pre><code class="Java">package java.util;
-public abstract class AbstractList&lt;E&gt; 
-            extends AbstractCollection&lt;E&gt; implements List&lt;E&gt; {
+<p>AbstractList继承AbstractCollection，并且实现List接口的抽象类。主要作用：它实现了List接口中的大部分函数。从而方便其它集合类继承List。<br>另外，和AbstractCollection相比，AbstractList抽象类中，实现了iterator()接口。</p>
+<p>源码如下：</p>
+<pre><code class="Java">package java.util;
+public abstract class AbstractList&lt;E&gt; extends AbstractCollection&lt;E&gt; implements List&lt;E&gt; {
 
     //当前list的修改操作次数，用于fail-fast决策
     protected transient int modCount = 0;
@@ -1179,17 +1149,15 @@ public abstract class AbstractList&lt;E&gt;
 }
 
 </code></pre>
-<h3 id="6-AbstractSet"><a href="#6-AbstractSet" class="headerlink" title="6 AbstractSet"></a><strong>6 AbstractSet</strong></h3><p>AbstractSet的定义如下： </p>
-<pre><code>public abstract class AbstractSet&lt;E&gt; 
-        extends AbstractCollection&lt;E&gt; 
-            implements Set&lt;E&gt; {}
-</code></pre><p>AbstractSet是一个继承于AbstractCollection，并且实现Set接口的抽象类。由于Set接口和Collection接口中的API完全一样，Set也就没有自己单独的API。</p>
-<p>和AbstractCollection一样，它实现了List中除iterator()和size()之外的函数。</p>
-<p>AbstractSet的主要作用：它实现了Set接口中的大部分函数。从而方便其它类实现Set接口。</p>
-<h3 id="7-ListIterator"><a href="#7-ListIterator" class="headerlink" title="7 ListIterator"></a>7 ListIterator</h3><blockquote>
-<p>ListIterator的定义如下：</p>
-<pre><code>public interface ListIterator&lt;E&gt; extends Iterator&lt;E&gt; {}
-</code></pre><p>ListIterator是一个继承于Iterator的接口，它是队列迭代器。专门用于便利List，能提供向前/向后遍历。相比于Iterator，它新增了添加、是否存在上一个元素、获取上一个元素等等API接口。</p>
+<h2 id="AbstractSet"><a href="#AbstractSet" class="headerlink" title="AbstractSet"></a>AbstractSet</h2><p>AbstractSet的定义如下： </p>
+<pre><code class="java">public abstract class AbstractSet&lt;E&gt; extends AbstractCollection&lt;E&gt; implements Set&lt;E&gt; {}
+</code></pre>
+<p>AbstractSet继承AbstractCollection，并且实现Set接口的抽象类。由于Set接口和Collection接口中的API完全一样，Set也就没有自己单独的API。</p>
+<p>和AbstractCollection一样，它实现了List中除iterator()和size()之外的函数。主要作用：它实现了Set接口中的大部分函数。从而方便其它类实现Set接口。</p>
+<h2 id="ListIterator"><a href="#ListIterator" class="headerlink" title="ListIterator"></a>ListIterator</h2><p>ListIterator的定义如下：</p>
+<pre><code class="java">public interface ListIterator&lt;E extends Iterator&lt;E&gt;&gt; {}
+</code></pre>
+<p>ListIterator继承Iterator接口，它是队列迭代器。专门用于遍历List，能提供向前/向后遍历。相比于Iterator，它新增了添加、是否存在上一个元素、获取上一个元素等等API接口。</p>
 <pre><code class="java">// ListIterator的API
 // 继承于Iterator的接口
 abstract boolean hasNext()
@@ -1203,7 +1171,6 @@ abstract E previous()
 abstract int previousIndex()
 abstract void set(E object)
 </code></pre>
-</blockquote>
 
       
     </div>
@@ -1224,21 +1191,7 @@ abstract void set(E object)
     <li class="popular-posts-item">
       
       
-      <div class="popular-posts-title"><a href="/posts/4dcbcf5f/" rel="bookmark">Java 集合系列03之ArrayList源码解析和使用示例</a></div>
-      
-    </li>
-  
-    <li class="popular-posts-item">
-      
-      
-      <div class="popular-posts-title"><a href="/posts/6ad3883/" rel="bookmark">Java 集合系列04之 fail-fast总结</a></div>
-      
-    </li>
-  
-    <li class="popular-posts-item">
-      
-      
-      <div class="popular-posts-title"><a href="/posts/dd7bc7f8/" rel="bookmark">Java 集合系列05之 LinkedList源码解析和使用示例</a></div>
+      <div class="popular-posts-title"><a href="/posts/4dcbcf5f/" rel="bookmark">Java 集合系列03之ArrayList</a></div>
       
     </li>
   
@@ -1246,6 +1199,20 @@ abstract void set(E object)
       
       
       <div class="popular-posts-title"><a href="/posts/3ac019a5/" rel="bookmark">Java 集合系列06之 Vector源码解析和使用示例</a></div>
+      
+    </li>
+  
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="/posts/ab3cc2a5/" rel="bookmark">Java 集合系列07之 Stack源码解析和使用示例</a></div>
+      
+    </li>
+  
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="/posts/719892b8/" rel="bookmark">Java 集合系列09之 Map架构</a></div>
       
     </li>
   
@@ -1270,7 +1237,7 @@ abstract void set(E object)
   <p><span>本文标题:</span><a href="/posts/9646a357/">Java 集合系列02之 Collection</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 fengxiu 的个人博客">fengxiu</a></p>
   <p><span>发布时间:</span>2019年03月04日 - 09:13</p>
-  <p><span>最后更新:</span>2019年08月31日 - 12:04</p>
+  <p><span>最后更新:</span>2019年09月04日 - 10:43</p>
   <p><span>原始链接:</span>
      <a href="/posts/9646a357/" title="Java 集合系列02之 Collection">Java 集合系列02之 Collection</a>
     <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://fengxiu.club/posts/9646a357/" aria-label="复制成功！"></i></span>
@@ -1510,7 +1477,9 @@ abstract void set(E object)
                     
                       
                     
-                    <span class="site-state-item-count">43</span>
+                      
+                    
+                    <span class="site-state-item-count">44</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -1773,7 +1742,7 @@ abstract void set(E object)
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概要"><span class="nav-number">1.</span> <span class="nav-text">概要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#主要内容"><span class="nav-number">2.</span> <span class="nav-text">主要内容</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Collection-简介"><span class="nav-number">2.1.</span> <span class="nav-text">1. Collection 简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-List-简介"><span class="nav-number">2.2.</span> <span class="nav-text">2. List 简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Set-简介"><span class="nav-number">2.3.</span> <span class="nav-text">3. Set 简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-AbstractCollection"><span class="nav-number">2.4.</span> <span class="nav-text">4. AbstractCollection</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-AbstractList"><span class="nav-number">2.5.</span> <span class="nav-text">5. AbstractList</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-AbstractSet"><span class="nav-number">2.6.</span> <span class="nav-text">6 AbstractSet</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-ListIterator"><span class="nav-number">2.7.</span> <span class="nav-text">7 ListIterator</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概要"><span class="nav-number">1.</span> <span class="nav-text">概要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Collection-简介"><span class="nav-number">2.</span> <span class="nav-text">Collection 简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#List-简介"><span class="nav-number">3.</span> <span class="nav-text">List 简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Set-简介"><span class="nav-number">4.</span> <span class="nav-text">Set 简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AbstractCollection"><span class="nav-number">5.</span> <span class="nav-text">AbstractCollection</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AbstractList"><span class="nav-number">6.</span> <span class="nav-text">AbstractList</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AbstractSet"><span class="nav-number">7.</span> <span class="nav-text">AbstractSet</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ListIterator"><span class="nav-number">8.</span> <span class="nav-text">ListIterator</span></a></li></ol></div>
             
 
           </div>
@@ -1816,7 +1785,7 @@ abstract void set(E object)
       总阅读时长
     </span>
     
-    <span title="站点阅读时长">21:05</span>
+    <span title="站点阅读时长">21:01</span>
   
 </div>
 
@@ -1900,7 +1869,7 @@ abstract void set(E object)
 
 
   
-  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@2/dist/jquery.min.js"></script>
 
   
   <script src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
