@@ -22,33 +22,15 @@ List是有序队列，这里所说的有序队列是指，按照什么顺序添�
 
 Set可以和数学概念中的集合类比，Set中不允许有重复的元素。
 
-由上面的类图可以看出，首先抽象出了一个AbstractCollection抽象类，实现了Collection接口中的大部分方法，方便后面代码的编写。接着AbstractList 和 AbstractSet继承了AbstractCollection。其中AbstraList实现了List中特有的一写方法，AbstractSet实现了对于Set来说通用的一些方法。这样做可以方便子类的编写。这很好的体现了面向对象的思想。
+由上面的类图可以看出，首先抽象出了一个AbstractCollection抽象类，实现了Collection接口中的大部分方法，方便代码的编写。接着AbstractList和AbstractSet继承了AbstractCollection。其中AbstraList实现了List中特有的一写方法，AbstractSet实现了对于Set来说通用的一些方法。这样做可以方便子类的编写。这很好的体现了面向对象的思想。
 
-另外要说明的一点是，Collection继承了Iterator接口，所以每一个实现了Collection接口的类中，都可以使用迭代器遍历。List系列的集合实现了一个特有的ListIterator接口，在这个接口中增加了一些添加，删除等方法。
+另外要说明的一点是，Collection继承了Iterable接口，所以每一个实现了Collection接口的类中，都可以使用迭代器遍历。List系列的集合实现了一个特有的ListIterator接口，在这个接口中增加了一些添加，删除等方法。
 
-通过上面的介绍可以发现，Collection体系中的集合并不是特别的复杂，所以只要细心的理一下，还是很容易理解和使用的。java 8新增加了default方法，还有流（Stream），因为我们关注的是集合的使用，因此在这里就省略这部分内容。后面我会专门写一系列的博客来讲解java8中的流。
+通过上面的介绍可以发现，Collection体系中的集合并不是特别的复杂，所以只要细心的理一下，还是很容易理解和使用的。java8新增加了default方法，还有流（Stream），我们关注的是集合的使用，因此在这里就省略这部分内容。
 
 <!--more -->
 
-## 主要内容
-
-1. Collection 简介
-
-2. List 简介
-
-3. Set 简介
-
-4. AbstractCollection 源码分析
-
-5. AbstractList    源码分析 
-
-6. AbstractSet    源码分析
-
-7. ListIterator
-
-   注：Iterator 请看我的另一篇博客[Iterator 和 iterable 区别](http://blog.csdn.net/u014569188/article/details/78881952)
-
-### 1. Collection 简介
+## Collection 简介
 
 Collection 定义如下
 
@@ -56,7 +38,7 @@ Collection 定义如下
 public interface Collection<E> extends Iterable<E>{}
 ```
 
-本身是一个接口，高度抽象出来集合，它包含了集合的基本操作：添加、删除、清空、遍历、是否为空、获取大小、是否保护某元素等等。
+本身是一个高度抽象出来的接口，包含集合的基本操作：添加、删除、清空、遍历、是否为空、获取大小等等。
 
 在Java API规定，所有实现Collection接口的子类（直接子类和间接子类）都必须实现俩种构造参数：不带参数的构造参数（为了创建出一个空的集合类）和带参数的构造参数（用参数创建出一个新的集合类，也就是可以转换集合类）。
 
@@ -66,8 +48,7 @@ public abstract boolean add(E e)  //添加元素
 public abstract boolean add(Collection<? extend E> c) //添加集合
 public abstract void clear()   //清空集合
 public abstract boolean contains(Object o) //判断集合是否包含此元素
-public abstract boolean containsAll(Collection<?> c)
-  								//判断集合中是否包含参数集合中所有的元素
+public abstract boolean containsAll(Collection<?> c)//判断集合中是否包含参数集合中所有的元素
 public abstract boolean  equals(Object object)  //比较俩个是否相同
 public abstract int     hashCode()   //返回hash值
 public abstract boolean         isEmpty()    //是否为空
@@ -80,34 +61,33 @@ public abstract <T> T[]         toArray(T[] array) //返回T类型的数组
 public abstract Object[]        toArray()  //返回包含集合所有元素的集，是Object类型
 ```
 
-### 2. List 简介
+## List 简介
 
 List 定义如下：
 
-```
+``` java
 public interface List<E> extends Collection<E> {}
 ```
 
-List 是一个继承了Collection的接口，是集合的一种，是一个有序集合。List中的每一个集合都有一个索引，第一个元素的索引是0，往后的元素一次加1，List中允许有重复的元素
+List是一个有序集合，List中的每一个集合都有一个整数索引，第一个元素的索引是0，往后的元素一次加1，List中允许有重复的元素
 
-关于API方面。既然List是继承于Collection接口，它自然就包含了Collection中的全部函数接口；由于List是有序队列，它也额外的有自己的API接口。主要有“添加、删除、获取、修改指定位置的元素”、“获取List中的子队列”等。
+关于API方面，既然List是继承于Collection接口，它自然就包含了Collection中的全部函数接口；由于List是有序队列，它也额外的有自己的API接口。主要有“添加、删除、获取、修改指定位置的元素”、“获取List中的子队列”等。
 
 ```java
 // 相比与Collection，List新增的API：
 abstract void                add(int location, E object) //在指定的位置增加元素
-  								//在指定的位置开始增加元素
-abstract boolean             addAll(int location, Collection<? extends E> c)
+abstract boolean             addAll(int location, Collection<? extends E> c)//在指定的位置开始增加元素
 abstract E                   get(int location) //得到指定位置的元素
 abstract int                 indexOf(Object object)  //返回第一个出现出现元素的索引
 abstract int                 lastIndexOf(Object object) //返回最后一个出现出现元素的索引
 abstract ListIterator<E>     listIterator(int location)  //从location位置开始返回
 abstract ListIterator<E>     listIterator()//返回listIterator对象
-abstract E                   remove(int location)
+abstract E                   remove(int location) // 删除指定元素
 abstract E                   set(int location, E object) //替换某个位置的元素
 abstract List<E>             subList(int start, int end) //返回当前List的子集
 ```
 
-### 3. Set 简介
+## Set 简介
 
 Set的定义如下：
 
@@ -115,44 +95,39 @@ Set的定义如下：
 public interface Set<E> extends Collection<E> {}
 ```
 
-Set是一个继承与Collection的接口，也是集合中的一种。Set是不允许有重复元素的集合
+Set是不允许有重复元素的集合。在API上，和Collection完全一样
 
-在API上，和Collection完全一样
+## AbstractCollection
 
-### 4. AbstractCollection
-
-AbstractCollection 定义如下：
+AbstractCollection实现了Collection接口的抽象类，方便代码的编写，将一些基本的操作进行了实现。定义如下：
 
 ```Java
 public abstract class AbstractCollection<E> implements Collection<E> {}
 ```
 
-AbstractCollection 是一个抽象类，他实现了Collection中除Iterator()和size()之外的函数
+AbstractCollection是一个抽象类，他实现了Collection中除Iterator()和size()之外的函数
 
 AbstractCollection的主要作用：它实现了Collection接口中的大部分函数。从而方便其它类实现Collection，比如ArrayList、LinkedList等，它们这些类想要实现Collection接口，通过继承AbstractCollection就已经实现了大部分的接口了。
 
 另外在集合中，很多的操作都是依赖于迭代器。而不同类型的集合迭代器的实现方式可能不同，因此实现迭代器一般都会放在子类中实现。
 
+源码如下：
+
 ```Java
-//对AbstractCollection的源码分析
-package java.util;
 public abstract class AbstractCollection<E> implements Collection<E> {
 
     protected AbstractCollection() {
-      
     }
 
     // 查询操作
 
-    //有collection的子类有不同的种类
-    //因此不同种类的迭代器可能不相同，这里就没有实现
+    //collection的子类有不同的种类，因此不同种类的迭代器可能不相同，这里就没有实现
     public abstract Iterator<E> iterator();
 
     //返回当前集合的大小
     public abstract int size();
 
-    //判断当前集合是否为空，
-    //只要size等于0说明没有元素
+    //判断当前集合是否为空，只要size等于0说明没有元素
     public boolean isEmpty() {
         return size() == 0;
     }
@@ -353,7 +328,7 @@ public abstract class AbstractCollection<E> implements Collection<E> {
 }
 ```
 
-### 5. AbstractList
+## AbstractList
 
 AbstractList的定义如下：
 
@@ -361,27 +336,14 @@ AbstractList的定义如下：
 public abstract class AbstractList<E> extends AbstractCollection<E> implements List<E> {}
 ```
 
-AbstractList是一个继承于AbstractCollection，并且实现List接口的抽象类。
-
-AbstractList的主要作用：它实现了List接口中的大部分函数。从而方便其它集合类继承List。
-
+AbstractList继承AbstractCollection，并且实现List接口的抽象类。主要作用：它实现了List接口中的大部分函数。从而方便其它集合类继承List。
 另外，和AbstractCollection相比，AbstractList抽象类中，实现了iterator()接口。
 
-有以下的方法没有实现
-
-```
-1. public abstract E get(int var1)
-2. public E set(int var1, E var2)
-3. public void add(int var1, E var2)
-4. public E remove(int var1)
-```
-
-
+源码如下：
 
 ```Java
 package java.util;
-public abstract class AbstractList<E> 
-			extends AbstractCollection<E> implements List<E> {
+public abstract class AbstractList<E> extends AbstractCollection<E> implements List<E> {
 
     //当前list的修改操作次数，用于fail-fast决策
     protected transient int modCount = 0;
@@ -703,48 +665,39 @@ public abstract class AbstractList<E>
 
 ```
 
-### **6 AbstractSet**
+## AbstractSet
 
 AbstractSet的定义如下： 
 
-```
-public abstract class AbstractSet<E> 
-		extends AbstractCollection<E> 
-			implements Set<E> {}
+``` java
+public abstract class AbstractSet<E> extends AbstractCollection<E> implements Set<E> {}
 ```
 
-AbstractSet是一个继承于AbstractCollection，并且实现Set接口的抽象类。由于Set接口和Collection接口中的API完全一样，Set也就没有自己单独的API。
+AbstractSet继承AbstractCollection，并且实现Set接口的抽象类。由于Set接口和Collection接口中的API完全一样，Set也就没有自己单独的API。
 
-和AbstractCollection一样，它实现了List中除iterator()和size()之外的函数。
+和AbstractCollection一样，它实现了List中除iterator()和size()之外的函数。主要作用：它实现了Set接口中的大部分函数。从而方便其它类实现Set接口。
 
-AbstractSet的主要作用：它实现了Set接口中的大部分函数。从而方便其它类实现Set接口。
+## ListIterator
 
+ListIterator的定义如下：
 
+``` java
+public interface ListIterator<E extends Iterator<E>> {}
+```
 
-###  7 ListIterator
+ListIterator继承Iterator接口，它是队列迭代器。专门用于遍历List，能提供向前/向后遍历。相比于Iterator，它新增了添加、是否存在上一个元素、获取上一个元素等等API接口。
 
->ListIterator的定义如下：
->
->```
->public interface ListIterator<E> extends Iterator<E> {}
->```
->
->ListIterator是一个继承于Iterator的接口，它是队列迭代器。专门用于便利List，能提供向前/向后遍历。相比于Iterator，它新增了添加、是否存在上一个元素、获取上一个元素等等API接口。
->
->```java
->// ListIterator的API
->// 继承于Iterator的接口
->abstract boolean hasNext()
->abstract E next()
->abstract void remove()
->// 新增API接口
->abstract void add(E object)
->abstract boolean hasPrevious()
->abstract int nextIndex()
->abstract E previous()
->abstract int previousIndex()
->abstract void set(E object)
->```
->
->
-
+```java
+// ListIterator的API
+// 继承于Iterator的接口
+abstract boolean hasNext()
+abstract E next()
+abstract void remove()
+// 新增API接口
+abstract void add(E object)
+abstract boolean hasPrevious()
+abstract int nextIndex()
+abstract E previous()
+abstract int previousIndex()
+abstract void set(E object)
+```

@@ -1,5 +1,5 @@
 ---
-title: Java 集合系列03之ArrayList源码解析和使用示例
+title: Java 集合系列03之ArrayList
 tags:
   - 集合
 categories:
@@ -8,49 +8,27 @@ categories:
 abbrlink: 4dcbcf5f
 date: 2019-03-04 12:09:00
 ---
-### 概要
-
 本篇博客主要的内容是介绍ArrayList的使用和对其源码进行分析，并比较ArrayList不同迭代器之间的性能
-
-内容包括：
-
-1. ArrayList 简介
-2. ArrayList数据结构
-3. ArrayList源码分析
-4. ArrayList遍历方式分析
-5. toArray 异常
-6. ArrayList 基本使用示例
 
 ## 1. ArrayList 简介
 
-ArrayList 是一个数组队列，可以动态的改变大小，相当于动态数组。与Java中的数组相比，它的容量能动态增长。他继承于AbstractList，实现了List，RandomAccess，Cloneable，java.io.Serializable接口。
+ArrayList是一个有序集合，底层是通过数组来实现的，可以动态的改变大小，相当于动态数组。与Java中的数组相比，它的容量能动态增长。他继承于AbstractList，实现了List，RandomAccess，Cloneable，java.io.Serializable接口。
+类如如下：
+![Xnip2019-09-04_10-04-56](/images/Xnip2019-09-04_10-04-56.jpg)
+ArrayList继承AbstractList，实现List接口。因此就具有相关的添加、删除、修改、遍历等功能。
 
-ArrayList 继承了AbstractList，实现了List。因此就具有相关的添加、删除、修改、遍历等功能。
+ArrayList实现RandmoAccess接口，即提供随机访问功能，注意这个接口内部并没有任何方法，只是起到标记的作用。
 
-ArrayList 实现了RandmoAccess接口，即提供了随机访问功能。RandmoAccess是java中用来被List实现，为List提供快速访问功能的。在ArrayList中，我们即可以通过元素的序号快速获取元素对象；这就是快速随机访问。稍后，我们会比较List的“快速随机访问”和“通过Iterator迭代器访问”的效率。
+ArrayList实现Cloneable接口，即覆盖了函数clone()，能被克隆。
 
-ArrayList 实现了Cloneable接口，即覆盖了函数clone()，能被克隆。
-
-ArrayList 实现java.io.Serializable接口，这意味着ArrayList支持序列化，能通过序列化去传输。
-
+ArrayList实现java.io.Serializable接口，这意味着ArrayList支持序列化，能通过序列化去传输。
 **注意的一点是：ArrayList不是线程安全的！所以不要再并发程序中使用**
 
 <!-- more --->
 
-## 2. ArrayList 数据结构
+## ArrayList源码分析
 
-Arraylist的类图如下
-
-![upload successful](/images/pasted-156.png)
-
-ArrayList包含了两个重要的对象：elementData 和 size。
-
-1. elementData 是"Object[]类型的数组"，它保存了添加到ArrayList中的元素。实际上，elementData是个动态数组，我们能通过构造函数 ArrayList(int initialCapacity)来执行它的初始容量为initialCapacity；如果通过不含参数的构造函数ArrayList()来创建ArrayList，则elementData的容量默认是10。elementData数组的大小会根据ArrayList容量的增长而动态的增长，具体的增长方式，请参考源码分析中的ensureCapacity()函数。
-2. size 则是动态数组的实际大小。
-
-## 3. ArrayList源码分析
-
-下面所有源码都是基于**java 8** 来进行的分析：按照add，remove，get，Iterator，ListIterator的顺序来进行源码分析
+下面所有源码都是基于Java8来进行的分析：按照add，remove，get，Iterator，ListIterator的顺序来进行源码分析
 
 首先看一下一些比较重要的属性，可以方便后面理解源码：
 
@@ -70,6 +48,9 @@ transient Object[] elementData;
 //集合包含元素的数量
 private int size;
 ```
+
+1. elementData 是"Object[]类型的数组"，它保存了添加到ArrayList中的元素。实际上，elementData是个动态数组，我们能通过构造函数 ArrayList(int initialCapacity)来执行它的初始容量为initialCapacity；如果通过不含参数的构造函数来创建ArrayList，则elementData的容量默认是10。elementData数组的大小会根据ArrayList容量的增长而动态的增长，具体的增长方式，请参考源码分析中的ensureCapacity()函数。
+2. size 则是动态数组的实际大小。
 
 **构造函数**
 
@@ -110,31 +91,41 @@ public ArrayList(Collection<? extends E> c) {
 
 从上面可知，提供了三个默认构造函数，分别是默认构造函数，将会初始化一个空数组，指定长度的构造函数，根据指定的长度来初始化数组，添加一个集合来初始化数组，这个会初始化一个和集合长度相等的数组，并把数据添加进去。
 
-### **添加：add**
+### 添加（add）
 
-我们先了解一下具体的添加过程首先会检测数组是否还能添加元素，如果已经满了，则创建一个更长的数组，将原先数组的数据拷贝过来，然后在添加元素。具体源码如下
+这里先总结下具体的添加过程
+
+1. 添加元素时，首先会检测数组是否已满，如果为满，则直接添加元素。否则进入下一步。
+2. 如果已经满了，则创建一个更长的数组，将原先数组的数据拷贝过来，然后在添加元素。
+
+具体源码如下
 
 ```java
  public boolean add(E e) {
      // 确认数组是否已满
-     ensureCapacityInternal(size + 1);  // Increments modCount!!
+     ensureCapacityInternal(size + 1); 
      // 在集合的末尾添加元素
      elementData[size++] = e;
      return true;
 }
 
-
+/**
+ * 确保数组有空间放置元素
+ */
 private void ensureCapacityInternal(int minCapacity) {
     // 判断数组是否为空，如果为空，比较DEFAULT_CAPACITY
     // 和minCapacity大小，使用较大的那个来初始化数组
     if (elementData == DEFAULTCAPACITY_EMPTY_ELEMENTDATA) {
         minCapacity = Math.max(DEFAULT_CAPACITY, minCapacity);
     }
-	// 初始化一个指定的长度
+    // 初始化一个指定的长度
     ensureExplicitCapacity(minCapacity);
 }
 
 
+/**
+ * 初始化一个指定长度的数组
+ */
 private void ensureExplicitCapacity(int minCapacity) {
     // 修改modCount 防止出现fail-fast
     modCount++;
@@ -145,7 +136,7 @@ private void ensureExplicitCapacity(int minCapacity) {
         grow(minCapacity);
 }
 
-// 初始化一个更大的数组
+// 初始化特定长度的数组，并将原来数组元素拷贝到当前数组中去
 private void grow(int minCapacity) {
 
     int oldCapacity = elementData.length;
@@ -155,19 +146,17 @@ private void grow(int minCapacity) {
     if (newCapacity - minCapacity < 0)
         newCapacity = minCapacity;
     if (newCapacity - MAX_ARRAY_SIZE > 0)
+        // 超过最大值，值抛出异常
         newCapacity = hugeCapacity(minCapacity);
    // 初始化newCapacity长度的数组，并拷贝旧数据
     elementData = Arrays.copyOf(elementData, newCapacity);
 }
 ```
 
-在上面已经将添加过程注释的很清楚，下面主要介绍一下添加过程：
+这里需要注意的一点是，重新设置容量大小按照下面这个公式来设置的：**新的容量=原始容量*3**。并且如果数组长度超过整型的最大值，则会抛出异常。
 
-1.  首先判断数组是否为null，如果为null然后判断指定的下标位置和默认长度谁大则使用谁，若使用默认构造函数，则ArrayList的**默认容量大小是10**。
-2.  判断当钱ArrayList容量是否足以容纳指定下标的元素，不足ArrayList会重新设置容量：**新的容量=原始容量*3**。然后初始化新容量的数组，然后将旧的数组数据拷贝到新数组中去
-3. 在指定下标添加元素
-
-至于`add(int index, E element) `,大体上差不多，不过在指定位置添加元素后，需要将原先位置的元素以及后面的元素往后順移一位，大概过程如下
+**指定下标添加元素**
+即`add(int index, E element) `,大体上和add差不多。在指定位置添加元素，需要将原先位置的元素以及后面的元素往后順移一位，大概过程如下
 
 ```java
 public void add(int index, E element) {
@@ -184,7 +173,7 @@ public void add(int index, E element) {
 }
 ```
 
-### **删除 remove**
+### 删除（remove）
 
 具体源码如下
 
@@ -200,8 +189,7 @@ public void add(int index, E element) {
     int numMoved = size - index - 1;
     // 下标之后的数据向前移动一位
     if (numMoved > 0)
-    	System.arraycopy(elementData, index+1, elementData, index,
-    numMoved);
+        System.arraycopy(elementData, index+1, elementData, index, numMoved);
      // 设置最后一个元素为空，方便GC
     elementData[--size] = null; // clear to let GC do its work
 
@@ -213,7 +201,7 @@ public void add(int index, E element) {
 
 ```java
  public boolean remove(Object o) {
- 		// 查找到素有和o相同的对象，并删除
+        // 查找到素有和o相同的对象，并删除
         if (o == null) {
             for (int index = 0; index < size; index++)
                 if (elementData[index] == null) {
@@ -230,8 +218,7 @@ public void add(int index, E element) {
         return false;
     }
 
- 	// 这个相对于上面的remove(index),省略了异步索引的校验，因此比上面删除少一次检查，
-	// 其他一样
+    // 这个相对于上面的remove(index),省略了异步索引的校验，因此比上面删除少一次检查，
     private void fastRemove(int index) {
         modCount++;
         int numMoved = size - index - 1;
@@ -270,7 +257,7 @@ public E get(int index) {
 
 会检测modCounrt和迭代器保存的modCount是否相等，如果相同，则说明有其他线程修改了集合，会抛出并发修改异常。
 
-## 4. ArrayList 遍历方式
+## ArrayList 遍历方式
 
 >(01) 第一种，**通过迭代器遍历**。即通过Iterator去遍历。
 >
@@ -376,19 +363,19 @@ public E get(int index) {
 >
 >
 
-## 5. toArray 异常
+## toArray 异常
 
->```java
->Object[] toArray()
-><T> T[] toArray(T[] arr)
->```
->
->调用 toArray() 函数会抛出“java.lang.ClassCastException”异常，但是调用 toArray(T[] contents) 能正常返回 T[]。
->
->toArray() 会抛出异常是因为 toArray() 返回的是 Object[] 数组，将 Object[] 转换为其它类型(类如，将Object[]转换为的Integer[])则会抛出“java.lang.ClassCastException”异常，因为**Java不支持向下转型**。具体的可以参考前面ArrayList.java的源码介绍部分的toArray()。
->解决该问题的办法是调用 < T > T[] toArray(T[] contents) ， 而不是 Object[] toArray()。
+```java
+Object[] toArray()
+<T> T[] toArray(T[] arr)
+```
 
-## 6. ArrayList基本使用
+有时调用toArray() 函数会抛出“java.lang.ClassCastException”异常，这时就需要调用toArray(T[] contents)来解决这中异常。
+
+toArray() 会抛出异常是因为toArray()返回的是Object[]数组，将 Object[] 转换为其它类型(类如，将Object[]转换为的Integer [])则会抛出“java.lang.ClassCastException”异常，因为**Java不支持向下转型**。具体的可以参考前面ArrayList.java的源码介绍部分的toArray()。
+解决该问题的办法是调用 `<T> T[] toArray(T[] contents)` 。
+
+## ArrayList基本使用
 
 >```java
 >import java.util.*;
@@ -438,10 +425,3 @@ public E get(int index) {
 >```
 >
 >
-
-
-
-
-
-
-
