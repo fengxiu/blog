@@ -43,7 +43,7 @@ public class PermGenOomMock{
 ```
 
 运行结果如下
-![820406-20160327005846979-1124627174](/source/images/820406-20160327005846979-1124627174.png)
+![820406-20160327005846979-1124627174](/images/820406-20160327005846979-1124627174.png)
 本例中使用的JDK版本是1.7，指定的PermGen区的大小为8M。通过每次生成不同URLClassLoader对象来加载Test类，从而生成不同的类对象，这样就能看到我们熟悉的 "java.lang.OutOfMemoryError: PermGen space "异常。这里之所以采用JDK 1.7，是因为在JDK1.8 中， HotSpot已经没有 “PermGen space”这个区间了，取而代之是一个叫做Metaspace（元空间）的东西。
 其实，移除永久代的工作从JDK1.7就开始了。JDK1.7中，存储在永久代的部分数据就已经转移到了Java Heap或者是 Native Heap。但永久代仍存在于JDK1.7中，并没完全移除，譬如符号引用(Symbols)转移到了native heap；字面量(interned strings)转移到了java heap；类的静态变量(class statics)转移到了java heap。
 <!-- more  -->
