@@ -808,9 +808,9 @@ public class PermGenOomMock{
 
       
         
-          <p>本篇文章主要讨论什么是GC，为什么要有GC？</p>
+          <p>翻译自<a href="https://plumbr.io/handbook/what-is-garbage-collection" target="_blank" rel="noopener">what-is-garbage-collection</a><br>本篇文章主要讨论什么是GC，为什么要有GC？</p>
 <h2 id="什么是GC-Garbage-Collection"><a href="#什么是GC-Garbage-Collection" class="headerlink" title="什么是GC(Garbage Collection)"></a>什么是GC(Garbage Collection)</h2><p>乍一看，垃圾收集应该处理名称所暗示的 —-找到并扔掉垃圾。实际上它恰恰相反。垃圾收集器追踪仍在使用的所有对象，并将其余对象标记为垃圾。考虑到这一点，我们开始深入研究Java虚拟机是如何实现内存的自动回收，在Java中这个过程叫做GC。</p>
-<p> 这篇文章不会一开始就深入GC的细节，而是先介绍垃圾收集器的一般性质，然后介绍核心概念和方法。</p>
+<p>这篇文章不会一开始就深入GC的细节，而是先介绍垃圾收集器的一般性质，然后介绍核心概念和方法。</p>
 <p>免责声明：此内容侧重于Oracle Hotspot和OpenJDK。在其他JVM（例如jRockit或IBM J9）上，本文中涉及的某些方面可能表现不同。<br>
           <!--noindex-->
           

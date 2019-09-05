@@ -634,7 +634,7 @@
           <h2 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/posts/1d97a19/" class="post-title-link" itemprop="url">JVM 垃圾回收器</a>
+                <a href="/posts/1d97a19/" class="post-title-link" itemprop="url">垃圾回收器</a>
               
             
           </h2>
@@ -716,7 +716,7 @@
 
           
           
-             <span id="/posts/1d97a19/" class="leancloud_visitors" data-flag-title="JVM 垃圾回收器">
+             <span id="/posts/1d97a19/" class="leancloud_visitors" data-flag-title="垃圾回收器">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -741,7 +741,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">8k</span>
+                <span title="本文字数">7.5k</span>
               
 
               
@@ -776,7 +776,7 @@
 
       
         
-          <h1 id="JVM-垃圾回收器"><a href="#JVM-垃圾回收器" class="headerlink" title="JVM 垃圾回收器"></a>JVM 垃圾回收器</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>在之前的博客中，我们大致介绍了，常见的 <strong>垃圾回收算法</strong> 及 <code>JVM</code> 中常见的分类回收算法。本篇我们主要介绍在 <code>oracle JVM</code> 中，垃圾回收的具体实现:<strong>垃圾回收器</strong>（<code>Garbage Collector</code>）。<br>
+          <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>在之前的博客中，我们大致介绍了常见的 <strong>垃圾回收算法</strong> 及 <code>JVM</code> 中常见的分代回收算法。本篇我们主要介绍在 <code>oracle JVM</code> 中，垃圾回收的具体实现:<strong>垃圾回收器</strong>（<code>Garbage Collector</code>）。<br>
           <!--noindex-->
           
             <div class="post-button text-center">
@@ -969,7 +969,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">3.4k</span>
+                <span title="本文字数">4.3k</span>
               
 
               
@@ -983,7 +983,7 @@
                 
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
-                <span title="阅读时长">3 分钟</span>
+                <span title="阅读时长">4 分钟</span>
               
             </div>
           
@@ -1007,6 +1007,7 @@
           <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>通过前面介绍<code>Java</code>内存运行时区域，可以学习到<strong>程序计数器</strong>、<strong>虚拟机栈</strong>、<strong>本地方法栈</strong> 三个区域随线程而生，随线程而灭；栈中的栈帧随着方法的进入和退出而有条不紊地执行着出栈和入栈操作。每一个栈帧中分配多少内存基本上是在类结构确定下来时就已知的，因此这几个区域的<strong>内存分配和回收</strong>都具备<strong>确定性</strong>。在这几个区域内不需要过多考虑回收的问题，<strong>因为方法结束或线程结束时，内存自然就跟随着回收了</strong>。</p>
 <p>而<code>Java</code><strong>堆</strong> 和 <strong>方法区</strong> 则不一样，一个接口中的多个实现类需要的内存可能不一样，一个方法中的多个分支需要的内存也可能不一样。我们只有在程序处于运行期间时才能知道会创建哪些对象，这部分<strong>内存的分配和回收</strong>都是<strong>动态的</strong>，<strong>垃圾收集器</strong> 所关注的是这部分内存。</p>
 <p>接下来我将会用俩篇文章来聊聊这部分内容，这篇文章主要讲解如何确定一个对象可以回收以及垃圾回收算法的种类，属于方法的介绍，下一篇文章则主要介绍<code>JVM</code>中实现的垃圾回收器和内存分配的策略。</p>
+<p>因此本篇文章主要是包含下面俩块内容：</p>
 <ol>
 <li>对象是否可以回收判定</li>
 <li>垃圾回收算法</li>

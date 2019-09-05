@@ -115,7 +115,8 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://fengxiu.club/images/pasted-134.png">
 <meta property="og:image" content="http://fengxiu.club/images/pasted-137.png">
-<meta property="og:updated_time" content="2019-09-04T12:15:14.674Z">
+<meta property="og:image" content="http://fengxiu.club/images/young_gc.png">
+<meta property="og:updated_time" content="2019-09-05T03:22:05.893Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JVM 垃圾回收算法">
 <meta name="twitter:description" content="概述通过前面介绍Java内存运行时区域，可以学习到程序计数器、虚拟机栈、本地方法栈 三个区域随线程而生，随线程而灭；栈中的栈帧随着方法的进入和退出而有条不紊地执行着出栈和入栈操作。每一个栈帧中分配多少内存基本上是在类结构确定下来时就已知的，因此这几个区域的内存分配和回收都具备确定性。在这几个区域内不需要过多考虑回收的问题，因为方法结束或线程结束时，内存自然就跟随着回收了。 而Java堆 和 方法区">
@@ -523,7 +524,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">3.4k</span>
+                <span title="本文字数">4.3k</span>
               
 
               
@@ -537,7 +538,7 @@
                 
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
-                <span title="阅读时长">3 分钟</span>
+                <span title="阅读时长">4 分钟</span>
               
             </div>
           
@@ -560,22 +561,17 @@
         <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>通过前面介绍<code>Java</code>内存运行时区域，可以学习到<strong>程序计数器</strong>、<strong>虚拟机栈</strong>、<strong>本地方法栈</strong> 三个区域随线程而生，随线程而灭；栈中的栈帧随着方法的进入和退出而有条不紊地执行着出栈和入栈操作。每一个栈帧中分配多少内存基本上是在类结构确定下来时就已知的，因此这几个区域的<strong>内存分配和回收</strong>都具备<strong>确定性</strong>。在这几个区域内不需要过多考虑回收的问题，<strong>因为方法结束或线程结束时，内存自然就跟随着回收了</strong>。</p>
 <p>而<code>Java</code><strong>堆</strong> 和 <strong>方法区</strong> 则不一样，一个接口中的多个实现类需要的内存可能不一样，一个方法中的多个分支需要的内存也可能不一样。我们只有在程序处于运行期间时才能知道会创建哪些对象，这部分<strong>内存的分配和回收</strong>都是<strong>动态的</strong>，<strong>垃圾收集器</strong> 所关注的是这部分内存。</p>
 <p>接下来我将会用俩篇文章来聊聊这部分内容，这篇文章主要讲解如何确定一个对象可以回收以及垃圾回收算法的种类，属于方法的介绍，下一篇文章则主要介绍<code>JVM</code>中实现的垃圾回收器和内存分配的策略。</p>
+<p>因此本篇文章主要是包含下面俩块内容：</p>
 <ol>
 <li>对象是否可以回收判定</li>
 <li>垃圾回收算法</li>
 </ol>
 <p><strong>注:</strong>后面都是基于java来进行讲解。<br><a id="more"></a></p>
 <h2 id="对象是否可以回收判定"><a href="#对象是否可以回收判定" class="headerlink" title="对象是否可以回收判定"></a>对象是否可以回收判定</h2><p>要想回收对象，首先应该判定哪些对象活着哪些对象已经死去（不会再被使用的对象）</p>
-<h4 id="1-引用计数算法"><a href="#1-引用计数算法" class="headerlink" title="1. 引用计数算法"></a>1. 引用计数算法</h4><p><code>Java</code> <strong>堆</strong> 中每个具体对象（<strong>不是引用</strong>）都有一个<strong>引用计数器</strong>。当一个对象被创建并初始化赋值后，该变量计数设置为<code>1</code>。每当有一个地方引用它时，计数器值就<strong>加1</strong>。当引用<strong>失效</strong>时，即一个对象的某个引用超过了生命周期（出作用域后）或者被设置为一个新值时，计数器值就<strong>减1</strong>。任何引用计数为<code>0</code>的对象可以被当作<strong>垃圾收集</strong>。当一个对象被垃圾收集时，它引用的任何对象计数减1。</p>
-<ul>
-<li><p><strong>优点</strong>：</p>
-<p>引用计数收集器执行简单，判定效率高，交织在程序运行中。对程序不被长时间打断的实时环境比较有利。</p>
-</li>
-<li><p><strong>缺点</strong>：</p>
-<p>难以检测出对象之间的循环引用。简单的说就是A对象内部引用了B对象，B对象内部引用了A对象同时，但是这俩个对象都不会在被使用，也就是对象已经死去，但是因为引用计数都是1，所以无法判定这俩个对象死去，也就无法回收。引用计数器增加了程序执行的开销。所以Java语言并没有选择这种算法进行垃圾回收。</p>
-</li>
-</ul>
-<h4 id="2-可达性分析算法"><a href="#2-可达性分析算法" class="headerlink" title="2. 可达性分析算法"></a>2. 可达性分析算法</h4><p><strong>可达性分析算法</strong>也叫<strong>根搜索算法</strong>，通过一系列的称为 <code>GC Roots</code> 的对象作为起点，然后向下搜索。搜索所走过的<strong>路径</strong>称为引用链 （<code>Reference Chain</code>）， 当一个<strong>对象</strong>到 <code>GC Roots</code> 没有任何<strong>引用链</strong>相连时, 即该对象<strong>不可达</strong>，也就说明此对象是 <strong>不可用的</strong>。</p>
+<h3 id="引用计数算法"><a href="#引用计数算法" class="headerlink" title="引用计数算法"></a>引用计数算法</h3><p>JVM堆中每个具体对象（<strong>不是引用</strong>）都有一个<strong>引用计数器</strong>。当一个对象被创建并初始化赋值后，该变量计数设置为<code>1</code>。每当有一个地方引用它时，计数器值就<strong>加1</strong>。当引用<strong>失效</strong>时，即一个对象的某个引用超过了生命周期（出作用域后）或者被设置为一个新值时，计数器值就<strong>减1</strong>。任何引用计数为<code>0</code>的对象可以被当作<strong>垃圾收集</strong>。当一个对象被回收时，它引用的任何对象计数减1。</p>
+<p><strong>优点</strong>：引用计数收集器执行简单，判定效率高，交织在程序运行中。对程序不被长时间打断的实时环境比较有利。</p>
+<p><strong>缺点</strong>：难以检测出对象之间的循环引用。简单的说就是A对象内部引用了B对象，B对象内部引用了A对象同时，但是这俩个对象都不会在被使用，也就是对象已经死去，但是因为引用计数都是1，所以无法判定这俩个对象死去，也就无法回收。引用计数器增加了程序执行的开销。所以Java语言并没有选择这种算法进行垃圾回收。</p>
+<h3 id="可达性分析算法"><a href="#可达性分析算法" class="headerlink" title="可达性分析算法"></a>可达性分析算法</h3><p><strong>可达性分析算法</strong>也叫<strong>根搜索算法</strong>，通过一系列的称为 <code>GC Roots</code> 的对象作为起点，然后向下搜索。搜索所走过的<strong>路径</strong>称为引用链 （<code>Reference Chain</code>）， 当一个<strong>对象</strong>到 <code>GC Roots</code> 没有任何<strong>引用链</strong>相连时, 即该对象<strong>不可达</strong>，也就说明此对象是 <strong>不可用的</strong>。</p>
 <p>如下图所示: <code>Object5</code>、<code>Object6</code>、<code>Object7</code> 虽然互有关联, 但它们到<code>GC Roots</code>是不可达的, 因此也会被判定为可回收的对象。</p>
 <p><img src="/images/pasted-134.png" alt="upload successful"></p>
 <p>在<code>Java</code>中, 可作为<code>GC Roots</code>的对象包括以下四种：</p>
@@ -586,35 +582,10 @@
 <li><strong>方法区</strong> 中<strong>常量</strong>引用的变量</li>
 </ul>
 <h2 id="垃圾回收算法"><a href="#垃圾回收算法" class="headerlink" title="垃圾回收算法"></a>垃圾回收算法</h2><p>本节具体介绍一下各种垃圾回收算法的思想，主要由<strong>标记-清除</strong>、<strong>标记-复制</strong>、<strong>标记-整理</strong></p>
-<h2 id="标记-清除算法"><a href="#标记-清除算法" class="headerlink" title="标记-清除算法"></a>标记-清除算法</h2><p>标记-清除算法对<strong>根集合</strong>进行扫描，对<strong>存活</strong>的对象进行标记。标记完成后，再对整个空间内<strong>未被标记</strong>的对象扫描，进行回收。</p>
-<ul>
-<li><p><strong>优点</strong>：</p>
-<p>实现简单，不需要进行对象进行移动。</p>
-</li>
-<li><p><strong>缺点</strong>：</p>
-<p>标记、清除过程效率低，产生大量不连续的内存碎片，提高了垃圾回收的频率。</p>
-</li>
-</ul>
-<h3 id="标记-复制算法"><a href="#标记-复制算法" class="headerlink" title="标记-复制算法"></a>标记-复制算法</h3><p>这种算法将内存区域划分成相同的两个<strong>内存块</strong>，每次仅使用一半的空间，<code>JVM</code>生成的新对象放在一半空间中。当一半空间用完时进行<code>GC</code>，第一步和 <strong>标记-清除算法</strong>一样，先对跟集合进行扫描，把可到达对象复制到另一半空间，然后把使用过的内存空间一次清理掉。这种收集算法解决了标记清除算法存在的效率问题。</p>
-<ul>
-<li><p><strong>优点</strong>：</p>
-<p>按顺序分配内存即可，实现简单、运行高效，不用考虑内存碎片。</p>
-</li>
-<li><p><strong>缺点</strong>：</p>
-<p>可用的内存大小缩小为原来的一半，对象存活率高时会频繁进行复制。</p>
-</li>
-</ul>
-<h3 id="标记-整理算法"><a href="#标记-整理算法" class="headerlink" title="标记-整理算法"></a>标记-整理算法</h3><p><strong>标记-整理算法</strong> 采用和 <strong>标记-清除算法</strong> 一样的方式进行对象的标记，但后续不直接对可回收对象进行清理，而是将所有的<strong>存活对象</strong>往一端<strong>空闲空间</strong>移动，然后清理掉边界以外的内存空间。</p>
-<ul>
-<li><p><strong>优点</strong>：</p>
-<p>解决了标记-清除算法存在的内存碎片问题。</p>
-</li>
-<li><p><strong>缺点</strong>：</p>
-<p>仍需要进行局部对象移动，一定程度上降低了效率。</p>
-</li>
-</ul>
-<h3 id="分代收集算法"><a href="#分代收集算法" class="headerlink" title="分代收集算法"></a>分代收集算法</h3><p>当前商业虚拟机都采用<strong>分代收集</strong>的垃圾收集算法。分代收集算法，顾名思义是根据对象的<strong>存活周期</strong>将内存划分为几块。一般包括<strong>年轻代</strong>、<strong>老年代</strong> 和 <strong>永久代</strong>，如图所示： </p>
-<p><img src="/images/pasted-137.png" alt="upload successful"></p>
+<h3 id="标记-清除算法"><a href="#标记-清除算法" class="headerlink" title="标记-清除算法"></a>标记-清除算法</h3><p>标记-清除算法对<strong>根集合</strong>进行扫描，对<strong>存活</strong>的对象进行标记。标记完成后，再对整个空间内<strong>未被标记</strong>的对象扫描，进行回收。<br><strong>优点</strong>：实现简单，不需要进行对象进行移动。<br><strong>缺点</strong>：标记、清除过程效率低，产生大量不连续的内存碎片，提高了垃圾回收的频率。</p>
+<h3 id="标记-复制算法"><a href="#标记-复制算法" class="headerlink" title="标记-复制算法"></a>标记-复制算法</h3><p>这种算法将内存区域划分成相同的两个<strong>内存块</strong>，每次仅使用一半的空间，<code>JVM</code>生成的新对象放在一半空间中。当一半空间用完时进行<code>GC</code>，第一步和 <strong>标记-清除算法</strong>一样，先对跟集合进行扫描，把可到达对象复制到另一半空间，然后把使用过的内存空间一次清理掉。这种收集算法解决了标记清除算法存在的效率问题。<br><strong>优点</strong>：按顺序分配内存即可，实现简单、运行高效，不用考虑内存碎片。<br><strong>缺点</strong>：可用的内存大小缩小为原来的一半，对象存活率高时会频繁进行复制。</p>
+<h3 id="标记-整理算法"><a href="#标记-整理算法" class="headerlink" title="标记-整理算法"></a>标记-整理算法</h3><p><strong>标记-整理算法</strong>采用和<strong>标记-清除算法</strong>一样的方式进行对象的标记，但后续不直接对可回收对象进行清理，而是将所有的<strong>存活对象</strong>往一端<strong>空闲空间</strong>移动，然后清理掉边界以外的内存空间。<br><strong>优点</strong>：解决了标记-清除算法存在的内存碎片问题。<br><strong>缺点</strong>：仍需要进行局部对象移动，一定程度上降低了效率。</p>
+<h3 id="分代收集算法"><a href="#分代收集算法" class="headerlink" title="分代收集算法"></a>分代收集算法</h3><p>当前商业虚拟机都采用<strong>分代收集</strong>的垃圾收集算法。分代收集算法，顾名思义是根据对象的<strong>存活周期</strong>将内存划分为几块。一般包括<strong>年轻代</strong>、<strong>老年代</strong> 和 <strong>永久代</strong>，如图所示：<br><img src="/images/pasted-137.png" alt="upload successful"></p>
 <ol>
 <li><p><strong>新生代（Young generation）</strong></p>
 <p>绝大多数最新被创建的对象会被分配到这里，由于<strong>大部分对象</strong>在创建后会很快变得<strong>不可达</strong>，所以很多对象被创建在<strong>新生代</strong>，然后<strong>消失</strong>。对象从这个区域消失的过程我们称之为 <code>minor GC</code>。</p>
@@ -648,7 +619,12 @@
 <p>通过上面的介绍你大概可以感受到回收永久代的性价比很低。</p>
 </li>
 </ol>
-<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ol>
+<p>上面已经简单介绍分代收集算法，下面补充下为什么需要分代和详细介绍下年轻代。</p>
+<h3 id="为什么分代"><a href="#为什么分代" class="headerlink" title="为什么分代"></a>为什么分代</h3><p>我们先来屡屡，为什么需要把堆分代？不分代不能完成他所做的事情么？其实不分代完全可以，分代的唯一理由就是优化GC性能。你先想想，如果没有分代，那我们所有的对象都在一块，GC的时候我们要找到哪些对象没用，这样就会对堆的所有区域进行扫描。而我们的很多对象都是朝生夕死的，如果分代的话，我们把新创建的对象放到某一地方，当GC的时候先把这块存“朝生夕死”对象的区域进行回收，这样就会腾出很大的空间出来。</p>
+<h3 id="新生代"><a href="#新生代" class="headerlink" title="新生代"></a>新生代</h3><p>HotSpot JVM把新生代分为了三部分：1个Eden区和2个Survivor区（分别叫from和to）。默认比例为8：1,为啥默认会是这个比例，接下来我们会聊到。一般情况下，新创建的对象都会被分配到Eden区(一些大对象特殊处理),这些对象经过第一次Minor GC后，如果仍然存活，将会被移到Survivor区。对象在Survivor区中每熬过一次Minor GC，年龄就会增加1岁，当它的年龄增加到一定程度时，就会被移动到老年代中。</p>
+<p>因为新生代中的对象基本都是朝生夕死的(80%以上)，所以在新生代的垃圾回收算法使用的是复制算法，复制算法的基本思想就是将内存分为两块，每次只用其中一块，当这一块内存用完，就将还活着的对象复制到另外一块上面。复制算法不会产生内存碎片。</p>
+<p>在GC开始的时候，对象只会存在于Eden区和名为“From”的Survivor区，Survivor区“To”是空的。紧接着进行GC，Eden区中所有存活的对象都会被复制到“To”，而在“From”区中，仍存活的对象会根据他们的年龄值来决定去向。年龄达到一定值(年龄阈值，可以通过-XX:MaxTenuringThreshold来设置)的对象会被移动到老年代中，没有达到阈值的对象会被复制到“To”区域。经过这次GC后，Eden区和From区已经被清空。这个时候，“From”和“To”会交换他们的角色，也就是新的“To”就是上次GC前的“From”，新的“From”就是上次GC前的“To”。不管怎样，都会保证名为To的Survivor区域是空的。Minor GC会一直重复这样的过程，直到“To”区被填满，“To”区被填满之后，会将所有对象移动到年老代中。<br><img src="/images/young_gc.png" alt="young_gc"></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
 <li>周志明，深入理解Java虚拟机：JVM高级特性与最佳实践，机械工业出版社</li>
 <li><a href="https://juejin.im/post/5b4dea755188251ac1098e98" target="_blank" rel="noopener">JVM系列(五) - JVM垃圾回收算法</a></li>
 <li><a href="http://ifeve.com/jvm-yong-generation/" target="_blank" rel="noopener">聊聊JVM的年轻代</a></li>
@@ -666,7 +642,7 @@
     <li class="popular-posts-item">
       
       
-      <div class="popular-posts-title"><a href="/posts/1d97a19/" rel="bookmark">JVM 垃圾回收器</a></div>
+      <div class="popular-posts-title"><a href="/posts/1d97a19/" rel="bookmark">垃圾回收器</a></div>
       
     </li>
   
@@ -691,7 +667,7 @@
   <p><span>本文标题:</span><a href="/posts/d20aa128/">JVM 垃圾回收算法</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 fengxiu 的个人博客">fengxiu</a></p>
   <p><span>发布时间:</span>2019年03月15日 - 09:05</p>
-  <p><span>最后更新:</span>2019年09月04日 - 20:15</p>
+  <p><span>最后更新:</span>2019年09月05日 - 11:22</p>
   <p><span>原始链接:</span>
      <a href="/posts/d20aa128/" title="JVM 垃圾回收算法">JVM 垃圾回收算法</a>
     <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://fengxiu.club/posts/d20aa128/" aria-label="复制成功！"></i></span>
@@ -751,8 +727,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/posts/1d97a19/" rel="prev" title="JVM 垃圾回收器">
-                JVM 垃圾回收器 <i class="fa fa-chevron-right"></i>
+              <a href="/posts/1d97a19/" rel="prev" title="垃圾回收器">
+                垃圾回收器 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -1196,7 +1172,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对象是否可以回收判定"><span class="nav-number">2.</span> <span class="nav-text">对象是否可以回收判定</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-引用计数算法"><span class="nav-number">2.0.1.</span> <span class="nav-text">1. 引用计数算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-可达性分析算法"><span class="nav-number">2.0.2.</span> <span class="nav-text">2. 可达性分析算法</span></a></li></ol></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#垃圾回收算法"><span class="nav-number">3.</span> <span class="nav-text">垃圾回收算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#标记-清除算法"><span class="nav-number">4.</span> <span class="nav-text">标记-清除算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#标记-复制算法"><span class="nav-number">4.1.</span> <span class="nav-text">标记-复制算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#标记-整理算法"><span class="nav-number">4.2.</span> <span class="nav-text">标记-整理算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分代收集算法"><span class="nav-number">4.3.</span> <span class="nav-text">分代收集算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考"><span class="nav-number">4.4.</span> <span class="nav-text">参考</span></a></li></ol></li></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对象是否可以回收判定"><span class="nav-number">2.</span> <span class="nav-text">对象是否可以回收判定</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#引用计数算法"><span class="nav-number">2.1.</span> <span class="nav-text">引用计数算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#可达性分析算法"><span class="nav-number">2.2.</span> <span class="nav-text">可达性分析算法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#垃圾回收算法"><span class="nav-number">3.</span> <span class="nav-text">垃圾回收算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#标记-清除算法"><span class="nav-number">3.1.</span> <span class="nav-text">标记-清除算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#标记-复制算法"><span class="nav-number">3.2.</span> <span class="nav-text">标记-复制算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#标记-整理算法"><span class="nav-number">3.3.</span> <span class="nav-text">标记-整理算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分代收集算法"><span class="nav-number">3.4.</span> <span class="nav-text">分代收集算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么分代"><span class="nav-number">3.5.</span> <span class="nav-text">为什么分代</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#新生代"><span class="nav-number">3.6.</span> <span class="nav-text">新生代</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">4.</span> <span class="nav-text">参考</span></a></li></ol></div>
             
 
           </div>
