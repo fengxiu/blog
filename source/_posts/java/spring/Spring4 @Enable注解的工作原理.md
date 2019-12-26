@@ -8,8 +8,6 @@ categories:
 abbrlink: 5d34b48
 date: 2019-03-11 06:46:00
 ---
-# Spring4 @Enable*注解的工作原理
-
 ## 概述
 
 1. 简介
