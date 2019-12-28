@@ -84,12 +84,12 @@ theme: next
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
-deploy:
-  type:
+# deploy:
+#   type:
 ### 本地搜索
 algolia:
-  applicationID: "M7AL4KWF0X"
-  apiKey: "73569ff3a8c4f5268d189b68828ee13e"
+  applicationID: "EANI2G9IBU"
+  apiKey: "a8cc8f9e5688c20770172ad27daeead0"
   indexName: "blog"
   chunkSize: 5000
 admin:
