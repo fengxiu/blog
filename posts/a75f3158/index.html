@@ -90,8 +90,8 @@
     tabs: true,
     motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     algolia: {
-      applicationID: 'M7AL4KWF0X',
-      apiKey: '73569ff3a8c4f5268d189b68828ee13e',
+      applicationID: 'EANI2G9IBU',
+      apiKey: 'a8cc8f9e5688c20770172ad27daeead0',
       indexName: 'blog',
       hits: {"per_page":10},
       labels: {"input_placeholder":"请输入搜索内容","hits_empty":"没有发现和 ${query} 有关的内容","hits_stats":"在 ${time} ms 内发现 ${hits} "}
@@ -106,14 +106,14 @@
 
 
   <meta name="description" content="并发队列-无界非阻塞队列ConcurrentLinkedQueue原理探究性能考虑在轻度到中度的争用情况下，非阻塞算法的性能会超越阻塞算法，因为 CAS 的多数时间都在第一次尝试时就成功，而发生争用时的开销也不涉及线程挂起和上下文切换，只多了几个循环迭代。没有争用的 CAS 要比没有争用的锁便宜得多（这句话肯定是真的，因为没有争用的锁涉及 CAS 加上额外的处理），而争用的 CAS 比争用的锁获取">
-<meta name="keywords" content="juc,并发队列">
+<meta name="keywords" content="并发队列,juc">
 <meta property="og:type" content="article">
 <meta property="og:title" content="并发队列-无界非阻塞队列ConcurrentLinkedQueue原理探究">
 <meta property="og:url" content="http://fengxiu.club/posts/a75f3158/index.html">
 <meta property="og:site_name" content="枫秀">
 <meta property="og:description" content="并发队列-无界非阻塞队列ConcurrentLinkedQueue原理探究性能考虑在轻度到中度的争用情况下，非阻塞算法的性能会超越阻塞算法，因为 CAS 的多数时间都在第一次尝试时就成功，而发生争用时的开销也不涉及线程挂起和上下文切换，只多了几个循环迭代。没有争用的 CAS 要比没有争用的锁便宜得多（这句话肯定是真的，因为没有争用的锁涉及 CAS 加上额外的处理），而争用的 CAS 比争用的锁获取">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-09-05T03:22:05.893Z">
+<meta property="og:updated_time" content="2019-12-28T04:51:49.880Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="并发队列-无界非阻塞队列ConcurrentLinkedQueue原理探究">
 <meta name="twitter:description" content="并发队列-无界非阻塞队列ConcurrentLinkedQueue原理探究性能考虑在轻度到中度的争用情况下，非阻塞算法的性能会超越阻塞算法，因为 CAS 的多数时间都在第一次尝试时就成功，而发生争用时的开销也不涉及线程挂起和上下文切换，只多了几个循环迭代。没有争用的 CAS 要比没有争用的锁便宜得多（这句话肯定是真的，因为没有争用的锁涉及 CAS 加上额外的处理），而争用的 CAS 比争用的锁获取">
@@ -577,6 +577,13 @@
     <li class="popular-posts-item">
       
       
+      <div class="popular-posts-title"><a href="/posts/3dcf748d/" rel="bookmark">并发队列-无界阻塞队列PriorityBlockingQueue原理研究</a></div>
+      
+    </li>
+  
+    <li class="popular-posts-item">
+      
+      
       <div class="popular-posts-title"><a href="/posts/5fda9009/" rel="bookmark">并发队列-有界阻塞队列ArrayBlockingQueue原理探究</a></div>
       
     </li>
@@ -598,14 +605,7 @@
     <li class="popular-posts-item">
       
       
-      <div class="popular-posts-title"><a href="/posts/3dcf748d/" rel="bookmark">并发队列-无界阻塞队列PriorityBlockingQueue原理研究</a></div>
-      
-    </li>
-  
-    <li class="popular-posts-item">
-      
-      
-      <div class="popular-posts-title"><a href="/posts/3f86c9f8/" rel="bookmark">java多线程系列-JUC线程池之05 ScheduledThreadPoolExecutor</a></div>
+      <div class="popular-posts-title"><a href="/posts/b9225de/" rel="bookmark">并发队列-无界阻塞延时队列DelayQueue原理研究</a></div>
       
     </li>
   
@@ -630,7 +630,7 @@
   <p><span>本文标题:</span><a href="/posts/a75f3158/">并发队列-无界非阻塞队列ConcurrentLinkedQueue原理探究</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 fengxiu 的个人博客">fengxiu</a></p>
   <p><span>发布时间:</span>2019年03月06日 - 19:07</p>
-  <p><span>最后更新:</span>2019年09月05日 - 11:22</p>
+  <p><span>最后更新:</span>2019年12月28日 - 12:51</p>
   <p><span>原始链接:</span>
      <a href="/posts/a75f3158/" title="并发队列-无界非阻塞队列ConcurrentLinkedQueue原理探究">并发队列-无界非阻塞队列ConcurrentLinkedQueue原理探究</a>
     <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://fengxiu.club/posts/a75f3158/" aria-label="复制成功！"></i></span>
@@ -667,9 +667,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/juc/" rel="tag">  <i class="fa fa-tag"></i> juc</a>
-          
             <a href="/tags/并发队列/" rel="tag">  <i class="fa fa-tag"></i> 并发队列</a>
+          
+            <a href="/tags/juc/" rel="tag">  <i class="fa fa-tag"></i> juc</a>
           
         </div>
       
@@ -773,7 +773,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">173</span>
+                    <span class="site-state-item-count">176</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -874,7 +874,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">44</span>
+                      
+                    
+                    <span class="site-state-item-count">45</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -1180,7 +1182,7 @@
       总阅读时长
     </span>
     
-    <span title="站点阅读时长">21:02</span>
+    <span title="站点阅读时长">21:05</span>
   
 </div>
 
