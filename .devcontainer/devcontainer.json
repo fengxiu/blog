@@ -4,7 +4,7 @@
     "service": "hexo",
     // Use 'appPort' to create a container with published ports. If the port isn't working, be sure
     // your server accepts connections from all interfaces (0.0.0.0 or '*'), not just localhost.
-    "appPort":"4000",
+    "appPort": "4000",
     // "settings": {
     //     "terminal.integrated.shell.linux": "/bin/bash"
     // },
@@ -12,7 +12,7 @@
     // "postCreateCommand": "yarn install",
     // Add the IDs of extensions you want installed when the container is created in the array below.
     "extensions": [
-       "james-yu.latex-workshop"
+        //    "james-yu.latex-workshop"
     ],
     "workspaceFolder": "/root/hexo"
 }
