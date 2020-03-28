@@ -113,7 +113,7 @@
 <meta property="og:site_name" content="枫秀">
 <meta property="og:description" content="概述Java对象引用体系除了强引用之外，出于对性能、可扩展性等方面考虑还特地实现了4种其他引用：SoftReference、WeakReference、PhantomReference、FinalReference，本文主要想讲的是FinalReference，因为当使用内存分析工具，比如zprofiler、mat等，分析一些oom的heap时，经常能看到 java.lang.ref.Finali">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-12-28T05:18:49.416Z">
+<meta property="og:updated_time" content="2020-03-28T12:41:10.351Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JVM源码分析之 FinalReference 完全解读">
 <meta name="twitter:description" content="概述Java对象引用体系除了强引用之外，出于对性能、可扩展性等方面考虑还特地实现了4种其他引用：SoftReference、WeakReference、PhantomReference、FinalReference，本文主要想讲的是FinalReference，因为当使用内存分析工具，比如zprofiler、mat等，分析一些oom的heap时，经常能看到 java.lang.ref.Finali">
@@ -761,7 +761,7 @@ protected void finalize() throws IOException {
   <p><span>本文标题:</span><a href="/posts/53c15109/">JVM源码分析之 FinalReference 完全解读</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 fengxiu 的个人博客">fengxiu</a></p>
   <p><span>发布时间:</span>2019年01月04日 - 10:24</p>
-  <p><span>最后更新:</span>2019年12月28日 - 13:18</p>
+  <p><span>最后更新:</span>2020年03月28日 - 20:41</p>
   <p><span>原始链接:</span>
      <a href="/posts/53c15109/" title="JVM源码分析之 FinalReference 完全解读">JVM源码分析之 FinalReference 完全解读</a>
     <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://fengxiu.club/posts/53c15109/" aria-label="复制成功！"></i></span>
@@ -902,7 +902,7 @@ protected void finalize() throws IOException {
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">176</span>
+                    <span class="site-state-item-count">177</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1288,7 +1288,7 @@ protected void finalize() throws IOException {
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; 2017 – <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; 2017 – <span itemprop="copyrightYear">2020</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>
@@ -1311,7 +1311,7 @@ protected void finalize() throws IOException {
       总阅读时长
     </span>
     
-    <span title="站点阅读时长">21:05</span>
+    <span title="站点阅读时长">21:06</span>
   
 </div>
 

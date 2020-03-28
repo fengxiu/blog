@@ -600,6 +600,248 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://fengxiu.club/posts/dd2855a/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="fengxiu">
+      <meta itemprop="description" content="java,spring,分布式,数据库">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="枫秀">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/posts/dd2855a/" class="post-title-link" itemprop="url">latex之列表使用</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-12-26 09:08:11" itemprop="dateCreated datePublished" datetime="2019-12-26T09:08:11+08:00">2019-12-26</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/tex/" itemprop="url" rel="index"><span itemprop="name">tex</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/posts/dd2855a/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="posts/dd2855a/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/posts/dd2855a/" class="leancloud_visitors" data-flag-title="latex之列表使用">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数：</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">928</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">1 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>列表就是将所要表达的内容分为若干个条目并按一定的顺序排列，达到简明、直观的效果。在论文的写作中会经常使用到列表。LaTeX 中常见的列表环境有 enumerate、itemize 和 description。这三种列表环境的主要区别是列表项标签的不同：</p>
+<h3 id="enumerate是有序列表"><a href="#enumerate是有序列表" class="headerlink" title="enumerate是有序列表"></a>enumerate是有序列表</h3><pre><code class="tex">\begin{enumerate}
+    \item This is the first item
+    \item This is the second item
+    \item This is the third item
+\end{enumerate}
+</code></pre>
+<p>生成效果如下<br><img src="/source/images/181604170295824.png" alt="181604170295824"></p>
+<h3 id="itemize-是无序列表"><a href="#itemize-是无序列表" class="headerlink" title="itemize 是无序列表"></a>itemize 是无序列表</h3><pre><code class="tex">\begin{itemize}
+    \item This is the first item
+    \item This is the second item
+    \item This is the third item
+\end{itemize}
+</code></pre>
+<p>生成效果如下<br><img src="/source/images/181609245917394.png" alt="181609245917394"></p>
+<h3 id="description-是解说列表，可以指定标签"><a href="#description-是解说列表，可以指定标签" class="headerlink" title="description 是解说列表，可以指定标签"></a>description 是解说列表，可以指定标签</h3><pre><code class="tex">%\usepackage{pifont}
+\begin{description}
+    \item[\ding{47}] This is the first item
+    \item[\ding{47}] This is the second item
+    \item[\ding{47}] This is the third item
+\end{description}
+</code></pre>
+<p>生成效果如下<br><img src="/source/images/181615512164578.png" alt="181615512164578"></p>
+<p>列表环境也可以互相嵌套，默认情况下不同层级的标签不同，以体现分级层次。<br>同时为也可以定制列表前的序号，可以使用 A，a，I，i，1 作为可选项产生 \Alph，\alph，\Roman，\roman，\arabic的效果。比如下面这个例子:</p>
+<pre><code class="tex">\begin{enumerate}[label=\Alph*)]
+    \item  ddd
+    \item ddd
+\end{enumerate}
+
+</code></pre>
+<p>效果如下<br><img src="/source/images/Xnip2020-02-15_21-30-18.jpg" alt="Xnip2020-02-15_21-30-18"></p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ol>
+<li><a href="https://blog.csdn.net/robert_chen1988/article/details/83179571" target="_blank" rel="noopener">latex 使用 enumitem 宏包调整 enumerate 或 itemize 的上下左右缩进间距</a></li>
+<li><a href="https://www.cnblogs.com/ahhylau/p/4586167.html" target="_blank" rel="noopener">定义不同的格式</a></li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+      
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://fengxiu.club/posts/31404d27/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2519,223 +2761,6 @@ proxy.request();
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://fengxiu.club/posts/ad8701ca/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="fengxiu">
-      <meta itemprop="description" content="java,spring,分布式,数据库">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="枫秀">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/posts/ad8701ca/" class="post-title-link" itemprop="url">Zuul2：Netflix通往异步、非阻塞系统之路</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-07-12 16:02:36" itemprop="dateCreated datePublished" datetime="2019-07-12T16:02:36+08:00">2019-07-12</time>
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/架构/" itemprop="url" rel="index"><span itemprop="name">架构</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/posts/ad8701ca/#comments" itemprop="discussionUrl">
-                
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="posts/ad8701ca/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-             <span id="/posts/ad8701ca/" class="leancloud_visitors" data-flag-title="Zuul2：Netflix通往异步、非阻塞系统之路">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数：</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">3.8k</span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">3 分钟</span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>本文翻译自<a href="https://medium.com/netflix-techblog/zuul-2-the-netflix-journey-to-asynchronous-non-blocking-systems-45947377fb5c" target="_blank" rel="noopener">Zuul 2 : The Netflix Journey to Asynchronous, Non-Blocking Systems</a></p>
-<p>前面在学习Spring Cloud中，了解到zuul这个应用网关，但是由于当时看到的是zuul1，使用的Servlet方式实现，所以整体性能很低。不过Netflix实际上升级了zuul，使用了netty来改造网关，也就是现在网关底层使用的是异步非阻塞的架构。下面我们就一起来拜读下他们的改造路程。<br>翻译如下：</p>
-<p>我们最近对我们的云网关Zuul进行了重大架构改造。Zuul2的功能与其前任相同 - 作为Netflix服务器基础设施的前门，处理来自全球所有Netflix用户的流量。它还可以路由请求，支持开发人员的测试和调试，深入了解我们的整体服务运行状况，保护Netflix免受攻击，并在AWS区域出现问题时将流量引导至其他云区域。 Zuul 2和原始版本之间的主要架构差异是Zuul2使用Netty在异步和非阻塞框架上运行。在过去几个月投入生产之后，主要优势（我们在开始这项工作时所期望的一个优势）是它为设备和Web浏览器提供了在Netflix规模上持久连接回Netflix的能力。拥有超过8300万会员，每个会员都有多个连接设备，这是一个巨大的挑战。通过与我们的云基础架构保持持久连接，我们可以实现许多有趣的产品功能和创新，减少整体设备请求，提高设备性能，更好地理解和调试客户体验。</p>
-<p>我们还希望Zuul2在延迟，吞吐量和成本方面提供弹性优势和性能改进。但正如您将在本文中了解到的那样，我们的愿望与结果不同。<br>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/posts/ad8701ca/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </p></div>
-
-    
-
-    
-    
-    
-
-      
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2785,7 +2810,7 @@ proxy.request();
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">176</span>
+                    <span class="site-state-item-count">177</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -3154,7 +3179,7 @@ proxy.request();
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; 2017 – <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; 2017 – <span itemprop="copyrightYear">2020</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>
@@ -3177,7 +3202,7 @@ proxy.request();
       总阅读时长
     </span>
     
-    <span title="站点阅读时长">21:05</span>
+    <span title="站点阅读时长">21:06</span>
   
 </div>
 
