@@ -113,7 +113,7 @@
 <meta property="og:site_name" content="枫秀">
 <meta property="og:description" content="在动态代理和CGLIB的支持下，Spring AOP框架的实现经过了两代。虽然划分成了两代，但是底层实现机制确一直没变。唯一改变的，是各种AOP概念实体的表现形式以及Spring AOP的使用方式。下面，我们先从第一代的Spring AOP相关的概念实体说起。 Spring AOP中的Joinpoint之前我们已经提到，AOP的JoinPoint可以有许多种类型，如构造方法调用、字段的设置及获取、">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-03-28T12:41:10.355Z">
+<meta property="og:updated_time" content="2020-03-31T12:27:39.904Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="spring AOP一世">
 <meta name="twitter:description" content="在动态代理和CGLIB的支持下，Spring AOP框架的实现经过了两代。虽然划分成了两代，但是底层实现机制确一直没变。唯一改变的，是各种AOP概念实体的表现形式以及Spring AOP的使用方式。下面，我们先从第一代的Spring AOP相关的概念实体说起。 Spring AOP中的Joinpoint之前我们已经提到，AOP的JoinPoint可以有许多种类型，如构造方法调用、字段的设置及获取、">
@@ -567,9 +567,10 @@
 <ol>
 <li>前面已经提到过，Spring AOP要提供一个简单而强大的AOP框架，并不想因大二全使得框架本身过于臃肿。</li>
 <li>对于属性级别的Joinpoint，如果提供这个级别的拦截支持，那么就破坏了面向对象的封装，而且，完全可以通过对setter和getter方法的拦截达到同样的目的。</li>
-<li>如果应用需求非常特殊，完全超出了Spring AOP提供的那80%的需求支持，不放求助于现有的其他AOP实现产品。目前看来，AspectJ是Java平台对AOP铲平支持最完整的产品。因此，Spring AOP也提供了对AspectJ的支持。</li>
+<li>如果应用需求非常特殊，完全超出了Spring AOP提供的那80%的需求支持，不放求助于现有的其他AOP实现产品。目前看来，AspectJ是Java平台对AOP铲平支持最完整的产品。因此，Spring AOP也提供了对AspectJ的支持。<a id="more"></a>
+<h2 id="Spring-AOP中的Pointcut"><a href="#Spring-AOP中的Pointcut" class="headerlink" title="Spring AOP中的Pointcut"></a>Spring AOP中的Pointcut</h2></li>
 </ol>
-<h2 id="Spring-AOP中的Pointcut"><a href="#Spring-AOP中的Pointcut" class="headerlink" title="Spring AOP中的Pointcut"></a>Spring AOP中的Pointcut</h2><p>Spring中以接口定义<code>org.springframework.aop.Pointcut</code>作为其AOP框架中所有Pointcut的最顶层抽象，该接口定义了俩个方法用来帮助捕捉系统中的相应Joinpoint，并提供一个TruePoint，默认会对系统中的所有对象，以及对象上所有被支持的Joinpoint进行匹配。接口具体定义如下：</p>
+<p>Spring中以接口定义<code>org.springframework.aop.Pointcut</code>作为其AOP框架中所有Pointcut的最顶层抽象，该接口定义了俩个方法用来帮助捕捉系统中的相应Joinpoint，并提供一个TruePoint，默认会对系统中的所有对象，以及对象上所有被支持的Joinpoint进行匹配。接口具体定义如下：</p>
 <pre><code class="java">public interface Pointcut {
     Pointcut TRUE = TruePointcut.INSTANCE;
 
@@ -633,7 +634,7 @@ public interface ClassFilter {
   <p><span>本文标题:</span><a href="/posts/a8dee644/">spring AOP一世</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 fengxiu 的个人博客">fengxiu</a></p>
   <p><span>发布时间:</span>2019年07月14日 - 18:04</p>
-  <p><span>最后更新:</span>2020年03月28日 - 20:41</p>
+  <p><span>最后更新:</span>2020年03月31日 - 20:27</p>
   <p><span>原始链接:</span>
      <a href="/posts/a8dee644/" title="spring AOP一世">spring AOP一世</a>
     <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://fengxiu.club/posts/a8dee644/" aria-label="复制成功！"></i></span>
@@ -768,7 +769,7 @@ public interface ClassFilter {
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">177</span>
+                    <span class="site-state-item-count">178</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

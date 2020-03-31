@@ -379,6 +379,244 @@
   <section id="posts" class="posts-expand">
     
       
+      
+           
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://fengxiu.club/posts/dd7bc7f8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="fengxiu">
+      <meta itemprop="description" content="java,spring,分布式,数据库">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="枫秀">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/posts/dd7bc7f8/" class="post-title-link" itemprop="url">Java 集合系列05之 LinkedList源码解析和使用示例</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-03-04 14:20:00" itemprop="dateCreated datePublished" datetime="2019-03-04T14:20:00+08:00">2019-03-04</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/collections/" itemprop="url" rel="index"><span itemprop="name">collections</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/posts/dd7bc7f8/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="posts/dd7bc7f8/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/posts/dd7bc7f8/" class="leancloud_visitors" data-flag-title="Java 集合系列05之 LinkedList源码解析和使用示例">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数：</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">30k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">27 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="LinkedList介绍"><a href="#LinkedList介绍" class="headerlink" title="LinkedList介绍"></a>LinkedList介绍</h2><p>LinkedList的类图如下<br><img src="/source/images/Xnip2019-09-04_10-35-20.jpg" alt="Xnip2019-09-04_10-35-20"></p>
+<p>LinkedList是一个继承于AbstractSequentialList双向链表。他可以被当做栈、队列和双端队列来使用。</p>
+<p>LinkedList实现了List接口，能对他进行队列操作。这个是因为。在LinkedList的默认实现时就是按照队列实现的。</p>
+<p>LinkedList是实现Deque接口，能对他进行双端队列操作。<br><strong>LinkedList不是线程安全的集合</strong></p>
+<p>LinkedList包含三个比较重要的成员：<strong>first、last和size</strong></p>
+<ul>
+<li><p>first指向双向链表的表头。</p>
+</li>
+<li><p>last指向双向链表的尾部。</p>
+</li>
+<li><p>size是双向链表中节点的个数。</p>
+</li>
+</ul>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/posts/dd7bc7f8/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+      
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+      
+    
+      
+      
+           
 
   
 
@@ -602,8 +840,11 @@
   </article>
 
 
+      
     
       
+      
+           
 
   
 
@@ -829,8 +1070,11 @@
   </article>
 
 
+      
     
       
+      
+           
 
   
 
@@ -1058,8 +1302,11 @@
   </article>
 
 
+      
     
       
+      
+           
 
   
 
@@ -1283,8 +1530,11 @@
   </article>
 
 
+      
     
       
+      
+           
 
   
 
@@ -1520,8 +1770,11 @@
   </article>
 
 
+      
     
       
+      
+           
 
   
 
@@ -1760,8 +2013,11 @@ public @interface BatchExec {
   </article>
 
 
+      
     
       
+      
+           
 
   
 
@@ -1989,8 +2245,11 @@ public @interface BatchExec {
   </article>
 
 
+      
     
       
+      
+           
 
   
 
@@ -2220,8 +2479,11 @@ public @interface BatchExec {
   </article>
 
 
+      
     
       
+      
+           
 
   
 
@@ -2451,242 +2713,7 @@ public @interface BatchExec {
   </article>
 
 
-    
       
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://fengxiu.club/posts/a375b501/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="fengxiu">
-      <meta itemprop="description" content="java,spring,分布式,数据库">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="枫秀">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/posts/a375b501/" class="post-title-link" itemprop="url">spring源码解析之 29实例化bean总结</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-01-15 06:54:00" itemprop="dateCreated datePublished" datetime="2019-01-15T06:54:00+08:00">2019-01-15</time>
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/spring/" itemprop="url" rel="index"><span itemprop="name">spring</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/spring/spring-源码分析/" itemprop="url" rel="index"><span itemprop="name">spring 源码分析</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/spring/spring-源码分析/SpringCore/" itemprop="url" rel="index"><span itemprop="name">SpringCore</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/posts/a375b501/#comments" itemprop="discussionUrl">
-                
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="posts/a375b501/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-             <span id="/posts/a375b501/" class="leancloud_visitors" data-flag-title="spring源码解析之 29实例化bean总结">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数：</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-            <div class="post-symbolscount">
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">本文字数：</span>
-                
-                <span title="本文字数">25k</span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">23 分钟</span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>在 Spring bean 解析篇深入分析了一个配置文件经历了哪些过程转变成了 BeanDefinition，但是这个 BeanDefinition 并不是我们真正想要的想要的 bean，因为它还仅仅只是承载了我们需要的目标 bean 的信息，从 BeanDefinition 到我们需要的目标还需要一个漫长的 bean 的初始化阶段，在Spring bean 实例化阶段已经详细分析了初始化 bean 的过程，所以这里做一个概括性的总结。</p>
-<p>bean 的初始化节点由第一次调用 <code>getBean()</code>(显式或者隐式)开启，所以我们从这个方法开始。<br>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/posts/a375b501/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </p></div>
-
-    
-
-    
-    
-    
-
-      
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
     
   </section>
 
@@ -2737,7 +2764,7 @@ public @interface BatchExec {
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">177</span>
+                    <span class="site-state-item-count">178</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
