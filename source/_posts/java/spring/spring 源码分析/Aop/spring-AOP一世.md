@@ -21,7 +21,7 @@ tags:
 1. 前面已经提到过，Spring AOP要提供一个简单而强大的AOP框架，并不想因大二全使得框架本身过于臃肿。
 2. 对于属性级别的Joinpoint，如果提供这个级别的拦截支持，那么就破坏了面向对象的封装，而且，完全可以通过对setter和getter方法的拦截达到同样的目的。
 3. 如果应用需求非常特殊，完全超出了Spring AOP提供的那80%的需求支持，不放求助于现有的其他AOP实现产品。目前看来，AspectJ是Java平台对AOP铲平支持最完整的产品。因此，Spring AOP也提供了对AspectJ的支持。
-
+<!-- more -->
 ## Spring AOP中的Pointcut
 
 Spring中以接口定义`org.springframework.aop.Pointcut`作为其AOP框架中所有Pointcut的最顶层抽象，该接口定义了俩个方法用来帮助捕捉系统中的相应Joinpoint，并提供一个TruePoint，默认会对系统中的所有对象，以及对象上所有被支持的Joinpoint进行匹配。接口具体定义如下：

@@ -11,7 +11,10 @@
 {% block content %}
   <section id="posts" class="posts-expand">
     {% for post in page.posts %}
-      {{ post_template.render(post, true) }}
+      {##添加notshow 用于某些文章占时不显示 #}
+      {% if post.notshow != true %}
+           {{ post_template.render(post, true) }}
+      {% endif %}
     {% endfor %}
   </section>
 
