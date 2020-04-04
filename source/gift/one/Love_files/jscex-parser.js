@@ -215,7 +215,7 @@ function is_letter(ch) {
 
 function is_digit(ch) {
         ch = ch.charCodeAt(0);
-        return ch >= 48 && ch <= 57; //XXX: find out if "UnicodeDigit" means something else than 0..9
+        return ch >= 48 && ch <= 57; 
 };
 
 function is_alphanumeric_char(ch) {

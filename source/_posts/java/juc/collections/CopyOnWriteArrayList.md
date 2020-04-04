@@ -186,8 +186,8 @@ import java.util.concurrent.CountDownLatch;
  */
 public class CopyOnWriteArrayListTest {
 
-    // TODO: list是ArrayList对象时，程序会出错。
-//    private static List<String> list = new ArrayList<String>();
+    // list是ArrayList对象时，程序会出错。 
+    // private static List<String> list = new ArrayList<String>();
     private static List<String> list = new CopyOnWriteArrayList<>();
 
     private static CountDownLatch latch = new CountDownLatch(2);
