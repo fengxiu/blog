@@ -46,7 +46,9 @@ jobs:
         ## generate
         hexo generate
         ## algolia 用于搜索
-        export HEXO_ALGOLIA_INDEXING_KEY=$ALGOLIA_KEY && hexo algolia
+        ## export HEXO_ALGOLIA_INDEXING_KEY=$ALGOLIA_KEY && hexo algolia
+        hexo deploy
+        
         
         
         
