@@ -1,0 +1,1843 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+  
+  
+    
+    
+      
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link rel="stylesheet" href="/lib/pace/themes/blue/pace-theme-minimal.css">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: true,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: 'EANI2G9IBU',
+      apiKey: 'a8cc8f9e5688c20770172ad27daeead0',
+      indexName: 'blog',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"请输入搜索内容","hits_empty":"没有发现和 ${query} 有关的内容","hits_stats":"在 ${time} ms 内发现 ${hits} "}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="概述ClassLoader翻译过来就是类加载器，普通的java开发者其实用到的不多，但对于某些框架开发者来说却非常常见。理解ClassLoader的加载机制，也有利于我们编写出更高效的代码。ClassLoader的具体作用就是将class文件加载到jvm虚拟机中去，程序就可以正确运行了。但是，jvm启动的时候，并不会一次性加载所有的class文件，而是根据需要去动态加载。想想也是的，一次性加载那么">
+<meta name="keywords" content="类加载">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入理解ClassLoader及双亲委派模型">
+<meta property="og:url" content="http://fengxiu.club/posts/2735b28b/index.html">
+<meta property="og:site_name" content="枫秀">
+<meta property="og:description" content="概述ClassLoader翻译过来就是类加载器，普通的java开发者其实用到的不多，但对于某些框架开发者来说却非常常见。理解ClassLoader的加载机制，也有利于我们编写出更高效的代码。ClassLoader的具体作用就是将class文件加载到jvm虚拟机中去，程序就可以正确运行了。但是，jvm启动的时候，并不会一次性加载所有的class文件，而是根据需要去动态加载。想想也是的，一次性加载那么">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://fengxiu.club/images/20170211112754197.png">
+<meta property="og:image" content="http://fengxiu.club/images/20180428160028362.png">
+<meta property="og:image" content="http://fengxiu.club/images/Xnip2019-07-11_22-42-28.jpg">
+<meta property="og:image" content="http://fengxiu.club/images/20170620232230987.png">
+<meta property="og:image" content="http://fengxiu.club/images/20170621075845201.png">
+<meta property="og:updated_time" content="2020-07-18T07:37:51.696Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="深入理解ClassLoader及双亲委派模型">
+<meta name="twitter:description" content="概述ClassLoader翻译过来就是类加载器，普通的java开发者其实用到的不多，但对于某些框架开发者来说却非常常见。理解ClassLoader的加载机制，也有利于我们编写出更高效的代码。ClassLoader的具体作用就是将class文件加载到jvm虚拟机中去，程序就可以正确运行了。但是，jvm启动的时候，并不会一次性加载所有的class文件，而是根据需要去动态加载。想想也是的，一次性加载那么">
+<meta name="twitter:image" content="http://fengxiu.club/images/20170211112754197.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://fengxiu.club/posts/2735b28b/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>深入理解ClassLoader及双亲委派模型 | 枫秀</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">枫秀</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-时间轴">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/timeAxis/" rel="section"><i class="menu-item-icon fa fa-fw fa-calendar"></i> <br>时间轴</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+  
+  
+
+  
+
+  <a href="https://github.com/fengxiu" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewbox="0 0 250 250" style="fill: #222; color: #fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a>
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+    <div class="reading-progress-bar"></div>
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://fengxiu.club/posts/2735b28b/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="fengxiu">
+      <meta itemprop="description" content="java,spring,分布式,数据库">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="枫秀">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">深入理解ClassLoader及双亲委派模型
+
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-07-09 21:07:04" itemprop="dateCreated datePublished" datetime="2019-07-09T21:07:04+08:00">2019-07-09</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/jvm/" itemprop="url" rel="index"><span itemprop="name">jvm</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java/jvm/类加载/" itemprop="url" rel="index"><span itemprop="name">类加载</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/posts/2735b28b/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="posts/2735b28b/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/posts/2735b28b/" class="leancloud_visitors" data-flag-title="深入理解ClassLoader及双亲委派模型">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数：</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">14k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">13 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>ClassLoader翻译过来就是类加载器，普通的java开发者其实用到的不多，但对于某些框架开发者来说却非常常见。理解ClassLoader的加载机制，也有利于我们编写出更高效的代码。ClassLoader的具体作用就是将class文件加载到jvm虚拟机中去，程序就可以正确运行了。但是，jvm启动的时候，并不会一次性加载所有的class文件，而是根据需要去动态加载。想想也是的，一次性加载那么多jar包那么多class，那内存不崩溃。本文的目的也是学习ClassLoader这种加载机制。</p>
+<p>因此本篇文章将会详细分析类加载整个过程，以及java代码中已存在的各种类加载器。这样我们便可以做到不仅仅在概念上，也可以能够简单的运用。<br><a id="more"></a></p>
+<h2 id="类加载器简单介绍"><a href="#类加载器简单介绍" class="headerlink" title="类加载器简单介绍"></a>类加载器简单介绍</h2><p>下图是类加载器的继承体系图：<br><img src="/images/20170211112754197.png" alt="类加载图"></p>
+<p>从上面可以看到平常我们经常听到到的扩展类加载器，系统类加载器等等，下面会对上面的类加载器一一进行介绍。</p>
+<h3 id="启动（Bootstrap）类加载器"><a href="#启动（Bootstrap）类加载器" class="headerlink" title="启动（Bootstrap）类加载器"></a>启动（Bootstrap）类加载器</h3><p>启动类加载器主要加载的是JVM自身需要的类，这个类加载使用C++语言实现的，是虚拟机自身的一部分，它负责将<strong>JAVA_HOME/lib</strong>路径下的核心类库或<code>-Xbootclasspath</code>参数指定的路径下的jar包加载到内存中，注意的一点是，由于虚拟机是按照文件名识别加载jar包的，如rt.jar，如果文件名不被虚拟机识别，即使把jar包丢到lib目录下也是没有作用的(出于安全考虑，Bootstrap启动类加载器只加载包名为java、javax、sun等开头的类)。</p>
+<h3 id="扩展（Extension）类加载器"><a href="#扩展（Extension）类加载器" class="headerlink" title="扩展（Extension）类加载器"></a>扩展（Extension）类加载器</h3><p>扩展类加载器是指Sun公司(已被Oracle收购)实现<code>sun.misc.Launcher$ExtClassLoader</code>类，由Java语言实现的，是Launcher的静态内部类，它负责加载<strong>JAVA_HOME/lib/ext</strong>目录下或者由系统变量<code>-Djava.ext.dir</code>指定位路径中的类库，开发者可以直接使用标准扩展类加载器。</p>
+<h3 id="系统（System）类加载器"><a href="#系统（System）类加载器" class="headerlink" title="系统（System）类加载器"></a>系统（System）类加载器</h3><p>也称应用程序加载器是指 Sun公司实现的<code>sun.misc.Launcher$AppClassLoader</code>。它负责加载系统类路径<code>java -classpath</code>或<code>-Djava.class.path</code>指定路径下的类库，也就是我们经常用到的classpath路径，开发者可以直接使用系统类加载器，一般情况下该类加载是程序中默认的类加载器，通过<code>ClassLoader#getSystemClassLoader()</code>方法可以获取到该类加载器。</p>
+<p>在Java的日常应用程序开发中，类的加载几乎是由上述3种类加载器相互配合执行的，在必要时，我们还可以自定义类加载器，需要注意的是，Java虚拟机对class文件采用的是按需加载的方式，也就是说当需要使用该类时才会将它的class文件加载到内存生成class对象，而且加载某个类的class文件时，Java虚拟机采用的是双亲委派模式即把请求交由父类处理，它一种任务委派模式，下面我们进一步了解它。</p>
+<h2 id="双亲委派模型"><a href="#双亲委派模型" class="headerlink" title="双亲委派模型"></a>双亲委派模型</h2><p>双亲委派模式要求除了顶层的启动类加载器外，其余的类加载器都应当有自己的父类加载器，<strong>请注意双亲委派模式中的父子关系并非通常所说的类继承关系，而是采用组合关系来复用父类加载器的相关代码</strong>，类加载器间的关系如下：<br><img src="/images/20180428160028362.png" alt="20180428160028362"><br>双亲委派模式是在Java 1.2后引入的，其工作原理的是，如果一个类加载器收到了类加载请求，它并不会自己先去加载，而是把这个请求委托给父类的加载器去执行，如果父类加载器还存在父类加载器，则进一步向上委托，依次递归，请求最终将到达顶层的启动类加载器，如果父类加载器可以完成类加载任务，就成功返回，倘若父类加载器无法完成此加载任务，子加载器才会尝试自己去加载，这就是双亲委派模式，即每个儿子都很懒，每次有活就丢给父亲去干，直到父亲说这件事我也干不了时，儿子自己想办法去完成，这不就是传说中的实力坑爹啊？那么采用这种模式有啥用呢?</p>
+<h3 id="双亲委派模式优势"><a href="#双亲委派模式优势" class="headerlink" title="双亲委派模式优势"></a>双亲委派模式优势</h3><p>采用双亲委派模式的是好处是Java类随着它的类加载器一起具备了一种带有优先级的层次关系，通过这种层级关可以避免类的重复加载，当父亲已经加载了该类时，就没有必要子ClassLoader再加载一次。其次是考虑到安全因素，java核心api中定义类型不会被随意替换，假设通过网络传递一个名为java.lang.Integer的类，通过双亲委托模式传递到启动类加载器，而启动类加载器在核心Java API发现这个名字的类，发现该类已被加载，并不会重新加载网络传递的过来的java.lang.Integer，而直接返回已加载过的Integer.class，这样便可以防止核心API库被随意篡改。可能你会想，如果我们在classpath路径下自定义一个名为java.lang.SingleInterge类(该类是胡编的)呢？该类并不存在java.lang中，经过双亲委托模式，传递到启动类加载器中，由于父类加载器路径下并没有该类，所以不会加载，将反向委托给子类加载器加载，最终会通过系统类加载器加载该类。但是这样做是不允许，因为java.lang是核心API包，需要访问权限，强制加载将会报出异常。<br>比如下面在java.lang包下自定义的一个类。</p>
+<pre><code class="java">/**************************************
+ *
+ *      Author : zhangke
+ *      Date   : 2019-07-11 22:27
+ *      Desc   : 验证能否通过默认类加载器加载
+ *              自定义的java.lang下面的类
+ *
+ ***************************************/
+public class MyString {
+    private int age = 0;
+
+    public static void main(String[] args) {
+        MyString myString = new MyString();
+        System.out.println(myString.age);
+    }
+}
+</code></pre>
+<p>运行上面的代码，将会抛出异常：</p>
+<pre><code class="java">Error: A JNI error has occurred, please check your installation and try again
+Exception in thread &quot;main&quot; java.lang.SecurityException: Prohibited package name: java.lang
+</code></pre>
+<h2 id="类加载源码分析"><a href="#类加载源码分析" class="headerlink" title="类加载源码分析"></a>类加载源码分析</h2><p>前面已经将类加载的基本信息进行了介绍，下面开始详细分析java中关于类加载的几个类，主要的类继承关系图如下：<br><img src="/images/Xnip2019-07-11_22-42-28.jpg" alt="类加载继承体系图"><br>由于ClassLoader中函数众多，这里我们只关注我们比较常用的一些函数。</p>
+<h3 id="ClassLoader"><a href="#ClassLoader" class="headerlink" title="ClassLoader"></a>ClassLoader</h3><p>这个类是Java代码中实现类加载的根类，定义了类加载中需要使用的函数，下面就具体看看。</p>
+<h4 id="loadClass-String"><a href="#loadClass-String" class="headerlink" title="loadClass(String)"></a>loadClass(String)</h4><p>该方法加载指定名称（包括包名）的二进制类型，该方法在JDK1.2之后不再建议用户重写但用户可以直接调用该方法，loadClass()方法是ClassLoader类自己实现的，该方法中的逻辑就是双亲委派模式的实现，其源码如下，loadClass(String name, boolean resolve)是一个重载方法，resolve参数代表是否生成class对象的同时进行解析相关操作。</p>
+<pre><code class="java">
+protected Class&lt;?&gt; loadClass(String name, boolean resolve)
+      throws ClassNotFoundException
+  {
+      synchronized (getClassLoadingLock(name)) {
+          // 先从缓存查找该class对象，找到就不用重新加载
+          Class&lt;?&gt; c = findLoadedClass(name);
+          if (c == null) {
+              long t0 = System.nanoTime();
+              try {
+                  if (parent != null) {
+                      //如果找不到，则委托给父类加载器去加载
+                      c = parent.loadClass(name, false);
+                  } else {
+                  //如果没有父类，则委托给启动加载器去加载
+                      c = findBootstrapClassOrNull(name);
+                  }
+              } catch (ClassNotFoundException e) {
+                  // ClassNotFoundException thrown if class not found
+                  // from the non-null parent class loader
+              }
+
+              if (c == null) {
+                  // If still not found, then invoke findClass in order
+                  // 如果都没有找到，则通过自定义实现的findClass去查找并加载
+                  c = findClass(name);
+
+                  // this is the defining class loader; record the stats
+                  sun.misc.PerfCounter.getParentDelegationTime().addTime(t1 - t0);
+                  sun.misc.PerfCounter.getFindClassTime().addElapsedTimeFrom(t1);
+                  sun.misc.PerfCounter.getFindClasses().increment();
+              }
+          }
+          if (resolve) {//是否需要在加载时进行解析
+              resolveClass(c);
+          }
+          return c;
+      }
+  }
+</code></pre>
+<h4 id="findClass-String"><a href="#findClass-String" class="headerlink" title="findClass(String)"></a>findClass(String)</h4><p>在JDK1.2之前，在自定义类加载时，总会去继承ClassLoader类并重写loadClass方法，从而实现自定义的类加载类，但是在JDK1.2之后已不再建议用户去覆盖loadClass()方法，而是建议把自定义的类加载逻辑写在findClass()方法中，从前面的分析可知，findClass()方法是在loadClass()方法中被调用的，当loadClass()方法中父加载器加载失败后，则会调用自己的findClass()方法来完成类加载，这样就可以保证自定义的类加载器也符合双亲委托模式。需要注意的是ClassLoader类中并没有实现findClass()方法的具体代码逻辑，取而代之的是抛出ClassNotFoundException异常，同时应该知道的是findClass方法通常是和defineClass方法一起使用的(稍后会分析)，ClassLoader类中findClass()方法源码如下：</p>
+<pre><code class="java">//直接抛出异常
+protected Class&lt;?&gt; findClass(String name) throws ClassNotFoundException {
+        throw new ClassNotFoundException(name);
+}
+</code></pre>
+<h4 id="defineClass-byte-b-int-off-int-len"><a href="#defineClass-byte-b-int-off-int-len" class="headerlink" title="defineClass(byte[] b, int off, int len)"></a>defineClass(byte[] b, int off, int len)</h4><p>defineClass()方法是用来将byte字节流解析成JVM能够识别的Class对象(ClassLoader中已实现该方法逻辑)，通过这个方法不仅能够通过class文件实例化class对象，也可以通过其他方式实例化class对象，如通过网络接收一个类的字节码，然后转换为byte字节流创建对应的Class对象，defineClass()方法通常与findClass()方法一起使用，一般情况下，在自定义类加载器时，会直接覆盖ClassLoader的findClass()方法并编写加载规则，取得要加载类的字节码后转换成流，然后调用defineClass()方法生成类的Class对象，简单例子如下：</p>
+<pre><code class="java">protected Class&lt;?&gt; findClass(String name) throws ClassNotFoundException {
+      // 获取类的字节数组
+      byte[] classData = getClassData(name);  
+      if (classData == null) {
+          throw new ClassNotFoundException();
+      } else {
+         //使用defineClass生成class对象
+          return defineClass(name, classData, 0, classData.length);
+      }
+  }
+</code></pre>
+<p>需要注意的是，如果直接调用defineClass()方法生成类的Class对象，这个类的Class对象并没有解析(也可以理解为链接阶段，毕竟解析是链接的最后一步)，其解析操作需要等待初始化阶段进行。</p>
+<h4 id="resolveClass-Class≺-≻-c"><a href="#resolveClass-Class≺-≻-c" class="headerlink" title="resolveClass(Class≺?≻ c)"></a>resolveClass(Class≺?≻ c)</h4><p>使用该方法可以完成类的Class对象创建也同时被解析。前面我们说链接阶段主要是对字节码进行验证，为类变量分配内存并设置初始值同时将字节码文件中的符号引用转换为直接引用。上述4个方法是ClassLoader类中的比较重要的方法，也是我们可能会经常用到的方法。</p>
+<h3 id="SercureClassLoader"><a href="#SercureClassLoader" class="headerlink" title="SercureClassLoader"></a>SercureClassLoader</h3><p>上述4个方法是ClassLoader类中的比较重要的方法，也是我们可能会经常用到的方法。接着下面是SercureClassLoader扩展了ClassLoader，新增了几个与使用相关的代码源(对代码源的位置及其证书的验证)和权限定义类验证(主要指对class源码的访问权限)的方法，一般我们不会直接跟这个类打交道。</p>
+<h3 id="UrlClassLoader"><a href="#UrlClassLoader" class="headerlink" title="UrlClassLoader"></a>UrlClassLoader</h3><p>在我们代码中，更多是URLClassLoader类关联，前面说过，ClassLoader是一个抽象类，很多方法是空的没有实现，比如findClass()、findResource()等。而URLClassLoader这个实现类为这些方法提供了具体的实现，并新增了URLClassPath类协助取得Class字节码流等功能，在编写自定义类加载器时，如果没有太过于复杂的需求，可以直接继承URLClassLoader类，这样就可以避免自己去编写findClass()方法及其获取字节码流的方式，使自定义类加载器编写更加简洁，下面是URLClassLoader的类图(利用IDEA生成的类图)</p>
+<p><img src="/images/20170620232230987.png" alt="20170620232230987"></p>
+<p>从类图结构看出URLClassLoader中存在一个URLClassPath类，通过这个类就可以找到要加载的字节码流，也就是说URLClassPath类负责找到要加载的字节码，再读取成字节流，最后通过defineClass()方法创建类的Class对象。<br>从URLClassLoader类的结构图可以看出其构造方法都有一个必须传递的参数URL[]，该参数的元素是代表字节码文件的路径,换句话说在创建URLClassLoader对象时必须要指定这个类加载器的到那个目录下找class文件。同时也应该注意URL[]也是URLClassPath类的必传参数，在创建URLClassPath对象时，会根据传递过来的URL数组中的路径判断是文件还是jar包，然后根据不同的路径创建FileLoader或者JarLoader或默认Loader类去加载相应路径下的class文件，而当JVM调用findClass()方法时，就由这3个加载器中的一个将class文件的字节码流加载到内存中，最后利用字节码流创建类的class对象。<strong>请记住，如果我们在定义类加载器时选择继承ClassLoader类而非URLClassLoader，必须手动编写findclass()方法的加载逻辑以及获取字节码流的逻辑。</strong></p>
+<h3 id="ExtClassLoader-和-AppClassLoader"><a href="#ExtClassLoader-和-AppClassLoader" class="headerlink" title="ExtClassLoader 和 AppClassLoader"></a>ExtClassLoader 和 AppClassLoader</h3><p>了解完URLClassLoader后接着看看剩余的两个类加载器，即拓展类加载器ExtClassLoader和系统类加载器AppClassLoader，这两个类都继承自URLClassLoader，是<code>sun.misc.Launcher</code>的静态内部类。<code>sun.misc.Launcher</code>主要被系统用于启动主应用程序，ExtClassLoader和AppClassLoader都是由sun.misc.Launcher创建的，如果想要，详细了解Launcher这个类，可以看这篇文章<a href="/posts/ddfbbdfc">main函数启动流程</a>其类主要类结构如下：<br><img src="/images/20170621075845201.png" alt="20170621075845201"><br>它们间的关系正如前面所阐述的那样，同时我们发现ExtClassLoader并没有重写loadClass()方法，这足矣说明其遵循双亲委派模式，而AppClassLoader重载了loadCass()方法，但最终调用的还是父类loadClass()方法，因此依然遵守双亲委派模式，重载方法源码如下：</p>
+<pre><code class="java"> /**
+  * Override loadClass 方法，新增包权限检测功能
+  */
+public Class loadClass(String name, boolean resolve)
+     throws ClassNotFoundException{
+
+     int i = name.lastIndexOf(&#39;.&#39;);
+     if (i != -1) {
+         SecurityManager sm = System.getSecurityManager();
+         if (sm != null) {
+             sm.checkPackageAccess(name.substring(0, i));
+         }
+     }
+     //依然调用父类的方法
+     return (super.loadClass(name, resolve));
+}
+</code></pre>
+<p>其实无论是ExtClassLoader还是AppClassLoader都继承URLClassLoader类，因此它们都遵守双亲委托模型，这点是毋庸置疑的。到此我们对ClassLoader、URLClassLoader、ExtClassLoader、AppClassLoader以及Launcher类间的关系有了比较清晰的了解，同时对一些主要的方法也有一定的认识，这里并没有对这些类的源码进行详细的分析，毕竟没有那个必要，因为我们主要弄得类与类间的关系和常用的方法同时搞清楚双亲委托模式的实现过程，为编写自定义类加载器做铺垫就足够了。前面出现了很多父类加载器的说法，但每个类加载器的父类到底是谁，一直没有阐明，下面我们就通过代码验证的方式来阐明这答案。</p>
+<h2 id="类加载器间的关系"><a href="#类加载器间的关系" class="headerlink" title="类加载器间的关系"></a>类加载器间的关系</h2><p>我们进一步了解类加载器间的关系(并非指继承关系)，主要可以分为以下4点</p>
+<ol>
+<li><p>启动类加载器，由C++实现，没有父类。</p>
+</li>
+<li><p>拓展类加载器(ExtClassLoader)，由Java语言实现，父类加载器为null</p>
+</li>
+<li><p>系统类加载器(AppClassLoader)，由Java语言实现，父类加载器为ExtClassLoader</p>
+</li>
+<li><p>自定义类加载器，父类加载器肯定为AppClassLoader。</p>
+</li>
+</ol>
+<p>下面我们通过程序来验证上述阐述的观点</p>
+<pre><code class="java">
+//自定义ClassLoader，完整代码稍后分析
+class FileClassLoader extends  ClassLoader{
+
+    private String rootDir;
+
+    public FileClassLoader(String rootDir) {
+        this.rootDir = rootDir;
+    }
+    // 编写获取类的字节码并创建class对象的逻辑
+    @Override
+    protected Class&lt;?&gt; findClass(String name) throws ClassNotFoundException {
+       //...省略逻辑代码
+    }
+    //编写读取字节流的方法
+    private byte[] getClassData(String className) {
+        // 读取类文件的字节
+        //省略代码....
+    }
+}
+
+public class ClassLoaderTest {
+
+    public static void main(String[] args) throws ClassNotFoundException {
+
+              FileClassLoader loader1 = new FileClassLoader(rootDir);
+              System.out.println(&quot;自定义类加载器的父加载器: &quot;+loader1.getParent());
+              System.out.println(&quot;系统默认的AppClassLoader: &quot;+ClassLoader.getSystemClassLoader());
+              System.out.println(&quot;AppClassLoader的父类加载器: &quot;+ClassLoader.getSystemClassLoader().getParent());
+              System.out.println(&quot;ExtClassLoader的父类加载器: &quot;+ClassLoader.getSystemClassLoader().getParent().getParent());
+            /**
+            输出结果:
+                自定义类加载器的父加载器: sun.misc.Launcher$AppClassLoader@29453f44
+                系统默认的AppClassLoader: sun.misc.Launcher$AppClassLoader@29453f44
+                AppClassLoader的父类加载器: sun.misc.Launcher$ExtClassLoader@6f94fa3e
+                ExtClassLoader的父类加载器: null
+            */
+
+    }
+}
+</code></pre>
+<p>代码中，我们自定义了一个FileClassLoader，这里我们继承了ClassLoader而非URLClassLoader,因此需要自己编写findClass()方法逻辑以及加载字节码的逻辑，关于自定义类加载器我们稍后会分析，这里仅需要知道FileClassLoader是自定义加载器即可，接着在main方法中，通过ClassLoader.getSystemClassLoader()获取到系统默认类加载器，通过获取其父类加载器及其父父类加载器，同时还获取了自定义类加载器的父类加载器,最终输出结果正如我们所预料的，AppClassLoader的父类加载器为ExtClassLoader，而ExtClassLoader没有父类加载器。显然ExtClassLoader的父类为null，而AppClassLoader的父加载器为ExtClassLoader，所有自定义的类加载器其父加载器只会是AppClassLoader，注意这里所指的父类并不是Java继承关系中的那种父子关系,而是组合的关系。</p>
+<h2 id="编写自己的类加载器"><a href="#编写自己的类加载器" class="headerlink" title="编写自己的类加载器"></a>编写自己的类加载器</h2><p><strong>class文件的显示加载与隐式加载的概念</strong><br>所谓class文件的显示加载与隐式加载的方式是指JVM加载class文件到内存的方式，显示加载指的是在代码中通过调用ClassLoader加载class对象，如直接使用<code>Class.forName(name)</code>或<code>this.getClass().getClassLoader().loadClass()</code>加载class对象。<br>而隐式加载则是不直接在代码中调用ClassLoader的方法加载class对象，而是通过虚拟机自动加载到内存中，如在加载某个类的class文件时，该类的class文件中引用了另外一个类的对象，此时额外引用的类将通过JVM自动加载到内存中。在日常开发以上两种方式一般会混合使用，这里我们知道有这么回事即可。</p>
+<p>通过前面的分析可知，实现自定义类加载器需要继承ClassLoader或者URLClassLoader，继承ClassLoader则需要自己重写findClass()方法并编写加载逻辑，继承URLClassLoader则可以省去编写findClass()方法以及class文件加载转换成字节码流的代码。那么编写自定义类加载器的意义何在呢？</p>
+<ol>
+<li><p>当class文件不在ClassPath路径下，默认系统类加载器无法找到该class文件，在这种情况下我们需要实现一个自定义的ClassLoader来加载特定路径下的class文件生成class对象。</p>
+</li>
+<li><p>当一个class文件是通过网络传输并且可能会进行相应的加密操作时，需要先对class文件进行相应的解密后再加载到JVM内存中，这种情况下也需要编写自定义的ClassLoader并实现相应的逻辑。</p>
+</li>
+<li><p>当需要实现热部署功能时(一个class文件通过不同的类加载器产生不同class对象从而实现热部署功能)，需要实现自定义ClassLoader的逻辑。</p>
+</li>
+</ol>
+<h3 id="自定义File类加载器"><a href="#自定义File类加载器" class="headerlink" title="自定义File类加载器"></a>自定义File类加载器</h3><p>这里我们继承URLClassLoader实现自定义的特定路径下的文件类加载器并加载编译后DemoObj.class，代码如下：</p>
+<pre><code class="java">
+ class FileUrlClassLoader extends URLClassLoader {
+
+    public FileUrlClassLoader(URL[] urls, ClassLoader parent) {
+        super(urls, parent);
+    }
+
+    public FileUrlClassLoader(URL[] urls) {
+        super(urls);
+    }
+
+    public FileUrlClassLoader(URL[] urls, ClassLoader parent, URLStreamHandlerFactory factory) {
+        super(urls, parent, factory);
+    }
+
+
+    public static void main(String[] args) throws ClassNotFoundException, MalformedURLException {
+        String rootDir=&quot;替换成自己的路径&quot;;
+        //创建自定义文件类加载器
+        File file = new File(rootDir);
+        //File to URI
+        URI uri=file.toURI();
+        URL[] urls={uri.toURL()};
+
+        FileUrlClassLoader loader = new FileUrlClassLoader(urls);
+
+        try {
+            //加载指定的class文件
+            Class&lt;?&gt; object1=loader.loadClass(&quot;DemoObj&quot;);
+            System.out.println(object1.newInstance().toString());
+            //输出结果:I am DemoObj
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+</code></pre>
+<p>非常简洁除了需要重写构造器外无需编写findClass()方法及其class文件的字节流转换逻辑。</p>
+<h3 id="热部署类加载器"><a href="#热部署类加载器" class="headerlink" title="热部署类加载器"></a>热部署类加载器</h3><p>所谓的热部署就是利用同一个class文件不同的类加载器在内存创建出两个不同的class对象关于这点，可以看这篇文章<a href="/posts/53cf9979">类加载之SystemDictionary:系统字典</a>。由于JVM在加载类之前会检测请求的类是否已加载过(即在loadClass()方法中调用findLoadedClass()方法)，如果被加载过，则直接从缓存获取，不会重新加载。注意同一个类加载器的实例和同一个class文件只能被加载器一次，多次加载将报错，因此我们实现的热部署必须让同一个class文件可以根据不同的类加载器重复加载，以实现所谓的热部署。实际上前面的实现的FileUrlClassLoader已具备这个功能，但前提是直接调用findClass()方法，而不是调用loadClass()方法，因为ClassLoader中loadClass()方法体中调用findLoadedClass()方法进行了检测是否已被加载，因此我们直接调用findClass()方法就可以绕过这个问题，当然也可以重新loadClass方法，但强烈不建议这么干。利用FileClassLoader类测试代码如下：</p>
+<pre><code class="java">
+ public static void main(String[] args) throws ClassNotFoundException {
+        String rootDir=&quot;自定义文件夹&quot;;
+       //创建自定义文件类加载器
+        File file = new File(rootDir);
+        //File to URI
+        URI uri=file.toURI();
+        URL[] urls={uri.toURL()};
+        //创建自定义文件类加载器
+        FileUrlClassLoader loader1 =  new FileUrlClassLoader(urls);
+        FileUrlClassLoader loader2 =  new FileUrlClassLoader(urls);
+
+        try {
+            //加载指定的class文件,调用loadClass()
+            Class&lt;?&gt; object1=loader.loadClass(&quot;DemoObj&quot;);
+            Class&lt;?&gt; object2=loader2.loadClass(&quot;DemoObj&quot;);
+
+            System.out.println(&quot;loadClass-&gt;obj1:&quot;+object1.hashCode());
+            System.out.println(&quot;loadClass-&gt;obj2:&quot;+object2.hashCode());
+
+            //加载指定的class文件,直接调用findClass(),绕过检测机制，创建不同class对象。
+            Class&lt;?&gt; object3=loader.findClass(&quot;DemoObj&quot;);
+            Class&lt;?&gt; object4=loader2.findClass(&quot;DemoObj&quot;);
+
+            System.out.println(&quot;loadClass-&gt;obj3:&quot;+object3.hashCode());
+            System.out.println(&quot;loadClass-&gt;obj4:&quot;+object4.hashCode());
+
+            /**
+             * 输出结果:
+             *  loadClass-&gt;obj1:644117698
+             *  loadClass-&gt;obj2:644117698
+             *  findClass-&gt;obj3:723074861
+             *  findClass-&gt;obj4:895328852
+             */
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+</code></pre>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
+<li><a href="https://blog.csdn.net/javazejian/article/details/73413292" target="_blank" rel="noopener">深入理解Java类加载器(ClassLoader)</a></li>
+<li><a href="https://blog.csdn.net/how_interesting/article/details/80091472" target="_blank" rel="noopener">URLClassLoader详解</a></li>
+</ol>
+
+      
+    </div>
+
+    
+      
+
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+  
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="/posts/a064c1bf/" rel="bookmark">类加载实战</a></div>
+      
+    </li>
+  
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="/posts/53cf9979/" rel="bookmark">类加载之SystemDictionary:系统字典</a></div>
+      
+    </li>
+  
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="/posts/338e9034/" rel="bookmark">系统、当前、线程上下文类加载概念介绍？</a></div>
+      
+    </li>
+  
+  </ul>
+
+
+    
+
+    
+    
+    
+
+      
+        <div>
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/posts/2735b28b/">深入理解ClassLoader及双亲委派模型</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 fengxiu 的个人博客">fengxiu</a></p>
+  <p><span>发布时间:</span>2019年07月09日 - 21:07</p>
+  <p><span>最后更新:</span>2020年07月18日 - 15:37</p>
+  <p><span>原始链接:</span>
+     <a href="/posts/2735b28b/" title="深入理解ClassLoader及双亲委派模型">深入理解ClassLoader及双亲委派模型</a>
+    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://fengxiu.club/posts/2735b28b/" aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+    $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+    });
+    });  
+</script>
+
+        </div>
+      
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/类加载/" rel="tag">  <i class="fa fa-tag"></i> 类加载</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/posts/fac740ad/" rel="next" title="java多线程系列-JUC线程池之06 CompletionService">
+                <i class="fa fa-chevron-left"></i> java多线程系列-JUC线程池之06 CompletionService
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/posts/f1fb5bce/" rel="prev" title="aop基本概念">
+                aop基本概念 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="fengxiu">
+            
+              <p class="site-author-name" itemprop="name">fengxiu</p>
+              <p class="site-description motion-element" itemprop="description">java,spring,分布式,数据库</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">178</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">45</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">92</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/fengxiutianya" title="GitHub &rarr; https://github.com/fengxiutianya" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i></a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                  
+                    
+                  
+                  <a href="mailto:398757724@qq.com" title="E-Mail &rarr; mailto:398757724@qq.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i></a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类加载器简单介绍"><span class="nav-number">2.</span> <span class="nav-text">类加载器简单介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#启动（Bootstrap）类加载器"><span class="nav-number">2.1.</span> <span class="nav-text">启动（Bootstrap）类加载器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#扩展（Extension）类加载器"><span class="nav-number">2.2.</span> <span class="nav-text">扩展（Extension）类加载器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#系统（System）类加载器"><span class="nav-number">2.3.</span> <span class="nav-text">系统（System）类加载器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#双亲委派模型"><span class="nav-number">3.</span> <span class="nav-text">双亲委派模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#双亲委派模式优势"><span class="nav-number">3.1.</span> <span class="nav-text">双亲委派模式优势</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类加载源码分析"><span class="nav-number">4.</span> <span class="nav-text">类加载源码分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ClassLoader"><span class="nav-number">4.1.</span> <span class="nav-text">ClassLoader</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#loadClass-String"><span class="nav-number">4.1.1.</span> <span class="nav-text">loadClass(String)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#findClass-String"><span class="nav-number">4.1.2.</span> <span class="nav-text">findClass(String)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#defineClass-byte-b-int-off-int-len"><span class="nav-number">4.1.3.</span> <span class="nav-text">defineClass(byte[] b, int off, int len)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#resolveClass-Class≺-≻-c"><span class="nav-number">4.1.4.</span> <span class="nav-text">resolveClass(Class≺?≻ c)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SercureClassLoader"><span class="nav-number">4.2.</span> <span class="nav-text">SercureClassLoader</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UrlClassLoader"><span class="nav-number">4.3.</span> <span class="nav-text">UrlClassLoader</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ExtClassLoader-和-AppClassLoader"><span class="nav-number">4.4.</span> <span class="nav-text">ExtClassLoader 和 AppClassLoader</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类加载器间的关系"><span class="nav-number">5.</span> <span class="nav-text">类加载器间的关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编写自己的类加载器"><span class="nav-number">6.</span> <span class="nav-text">编写自己的类加载器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#自定义File类加载器"><span class="nav-number">6.1.</span> <span class="nav-text">自定义File类加载器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#热部署类加载器"><span class="nav-number">6.2.</span> <span class="nav-text">热部署类加载器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">7.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2017 – <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">fengxiu</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      
+      网站总字数
+    </span>
+    
+    <span title="站点总字数">1.4m</span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      
+      总阅读时长
+    </span>
+    
+    <span title="站点阅读时长">21:06</span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+    
+    
+  
+  <script color="0,0,255" opacity="0.5" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script src="//cdn.jsdelivr.net/npm/jquery@2/dist/jquery.min.js"></script>
+
+  
+  <script src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/reading_progress/reading_progress.js"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=6.7.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=6.7.0"></script>
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://fengxiu.disqus.com/count.js" async></script>
+  
+
+  
+    <script>
+      var disqus_config = function () {
+        this.page.url = "http://fengxiu.club/posts/2735b28b/";
+        this.page.identifier = "posts/2735b28b/";
+        this.page.title = '深入理解ClassLoader及双亲委派模型';
+        };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://fengxiu.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        $(function () {
+          var offsetTop = $('#comments').offset().top - $(window).height();
+          if (offsetTop <= 0) {
+            // load directly when there's no a scrollbar
+            loadComments();
+          } else {
+            $(window).on('scroll.disqus_scroll', function () {
+              // offsetTop may changes because of manually resizing browser window or lazy loading images.
+              var offsetTop = $('#comments').offset().top - $(window).height();
+              var scrollTop = $(window).scrollTop();
+
+              // pre-load comments a bit? (margin or anything else)
+              if (offsetTop - scrollTop < 60) {
+                $(window).off('.disqus_scroll');
+                loadComments();
+              }
+            });
+          }
+        });
+      
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=6.7.0"></script>
+
+
+
+  
+
+  
+  <script>
+    
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function ({ results }) {
+          if (results.length > 0) {
+            var counter = results[0];
+            
+            Counter('put', `/classes/Counter/${counter.objectId}`, JSON.stringify({ time: { "__op":"Increment", "amount":1 } }))
+            
+            .done(function () {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(counter.time + 1);
+            })
+            
+            .fail(function ({ responseJSON }) {
+                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
+            })
+          } else {
+            
+              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1}))
+                .done(function () {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(1);
+                })
+                .fail(function () {
+                  console.log('Failed to create');
+                });
+            
+          }
+        })
+      .fail(function ({ responseJSON }) {
+        console.log('LeanCloud Counter Error:' + responseJSON.code + " " + responseJSON.error);
+      });
+    }
+    
+
+    $(function() {
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + "8rM8gj5HTRTSqBQdFyePed86-gzGzoHsz")
+        .done(function ({ api_server }) {
+          var Counter = function (method, url, data) {
+            return $.ajax({
+              method: method,
+              url: `https://${api_server}/1.1${url}`,
+              headers: {
+                'X-LC-Id': "8rM8gj5HTRTSqBQdFyePed86-gzGzoHsz",
+                'X-LC-Key': "f92qb0ijeNp2joqk3ld6IlRW",
+                'Content-Type': 'application/json',
+              },
+              data: data,
+            });
+          };
+          
+          addCount(Counter);
+          
+        })
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #333;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #eee;
+      background-image: linear-gradient(#fcfcfc, #eee);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+  <script>
+    $('.highlight').each(function (i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap');
+      $(e).after($wrap);
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function (e) {
+        var code = $(this).parent().find('.code').find('.line').map(function (i, e) {
+          return $(e).text();
+        }).toArray().join('\n');
+        var ta = document.createElement('textarea');
+        var range = document.createRange(); //For Chrome
+        var sel = window.getSelection(); //For Chrome
+        var yPosition = window.pageYOffset || document.documentElement.scrollTop;
+        ta.style.top = yPosition + 'px'; //Prevent page scroll
+        ta.style.position = 'absolute';
+        ta.style.opacity = '0';
+        ta.value = code;
+        ta.textContent = code; //For FireFox
+        ta.contentEditable = true;
+        ta.readOnly = false;
+        document.body.appendChild(ta);
+        range.selectNode(ta);
+        sel.removeAllRanges();
+        sel.addRange(range);
+        ta.setSelectionRange(0, code.length);
+        var result = document.execCommand('copy');
+        
+          if (result) $(this).text('复制成功');
+          else $(this).text('复制失败');
+        
+        ta.blur(); //For iOS
+        $(this).blur();
+      })).on('mouseleave', function (e) {
+        var $b = $(this).find('.copy-btn');
+        setTimeout(function () {
+          $b.text('复制');
+        }, 300);
+      }).append(e);
+    })
+  </script>
+
+
+  
+
+  
+  
+  
+
+  <link rel="stylesheet" href="/lib/prettify/themes/atelier-estuary-light.min.css" type="text/css">
+
+
+<script src="/lib/prettify/prettify.js"></script>
+<script type="text/javascript">
+
+$(window).load(function(){
+
+  // 设置prettify
+  $('pre').addClass('prettyprint linenums');
+   prettyPrint();
+ })
+</script>
+<style>
+pre {
+  white-space:pre;
+  white-space:pre-wrap;
+  word-break:break-all;
+  word-wrap:break-word;
+}
+</style>
+
+
+
+
+  
+  
+</body>
+</html>
