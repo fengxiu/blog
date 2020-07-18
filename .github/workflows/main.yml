@@ -47,7 +47,7 @@ jobs:
     # Use the output from the `deploy` step(use for test action)
     - name: Get the output
       run: |
-        export HEXO_ALGOLIA_INDEXING_KEY=$ALGOLIA_KEY && hexo algolia
+        export HEXO_ALGOLIA_INDEXING_KEY=${{ALGOLIA_KEY}} && hexo algolia
         
         
         
