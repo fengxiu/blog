@@ -87,7 +87,7 @@ theme: next
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repo: git@github.com:fengxiu/blog.git # 使用仓库的ssh地址
+  repo: git@github.com:fengxiu/blogpage.git # 使用仓库的ssh地址
   branch: gh-pages
 ### 本地搜索
 algolia:
