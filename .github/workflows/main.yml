@@ -24,7 +24,6 @@ jobs:
       uses: actions/setup-node@v1 # 配置脚本来自 https://github.com/actions/setup-node
       id: cache
       with:
-        path: node_modules
         node-version: "10.x"
     ## 安装依赖
     - name: Install Dependencies
