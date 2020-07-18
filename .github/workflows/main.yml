@@ -6,9 +6,8 @@ on:
   push:
     branches: 
       - master
-      - dev
   watch:
-    types: started
+    types: [started]
 # 任务
 jobs:
   build: # 一项叫做build的任务
