@@ -45,7 +45,7 @@ jobs:
     
     # 用于搜索
     - name: hexo index
-      run:  export HEXO_ALGOLIA_INDEXING_KEY=${{ HEXO_ALGOLIA_INDEXING_KEY }} && hexo algolia
+      run:  export HEXO_ALGOLIA_INDEXING_KEY=${{ secrets.HEXO_ALGOLIA_INDEXING_KEY }} && hexo algolia
         
         
         
