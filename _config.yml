@@ -85,8 +85,10 @@ theme: next
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
-# deploy:
-#   type:
+deploy:
+  type: git
+  repo: git@github.com:fengxiu/blog.git # 使用仓库的ssh地址
+  branch: gh-pages
 ### 本地搜索
 algolia:
   applicationID: "EANI2G9IBU"
