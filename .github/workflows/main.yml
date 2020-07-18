@@ -9,13 +9,13 @@ on:
       - dev
   watch:
     types: started
-    if: github.event.repository.owner.id == github.event.sender.id
 # 任务
 jobs:
   build: # 一项叫做build的任务
 
     runs-on: ubuntu-16.04 # 在最新版的Ubuntu系统下运行
-  
+    if: github.event.repository.owner.id == github.event.sender.id
+    
     steps:
     - name: Checkout # 将仓库内master分支的内容下载到工作目录
       uses: actions/checkout@v1 # 脚本来自 https://github.com/actions/checkout
