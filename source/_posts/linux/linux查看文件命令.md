@@ -1,3 +1,9 @@
+---
+categories:
+  - linux
+title: inux 查看文件命令
+abbrlink: b4c41cf9
+---
 # linux 查看文件命令
 
 当我们在进行调试的时候，经常需要查看各种日志文件，这时候熟悉linux下一些常用的查看文件命令是非常重要的，本篇文章专门整理了这些常用的命令，主要有下面几个。
@@ -26,7 +32,7 @@ tail [ -f ] [ -c Number | -n Number | -m Number | -b Number | -k Number ]  [-r] 
 8. File 指定操作的目标文件名称
 
 上述命令中，都涉及到number，假设不指定，默认显示10行。Number前面可使用正负号，表示该偏移从顶部还是从尾部开始计算。这个具体看下面例子。
-
+<!-- more -->
 ### tail命令使用例子
 
 1. tail -f filename
