@@ -88,7 +88,7 @@ theme: next
 deploy:
   type: git
   repo: git@github.com:fengxiu/blogpage.git # 使用仓库的ssh地址
-  branch: gh-pages
+  branch: master
 ### 本地搜索
 algolia:
   applicationID: "EANI2G9IBU"
