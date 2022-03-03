@@ -44,8 +44,8 @@ jobs:
         commit_msg: ${{ github.event.head_commit.message }}  # (or delete this input setting to use hexo default settings)
     
     # 用于搜索
-    - name: hexo index
-      run:  export HEXO_ALGOLIA_INDEXING_KEY=${{ secrets.HEXO_ALGOLIA_INDEXING_KEY }} && hexo algolia
+#     - name: hexo index
+#       run:  export HEXO_ALGOLIA_INDEXING_KEY=${{ secrets.HEXO_ALGOLIA_INDEXING_KEY }} && hexo algolia
         
         
         
