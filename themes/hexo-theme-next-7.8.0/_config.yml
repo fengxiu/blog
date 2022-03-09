@@ -573,14 +573,15 @@ comments:
   # Setting `true` means remembering the comment system selected by the visitor.
   storage: true
   # Lazyload all comment systems.
-  lazyload: false
+  lazyload: true
   # Modify texts or order for any navs, here are some examples.
   nav:
-    #disqus:
-    #  text: Load Disqus
-    #  order: -1
-    #gitalk:
-    #  order: -2
+    disqus:
+     text: "评论"
+     order: -1
+    valine:
+     text: "评论"
+     order: -2
 
 # Disqus
 disqus:
@@ -619,7 +620,7 @@ valine:
   appkey: kK371eQflnC992Bf2YhhdBjM # Your leancloud application appkey
   notify: false # Mail notifier
   verify: false # Verification code
-  placeholder: 提出大佬宝贵的建议 # Comment box placeholder
+  placeholder:  # Comment box placeholder
   avatar: mm # Gravatar style
   guest_info: nick,mail,link # Custom comment header
   pageSize: 10 # Pagination size
