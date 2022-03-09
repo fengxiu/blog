@@ -103,7 +103,9 @@ theme: hexo-theme-next-7.8.0
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
-  type: ''
+  type: git
+  repo: git@github.com:fengxiu/blogpage.git # 使用仓库的ssh地址
+  branch: master
 
 # next 主题配置
 
@@ -141,3 +143,4 @@ codeblock:
   copy_button:
     enable: false      # 增加复制按钮的开关
     show_result: false # 点击复制完后是否显示 复制成功 结果提示
+
