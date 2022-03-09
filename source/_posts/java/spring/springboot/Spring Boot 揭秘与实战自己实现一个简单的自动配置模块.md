@@ -7,6 +7,7 @@ categories:
   - spring
   - springboot
 abbrlink: 62b625fe
+author: zhangke
 date: 2019-03-11 06:46:00
 ---
 我们知道在使用springboot的时候，都会我们只需要在application.yml或者application.properties中指定配置参数就可以使用，那这是如何实现的，本篇文章就通过一个简单例子来解释springboot是如何实现自动配置。

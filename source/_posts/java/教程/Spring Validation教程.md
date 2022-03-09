@@ -4,6 +4,7 @@ categories:
   - 教程
 title: Spring Validation教程
 abbrlink: a61a4fcc
+date: 2020-09-13 17:22:53
 ---
 # Spring Validation教程
 

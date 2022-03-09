@@ -4,6 +4,7 @@ categories:
   - 基础
 title: 如何从Jar包中加载class
 abbrlink: 7e5ec6ca
+date: 2020-09-13 10:09:53
 ---
 
 # 如何从Jar包中加载class

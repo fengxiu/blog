@@ -4,6 +4,7 @@ categories:
   - 教程
 title: Hibernate Validator 学习与使用
 abbrlink: fc06a9d1
+date: 2020-09-28 10:09:53
 ---
 # Hibernate Validator 学习与使用
 

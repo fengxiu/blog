@@ -1,4 +1,0 @@
-admin:
-  deployCommand: ./upload.sh
-options:
-  overwriteImages: true

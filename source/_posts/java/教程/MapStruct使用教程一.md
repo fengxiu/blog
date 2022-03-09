@@ -4,6 +4,7 @@ categories:
   - 教程
 title: MapStruct使用教程一
 abbrlink: bb156b86
+date: 2020-09-13 10:09:53
 ---
 # MapStruct使用教程一
 

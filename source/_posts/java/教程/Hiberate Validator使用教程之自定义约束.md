@@ -4,6 +4,7 @@ categories:
   - 教程
 title: Hiberate Validator使用教程之自定义约束
 abbrlink: 76d29d45
+date: 2021-07-28 10:09:53
 ---
 
 # Hiberate Validator使用教程之自定义约束

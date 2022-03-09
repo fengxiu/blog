@@ -3,6 +3,7 @@ categories:
   - linux
 title: inux 查看文件命令
 abbrlink: b4c41cf9
+date: 2021-07-28 10:09:53
 ---
 # linux 查看文件命令
 
