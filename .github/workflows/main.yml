@@ -46,6 +46,7 @@ jobs:
         run: |
           hexo clean && hexo generate && hexo clean
           git add .  && git commit -m  "${{ github.event.head_commit.message }}-generate-abbrlink" 
+          git config user.name=fengxiu && user.email=fengxiu.zk@alibaba-inc.com
           git push origin master
     # Deploy hexo blog website.
       - name: Deploy
