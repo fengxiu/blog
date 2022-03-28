@@ -45,9 +45,11 @@ jobs:
       - name: generate
         run: |
           hexo clean && hexo generate && hexo clean
-          git add .  && git commit -m  "${{ github.event.head_commit.message }}-generate-abbrlink" 
-          git config --global user.name=fengxiu && git config --global user.email=fengxiu.zk@alibaba-inc.com
-          git push origin master
+          git config --global user.name 'fengxiu'
+          git config --global user.email 'fengxiu.zk@alibaba-inc.com'
+          git remote set-url origin https://x-access-token:${{ secrets.ACTION_DEPLOY_KEY }}@github.com/blog
+          git commit -m "${{ github.event.head_commit.message }}-generate-abbrlink" 
+          git push
     # Deploy hexo blog website.
       - name: Deploy
         id: deploy
