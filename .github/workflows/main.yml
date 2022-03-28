@@ -45,7 +45,7 @@ jobs:
       - name: generate
         run: |
           hexo clean && hexo generate && hexo clean
-          git add .  && git commit -m  ${{ github.event.head_commit.message }}-generate-abbrlink 
+          git add .  && git commit -m  "${{ github.event.head_commit.message }}-generate-abbrlink" 
           git push origin master
     # Deploy hexo blog website.
       - name: Deploy
