@@ -1,13 +1,14 @@
 ---
 title: 本地事务表 (An Acid Alternative)
+tags:
+  - 分布式
+  - 翻译
+categories:
+  - 分布式
+  - 翻译
+abbrlink: 6735
 date: 2022-03-28 19:19:51
 updated: 2022-03-28 19:19:51
-tags:
-    - 分布式
-    - 翻译
-categories:
-    - 分布式
-    - 翻译
 ---
 本文翻译自[Base: An Acid Alternative](https://queue.acm.org/detail.cfm?id=1394128)。
 
