@@ -1,12 +1,13 @@
 ---
 title: seata简单总结
+tags:
+  - 分布式事务
+  - seata
+categories:
+  - 分布式
+abbrlink: 59493
 date: 2022-03-28 14:34:49
 updated: 2022-03-28 14:34:49
-tags:
-    - 分布式事务
-    - seata
-categories:
-    - 分布式
 ---
 
 收集信息

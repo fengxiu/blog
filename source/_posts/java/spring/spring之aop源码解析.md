@@ -1,15 +1,16 @@
 ---
 title: spring之aop源码解析
+tags:
+  - spring
+  - aop
+  - 源码解析
+categories:
+  - spring
+  - aop
+  - 源码解析
+abbrlink: 1930
 date: 2022-03-14 17:58:06
 updated: 2022-03-14 17:58:06
-tags:   
-    - spring
-    - aop
-    - 源码解析
-categories:
-    - spring
-    - aop
-    - 源码解析
 ---
 
 本篇文章主要用来记录研究aop源码的过程。
