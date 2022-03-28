@@ -48,9 +48,9 @@ jobs:
           git config --global user.name 'fengxiu'
           git config --global user.email 'fengxiu.zk@alibaba-inc.com'
           git remote set-url --delete origin
-          git remote set-url origin https://x-access-token:${{ secrets.ACTION_DEPLOY_KEY }}@github.com/${{ github.repository }}
+          git remote set-url --add origin https://x-access-token:${{ secrets.ACTION_DEPLOY_KEY }}@github.com/${{ github.repository }}
           git commit -m "${{ github.event.head_commit.message }}-generate-abbrlink" 
-          git push
+          git push origin master
     # Deploy hexo blog website.
       - name: Deploy
         id: deploy
