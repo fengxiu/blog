@@ -1,13 +1,14 @@
 ---
 title: InnoDB行格式
+tags:
+  - mysql
+  - InnoDB
+categories:
+  - Mysql
+  - 读书笔记
+abbrlink: 43453
 date: 2022-04-01 14:25:20
 updated: 2022-04-01 14:25:39
-tags:
-    - mysql
-    - InnoDB
-categories:
-    - Mysql
-    - 读书笔记
 ---
 
 InnoDB是mysql数据库中最常用的存储引擎，对其底层进行研究有助于理解常见的一些数据库优化思路。本篇文章介绍一条记录是如何存储在磁盘上。
