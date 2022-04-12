@@ -1,13 +1,14 @@
 ---
 title: Mysql是如何执行查询
+tags:
+  - 索引
+categories:
+  - 数据库
+  - mysql
+  - 读书笔记
+abbrlink: 63372
 date: 2022-04-11 14:04:42
 updated: 2022-04-11 14:04:42
-tags:
-    - 索引
-categories:
-    - 数据库
-    - mysql
-    - 读书笔记
 ---
 本篇文章会按照以下思路来对mysql查询的原理进行讲解，首先讲解mysql是如何在单表上执行查询，在此基础上，讲解多表查询的原理，也就是join时，mysql是如何执行查询的，最后讲解mysql是如何计算查询的成本。
 
