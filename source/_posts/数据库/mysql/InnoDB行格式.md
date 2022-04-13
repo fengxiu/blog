@@ -1,10 +1,10 @@
 ---
-title: InnoDB行格式
+title: Innodb行格式
 tags:
   - mysql
-  - InnoDB
+  - Innodb
 categories:
-  - Mysql
+  - mysql
   - 读书笔记
 abbrlink: 43453
 date: 2022-04-01 14:25:20

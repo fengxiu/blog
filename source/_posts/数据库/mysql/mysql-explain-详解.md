@@ -5,48 +5,78 @@ categories:
   - mysql
 tags:
   - mysql
-  - explain
 abbrlink: dd6beb0a
 date: 2019-03-26 19:57:28
-copyright:
 ---
-今天在看《高性能mysql》这本书的时候，经常看到explain这个命令。所以希望总结一下这个命令的一些知识点。此外，我们为了能够在数据库运行过程中去优化，就会开启慢查询日志，而慢查询日志记录一些执行时间比较久的SQL语句，但是找出这些SQL语句并不意味着完事了。我们需要分析为什么这条sql执行的慢，也就是找出具体的原因。这时我们常常用到explain这个命令来查看一个这些SQL语句的执行计划，查看该SQL语句有没有使用上了索引，有没有做全表扫描，这都可以通过explain命令来查看。所以我们深入了解MySQL的基于开销的优化器，还可以获得很多可能被优化器考虑到的访问策略的细节，以及当运行SQL语句时哪种策略预计会被优化器采用。（QEP：sql生成一个执行计划query Execution plan）
-<!-- more -->
+在看《高性能mysql》这本书的时候，经常看到explain这个命令。所以希望总结一下这个命令的一些知识点。此外，我们为了能够在数据库运行过程中去优化，就会开启慢查询日志，而慢查询日志记录一些执行时间比较久的SQL语句，但是找出这些SQL语句并不意味着完事了。我们需要分析为什么这条sql执行的慢，也就是找出具体的原因。这时我们常常用到explain这个命令来查看一个这些SQL语句的执行计划，查看该SQL语句有没有使用上了索引，有没有做全表扫描，这都可以通过explain命令来查看。所以我们深入了解MySQL的基于开销的优化器，还可以获得很多可能被优化器考虑到的访问策略的细节，以及当运行SQL语句时哪种策略预计会被优化器采用。（QEP：sql生成一个执行计划query Execution plan）
+
 首先我们看看这个命令输出的具体格式，然后分别的解释其中每列代表的意思,如果执行这条sql语句`explain  select * from film`,输出的内容如下：
 
 | id  | select_type | table | type | possible_keys | key  | key_len | ref  | rows | filtered | Extras |
-|-----|-------------|-------|------|---------------|------|---------|------|------|----------|--------|
+| --- | ----------- | ----- | ---- | ------------- | ---- | ------- | ---- | ---- | -------- | ------ |
 | 1   | SIMPLE      | film  | ALL  | NULL          | NULL | NULL    | NULL | 1000 | 100      | NULL   |
 
-以上就是explain命令打印出来的信息，下面分别解释上面每一列的内容
-1. **id**
+以上就是explain命令打印出来的信息，先对这些字段进行一个简介，有个整体的感知，然后在分别详细介绍每一个字段
 
-   是SQL执行的顺序的标识,SQL从大到小的执行
-   1. id相同时，执行顺序由上至下
-   2. 如果是子查询，id的序号会递增，id值越大优先级越高，越先被执行
-   3. id如果相同，可以认为是一组，从上往下顺序执行；在所有组中，id值越大，优先级越高，越先执行
+| 列名          | 描述                                                             |
+| ------------- | ---------------------------------------------------------------- |
+| id            | 在一个大的查询语句中，每个SELECT关键字都对应一个唯一的id         |
+| select_type   | SELECT关键字对应的查询的类型                                     |
+| table         | 表名                                                             |
+| partitions    | 匹配的分区信息                                                   |
+| type          | 针对单表的访问方法                                               |
+| possible_keys | 可能使用到的索引                                                 |
+| key           | 实际使用的索引                                                   |
+| key_len       | 实时使用的索引长度                                               |
+| ref           | 当使用索引列等值查询时，与索引列进行等值匹配的对象信息           |
+| rows          | 预估的需要读取的记录条数                                         |
+| filtered      | 针对预估的需要读取的记录，经过搜索条件过滤后剩余记录条数的百分比 |
+| extra         | 一些额外信息                                                     |
 
-2. **select_type**
+<!-- more -->
+## id
 
-    表示了查询的类型, 它的常用取值有:
+是SQL执行的顺序的标识,SQL从大到小的执行
 
-    - **SIMPLE**：表示此查询不包含 UNION 查询或子查询,也就是简单的select语句。
-    - **PRIMARY** 表示此查询是最外层的查询，也就是查询中包含任何复杂的子部分，最外层的select被标记为此类型。
-    - **UNION**：表示此查询是 UNION 的第二或随后的查询
-    - **DEPENDENT UNION** ： UNION 中的第二个或后面的查询语句, 取决于外面的查询
-    - **UNION RESULT** UNION 的结果
-    - **SUBQUERY** 子查询中的第一个 SELECT
-    - **DEPENDENT SUBQUERY**: 子查询中的第一个 SELECT, 取决于外面的查询. 即子查询依赖于外层查询的结果.
-    - **DERIVED** ：派生表的SELECT, FROM子句的子查询。
-    - **UNCACHEABLE SUBQUERY**：一个子查询的结果不能被缓存，必须重新评估外链接的第一行。
+ 1. id相同时，执行顺序由上至下
+ 2. 如果是子查询，id的序号会递增，id值越大优先级越高，越先被执行
+ 3. id如果相同，可以认为是一组，从上往下顺序执行；在所有组中，id值越大，优先级越高，越先执行
 
-3. **table**
+另外也有可能id值为NULL，这种情况表示的是对多个结果进行UNION并去重产生的结果。
 
-    显示这一行的数据是关于哪张表，有时不是真实的表名字，看到的是derivedX(x是个数字，表示第几步执行结果)
+## select_type
 
-4. **type**
+表示了查询的类型，具体的值如下表所示
 
-    表示MySQL在表中找到所需行的方式，又称"访问类型"。
+![select_type](https://raw.githubusercontent.com/fengxiu/img/master/20220413103943.png)
+
+- **SIMPLE**：表示此查询不包含 UNION 查询或子查询,也就是简单的select语句。
+- **PRIMARY** 对于包含UNION、UNION ALL或者子查询的大查询来说，它是由几个小查询组成，其中最左边那个查询的select_type值及时PRIMARY。
+- **UNION**：对于包含UNION或者UNION ALL的大查询来说，它是由几个小查询组成的，其中除了最左边的那个小查询以外，其余的小查询都是UNION
+- **DEPENDENT SUBQUERY** ：如果包含子查询的查询语句不能转为对应的半连接形式，并且该子查询被查询优化器转换为相关子查询的形式。同时这种子查询可能会被执行多次。
+- **UNION RESULT** Mysql选择使用临时表来完成UNION查询的去重工作，针对该临时表的查询的select_type就是UNION RESULT。
+- **SUBQUERY** 如果包含子查询的查询语句不能转换为对应的半连接形式，并且改子查询是不相关子查询，而且查询优化器决定采用将改子查询物化的方案来执行改子查询时，该查询对应的类型就是SUBQUERY。这种查询只会被执行一次。
+- **DEPENDENT UNION**: 在包含UNION或者UNION ALL的大查询中，如果各个小查询都依赖与外层查询，则处理最左边的那个小查询之外，其余小查询都是DEPENDENT UNION。
+- **DERIVED** ：在包含派生表的查询中，如果以物化派生表的方式执行查询，则派生表对应的子查询的select_type就是DERIVED
+- **MATERlALIZED**: 当查询优化器在执行包含子查询的语句时，选择将子查询物化之后与外层查询进行连接查询，该子查询对应的select_type属性就是MATERlALIZED。
+- **UNCACHEABLE SUBQUERY**：一个子查询的结果不能被缓存，必须重新评估外链接的第一行。
+- **UNCACHEABLE SUBQUERY**: 不常用
+
+## table
+
+显示当前查询的是哪张表，有时不是真实的表名字，会出现以下格式的值
+
+* `<unionM,N>`:数据的来源是id为M和N的并集
+* `<derivedN>`: 该行指的是id值为N的行的派生表结果。派生表可能来自例如 FROM 子句中的子查询
+* `<subqueryN>`: 表示id为N的子查询物化后的结果表。
+
+## partitions
+
+表示当前查询使用到的分区是哪一个，如果是null则表示当前表不是分区表。
+
+## type
+
+表示Mysql执行这条语句是使用的访问方法，
 
     常用的类型有：**ALL, index,  range, ref, eq_ref, const, system, NULL（从左到右，性能从差到好）**
 
@@ -152,29 +182,29 @@ copyright:
     2 rows in set, 1 warning (0.01 sec)
     ```
 
-5. **possible_keys**
+1. **possible_keys**
 
     表示mysql在查询时，能够使用到的索引。 即使有些索引在 `possible_keys` 中出现, 但是并不表示此索引会真正地被 MySQL 使用到. MySQL 在查询时具体使用了哪些索引, 由 `key` 字段决定。
 
     如果该列是NULL，则没有相关的索引。在这种情况下，可以通过检查WHERE子句看是否它引用某些列或适合索引的列来提高你的查询性能。如果是这样，创造一个适当的索引并且再次用EXPLAIN检查查询
 
-6. **key**
+2. **key**
 
     是查询实际使用的键。如果没有选择索引，键是NULL。要想强制MySQL使用或忽视possible_keys列中的索引，在查询中使用FORCE INDEX、USE INDEX或者IGNORE INDEX。
 
-7. **key_len**
+3. **key_len**
 
     **表示索引中使用的字节数，可通过该列计算查询中使用的索引的长度（key_len显示的值为索引字段的最大可能长度，并非实际使用长度，即key_len是根据表定义计算而得，不是通过表内检索出的）**不损失精确性的情况下，长度越短越好 。
 
-8. **ref**
+4. **ref**
 
     表示上述连接表的匹配条件，即哪些列或者常量被用于查找索引列上的值。
 
-9. **rows**
+5. **rows**
 
     表示根据统计信息及索引选用情况，估算的找到所需的记录所需要读取的行数。
 
-10. Extra
+6.  Extra
 
    **该列包含MySQL解决查询的详细信息,有以下几种情况：**
 
@@ -198,6 +228,8 @@ copyright:
 
 
 ## 参考
+
 1. [MySQL Explain详解](http://www.cnblogs.com/xuanzhi201111/p/4175635.html)
 2. [MySQL 性能优化神器 Explain 使用分析](https://segmentfault.com/a/1190000008131735)
 3. [Mysql优化之explain详解，基于5.7来解释](<https://www.jianshu.com/p/73f2c8448722>)
+4. mysql是怎样运行的
