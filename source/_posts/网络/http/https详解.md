@@ -1,13 +1,14 @@
 ---
 title: https详解
+tags:
+  - http
+  - https
+categories:
+  - 网络
+  - http
+abbrlink: 48094
 date: 2022-04-16 21:23:34
 updated: 2022-04-16 21:23:34
-tags:
-    - http
-    - https
-categories:
-    - 网络
-    - http
 ---
 
 可以参考这俩篇文章，还未来得急整理
