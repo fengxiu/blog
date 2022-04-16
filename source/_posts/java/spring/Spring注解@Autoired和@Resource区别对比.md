@@ -1,11 +1,9 @@
 ---
-categories:
-  - java
-  - spring
-  - spring
 title: Spring注解@Autoired和@Resource区别对比
 abbrlink: d1a2b8ab
 date: 2020-11-11 06:46:00
+categories:
+  - spring
 ---
 # Spring注解@Autoired和@Resource区别对比
 

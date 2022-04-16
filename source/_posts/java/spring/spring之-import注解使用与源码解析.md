@@ -7,7 +7,6 @@ tags:
     - java
 categories: 
     - spring 
-    - java
 ---
 
 本篇文章记录对@Import注解学习的整个过程。首先文章会介绍@Import注解的使用，接着分析下spring是如何处理@Import注解，最后通过@EnableAsync来举例说明该类型注解实现的原理。
