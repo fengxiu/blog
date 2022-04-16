@@ -7,8 +7,8 @@ categories:
   - http
 abbrlink: '9568466'
 date: 2019-03-10 00:35:00
+updated: 2019-03-10 00:35:00
 ---
-#  HTTP/2 简介
 
 注：以下内容节选自[《高性能浏览器网络》](http://shop.oreilly.com/product/0636920028048.do)（出版社：O'Reilly，作者：Ilya Grigorik）。 要了解完整版本和相关内容，请访问 [hpbn.co](https://hpbn.co/)。
 
@@ -186,7 +186,7 @@ HTTP/2 未指定任何特定算法来实现流控制。 不过，它提供了简
 
 HTTP/2 新增的另一个强大的新功能是，服务器可以对一个客户端请求发送多个响应。 换句话说，除了对最初请求的响应外，服务器还可以向客户端推送额外资源（图 12-5），而无需客户端明确地请求。
 
-![服务器为推送资源发起新数据流 (promise) ](https://developers.google.com/web/fundamentals/performance/http2/images/push01.svg?hl=zh-cn)
+![](https://raw.githubusercontent.com/fengxiu/img/master/20220416210519.png)
 
 注：HTTP/2 打破了严格的请求-响应语义，支持一对多和服务器发起的推送工作流，在浏览器内外开启了全新的互动可能性。 这是一项使能功能，对我们思考协议、协议用途和使用方式具有重要的长期影响。
 
@@ -219,7 +219,7 @@ HTTP/2 新增的另一个强大的新功能是，服务器可以对一个客户�
 
 利用霍夫曼编码，可以在传输时对各个值进行压缩，而利用之前传输值的索引列表，我们可以通过传输索引值的方式对重复值进行编码，索引值可用于有效查询和重构完整的标头键值对。
 
-![HPACK：HTTP/2 的标头压缩](https://developers.google.com/web/fundamentals/performance/http2/images/header_compression01.svg?hl=zh-cn)
+![](https://raw.githubusercontent.com/fengxiu/img/master/20220416210355.png)
 
 作为一种进一步优化方式，HPACK 压缩上下文包含一个静态表和一个动态表：静态表在规范中定义，并提供了一个包含所有连接都可能使用的常用 HTTP 标头字段（例如，有效标头名称）的列表；动态表最初为空，将根据在特定连接内交换的值进行更新。 因此，为之前未见过的值采用静态 Huffman 编码，并替换每一侧静态表或动态表中已存在值的索引，可以减小每个请求的大小。
 
@@ -235,7 +235,7 @@ HTTP/2 新增的另一个强大的新功能是，服务器可以对一个客户�
 
 如需了解有关 HPACK 压缩算法的完整详情，请参阅 [IETF HPACK - HTTP/2 的标头压缩](https://tools.ietf.org/html/draft-ietf-httpbis-header-compression)。
 
-## 深入阅读：
+## 深入阅读
 
 - [“HTTP/2”](https://hpbn.co/http2/) – Ilya Grigorik 所著的完整文章
 - [“设置 HTTP/2”](https://surma.link/things/h2setup/) – 如何在不同的后端中设置 HTTP/2，作者：Surma

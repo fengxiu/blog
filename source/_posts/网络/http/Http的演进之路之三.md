@@ -7,12 +7,15 @@ categories:
   - http
 abbrlink: 9a3c28b1
 date: 2019-03-10 09:25:00
+updated: 2019-03-10 09:25:00
 ---
 ---
-## **HTTP/1.1**
+
 ## cookie机制
+
 前面不止一次讲过HTTP属于无状态的协议。所谓无状态是指：每个请求之间是独立的，当前请求不会记录它与上一次请求之间的关系。那么我们面临的问题是：当需要完成一整套业务逻辑的时候，请求与请求之间需要建立一定的逻辑关系，那么如何管理多次请求之间的关系来保证上下文的一致性。为此，网景公司（早期浏览器大厂，曾经与微软的IE进行过著名的浏览器大战）设计了Cookie，它是保存在客户端并通过request header发送给服务端的一段文本，用来标识客户在服务端的状态。简单来说，当你访问一个之前曾经登录过的网站的时候，你会发现现在的状态是已登录的状态，而不再需要输入用户名和密码才能登录。这就是Cookie的作用，它让浏览器与服务端可以对用户的状态进行沟通，从而使原本没有状态的HTTP协议变得有状态了。一个Cookie的简单交互流程如下：
 ![upload successful](/images/pasted-234.png)
+
 <!-- more -->
 当用户访问一个服务器的时候，服务端会获取该用户的相关信息（例如账号等），然后会在服务端计算出一个数值并通过Set-Cookie头域返回给客户端。从上图中可以看到用户第一次访问[http://www.alibaba-inc.com](http://www.alibaba-inc.com)并在response中得到了Set-Cookie头域。当用户再次访问该服务器时，会在request header中添加一个Cookie头域并在该头域中设置之前服务器返回的信息，当服务端收到这个带有Cookie头域的request请求时就会知道是谁发起了这次请求并会在服务端立刻恢复用户状态。
 
@@ -40,6 +43,7 @@ Cookie保存在浏览器端，相当于由用户来保存相关的状态。而Se
 综上所述：对于一些非常敏感的信息，例如登录信息等最好使用Session机制由服务端管理，而其他信息可以使用Cookie机制在本地进行管理。
 
 ## 数据压缩
+
 Http数据部分的压缩其实是就是对其编码的过程（例如gzip）。客户端在请求数据的时候会告知服务端自己可以接收的编码格式，服务端在随后的应答时会将相关数据使用这些编码格式进行编码并发送给客户端。从下图可以看出客户端在发送request请求的时候会添加accept-encoding头域来告知服务端自己支持的内容编码格式：
 - gzip 使用GUN zip对内容进行编码；
 - compress 使用UNIX的文件压缩程序进行编码；
@@ -48,7 +52,8 @@ Http数据部分的压缩其实是就是对其编码的过程（例如gzip）。
 ![upload successful](/images/pasted-239.png)
 从上图中可以看到当申请一个index.html资源时，如果使用了accept-encoding头域，则会在服务端对相关资源进行压缩处理并通过content-encoding头域告知客户端该资源已经通过gzip进行了压缩。通过数据压缩可以大大减少双方的数据交互，节省流量。从下图的抓包中可以看到使用gzip压缩后可以大大降低数据的大小。
 ![upload successful](/images/pasted-240.png)
-这一块可以具体参考下面这篇文章[Http协议中的Content-Encoding](/posts/e20a716d/)
+
+这一块可以具体参考下面这篇文章[Http协议中的Content-Encoding](/archives/e20a716d.html)
 
 ## 参考
 1. [lonnieZ http的演进之路](https://www.zhihu.com/people/lonniez/activities)

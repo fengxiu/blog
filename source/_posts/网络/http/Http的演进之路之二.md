@@ -1,16 +1,17 @@
 ---
 tags:
   - http
-  - http1.1
 categories:
   - 网络
   - http
 title: Http的演进之路之二
 abbrlink: d860bebc
 date: 2019-03-10 08:45:00
+updated: 2019-03-10 08:45:00
 ---
-## **HTTP/1.1**
-仅仅在HTTP/1.0公布后的几个月，HTTP/1.1发布了，她是目前主流HTTP协议的版本，也是目前为止使用最为广泛、延用时间最为久远的HTTP版本，以至于随后的近10年时间里都没有新的HTTP协议版本发布。对比之前的版本，其主要更新如下：
+## HTTP/1.1
+
+仅仅在HTTP/1.0公布后的几个月，HTTP/1.1发布了，是目前主流HTTP协议的版本，也是目前为止使用最为广泛、延用时间最为久远的HTTP版本，以至于随后的近10年时间里都没有新的HTTP协议版本发布。对比之前的版本，其主要更新如下：
 
 - 默认长连接机制
 - Pipeline机制
@@ -18,10 +19,12 @@ date: 2019-03-10 08:45:00
 - Chunked编码传输
 - 更全面的Cache机制
 - 引入OPTIONS, PUT, DELETE, TRACE和CONNECT方法
+
 <!-- more -->
 
 ## keep-alive
-又是keep-alive，她已经在HTTP/1.0中诞生了，但由于当时没有写入标准，因此这次特意提出来强调。为何keep-alive会被反复提到。可以通过下图看出keep-alive的重要性。在HTTP/0.9的时代，由于网页内容相对简单，需要向服务器申请的资源以及对应的次数相对较少，每发起一次http请求就会建立一次连接，每次建连都会涉及tcp的三次握手过程，同时建连前还需要向dns服务器查询相关的IP地址。
+
+keep-alive在HTTP/1.0中已经诞生，但由于当时没有写入标准，因此这次特意提出来强调。为何keep-alive会被反复提到。可以通过下图看出keep-alive的重要性。在HTTP/0.9的时代，由于网页内容相对简单，需要向服务器申请的资源以及对应的次数相对较少，每发起一次http请求就会建立一次连接，每次建连都会涉及tcp的三次握手过程，同时建连前还需要向dns服务器查询相关的IP地址。
 
 随着互联网的迅猛发展，网页资源也越来越多，HTTP/1.0的出现正是解决了浏览器与服务器间传递非html类型文件的需求，但随之而来的是请求次数的增多。由于每个资源的下载都需要重新建立连接，每次建连都包含tcp的三次握手，完成数据传递后又通过tcp的四次挥手关闭连接，周而复始，访问一个较为复杂的网页会消耗大量的时间。虽然在HTTP/1.0中引入了长连接的机制，但由于未加入标准，因此此时仍然是每个资源会重新建立一次连接。
 
@@ -29,18 +32,25 @@ date: 2019-03-10 08:45:00
 
 基于HTTP的工作原理，后面又有了针对DNS和Connection的优化，不过这都是后话了。
 Http0.9 到Http1.1的请求示意图如下：
-![upload successful](/images/pasted-211.png)
+
+![](https://raw.githubusercontent.com/fengxiu/img/master/pasted-211.png)
+
 为了进一步说明keep-alive的重要性，在此进行了一次测试，分别以Keep-Alive的方式和非Keep-Alive的方式对[http://api.yunos.com](http://api.yunos.com)访问5次、10次、15次、20次。以下是测试数据的对比：
+
 ![upload successful](/images/pasted-212.png)
+
 从上面的数据可以看出，随着访问次数增长Close与Keep-Alive的时间差距越来越大，除了平均耗时上的差异，还有一组方差数据的对比：
 ![upload successful](/images/pasted-214.png)
 从方差数据来看，Close模式的波动要大于Keep-Alive模式。我们再从另一个角度看这个问题，从下面的数据可以看出：一个网络请求过程中DNS和Connection建连的过程会耗费很大的时间：
 ![upload successful](/images/pasted-215.png)
 从上面的这些数据可以看出长连接对于网络访问速度的重要性，这也是为何我们在多个场合提及Keep-Alive机制。包括后续的许多优化都是针对DNS、Connection建连这两个方面进行的。
+
 ## TCP中的keep-alive
+
 上面讲述了很多关于HTTP/1.1中Keep-Alive的特性，这里需要强调的一点是此处的Keep-Alive不同于TCP层的Keep-Alive。Http层的Keep-Alive主要是保持Client端与Server端的连接不会因为一次request请求的结束而被关闭，以此来实现连接复用的目的。而TCP层的Keep-Alive则更像一种保鲜机制，即当连接建立后，相关socket可以定期向对端发送心跳包来检查连接是否还有效，用户可以设置相关的参数，包括多久开始发送、每次发送的间隔、发送次数等。如果一直没有收到对端的响应，则认为连接已经断开并释放相关资源。正常的TCP关闭流程会通知对方连接已经关闭，但是如果是一些意外情况，例如拔掉网线、有一端设备宕机或重启，此时正在执行recv或者send操作的一方就会因为没有任何连接中断的通知而一直等待下去。为了解决这个问题，引入了TCP的Keep-Alive机制。
 
 一般情况下TCP的Keep-Alive机制是关闭的且默认参数不一定满足每个用户的需求，需要用户自行调整：
+
 ```http
 // 打开Keep-Alive机制。默认是关闭的。 
 int keepAlive = 1; 
@@ -71,7 +81,7 @@ echo 2 > /proc/sys/net/ipv4/tcp_keepalive_probes
 ```
 以下是下载一个文件过程中拔掉网线的抓包记录。我代码中设置的keepalive_time为45秒，interval为5秒，count为9次。从抓包中可以看到从14:53:33开始断网，45秒以后，也就是14:54:18开始第一次keep-alive检查，间隔5秒后，也就是14:54:23秒开始第二次keep-alive检查，以此类推，一共经历了9次keep-alive。即断网后经历了45+5*9=90s也就是14:53:33后的90秒14:54:03后宣告网络已断开，此链接不再有效。
 ![upload successful](/images/pasted-217.png)
-具体tcp的保活机制可以参考这篇文章[tcp保活机制](/posts/b56667c1/)
+具体tcp的保活机制可以参考这篇文章[tcp保活机制](/posts/b56667c1/)，可以参考这篇文章了解[https://xie.infoq.cn/article/398b82c2b4300f928108ac605](https://xie.infoq.cn/article/398b82c2b4300f928108ac605)
 ## pipeline
 pipeline机制是在**一条connection**上发送多个http请求而不需要等待对应的响应返回的技术。之前的request请求需要等待response返回后才能发起下一个request，而pipeline则废除了这项限制，新的request可以不必等待之前request的response返回就可以立即发送：
 ![upload successful](/images/pasted-219.png)
@@ -87,8 +97,9 @@ pipeline机制是在**一条connection**上发送多个http请求而不需要等
 - 只有幂等的方法才能使用pipeline，例如GET和HEAD请求。而由于POST是非幂等的，因此不能使用pipeline；关于幂等性可以参见[这里](blog.csdn.net/zjkC050818/article/details/78799386)。谓幂等就是多次执行对资源的影响，和一次执行对资源的影响相同。幂等保证在pipeline中的所有请求可以不必关心发送次序和到达服务器后执行的次序，即使多次请求，返回的结果一直是一样的。反之，若其中包含了不幂等的请求，两个请求，第一个是更新用户张三信息，第二请求是获取更新后的张三最新信息。 他们是按照次序顺序在服务器端执行的：1先执行，2紧接着执行。 但是**后一个请求不会等前一个请求完成才执行**， 即可能 获取张三最新信息的2号请求先**执行完成**，这样返回的信息就不是期望的了。
 - 新建立的连接由于无法得知服务端是否支持HTTP/1.1，因此也不能使用pipeline，即只能重用之前的连接时才能使用pipeline
 
-具体的可以看这篇文章[Http pipeline](/posts/6fbc205f/)
+具体的可以看这篇文章[Http pipeline](/archives/6fbc205f.html)
 ## 并行连接
+
 上面讲到的pipeline技术在队头阻塞的情况下并不能真正意义上提高加载资源的速度。为了解决这个问题，我们又想到了通过在浏览器端同时开启多个http connection的方式从服务端获取数据资源以提升访问速度。它的过程如下图所示。从图中我们可以看到客户端在启动的时候同时开启了三条connection同时向服务端发起请求，这三条connection互相之间是独立的，因此客户端可以通过这三条connection去下载服务端的资源。
 ![upload successful](/images/pasted-222.png)
 我们通过chrome浏览器在访问水木社区的时候可以看到，它在访问[http://images.newsmth.net](http://images.newsmth.net)这个域名的时候，同时开启了六个connection下载相关资源。
@@ -105,8 +116,11 @@ int g_max_sockets_per_group[] = {
   255 // WEBSOCKET_SOCKET_POOL
 };
 ```
+
 ## host头域
+
 在请求头域中新增了[Host](http://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Host)字段，其用来指定服务器的域名。有了Host字段，在同一台服务器上就可以搭建不同的网站了，这也为后来虚拟化的发展打下了基础。
+
 ```text
 Host: www.alibaba-inc.com
 ```
@@ -204,7 +218,9 @@ that
 
 0
 ```
-如果一个Http Response Header的中包含“Transfer-Encoding: chunked”头域，那么其消息体由数量未定的块组成且以最后一个大小为0的块结束。每一个非空块都以该块包含的字节数开始，跟随一个CRLF（回车即换行），然后是数据本身，最后以CRLF结束本块。最后一个块是单行，由块大小（0）以及CRLF组成。整个消息最后以CRLF结尾。如上图所示，解析如下：
+
+如果一个Http Response Header的中包含`Transfer-Encoding: chunked`头域，那么其消息体由数量未定的块组成，且以最后一个大小为0的块结束。每一个非空块都以该块包含的字节数开始，跟随一个CRLF（回车即换行），然后是数据本身，最后以CRLF结束本块。最后一个块是单行，由块大小（0）以及CRLF组成。整个消息最后以CRLF结尾。如上图所示，解析如下：
+
 ```http
 前两个块的数据中包含有显示的\r\n字符
 "Data in the first chunk\r\n"   ==> 25 (0x19)
@@ -212,8 +228,11 @@ that
 "after "                        ==> 6 (0x06)
 "that"                          ==> 4 (0x04)
 ```
+
 以下是一个具体的示例：
 ![upload successful](/images/pasted-233.png)
-这一块具体可以参考[Http值传输编码(Transfer-Encoding)](https://fengxiutianya.top/posts/ce94709/)
+
+这一块具体可以参考[Http值传输编码(Transfer-Encoding)](/archives/ce94709.html)
 ## 参考
+
 1. [lonnieZ http的演进之路](https://www.zhihu.com/people/lonniez/activities)
