@@ -6,37 +6,37 @@ categories:
   - 网络
   - tcp
 abbrlink: 8207bbe3
-date: 2019-03-10 02:09:00
+date: 2019-03-10 12:09:00
+updated: 2019-03-10 12:09:00
 ---
-# TCP的粘包问题
 
 ## 为什么TCP 会粘包
-
 
 先来分析一下通信协议TCP/UDP：
 
 - TCP（transport control protocol，传输控制协议）是面向连接的，面向流的，提供高可靠性服务。收发两端（客户端和服务器端）都要有一一成对的socket，因此，发送端为了将多个发往接收端的包，更有效的发到对方，使用了优化方法（Nagle算法），将多次间隔较小且数据量小的数据，合并成一个大的数据块，然后进行封包。这样，接收端，就难于分辨出来了，必须提供科学的拆包机制。 **即面向流的通信是无消息保护边界的。**
 
 - UDP（user datagram protocol，用户数据报协议）是无连接的，面向消息的，提供高效率服务。不会使用块的合并优化算法，, 由于UDP支持的是一对多的模式，所以接收端的skbuff(套接字缓冲区）采用了链式结构来记录每一个到达的UDP包，在每个UDP包中就有了消息头（消息来源地址，端口等信息），这样，对于接收端来说，就容易进行区分处理了。 **即面向消息的通信是有消息保护边界的。**
-<!-- more -->
+
 由于TCP无消息保护边界, 需要在消息接收端处理消息边界问题。也就是为什么我们以前使用UDP没有此问题。 反而使用TCP后，出现少包的现象。
 
+<!-- more -->
 ### 粘包的分析
 
 上面说了原理，但可能有人使用TCP通信会出现多包/少包，而一些人不会。那么我们具体分析一下，少包，多包的情况。
 
 - 正常情况，发送及时每消息发送，接收也不繁忙，及时处理掉消息。像UDP一样.
-  ![upload successful](/images/pasted-186.png)
+![](https://raw.githubusercontent.com/fengxiu/img/master/pasted-186.png)
 - 发送粘包,多次间隔较小且数据量小的数据，合并成一个大的数据块，然后进行封包. 这种情况和客户端处理繁忙，接收缓存区积压，用户一次从接收缓存区多个数据包的接收端处理一样。
-  ![upload successful](/images/pasted-188.png)
+![](https://raw.githubusercontent.com/fengxiu/img/master/pasted-188.png)
 - 发送粘包或接收缓存区积压，但用户缓冲区大于接收缓存区数据包总大小。此时需要考虑处理一次处理多数据包的情况，但每个数据包都是完整的。
-  ![upload successful](/images/pasted-189.png)
+![](https://raw.githubusercontent.com/fengxiu/img/master/pasted-189.png)
 - 发送粘包或接收缓存区积压， 用户缓存区是数据包大小的整数倍。 此时需要考虑处理一次处理多数据包的情况，但每个数据包都是完整的。
-  ![upload successful](/images/pasted-190.png)
+![](https://raw.githubusercontent.com/fengxiu/img/master/pasted-190.png)
 - 发送粘包或接收缓存区积压， 用户缓存区不是数据包大小的整数倍。 此时需要考虑处理一次处理多数据包的情况，同时也需要考虑数据包不完整。
-  ![upload successful](/images/pasted-191.png)
+![](https://raw.githubusercontent.com/fengxiu/img/master/pasted-191.png)
 
-  我们的情况就属于最后一种，发生了数据包不完整的情况。
+我们的情况就属于最后一种，发生了数据包不完整的情况。
 
 啰嗦了这么多，总结 一下， 就两种情况下会发生粘包。
 

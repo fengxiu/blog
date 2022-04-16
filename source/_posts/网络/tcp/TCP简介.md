@@ -6,8 +6,8 @@ categories:
   - 网络
   - tcp
 abbrlink: f8c819ed
-date: 2019-03-09 04:33:00
-updated: 2019-03-09 04:33:00
+date: 2019-03-09 08:33:00
+updated: 2019-03-09 08:33:00
 ---
 
 TCP是一个面向连接的(connection-oriented)、可靠的(reliable)、字节流式(byte stream)传输协议。这个对TCP进行了官方的解释，下面首先简单介绍面向连接，可靠以及字节流，既然是协议，就会有格式，接着会介绍具体的协议格式。

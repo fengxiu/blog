@@ -57,15 +57,6 @@ prismjs:
   line_number: true
   tab_replace: ''
 
-# Home page setting
-# path: Root path for your blogs index page. (default = '')
-# per_page: Posts displayed per page. (0 = disable pagination)
-# order_by: Posts order. (Order by date descending by default)
-index_generator:
-  path: ''
-  per_page: 10
-  order_by: -date
-
 # Category & Tag
 default_category: uncategorized
 category_map:
@@ -125,7 +116,7 @@ feed:
   content:
   content_limit: 140
   content_limit_delim: ' '
-  order_by: -date
+  order_by: -updated
   icon: icon.png
   autodiscovery: true
   template:
