@@ -28,9 +28,9 @@ Java对象引用体系除了强引用之外，出于对性能、可扩展性等�
 首先我们看看`FinalReference`在JDK里的实现：
 
 ```
-class FinalReference&lt;T&gt; extends Reference&lt;T&gt; {
+class FinalReference<T> extends Reference<T> {
 
-    public FinalReference(T referent, ReferenceQueue&lt;? super T&gt; q) {
+    public FinalReference(T referent, ReferenceQueue <? super T> q) {
         super(referent, q);
     }
 

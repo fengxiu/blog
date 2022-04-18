@@ -4,10 +4,10 @@ abbrlink: f1158e94
 categories:
   - java
   - jvm
-  - GC
-date: 2019-04-19 15:03:49
 tags:
-  - GC
+  - 垃圾回收
+date: 2019-04-19 15:03:49
+updated: 2019-04-19 15:03:49
 ---
 翻译自[what-is-garbage-collection](https://plumbr.io/handbook/what-is-garbage-collection)
 本篇文章主要讨论什么是GC，为什么要有GC？
