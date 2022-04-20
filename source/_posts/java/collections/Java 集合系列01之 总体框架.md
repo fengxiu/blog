@@ -7,6 +7,7 @@ categories:
   - collections
 abbrlink: 2d62f277
 date: 2019-03-04 09:08:00
+updated: 2019-03-04 09:08:00
 ---
 集合框架是Java提供的工具包，包含了一些常用的数据结构：集合、链表、队列、栈、数组、映射等，方便我们日常开发。Java集合工具包位置是java.util.*。
 
@@ -15,7 +16,7 @@ Java集合主要可以划分为4个部分：列表（List）、集合（Set）�
 下图是java集合的整体框架图：
 
 ![Collection](/images/Collection.png)
-<!-- ![upload successful](/images/pasted-154.png) -->
+![upload successful](/images/pasted-154.png)
 
 [java 集合具体的官方描述在这](https://docs.oracle.com/javase/tutorial/collections/index.html)
 

@@ -1,5 +1,5 @@
 ---
-title: Java 8元空间
+title: Java8元空间
 tags:
   - MetaSpace
   - 元空间
@@ -7,9 +7,9 @@ tags:
 categories:
   - java
   - jvm
-  - 内存
 abbrlink: bda9e2c7
 date: 2019-04-22 16:50:11
+updated: 2019-04-22 16:50:11
 ---
 本文主要讲解Java8中JVM的一个更新，就是持久代的移除。将会介绍为什么需要移除持久代以及它的替代者：元空间(Metaspace)。
 

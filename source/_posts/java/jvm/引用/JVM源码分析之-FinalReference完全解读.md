@@ -125,7 +125,7 @@ final class Finalizer extends FinalReference {
 
 另外需要提醒的是，当我们通过clone的方式复制一个对象时，如果当前类是一个f类，那么在clone完成时将调用`Finalizer.register`方法进行注册。
 
-### hotspot如何实现f类对象在构造函数执行完毕后调用Finalizer.register
+**hotspot如何实现f类对象在构造函数执行完毕后调用Finalizer.register**
 
 这个实现比较有意思，在这简单提一下，我们知道执行一个构造函数时，会去调用父类的构造函数，主要是为了初始化继承自父类的属性，那么任何一个对象的初始化最终都会调用到`Object`的空构造函数里（任何空的构造函数其实并不空，会含有三条字节码指令，如下代码所示），为了不对所有类的构造函数都埋点调用`Finalizer.register`方法，hotspot的实现是，在初始化`Object`类时将构造函数里的`return`指令替换为`_return_register_finalizer`指令，该指令并不是标准的字节码指令，是hotspot扩展的指令，这样在处理该指令时调用`Finalizer.register`方法，以很小的侵入性代价完美地解决了这个问题。
 

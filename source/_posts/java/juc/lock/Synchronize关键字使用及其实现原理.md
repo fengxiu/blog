@@ -3,7 +3,6 @@ title: Synchronize关键字使用及其实现原理
 tags:
   - 并发
   - Synchronize
-  - jvm
 categories:
   - java
   - juc
@@ -11,9 +10,8 @@ categories:
 abbrlink: aae77c7e
 date: 2019-02-28 17:55:00
 ---
-# Synchronize关键字使用及其实现原理
 
-### 概述
+## 概述
 
 Synchronized是Java中解决并发问题的一种最常用的方法，也是最简单的一种方法。本文主要分析`Synchronize`关键字的使用，并在后面介绍他的实现原理是什么，用来加深理解`Synchronize`关键字的使用。
 

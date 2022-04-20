@@ -6,11 +6,12 @@ tags:
 categories:
   - java
   - jvm
-  - 引用
 abbrlink: 2e7bd07f
 date: 2019-01-04 10:25:00
+updated: 2019-01-04 10:25:00
 ---
 ### 概述
+
 Java引用体系中我们最熟悉的就是强引用类型，如 A a= new A();这是我们经常说的强引用StrongReference，jvm gc时会检测对象是否存在强引用，如果存在由根对象对其有传递的强引用，则不会对其进行回收，即使内存不足抛出OutOfMemoryError。
 
 除了强引用外，Java还引入了SoftReference，WeakReference，PhantomReference，FinalReference ，这些类放在java.lang.ref包下，类的继承体系如下图。Java额外引入这个四种类型引用主要目的是在jvm 在gc时，按照引用类型的不同，在回收时采用不同的逻辑。可以把这些引用看作是对对象的一层包裹，jvm根据外层不同的包裹，对其包裹的对象采用不同的回收策略，或特殊逻辑处理。 这几种类型的引用主要在jvm内存缓存、资源释放、对象可达性事件处理等场景会用到。
@@ -18,7 +19,9 @@ Java引用体系中我们最熟悉的就是强引用类型，如 A a= new A();�
 ![输入图片说明](https://static.oschina.net/uploads/img/201701/21153037_ubGO.png)
 
 本篇文章主要讲解前面三种SoftReference，WeakReference和PhantomReference的使用，以及ReferenceQueue的使用。至于FinalRefeence会在另一篇文章中讲解。
+
 <!-- more -->
+
 主要内容如下
 
 1. 对象可达性判断
@@ -28,11 +31,13 @@ Java引用体系中我们最熟悉的就是强引用类型，如 A a= new A();�
 5. PhantomReference简介及使用
 6. 总结
 
-**本文名称使用说明**名称说明下：Reference指代引用对象本身，Referent指代被引用对象，下文介绍会以Reference，Referent形式出现。 
+**本文名称使用说明**：Reference指代引用对象本身，Referent指代被引用对象，下文介绍会以Reference，Referent形式出现。
 
 ### 1. 对象可达性判断
 
-jvm gc时，判断一个对象是否存在引用时，都是从根结合引用(Root Set of References)开始去标识,往往到达一个对象的引用路径会存在多条，如下图。 ![输入图片说明](https://static.oschina.net/uploads/img/201701/21165610_kkb9.png)
+jvm gc时，判断一个对象是否存在引用时，都是从根结合引用(Root Set of References)开始去标识,往往到达一个对象的引用路径会存在多条，如下图。
+
+![输入图片说明](https://static.oschina.net/uploads/img/201701/21165610_kkb9.png)
 
 那么 垃圾回收时会依据两个原则来判断对象的可达性：
 
@@ -77,6 +82,13 @@ ReferenceQueue名义上是一个队列，但实际内部并非有实际的存储
 具体源码分析可以参考这个网站：[ReferenceQueue源码分析参考](http://www.importnew.com/26250.html)
 
 因此可以看出，当reference与referenQueue联合使用的主要作用就是当reference指向的referent回收时，提供一种通知机制，通过queue取到这些reference，来做额外的处理工作。当然，如果我们不需要这种通知机制，在创建Reference对象时不传入queue对象即可。
+
+### java引用种类简介
+
+* 强引用是最传统的“引用”的定义，是指在程序代码之中普遍存在的引用赋值，即类似“Object obj=new Object()”这种引用关系。无论任何情况下，只要强引用关系还存在，垃圾收集器就永远不会回 收掉被引用的对象。
+* 软引用是用来描述一些还有用，但非必须的对象。只被软引用关联着的对象，在系统将要发生内 存溢出异常前，会把这些对象列进回收范围之中进行第二次回收，如果这次回收还没有足够的内存， 才会抛出内存溢出异常。在JDK 1.2版之后提供了SoftReference类来实现软引用。
+* 弱引用也是用来描述那些非必须对象，但是它的强度比软引用更弱一些，被弱引用关联的对象只 能生存到下一次垃圾收集发生为止。当垃圾收集器开始工作，无论当前内存是否足够，都会回收掉只 被弱引用关联的对象。在JDK 1.2版之后提供了WeakReference类来实现弱引用。
+* 虚引用也称为“幽灵引用”或者“幻影引用”，它是最弱的一种引用关系。一个对象是否有虚引用的 存在，完全不会对其生存时间构成影响，也无法通过虚引用来取得一个对象实例。为一个对象设置虚 引用关联的唯一目的只是为了能在这个对象被收集器回收时收到一个系统通知。
 
 ### 3. SoftReference简介及使用
 

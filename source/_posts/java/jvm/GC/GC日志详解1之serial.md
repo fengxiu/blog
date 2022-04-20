@@ -1,15 +1,16 @@
+---
 title: GC日志详解1之serial
 abbrlink: f857a2aa
 categories:
   - java
   - jvm
-  - GC
 tags:
   - JVM
   - GC
   - GC日志
   - serial
 date: 2019-04-17 11:03:00
+updated: 2019-04-17 11:03:00
 ---
 前面我有写过一篇文章来详细介绍JVM中的各种GC,如果你还不了解，可以看这篇文章[JVM 垃圾回收器](/posts/1d97a19/)。本篇文章以及后面几篇文章，将对每种GC产生的日志进行详细的解析，主要是由于写成一篇文章的话，篇幅太长，所以分成几篇文章来写。这篇文章主要介绍Serial垃圾回收器的日志解析。
 <!-- more -->
