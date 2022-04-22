@@ -1,5 +1,5 @@
 ---
-title: Java 集合系列06之 Vector源码解析和使用示例
+title: Java集合系列06之 Vector源码解析和使用示例
 tags:
   - 集合
 categories:
@@ -7,8 +7,8 @@ categories:
   - collections
 abbrlink: 3ac019a5
 date: 2019-03-04 15:23:00
+updated: 2019-03-04 15:23:00
 ---
-### **概要**
 
 学完ArrayList和LinkedList，我们接着学习Vector。学习方式还是和之前一样，先对Vector有个整体认识，然后再学习它的源码；最后再通过实例来学会使用它。
 
@@ -19,105 +19,98 @@ date: 2019-03-04 15:23:00
 
 <!-- more -->
 
-### 1. Vector 介绍
+## Vector 介绍
 
->Vector 简介
->
->Vector 是**矢量队列**，它是JDK1.0版本添加的类。继承于AbstractList，实现了List, RandomAccess, Cloneable这些接口。
->Vector 继承了AbstractList，实现了List；所以，**它是一个队列，支持相关的添加、删除、修改、遍历等功能**。
->Vector 实现了RandmoAccess接口，即**提供了随机访问功能**。RandmoAccess是java中用来被List实现，为List提供快速访问功能的。在Vector中，我们即可以通过元素的序号快速获取元素对象；这就是快速随机访问。
->Vector 实现了Cloneable接口，即实现clone()函数。它能被克隆。
->
->和ArrayList的最大不同,vector 是线程安全的。保证线程安全使用synchronized发， 因此代价也会相当大的。
->
->Vector 的构造函数
->
->```java
->
->Vector共有4个构造函数
->// 默认构造函数
->Vector()
->
->// capacity是Vector的默认容量大小。当由于增加数据导致容量增加时，每次容量会增加一倍。
->Vector(int capacity)
->
->// capacity是Vector的默认容量大小，capacityIncrement是每次Vector容量增加时的增量值。
->Vector(int capacity, int capacityIncrement)
->
->// 创建一个包含collection的Vector
->Vector(Collection<? extends E> collection)
->```
->
->Vector的API:
->
->```java
->public synchronized void copyInto(Object[] anArray) //拷贝集合元素到数组
->public synchronized void trimToSize()   //缩短集合长度和实际元素数量相同
->public synchronized void ensureCapacity(int minCapacity)  //设置集合长度
->public synchronized int  capacity()  //返回集合容量
->public synchronized int size()    //返回集合元素数量
->public synchronized boolean isEmpty()  //判断集合是否为空
->public synchronized Enumeration<E> elements()
->  // 从指定位置开始搜索和对象o相同的元素索引
->public synchronized int indexOf(Object o, int index)
->  										
->// 返回最后一个和指定元素o匹配的对象索引
->public synchronized int lastIndexOf(Object o) 
->  										
->public synchronized E elementAt(int index) //返回指定索引地点的元素  
->public synchronized E firstElement() //返回第一个元素对象
->public synchronized E lastElement()  //返回最后一个元素对象  
->public synchronized void setElementAt(E obj, int index) // 替换指定位置的对象元素  
->public synchronized void removeElementAt(int index) // 删除指定位置的元素
->public synchronized void insertElementAt(E obj, int index) //在指定位置插入对象元素
->public synchronized void addElement(E obj) //添加元素到集合末尾  
->public synchronized boolean removeElement(Object obj) // 删除集合的第一个元素  
->public synchronized void removeAllElements()   //删除所有元素  
->public synchronized Object clone()  //对象clone  
->public synchronized Object[] toArray() // 返回包含所有元素的数组  
->public synchronized < T > T[] toArray(T[] a)   //返回集合中的所有元素到数组a中
->public synchronized E get(int index) //返回指定索引位置上的元素  
->public synchronized E set(int index, E element) //替换指定位置的元素  
->public synchronized boolean add(E e) //添加元素到集合的末尾  
->public synchronized E remove(int index) //删除指定位置的元素
->  //返回集合是否包含集合c中所有元素  
->public synchronized boolean containsAll(Collection<?> c) 
->  									
->public synchronized boolean addAll(Collection<? extends E> c) //添加集合c到vector的末尾  
->public synchronized  boolean removeAll(Collection<?> c) //删除集合所有集合c中包含的元素  
->public synchronized boolean retainAll(Collection<?> c) //仅保留集合c中由的元素
->  //在指定位置开始插入集合c中元素
->public synchronized boolean addAll(int index, Collection<? extends E> c) 
->  //判断此集合和o是否相同
->public synchronized boolean equals(Object o)
->public synchronized int hashCode()
->public synchronized List<E> subList(int fromIndex, int toIndex)
->public synchronized void removeRange(int fromIndex, int toIndex) 
->public synchronized ListIterator<E> listIterator(int index) 
->public synchronized ListIterator<E> listIterator()
->public synchronized Iterator<E> iterator()
->public boolean contains(Object o)  //是否包含此集合元素
->public int indexOf(Object o)  //返回第一次出现和指定元素相同的元素的索引
->public boolean remove(Object o)  //移除队首元素
->public void add(int index, E element) //在指定位置插入元素
->public void clear()  //清空所有的元素
->```
->
->
->
->
+Vector类结构图如下
 
-### 2. Vector数据结构
+![Vector ](https://raw.githubusercontent.com/fengxiu/img/master/20220420111808.png)
 
->![upload successful](/images/pasted-158.png)
->
->Vector的数据结构和ArrayList差不多，它包含了3个成员变量：elementData , elementCount， capacityIncrement。
->
->(01) elementData 是"Object[]类型的数组"，它保存了添加到Vector中的元素。elementData是个动态数组，如果初始化Vector时，没指定动态数组的>大小，则使用默认大小10。随着Vector中元素的增加，Vector的容量也会动态增长，capacityIncrement是与容量增长相关的增长系数，具体的增长方式，请参考源码分析中的ensureCapacity()函数。
->
->(02) elementCount 是动态数组的实际大小。
->
->(03) capacityIncrement 是动态数组的增长系数。如果在创建Vector时，指定了capacityIncrement的大小；则，每次当Vector中动态数组容量增加时，增加的大小都是capacityIncrement。
+* Vector是**矢量队列**，它是JDK1.0版本添加的类。继承于AbstractList，实现了List, RandomAccess, Cloneable这些接口。
+* Vector 继承了AbstractList，实现了List；所以，**它是一个队列，支持相关的添加、删除、修改、遍历等功能**。
+* Vector 实现了RandmoAccess接口，即**提供了随机访问功能**。RandmoAccess是java中用来被List实现，为List提供快速访问功能的。在Vector中，我们即可以通过元素的序号快速获取元素对象；这就是快速随机访问。
+* Vector实现了Cloneable接口，即实现clone()函数。它能被克隆。
+
+和ArrayList的最大不同vector是线程安全的。保证线程安全使用synchronized发， 因此代价也会相当大的。
+
+Vector 的构造函数
+
+```java
+
+Vector共有4个构造函数
+// 默认构造函数
+Vector()
+
+// capacity是Vector的默认容量大小。当由于增加数据导致容量增加时，每次容量会增加一倍。
+Vector(int capacity)
+
+// capacity是Vector的默认容量大小，capacityIncrement是每次Vector容量增加时的增量值。
+Vector(int capacity, int capacityIncrement)
+
+// 创建一个包含collection的Vector
+Vector(Collection<? extends E collection)
+```
+
+Vector的API:
+
+```java
+public synchronized void copyInto(Object[] anArray) //拷贝集合元素到数组
+public synchronized void trimToSize()   //缩短集合长度和实际元素数量相同
+public synchronized void ensureCapacity(int minCapacity)  //设置集合长度
+public synchronized int  capacity()  //返回集合容量
+public synchronized int size()    //返回集合元素数量
+public synchronized boolean isEmpty()  //判断集合是否为空
+public synchronized Enumeration<E elements()
+// 从指定位置开始搜索和对象o相同的元素索引
+public synchronized int indexOf(Object o, int index)
+// 返回最后一个和指定元素o匹配的对象索引
+public synchronized int lastIndexOf(Object o) 
+public synchronized E elementAt(int index) //返回指定索引地点的元素  
+public synchronized E firstElement() //返回第一个元素对象
+public synchronized E lastElement()  //返回最后一个元素对象  
+public synchronized void setElementAt(E obj, int index) // 替换指定位置的对象元素  
+public synchronized void removeElementAt(int index) // 删除指定位置的元素
+public synchronized void insertElementAt(E obj, int index) //在指定位置插入对象元素
+public synchronized void addElement(E obj) //添加元素到集合末尾  
+public synchronized boolean removeElement(Object obj) // 删除集合的第一个元素  
+public synchronized void removeAllElements()   //删除所有元素  
+public synchronized Object clone()  //对象clone  
+public synchronized Object[] toArray() // 返回包含所有元素的数组  
+public synchronized < T  T[] toArray(T[] a)   //返回集合中的所有元素到数组a中
+public synchronized E get(int index) //返回指定索引位置上的元素  
+public synchronized E set(int index, E element) //替换指定位置的元素  
+public synchronized boolean add(E e) //添加元素到集合的末尾  
+public synchronized E remove(int index) //删除指定位置的元素
+//返回集合是否包含集合c中所有元素  
+public synchronized boolean containsAll(Collection<? c) 
+public synchronized boolean addAll(Collection<? extends E c) //添加集合c到vector的末尾  
+public synchronized  boolean removeAll(Collection<? c) //删除集合所有集合c中包含的元素  
+public synchronized boolean retainAll(Collection<? c) //仅保留集合c中由的元素
+//在指定位置开始插入集合c中元素
+public synchronized boolean addAll(int index, Collection<? extends E c) 
+  //判断此集合和o是否相同
+public synchronized boolean equals(Object o)
+public synchronized int hashCode()
+public synchronized List<E subList(int fromIndex, int toIndex)
+public synchronized void removeRange(int fromIndex, int toIndex) 
+public synchronized ListIterator<E listIterator(int index) 
+public synchronized ListIterator<E listIterator()
+public synchronized Iterator<E iterator()
+public boolean contains(Object o)  //是否包含此集合元素
+public int indexOf(Object o)  //返回第一次出现和指定元素相同的元素的索引
+public boolean remove(Object o)  //移除队首元素
+public void add(int index, E element) //在指定位置插入元素
+public void clear()  //清空所有的元素
+```
+
+## Vector数据结构
+
+Vector的数据结构和ArrayList差不多，它包含了3个成员变量：elementData , elementCount， capacityIncrement。
+
+* elementData 是"Object[]类型的数组"，它保存了添加到Vector中的元素。elementData是个动态数组，如果初始化Vector时，没指定动态数组的大小，则使用默认大小10。随着Vector中元素的增加，Vector的容量也会动态增长，capacityIncrement是与容量增长相关的增长系数，具体的增长方式，请参考源码分析中的ensureCapacity()函数。
+
+* elementCount 是动态数组的实际大小。
+
+* capacityIncrement 是动态数组的增长系数。如果在创建Vector时，指定了capacityIncrement的大小；则，每次当Vector中动态数组容量增加时，增加的大小都是capacityIncrement。
 
 ### 3. Vector 源码分析
 
@@ -130,7 +123,7 @@ import java.util.function.UnaryOperator;
 
 /**
  * Vector 是一个动态数组，同时也是一个矢量队列
- * 是List的一种，只不过是因为是java 1就开始就添加进来，为了兼容之前的代码
+ * 是List的一种，只不过是因为是java1就开始就添加进来，为了兼容之前的代码
  * 所以在有了集合类之后也没有删除。
  * 既然是List，那么他也具备List所有的特性，保证插入的顺序和输出的顺序相同
  * 
@@ -141,7 +134,7 @@ import java.util.function.UnaryOperator;
  * 实现Cloneable    接口，说明此类支持克隆
  * 实现java.io.Serializable 接口，可以支持序列化
  */
-public class Vector<E> extends AbstractList<E> implements List<E>, RandomAccess, Cloneable, java.io.Serializable {
+public class Vector<E extends AbstractList<E implements List<E, RandomAccess, Cloneable, java.io.Serializable {
 
     //存储集合元素的数组
     protected Object[] elementData;
@@ -193,7 +186,7 @@ public class Vector<E> extends AbstractList<E> implements List<E>, RandomAccess,
      * @throws NullPointerException 如果指定的集合为空
      * @since   1.2
      */
-    public Vector(Collection<? extends E> c) {
+    public Vector(Collection<? extends E c) {
         elementData = c.toArray();
         elementCount = elementData.length;
         // c.toArray 有可能返回的数组类型 和 Object[] 不匹配 
@@ -203,7 +196,6 @@ public class Vector<E> extends AbstractList<E> implements List<E>, RandomAccess,
 
     /**
      * 拷贝当前集合元素到指定的数组
-     *
      */
     public synchronized void copyInto(Object[] anArray) {
         System.arraycopy(elementData, 0, anArray, 0, elementCount);
@@ -225,7 +217,6 @@ public class Vector<E> extends AbstractList<E> implements List<E>, RandomAccess,
      * 这个函数式判断给定的值是否大于0 
      * 这样做是为了在synchronized中做尽量少的操作
      * 保证效率
-     * 
      */
     public synchronized void ensureCapacity(int minCapacity) {
         if (minCapacity > 0) {
@@ -239,7 +230,7 @@ public class Vector<E> extends AbstractList<E> implements List<E>, RandomAccess,
      */
     private void ensureCapacityHelper(int minCapacity) {
         // overflow-conscious code
-        if (minCapacity - elementData.length > 0)
+        if (minCapacity - elementData.length  > 0)
             grow(minCapacity);
     }
 
@@ -268,7 +259,7 @@ public class Vector<E> extends AbstractList<E> implements List<E>, RandomAccess,
     private static int hugeCapacity(int minCapacity) {
         if (minCapacity < 0) // overflow
             throw new OutOfMemoryError();
-        return (minCapacity > MAX_ARRAY_SIZE) ? Integer.MAX_VALUE : MAX_ARRAY_SIZE;
+        return (minCapacity  MAX_ARRAY_SIZE) ? Integer.MAX_VALUE : MAX_ARRAY_SIZE;
     }
 
     /**
@@ -277,7 +268,7 @@ public class Vector<E> extends AbstractList<E> implements List<E>, RandomAccess,
      */
     public synchronized void setSize(int newSize) {
         modCount++;
-        if (newSize > elementCount) {
+        if (newSize  elementCount) {
             ensureCapacityHelper(newSize);
         } else {
             for (int i = newSize; i < elementCount; i++) {
@@ -317,7 +308,7 @@ public class Vector<E> extends AbstractList<E> implements List<E>, RandomAccess,
      * @return  an enumeration of the components of this vector
      * @see     Iterator
      */
-    public Enumeration<E> elements() {
+    public Enumeration< elements>() {
         return new Enumeration<E>() {
             int count = 0;
 
@@ -340,7 +331,7 @@ public class Vector<E> extends AbstractList<E> implements List<E>, RandomAccess,
      * 返回集合是否包含指定的元素
      */
     public boolean contains(Object o) {
-        return indexOf(o, 0) >= 0;
+        return indexOf(o, 0) = 0;
     }
 
     /**
@@ -377,8 +368,8 @@ public class Vector<E> extends AbstractList<E> implements List<E>, RandomAccess,
      * 返回从指定位置开始和对象o匹配的元素索引
      */
     public synchronized int lastIndexOf(Object o, int index) {
-        if (index >= elementCount)
-            throw new IndexOutOfBoundsException(index + " >= " + elementCount);
+        if (index = elementCount)
+            throw new IndexOutOfBoundsException(index + " = " + elementCount);
 
         if (o == null) {
             for (int i = index; i >= 0; i--)
@@ -396,8 +387,8 @@ public class Vector<E> extends AbstractList<E> implements List<E>, RandomAccess,
      * 返回指定索引地点的元素
      */
     public synchronized E elementAt(int index) {
-        if (index >= elementCount) {
-            throw new ArrayIndexOutOfBoundsException(index + " >= " + elementCount);
+        if (index = elementCount) {
+            throw new ArrayIndexOutOfBoundsException(index + " = " + elementCount);
         }
 
         return elementData(index);
@@ -427,8 +418,8 @@ public class Vector<E> extends AbstractList<E> implements List<E>, RandomAccess,
      * 替换指定位置的对象元素
      */
     public synchronized void setElementAt(E obj, int index) {
-        if (index >= elementCount) {
-            throw new ArrayIndexOutOfBoundsException(index + " >= " + elementCount);
+        if (index = elementCount) {
+            throw new ArrayIndexOutOfBoundsException(index + " = " + elementCount);
         }
         elementData[index] = obj;
     }
@@ -438,13 +429,13 @@ public class Vector<E> extends AbstractList<E> implements List<E>, RandomAccess,
      */
     public synchronized void removeElementAt(int index) {
         modCount++;
-        if (index >= elementCount) {
-            throw new ArrayIndexOutOfBoundsException(index + " >= " + elementCount);
+        if (index = elementCount) {
+            throw new ArrayIndexOutOfBoundsException(index + " = " + elementCount);
         } else if (index < 0) {
             throw new ArrayIndexOutOfBoundsException(index);
         }
         int j = elementCount - index - 1;
-        if (j > 0) {
+        if (j  0) {
             System.arraycopy(elementData, index + 1, elementData, index, j);
         }
         elementCount--;
@@ -456,8 +447,8 @@ public class Vector<E> extends AbstractList<E> implements List<E>, RandomAccess,
      */
     public synchronized void insertElementAt(E obj, int index) {
         modCount++;
-        if (index > elementCount) {
-            throw new ArrayIndexOutOfBoundsException(index + " > " + elementCount);
+        if (index  elementCount) {
+            throw new ArrayIndexOutOfBoundsException(index + "  " + elementCount);
         }
         ensureCapacityHelper(elementCount + 1);
         System.arraycopy(elementData, index, elementData, index + 1, elementCount - index);
@@ -480,7 +471,7 @@ public class Vector<E> extends AbstractList<E> implements List<E>, RandomAccess,
     public synchronized boolean removeElement(Object obj) {
         modCount++;
         int i = indexOf(obj);
-        if (i >= 0) {
+        if (i = 0) {
             removeElementAt(i);
             return true;
         }
@@ -505,7 +496,7 @@ public class Vector<E> extends AbstractList<E> implements List<E>, RandomAccess,
     public synchronized Object clone() {
         try {
             @SuppressWarnings("unchecked")
-            Vector<E> v = (Vector<E>) super.clone();
+            Vector<E v = (Vector<E) super.clone();
             v.elementData = Arrays.copyOf(elementData, elementCount);
             v.modCount = 0;
             return v;
@@ -526,13 +517,13 @@ public class Vector<E> extends AbstractList<E> implements List<E>, RandomAccess,
      * 返回集合中的所有元素到数组a中
      */
     @SuppressWarnings("unchecked")
-    public synchronized <T> T[] toArray(T[] a) {
+    public synchronized <T T[] toArray(T[] a) {
         if (a.length < elementCount)
             return (T[]) Arrays.copyOf(elementData, elementCount, a.getClass());
 
         System.arraycopy(elementData, 0, a, 0, elementCount);
 
-        if (a.length > elementCount)
+        if (a.length  elementCount)
             a[elementCount] = null;
 
         return a;
@@ -550,7 +541,7 @@ public class Vector<E> extends AbstractList<E> implements List<E>, RandomAccess,
      * 返回指定索引位置上的元素
      */
     public synchronized E get(int index) {
-        if (index >= elementCount)
+        if (index = elementCount)
             throw new ArrayIndexOutOfBoundsException(index);
 
         return elementData(index);
@@ -560,7 +551,7 @@ public class Vector<E> extends AbstractList<E> implements List<E>, RandomAccess,
      * 替换指定位置的元素
      */
     public synchronized E set(int index, E element) {
-        if (index >= elementCount)
+        if (index = elementCount)
             throw new ArrayIndexOutOfBoundsException(index);
 
         E oldValue = elementData(index);
@@ -597,12 +588,12 @@ public class Vector<E> extends AbstractList<E> implements List<E>, RandomAccess,
      */
     public synchronized E remove(int index) {
         modCount++;
-        if (index >= elementCount)
+        if (index = elementCount)
             throw new ArrayIndexOutOfBoundsException(index);
         E oldValue = elementData(index);
 
         int numMoved = elementCount - index - 1;
-        if (numMoved > 0)
+        if (numMoved  0)
             System.arraycopy(elementData, index + 1, elementData, index, numMoved);
         elementData[--elementCount] = null; // Let gc do its work
 
@@ -621,14 +612,14 @@ public class Vector<E> extends AbstractList<E> implements List<E>, RandomAccess,
     /**
      * 返回集合是否包含集合c中所有元素
      */
-    public synchronized boolean containsAll(Collection<?> c) {
+    public synchronized boolean containsAll(Collection<? c) {
         return super.containsAll(c);
     }
 
     /**
      * 添加集合c到vector的末尾
      */
-    public synchronized boolean addAll(Collection<? extends E> c) {
+    public synchronized boolean addAll(Collection<? extends E c) {
         modCount++;
         Object[] a = c.toArray();
         int numNew = a.length;
@@ -641,23 +632,23 @@ public class Vector<E> extends AbstractList<E> implements List<E>, RandomAccess,
     /**
      * 删除集合所有集合c中包含的元素
      */
-    public synchronized boolean removeAll(Collection<?> c) {
+    public synchronized boolean removeAll(Collection<? c) {
         return super.removeAll(c);
     }
 
     /**
      * 仅保留集合c中由的元素
      */
-    public synchronized boolean retainAll(Collection<?> c) {
+    public synchronized boolean retainAll(Collection<? c) {
         return super.retainAll(c);
     }
 
     /**
      * 在指定位置开始插入集合c中元素
      */
-    public synchronized boolean addAll(int index, Collection<? extends E> c) {
+    public synchronized boolean addAll(int index, Collection<? extends E c) {
         modCount++;
-        if (index < 0 || index > elementCount)
+        if (index < 0 || index  elementCount)
             throw new ArrayIndexOutOfBoundsException(index);
 
         Object[] a = c.toArray();
@@ -665,7 +656,7 @@ public class Vector<E> extends AbstractList<E> implements List<E>, RandomAccess,
         ensureCapacityHelper(elementCount + numNew);
 
         int numMoved = elementCount - index;
-        if (numMoved > 0)
+        if (numMoved  0)
             System.arraycopy(elementData, index, elementData, index + numNew, numMoved);
 
         System.arraycopy(a, 0, elementData, index, numNew);
@@ -697,7 +688,7 @@ public class Vector<E> extends AbstractList<E> implements List<E>, RandomAccess,
     /**
      * 返回从fromIndex 到toIndex的子集合
      */
-    public synchronized List<E> subList(int fromIndex, int toIndex) {
+    public synchronized List<E subList>(int fromIndex, int toIndex) {
         return Collections.synchronizedList(super.subList(fromIndex, toIndex), this);
     }
 
@@ -741,12 +732,12 @@ public class Vector<E> extends AbstractList<E> implements List<E>, RandomAccess,
      * An initial call to {@link ListIterator#previous previous} would
      * return the element with the specified index minus one.
      *
-     * <p>The returned list iterator is <a href="#fail-fast"><i>fail-fast</i></a>.
+     * <pThe returned list iterator is <a href="#fail-fast"<ifail-fast</i</a.
      *
      * @throws IndexOutOfBoundsException {@inheritDoc}
      */
-    public synchronized ListIterator<E> listIterator(int index) {
-        if (index < 0 || index > elementCount)
+    public synchronized ListIterator<E listIterator(int index) {
+        if (index < 0 || index  elementCount)
             throw new IndexOutOfBoundsException("Index: " + index);
         return new ListItr(index);
     }
@@ -755,29 +746,29 @@ public class Vector<E> extends AbstractList<E> implements List<E>, RandomAccess,
      * Returns a list iterator over the elements in this list (in proper
      * sequence).
      *
-     * <p>The returned list iterator is <a href="#fail-fast"><i>fail-fast</i></a>.
+     * <pThe returned list iterator is <a href="#fail-fast"<ifail-fast</i</a.
      *
      * @see #listIterator(int)
      */
-    public synchronized ListIterator<E> listIterator() {
+    public synchronized ListIterator<E listIterator() {
         return new ListItr(0);
     }
 
     /**
      * Returns an iterator over the elements in this list in proper sequence.
      *
-     * <p>The returned iterator is <a href="#fail-fast"><i>fail-fast</i></a>.
+     * <pThe returned iterator is <a href="#fail-fast"<ifail-fast</i</a.
      *
      * @return an iterator over the elements in this list in proper sequence
      */
-    public synchronized Iterator<E> iterator() {
+    public synchronized Iterator<E iterator() {
         return new Itr();
     }
 
     /**
      * An optimized version of AbstractList.Itr
      */
-    private class Itr implements Iterator<E> {
+    private class Itr implements Iterator<E {
         int cursor; // index of next element to return
         int lastRet = -1; // index of last element returned; -1 if no such
         int expectedModCount = modCount;
@@ -792,7 +783,7 @@ public class Vector<E> extends AbstractList<E> implements List<E>, RandomAccess,
             synchronized (Vector.this) {
                 checkForComodification();
                 int i = cursor;
-                if (i >= elementCount)
+                if (i = elementCount)
                     throw new NoSuchElementException();
                 cursor = i + 1;
                 return elementData(lastRet = i);
@@ -812,17 +803,17 @@ public class Vector<E> extends AbstractList<E> implements List<E>, RandomAccess,
         }
 
         @Override
-        public void forEachRemaining(Consumer<? super E> action) {
+        public void forEachRemaining(Consumer<? super E action) {
             Objects.requireNonNull(action);
             synchronized (Vector.this) {
                 final int size = elementCount;
                 int i = cursor;
-                if (i >= size) {
+                if (i = size) {
                     return;
                 }
                 @SuppressWarnings("unchecked")
                 final E[] elementData = (E[]) Vector.this.elementData;
-                if (i >= elementData.length) {
+                if (i = elementData.length) {
                     throw new ConcurrentModificationException();
                 }
                 while (i != size && modCount == expectedModCount) {
@@ -844,7 +835,7 @@ public class Vector<E> extends AbstractList<E> implements List<E>, RandomAccess,
     /**
      * An optimized version of AbstractList.ListItr
      */
-    final class ListItr extends Itr implements ListIterator<E> {
+    final class ListItr extends Itr implements ListIterator<E {
         ListItr(int index) {
             super();
             cursor = index;
@@ -895,7 +886,7 @@ public class Vector<E> extends AbstractList<E> implements List<E>, RandomAccess,
     }
 
     @Override
-    public synchronized void forEach(Consumer<? super E> action) {
+    public synchronized void forEach(Consumer<? super E action) {
         Objects.requireNonNull(action);
         final int expectedModCount = modCount;
         @SuppressWarnings("unchecked")
@@ -911,7 +902,7 @@ public class Vector<E> extends AbstractList<E> implements List<E>, RandomAccess,
 
     @Override
     @SuppressWarnings("unchecked")
-    public synchronized boolean removeIf(Predicate<? super E> filter) {
+    public synchronized boolean removeIf(Predicate<? super E filter) {
         Objects.requireNonNull(filter);
         // figure out which elements are to be removed
         // any exception thrown from the filter predicate at this stage
@@ -933,7 +924,7 @@ public class Vector<E> extends AbstractList<E> implements List<E>, RandomAccess,
         }
 
         // shift surviving elements left over the spaces left by removed elements
-        final boolean anyToRemove = removeCount > 0;
+        final boolean anyToRemove = removeCount  0;
         if (anyToRemove) {
             final int newSize = size - removeCount;
             for (int i = 0, j = 0; (i < size) && (j < newSize); i++, j++) {
@@ -955,7 +946,7 @@ public class Vector<E> extends AbstractList<E> implements List<E>, RandomAccess,
 
     @Override
     @SuppressWarnings("unchecked")
-    public synchronized void replaceAll(UnaryOperator<E> operator) {
+    public synchronized void replaceAll(UnaryOperator<E operator) {
         Objects.requireNonNull(operator);
         final int expectedModCount = modCount;
         final int size = elementCount;
@@ -970,7 +961,7 @@ public class Vector<E> extends AbstractList<E> implements List<E>, RandomAccess,
 
     @SuppressWarnings("unchecked")
     @Override
-    public synchronized void sort(Comparator<? super E> c) {
+    public synchronized void sort(Comparator<? super E c) {
         final int expectedModCount = modCount;
         Arrays.sort((E[]) elementData, 0, elementCount, c);
         if (modCount != expectedModCount) {
@@ -980,11 +971,11 @@ public class Vector<E> extends AbstractList<E> implements List<E>, RandomAccess,
     }
 
     /**
-     * Creates a <em><a href="Spliterator.html#binding">late-binding</a></em>
-     * and <em>fail-fast</em> {@link Spliterator} over the elements in this
+     * Creates a <em<a href="Spliterator.html#binding"late-binding</a</em
+     * and <emfail-fast</em {@link Spliterator} over the elements in this
      * list.
      *
-     * <p>The {@code Spliterator} reports {@link Spliterator#SIZED},
+     * <pThe {@code Spliterator} reports {@link Spliterator#SIZED},
      * {@link Spliterator#SUBSIZED}, and {@link Spliterator#ORDERED}.
      * Overriding implementations should document the reporting of additional
      * characteristic values.
@@ -993,20 +984,20 @@ public class Vector<E> extends AbstractList<E> implements List<E>, RandomAccess,
      * @since 1.8
      */
     @Override
-    public Spliterator<E> spliterator() {
-        return new VectorSpliterator<>(this, null, 0, -1, 0);
+    public Spliterator<E spliterator() {
+        return new VectorSpliterator<(this, null, 0, -1, 0);
     }
 
     /** Similar to ArrayList Spliterator */
-    static final class VectorSpliterator<E> implements Spliterator<E> {
-        private final Vector<E> list;
+    static final class VectorSpliterator<E implements Spliterator<E {
+        private final Vector<E list;
         private Object[] array;
         private int index; // current index, modified on advance/split
         private int fence; // -1 until used; then one past last index
         private int expectedModCount; // initialized when fence set
 
         /** Create new spliterator covering the given  range */
-        VectorSpliterator(Vector<E> list, Object[] array, int origin, int fence, int expectedModCount) {
+        VectorSpliterator(Vector<E list, Object[] array, int origin, int fence, int expectedModCount) {
             this.list = list;
             this.array = array;
             this.index = origin;
@@ -1026,17 +1017,17 @@ public class Vector<E> extends AbstractList<E> implements List<E>, RandomAccess,
             return hi;
         }
 
-        public Spliterator<E> trySplit() {
-            int hi = getFence(), lo = index, mid = (lo + hi) >>> 1;
-            return (lo >= mid) ? null : new VectorSpliterator<E>(list, array, lo, index = mid, expectedModCount);
+        public Spliterator<E trySplit() {
+            int hi = getFence(), lo = index, mid = (lo + hi)  1;
+            return (lo = mid) ? null : new VectorSpliterator<E(list, array, lo, index = mid, expectedModCount);
         }
 
         @SuppressWarnings("unchecked")
-        public boolean tryAdvance(Consumer<? super E> action) {
+        public boolean tryAdvance(Consumer<? super E action) {
             int i;
             if (action == null)
                 throw new NullPointerException();
-            if (getFence() > (i = index)) {
+            if (getFence()  (i = index)) {
                 index = i + 1;
                 action.accept((E) array[i]);
                 if (list.modCount != expectedModCount)
@@ -1047,9 +1038,9 @@ public class Vector<E> extends AbstractList<E> implements List<E>, RandomAccess,
         }
 
         @SuppressWarnings("unchecked")
-        public void forEachRemaining(Consumer<? super E> action) {
+        public void forEachRemaining(Consumer<? super E action) {
             int i, hi; // hoist accesses and checks from loop
-            Vector<E> lst;
+            Vector<E lst;
             Object[] a;
             if (action == null)
                 throw new NullPointerException();
@@ -1062,7 +1053,7 @@ public class Vector<E> extends AbstractList<E> implements List<E>, RandomAccess,
                     }
                 } else
                     a = array;
-                if (a != null && (i = index) >= 0 && (index = hi) <= a.length) {
+                if (a != null && (i = index) = 0 && (index = hi) <= a.length) {
                     while (i < hi)
                         action.accept((E) a[i++]);
                     if (lst.modCount == expectedModCount)
@@ -1086,130 +1077,130 @@ public class Vector<E> extends AbstractList<E> implements List<E>, RandomAccess,
 
 ### 4. Vector 遍历方式
 
->Vector 支持4种遍历方式。
->
->1. 通过迭代器遍历。即通过Iterator遍历
->
->   ```
->    for(Iterator iter = list.iterator(); iter.hasNext(); ) {
->               iter.next();
->           }
->   ```
->
->2. 随机访问，通过索引值去遍历
->
->   ```
->   Integer value = null;
->   int size = vec.size();
->   for (int i=0; i<size; i++) {
->       value = (Integer)vec.get(i);        
->   }
->   ```
->
->3. 通过foreach访问
->
->   ```
->   for (Integer integ:vec) {
->       value = integ;
->   }
->   ```
->
->4. 通过Enumeration遍历
->
->   ```
->   Integer value = null;
->   Enumeration enu = vec.elements();
->   while (enu.hasMoreElements()) {
->       value = (Integer)enu.nextElement();
->   }
->   ```
->
->   **测试这些遍历方式效率的代码如下**：
->
->   ```
->   package Collections.cnblog.collection.list;
->
->   /**************************************
->    *      Author : zhangke
->    *      Date   : 2018/1/31 11:54
->    *      Desc   : vector 学习
->    ***************************************/
->
->   import java.util.*;
->
->   public class StudyVector {
->
->       public static void main(String[] args) {
->           Vector vec = new Vector();
->           for (int i = 0; i < 100000; i++)
->               vec.add(i);
->           iteratorThroughRandomAccess(vec);
->           iteratorThroughIterator(vec);
->           iteratorThroughFor2(vec);
->           iteratorThroughEnumeration(vec);
->
->       }
->
->       private static void isRandomAccessSupported(List list) {
->           if (list instanceof RandomAccess) {
->               System.out.println("RandomAccess implemented!");
->           } else {
->               System.out.println("RandomAccess not implemented!");
->           }
->
->       }
->
->       public static void iteratorThroughRandomAccess(List list) {
->
->           long startTime;
->           long endTime;
->           startTime = System.currentTimeMillis();
->           for (int i = 0; i < list.size(); i++) {
->               list.get(i);
->           }
->           endTime = System.currentTimeMillis();
->           long interval = endTime - startTime;
->           System.out.println("iteratorThroughRandomAccess：" + interval + " ms");
->       }
->
->       public static void iteratorThroughIterator(List list) {
->
->           long startTime;
->           long endTime;
->           startTime = System.currentTimeMillis();
->           for (Iterator iter = list.iterator(); iter.hasNext(); ) {
->               iter.next();
->           }
->           endTime = System.currentTimeMillis();
->           long interval = endTime - startTime;
->           System.out.println("iteratorThroughIterator：" + interval + " ms");
->       }
->   ```
->
->
->       public static void iteratorThroughFor2(List list) {
->    
->           long startTime;
->           long endTime;
->           startTime = System.currentTimeMillis();
->           for (Object obj : list)
->               ;
->           endTime = System.currentTimeMillis();
->           long interval = endTime - startTime;
->           System.out.println("iteratorThroughFor2：" + interval + " ms");
->       }
->    
->       public static void iteratorThroughEnumeration(Vector vec) {
->    
->           long startTime;
->           long endTime;
->           startTime = System.currentTimeMillis();
->           for (Enumeration enu = vec.elements(); enu.hasMoreElements(); ) {
->               enu.nextElement();
->           }
->           endTime = System.currentTimeMillis();
->           long interval = endTime - startTime;
->           System.out.println("iteratorThroughEnumeration：" + interval + " ms");
->       }
->   运行结果几次都显示 foreach遍历最快
+Vector 支持4种遍历方式。
+
+1. 通过迭代器遍历。即通过Iterator遍历
+
+   ```
+    for(Iterator iter = list.iterator(); iter.hasNext(); ) {
+               iter.next();
+           }
+   ```
+
+2. 随机访问，通过索引值去遍历
+
+   ```
+   Integer value = null;
+   int size = vec.size();
+   for (int i=0; i<size; i++) {
+       value = (Integer)vec.get(i);        
+   }
+   ```
+
+3. 通过foreach访问
+
+   ```
+   for (Integer integ:vec) {
+       value = integ;
+   }
+   ```
+
+4. 通过Enumeration遍历
+
+   ```
+   Integer value = null;
+   Enumeration enu = vec.elements();
+   while (enu.hasMoreElements()) {
+       value = (Integer)enu.nextElement();
+   }
+   ```
+
+   **测试这些遍历方式效率的代码如下**：
+
+   ```
+   package Collections.cnblog.collection.list;
+
+   /**************************************
+    *      Author : zhangke
+    *      Date   : 2018/1/31 11:54
+    *      Desc   : vector 学习
+    ***************************************/
+
+   import java.util.*;
+
+   public class StudyVector {
+
+       public static void main(String[] args) {
+           Vector vec = new Vector();
+           for (int i = 0; i < 100000; i++)
+               vec.add(i);
+           iteratorThroughRandomAccess(vec);
+           iteratorThroughIterator(vec);
+           iteratorThroughFor2(vec);
+           iteratorThroughEnumeration(vec);
+
+       }
+
+       private static void isRandomAccessSupported(List list) {
+           if (list instanceof RandomAccess) {
+               System.out.println("RandomAccess implemented!");
+           } else {
+               System.out.println("RandomAccess not implemented!");
+           }
+
+       }
+
+       public static void iteratorThroughRandomAccess(List list) {
+
+           long startTime;
+           long endTime;
+           startTime = System.currentTimeMillis();
+           for (int i = 0; i < list.size(); i++) {
+               list.get(i);
+           }
+           endTime = System.currentTimeMillis();
+           long interval = endTime - startTime;
+           System.out.println("iteratorThroughRandomAccess：" + interval + " ms");
+       }
+
+       public static void iteratorThroughIterator(List list) {
+
+           long startTime;
+           long endTime;
+           startTime = System.currentTimeMillis();
+           for (Iterator iter = list.iterator(); iter.hasNext(); ) {
+               iter.next();
+           }
+           endTime = System.currentTimeMillis();
+           long interval = endTime - startTime;
+           System.out.println("iteratorThroughIterator：" + interval + " ms");
+       }
+   ```
+
+
+       public static void iteratorThroughFor2(List list) {
+    
+           long startTime;
+           long endTime;
+           startTime = System.currentTimeMillis();
+           for (Object obj : list)
+               ;
+           endTime = System.currentTimeMillis();
+           long interval = endTime - startTime;
+           System.out.println("iteratorThroughFor2：" + interval + " ms");
+       }
+    
+       public static void iteratorThroughEnumeration(Vector vec) {
+    
+           long startTime;
+           long endTime;
+           startTime = System.currentTimeMillis();
+           for (Enumeration enu = vec.elements(); enu.hasMoreElements(); ) {
+               enu.nextElement();
+           }
+           endTime = System.currentTimeMillis();
+           long interval = endTime - startTime;
+           System.out.println("iteratorThroughEnumeration：" + interval + " ms");
+       }
+   运行结果几次都显示 foreach遍历最快
 

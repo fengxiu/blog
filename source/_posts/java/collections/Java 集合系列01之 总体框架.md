@@ -1,5 +1,5 @@
 ---
-title: Java 集合系列01之 总体框架
+title: java集合系列01之 总体框架
 tags:
   - 集合
 categories:
@@ -15,10 +15,11 @@ Java集合主要可以划分为4个部分：列表（List）、集合（Set）�
 
 下图是java集合的整体框架图：
 
-![Collection](/images/Collection.png)
-![upload successful](/images/pasted-154.png)
+![collection](https://raw.githubusercontent.com/fengxiu/img/master/Collection.png)
 
-[java 集合具体的官方描述在这](https://docs.oracle.com/javase/tutorial/collections/index.html)
+![集合](https://raw.githubusercontent.com/fengxiu/img/master/pasted-154.png)
+
+[java集合具体的官方描述在这](https://docs.oracle.com/javase/tutorial/collections/index.html)
 
 <!--more -->
 
@@ -46,4 +47,4 @@ Java集合主要可以划分为4个部分：列表（List）、集合（Set）�
 
 本系列博客主要是参考下面博客
 
-1. [Java 集合系列目录(Category)](https://www.cnblogs.com/skywang12345/p/3323085.html)
+1. [java集合系列目录(Category)](https://www.cnblogs.com/skywang12345/p/3323085.html)

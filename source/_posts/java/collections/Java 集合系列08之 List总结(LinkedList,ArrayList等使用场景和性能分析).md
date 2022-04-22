@@ -1,5 +1,5 @@
 ---
-title: 'Java 集合系列08之 List总结(LinkedList,ArrayList等使用场景和性能分析)'
+title: 'java集合系列08之 List总结(LinkedList,ArrayList等使用场景和性能分析)'
 tags:
   - 集合
 categories:
@@ -7,6 +7,7 @@ categories:
   - collections
 abbrlink: e23e1ac6
 date: 2019-03-04 17:39:00
+updated: 2019-03-04 17:39:00
 ---
 
 ## 概述
@@ -18,25 +19,24 @@ date: 2019-03-04 17:39:00
 
 <!-- more -->
 
-## 1. List概括
+## List概括
 
-![upload successful](/images/pasted-160.png)
+![](https://raw.githubusercontent.com/fengxiu/img/master/pasted-160.png)
 
 1. List 是一个接口，它继承于Collection的接口。它代表着有序的队列。
-2.  AbstractList 是一个抽象类，它继承于AbstractCollection。AbstractList实现List接口中除size()、get(int location)之外的函数。
-3. AbstractSequentialList 是一个抽象类，它继承于AbstractList。AbstractSequentialList 实现了“链表中，根据index索引值操作链表的全部函数”。
-
+2. AbstractList是一个抽象类，它继承于AbstractCollection。AbstractList实现List接口中除size()、get(int location)之外的函数。
+3. AbstractSequentialList 是一个抽象类，它继承于AbstractList。AbstractSequentialList实现了链表中，根据index索引值操作链表的全部函数。
 4. ArrayList, LinkedList, Vector, Stack是List的4个实现类。
    * ArrayList 是一个**数组队列，相当于动态数组**。它由数组实现，随机访问效率高，随机插入、随机删除效率低。
    * LinkedList 是一个**双向链表**。它也可以被当作堆栈、队列或双端队列进行操作。LinkedList随机访问效率低，但随机插入、随机删除效率低。
    * Vector 是**矢量队列，和ArrayList一样，它也是一个动态数组，由数组实现**。但是ArrayList是非线程安全的，而Vector是线程安全的。
-   * Stack 是**栈，它继承于Vector**。它的特性是：先进后出(FILO, First In Last Out)。
+   * Stack是**栈，它继承于Vector**。它的特性是：先进后出(FILO, First In Last Out)。
 
 ## 2. List 使用场景
 
 学东西的最终目的是为了**能够理解、使用它**。下面**先概括的说明一下各个List的使用场景**，**后面再分析原因**。
 
-**如果涉及到“栈”、“队列”、“链表”等操作，应该考虑用List，具体的选择哪个List，根据下面的标准来取舍。**
+**如果涉及到栈、队列、链表等操作，应该考虑用List，具体的选择哪个List，根据下面的标准来取舍。**
 (01) 对于需要快速插入，删除元素，应该使用LinkedList。
 (02) 对于需要快速随机访问元素，应该使用ArrayList。
 (03) 对于“**单线程环境**” 或者 “**多线程环境，但List仅仅只会被单个线程操作**”，此时应该使用非同步的类(如ArrayList)。
@@ -146,7 +146,7 @@ date: 2019-03-04 17:39:00
 
 **运行结果如下**：
 
-```
+```txt
 Stack : insert 100000 elements into the 1st position use time：1640 ms
 Vector : insert 100000 elements into the 1st position use time：1607 ms
 LinkedList : insert 100000 elements into the 1st position use time：29 ms
@@ -166,7 +166,8 @@ ArrayList : delete 100000 elements from the 1st position use time：1909 ms
 **从中，我们可以发现**：
 插入10万个元素，LinkedList所花时间最短：**29ms**。
 删除10万个元素，LinkedList所花时间最短：**15ms**。
-遍历10万个元素，LinkedList所花时间最长：**10809 ms**；而ArrayList、Stack和Vector则相差不多，都只用了几秒。
+遍历10万个元素，LinkedList所花时间最长：**10809 ms**；
+而ArrayList、Stack和Vector则相差不多，都只用了几秒。
 
 考虑到Vector是支持同步的，而Stack又是继承于Vector的；因此，得出结论：
 **(01) 对于需要快速插入，删除元素，应该使用LinkedList。**
@@ -218,7 +219,7 @@ private Entry<E> addBefore(E e, Entry<E> entry) {
 ```
 
 从中，我们可以看出：通过add(int index, E element)向LinkedList插入元素时。先是**在双向链表中找到要插入节点的位置index**；找到之后，**再插入一个新节点**。
-双向链表查找index位置的节点时，有一个**加速动作**：*若index < 双向链表长度的1/2，则从前向后查找; 否则，从后向前查找*。
+双向链表查找index位置的节点时，有一个**加速动作**：若index 小于双向链表长度的1/2，则从前向后查找; 否则，从后向前查找。
 
 **接着，我们看看ArrayList.java中向指定位置插入元素的代码。**如下：
 
@@ -240,18 +241,16 @@ public void add(int index, E element) {
 ensureCapacity(size+1) 的作用是“**确认ArrayList的容量，若容量不够，则增加容量。**”
 真正耗时的操作是 System.arraycopy(elementData, index, elementData, index + 1, size - index);
 
-Sun JDK包的java/lang/System.java中的arraycopy()声明如下：
+System.arraycopy()声明如下：
 
-```
+```java
 public static native void arraycopy(Object src, int srcPos, Object dest, int destPos, int length);
 ```
 
-arraycopy()是个JNI函数，它是在JVM中实现的。sunJDK中看不到源码，不过可以在OpenJDK包中看到的源码。网上有对arraycopy()的分析说明，请参考：[System.arraycopy源码分析](http://gutspot.com/2011/11/16/system-arraycopy%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/) 
-实际上，我们只需要了解： *System.arraycopy(elementData, index, elementData, index + 1, size - index); \**会移动index之后所有元素即可**。*这就意味着，ArrayList的add(int index, E element)函数，会引起index之后所有元素的改变！
+arraycopy()是个JNI函数，它是在JVM中实现的。sunJDK中看不到源码，不过可以在OpenJDK包中看到的源码。网上有对arraycopy()的分析说明，请参考：[System.arraycopy源码分析][(http://gutspot.com/2011/11/16/system-arraycopy%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/](https://juejin.cn/post/6844903573545811981#heading-4)) 
+实际上，我们只需要了解： `System.arraycopy(elementData, index, elementData, index + 1, size - index);`会移动index之后所有元素即可。这就意味着，ArrayList的add(int index, E element)函数，会引起index之后所有元素的改变！
 **通过上面的分析，我们就能理解为什么LinkedList中插入元素很快，而ArrayList中插入元素很慢。**
 **“删除元素”与“插入元素”的原理类似，这里就不再过多说明。**
-
- 
 
 接下来，我们看看 **“为什么LinkedList中随机访问很慢，而ArrayList中随机访问很快”**。
 
@@ -419,8 +418,8 @@ Vector(int capacity, int capacityIncrement)
 
 **4 容量增加方式不同**
 
-   逐个添加元素时，若ArrayList容量不足时，“新的容量”=“原始容量x3”。
-   而Vector的容量增长与“增长系数有关”，若指定了“增长系数”，且“增长系数有效(即，大于0)”；那么，每次容量不足时，“新的容量”=“原始容量+增长系数”。若增长系数无效(即，小于/等于0)，则“新的容量”=“原始容量 x 2”。
+逐个添加元素时，若ArrayList容量不足时，“新的容量”=“原始容量x3”。
+而Vector的容量增长与“增长系数有关”，若指定了“增长系数”，且“增长系数有效(即，大于0)”；那么，每次容量不足时，“新的容量”=“原始容量+增长系数”。若增长系数无效(即，小于/等于0)，则“新的容量”=“原始容量 x 2”。
 
 ArrayList中容量增长的主要函数如下：
 
@@ -485,6 +484,3 @@ public Enumeration<E> elements() {
     };
 }
 ```
-
-
-

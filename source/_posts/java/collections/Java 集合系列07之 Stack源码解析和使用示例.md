@@ -1,5 +1,5 @@
 ---
-title: Java 集合系列07之 Stack源码解析和使用示例
+title: java集合系列07之 Stack源码解析和使用示例
 tags:
   - 集合
 categories:
@@ -7,8 +7,8 @@ categories:
   - collections
 abbrlink: ab3cc2a5
 date: 2019-03-04 15:41:00
+updated: 2019-03-04 15:41:00
 ---
-### 概要
 
 本篇博客将主要学习Stack。Stack很简单，就是一些简单的栈操作，他继承Vector。
 
@@ -19,38 +19,36 @@ date: 2019-03-04 15:41:00
 
 <!-- more -->
 
-### 1. Stack介绍
+## Stack介绍
 
->Stack简介
->
->Stack是栈。它的特性是：先进后出（FILO）。
->
->Stack是继承Vector，因此Stack的数据结构和Vector很相似。在这里就不具体介绍。
->
->**Stack类图**：
->
->![upload successful](/images/pasted-159.png)
->
->Stack的构造函数
->
->```
->只有一个默认构造函数，如下
->stack()
->```
->
->**Stack的API**
->
->Stack是栈，它**常用的API**如下：
->
->```
->             boolean       empty()
->synchronized E             peek()
->synchronized E             pop()
->             E             push(E object)
->synchronized int           search(Object o)
->```
+Stack是在java中栈的一种实现，它的特性是：先进后出（FILO）。
 
-### Stack源码分析
+Stack是继承Vector，因此Stack的数据结构和Vector很相似。在这里就不具体介绍。
+
+**Stack类图**：
+
+![栈](https://raw.githubusercontent.com/fengxiu/img/master/pasted-159.png)
+
+Stack的构造函数
+
+```java
+// 只有一个默认构造函数，如下
+stack()
+```
+
+**Stack的API**
+
+Stack是栈，它**常用的API**如下：
+
+```java
+             boolean       empty()
+synchronized E             peek()
+synchronized E             pop()
+             E             push(E object)
+synchronized int           search(Object o)
+```
+
+## Stack源码分析
 
 >```java
 >package java.util;
@@ -124,13 +122,12 @@ date: 2019-03-04 15:41:00
 >
 >```
 >
->**总结**：
->
->(01) Stack实际上也是通过数组去实现的。
->​       执行**push**时(即，**将元素推入栈中**)，是通过将元素追加的数组的末尾中。
->​       执行**peek**时(即，**取出栈顶元素，不执行删除**)，是返回数组末尾的元素。
->​       执行**pop**时(即，**取出栈顶元素，并将该元素从栈中删除**)，是取出数组末尾的元素，然后将该元素从数组中删除。
->(02) Stack继承于Vector，意味着Vector拥有的属性和功能，Stack都拥有。
->
->
+
+## 总结
+
+1. Stack实际上也是通过数组去实现
+   1. 执行**push**时(即，**将元素推入栈中**)，是通过将元素追加的数组的末尾中。
+   2. 执行**peek**时(即，**取出栈顶元素，不执行删除**)，是返回数组末尾的元素。
+   3. 执行**pop**时(即，**取出栈顶元素，并将该元素从栈中删除**)，是取出数组末尾的元素，然后将该元素从数组中删除。
+2. Stack继承于Vector，意味着Vector拥有的属性和功能，Stack都拥有。
 

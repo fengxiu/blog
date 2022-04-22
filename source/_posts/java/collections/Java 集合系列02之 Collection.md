@@ -1,5 +1,5 @@
 ---
-title: Java 集合系列02之 Collection
+title: java集合系列02之 Collection
 tags:
   - 集合
 categories:
@@ -7,12 +7,13 @@ categories:
   - collections
 abbrlink: 9646a357
 date: 2019-03-04 09:13:00
+updated: 2019-03-04 09:13:00
 ---
 ## 概要
 
 首先，对Collection进行说明。下面是Collection的继承关系的主要类图，（这里只列举了抽象类和接口，来说明Collection的整体结构）
 
-![collection 整体架构](/images/pasted-155.png)
+![collection 整体架构](https://raw.githubusercontent.com/fengxiu/img/master/pasted-155.png)
 
 Collection是一个接口，它主要的俩个分支是：**List** 和**Set**。
 
@@ -120,7 +121,6 @@ public abstract class AbstractCollection<E> implements Collection<E> {
     }
 
     // 查询操作
-
     //collection的子类有不同的种类，因此不同种类的迭代器可能不相同，这里就没有实现
     public abstract Iterator<E> iterator();
 

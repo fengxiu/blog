@@ -1,5 +1,5 @@
 ---
-title: Java 集合系列05之 LinkedList源码解析和使用示例
+title: java集合系列05之 LinkedList源码解析和使用示例
 tags:
   - 集合
 categories:
@@ -7,11 +7,14 @@ categories:
   - collections
 abbrlink: dd7bc7f8
 date: 2019-03-04 14:20:00
+updated: 2019-03-04 14:20:00
 ---
+
 ## LinkedList介绍
 
 LinkedList的类图如下
-![Xnip2019-09-04_10-35-20](/source/images/Xnip2019-09-04_10-35-20.jpg)
+
+![LinkedList](https://raw.githubusercontent.com/fengxiu/img/master/Xnip2019-09-04_10-35-20.jpg)
 
 LinkedList是一个继承于AbstractSequentialList双向链表。他可以被当做栈、队列和双端队列来使用。
 
@@ -19,8 +22,6 @@ LinkedList实现了List接口，能对他进行队列操作。这个是因为。
 
 LinkedList是实现Deque接口，能对他进行双端队列操作。
 **LinkedList不是线程安全的集合**
-
-
 
 LinkedList包含三个比较重要的成员：**first、last和size**
 
@@ -59,11 +60,11 @@ queue定义的API如下：
 
 上面六个方法，总结如下
 
-| 操作不成功时      | 抛出异常的方法   | 返回特定值得方法 |
-| ----------- | --------- | -------- |
-| **Insert**  | add(e)    | offer(e) |
-| **Remove**  | remove()  | poll()   |
-| **Examine** | element() | peek()   |
+| 操作不成功时 | 抛出异常的方法 | 返回特定值得方法 |
+| ------------ | -------------- | ---------------- |
+| **Insert**   | add(e)         | offer(e)         |
+| **Remove**   | remove()       | poll()           |
+| **Examine**  | element()      | peek()           |
 
 ## Deque介绍
 
@@ -110,12 +111,12 @@ Iterator<E descendingIterator();
 
 对以上方法进行总结
 
-| 操作类型        | **First Element (Head)** |                 | Last Element (Tail) |                 |
-| ----------- | ------------------------ | --------------- | ------------------- | --------------- |
-| 是否抛出异常      | *Throws exception*       | *Special value* | *Throws exception*  | *Special value* |
-| **Insert**  | addFirst(e)              | offerFirst(e)   | addLast(e)          | offerLast(e)    |
-| **Remove**  | removeFirst()            | pollFirst()     | removeLast()        | pollLast()      |
-| **Examine** | getFirst()               | peekFirst()     | getLast()           | peekLast()      |
+| 操作类型     | **First Element (Head)** |                 | Last Element (Tail) |                 |
+| ------------ | ------------------------ | --------------- | ------------------- | --------------- |
+| 是否抛出异常 | *Throws exception*       | *Special value* | *Throws exception*  | *Special value* |
+| **Insert**   | addFirst(e)              | offerFirst(e)   | addLast(e)          | offerLast(e)    |
+| **Remove**   | removeFirst()            | pollFirst()     | removeLast()        | pollLast()      |
+| **Examine**  | getFirst()               | peekFirst()     | getLast()           | peekLast()      |
 
 但是我在阅读源代码的时候，没有发addFrist抛出异常的代码，希望大家能指出一下
 
@@ -147,39 +148,36 @@ queue和Deque之间的对比
 首先介绍一下，比较重要的参数
 
 ```java
- //链表的长度
-    transient int size = 0;
+//链表的长度
+transient int size = 0;
 
-    /**
-     * 指向链表的第一个节点
-     *      初始化时定义如下:
-     *            (first == null && last == null) ||
-     *            (first.prev == null && first.item != null)
-     */
-    transient Node<E> first;
+/**
+ *指向链表的第一个节点
+ *初始化时定义如下:
+ *  (first == null && last == null) ||  (first.prev == null && first.item != null)
+ */
+transient Node<E> first;
 
-    /**
-     * 指向链表的最后一个节点
-     *          初始化时定义如下：
-     *            (first == null && 
-     *            (last.next == null && last.item != null)
-     */
-    transient Node<E> last;
+/**
+ * 指向链表的最后一个节点
+ * 初始化时定义如下：(first == null &&  (last.next == null && last.item != null)
+ */
+transient Node<E> last;
 
- private static class Node<E> {
-     	// 数据
-        E item;
-     	// 后继指针	
-        Node<E> next;
-     	// 前继指针
-        Node<E> prev;
+private static class Node<E> {
+    // 数据
+    E item;
+    // 后继指针	
+    Node<E> next;
+    // 前继指针
+    Node<E> prev;
 
-        Node(Node<E> prev, E element, Node<E> next) {
-            this.item = element;
-            this.next = next;
-            this.prev = prev;
-        }
+    Node(Node<E> prev, E element, Node<E> next) {
+        this.item = element;
+        this.next = next;
+        this.prev = prev;
     }
+}
 ```
 
 具体操作源码如下，将java8中新添加的流操作省略掉。实现还是比较简单，都是对链表的操作。
@@ -350,7 +348,7 @@ public class LinkedList<E extends AbstractSequentialList<E
         return indexOf(o) != -1;
     }
 
-    //返回刺激和的大小
+    //返回大小
     public int size() {
         return size;
     }

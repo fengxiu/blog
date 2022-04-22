@@ -362,7 +362,7 @@ codeblock:
   copy_button: 
     enable: true  # 增加复制按钮的开关
     # Show text copy result.
-    show_result: false # 点击复制完后是否显示 复制成功 结果提示
+    show_result: true # 点击复制完后是否显示 复制成功 结果提示
     # Available values: default | flat | mac
     style:
 

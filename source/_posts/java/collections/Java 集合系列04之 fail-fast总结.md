@@ -1,5 +1,5 @@
 ---
-title: Java 集合系列04之 fail-fast总结
+title: java集合系列04之 fail-fast总结
 tags:
   - 集合
 categories:
@@ -7,6 +7,7 @@ categories:
   - collections
 abbrlink: 6ad3883
 date: 2019-03-04 12:2:00
+updated: 2019-03-04 12:2:00
 ---
 前面已经讲解了Arraylist，但是留下了一个知识点没有说明，Iterator的fail-fast机制。本篇博客主要讲解一下这个机制。
 
@@ -18,7 +19,7 @@ date: 2019-03-04 12:2:00
 if the list is structurally modified at any time after the iterator is created, in any way except through the iterator's own remove or add methods, the iterator will throw a ConcurrentModificationException. Thus, in the face of concurrent modification, the iterator fails quickly and cleanly, rather than risking arbitrary, non-deterministic behavior at an undetermined time in the future.
 ```
 
-大概的意思就是说：当通过list返回一个Iterator或者ListIterator对象之后，除了Iterator和ListIterator对象自己对集合的修改之外的其他任何修改集合的行为，都会报ConcurrentModificationException。因此在面对并发修改时，迭代器会快速而干净的失败，也就是不对List对象的状态有任何的修改，同时不会再未来某个不确定的时间产生任意的风险和不确定的行为。
+大概的意思就是说：当通过list返回一个Iterator或者ListIterator对象之后，除了Iterator和ListIterator对象自己对集合的修改之外的其他任何修改集合的行为，都会报ConcurrentModificationException。因此在面对并发修改时，迭代器会快速而干净的失败，也就是不对List对象的状态有任何的修改，同时不会在未来某个不确定的时间产生任意的风险和不确定的行为。
 
 用下面通俗的话来说就是：
 
@@ -190,15 +191,13 @@ FastFailTest中通过 new ThreadOne().start() 和 new ThreadTwo().start() 同时
 接下来，我们再系统的梳理一下fail-fast是怎么产生的。步骤如下：
 
 1. 新建了一个ArrayList，名称为arrayList
-2. *向arrayList中添加内容。*
-3. 新建一个“**线程a**，并在“线程a”中**通过Iterator反复的读取arrayList的值**
-4. 新建一个**线程b**，在“线程b”中**删除arrayList中的一个节点A**
-5. 这时，就会产生有趣的事件了。在某一时刻，“线程a”创建了arrayList的Iterator。此时“节点A”仍然存在于arrayList中，**创建arrayList时，expectedModCount = modCount**(假设它们此时的值为N)。在“线程a”在遍历arrayList过程中的某一时刻，“线程b”执行了，并且“线程b”删除了arrayList中的“节点A”。“线程b”执行remove()进行删除操作时，在remove()中执行了“modCount++”，此时**modCount变成了N+1**！“线程a”接着遍历，当它执行到next()函数时，调用checkForComodification()比较“expectedModCount”和“modCount”的大小；而“expectedModCount=N”，“modCount=N+1”,这样，便抛出ConcurrentModificationException异常，产生fail-fast事件。
+2. 向arrayList中添加内容。
+3. 新建一个“**线程a**，并在线程a中**通过Iterator反复的读取arrayList的值**
+4. 新建一个**线程b**，在线程b中**删除arrayList中的一个节点A**
+5. 这时，就会产生有趣的事件了。在某一时刻，线程a创建了arrayList的Iterator。此时节点A仍然存在于arrayList中，**创建arrayList时，expectedModCount = modCount**(假设它们此时的值为N)。在线程a在遍历arrayList过程中的某一时刻，线程b执行了，并且线程b删除了arrayList中的节点A。线程b执行remove()进行删除操作时，在remove()中执行了`modCount++`，此时**modCount变成了N+1**！线程a接着遍历，当它执行到next()函数时，调用checkForComodification()比较expectedModCount和modCount的大小；而`expectedModCount=N`，`modCount=N+1`,这样，便抛出ConcurrentModificationException异常，产生fail-fast事件。
 
 至此，**我们就完全了解了fail-fast是如何产生的！**
 即，当多个线程对同一个集合进行操作的时候，某线程访问集合的过程中，该集合的内容被其他线程所改变(即其它线程通过add、remove、clear等方法，改变了modCount的值)；这时，就会抛出ConcurrentModificationException异常，产生fail-fast事件。
-
-
 
 ## 解决fail-fast方式
 
@@ -206,3 +205,7 @@ FastFailTest中通过 new ThreadOne().start() 和 new ThreadTwo().start() 同时
 
 1. 我们可以使用`Collections.synchronizedList`包装一下Arraylist，对每个方法都是用Synchronize进行同步
 2. 使用JUC中线程安全的集合类，类如`CopyOnWriteList`来替代ArrayList
+
+## Fail-fast存在的问题
+
+从前面可以看到，Fail-fast产生的原因是expectedModCount和modCount不相等，就会抛出异常，什么时间会修改modCount，在删除或者新增的时候会修改，如果是更新呢，根据ArrayList的源码可以看出，是不会对modCount进行修改，因此如果遍历数据的时候，只是修改数据，则不会出现Fail-fast的问题，因此会带来数据不一致的问题，但是ArrayList本身也没有保证一致性。

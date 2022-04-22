@@ -1,13 +1,13 @@
 ---
-title: JVM源码分析之 FinalReference 完全解读
+title: JVM源码分析之FinalReference 完全解读
 tags:
   - 引用
 categories:
   - java
   - jvm
-  - 引用
 abbrlink: 53c15109
 date: 2019-01-04 10:24:00
+updated: 2019-01-04 10:24:00
 ---
 ## 概述
 
@@ -27,7 +27,7 @@ Java对象引用体系除了强引用之外，出于对性能、可扩展性等�
 
 首先我们看看`FinalReference`在JDK里的实现：
 
-```
+```java
 class FinalReference<T> extends Reference<T> {
 
     public FinalReference(T referent, ReferenceQueue <? super T> q) {
@@ -39,7 +39,7 @@ class FinalReference<T> extends Reference<T> {
 
 大家应该注意到了类访问权限是package的，这也就意味着我们不能直接去对其进行扩展，但是JDK里对此类进行了扩展实现`java.lang.ref.Finalizer`，这个类在概述里提到的过，而此类的访问权限也是package的，并且是final的，意味着它不能再被扩展了，接下来的重点我们围绕`java.lang.ref.Finalizer`展开。(PS：后续讲的`Finalizer`其实也是在说`FinalReference`。)
 
-```
+```java
 final class Finalizer extends FinalReference { 
    /* Package-private; must be in same package as the 
    Referenceclass */
@@ -100,7 +100,7 @@ final class Finalizer extends FinalReference {
 
 在讲这个问题之前，我们先来看下`java.lang.Object`里的一个方法
 
-```
+```java
     protected void finalize() throws Throwable { }
 ```
 
@@ -114,7 +114,7 @@ final class Finalizer extends FinalReference {
 
 对象的创建其实是被拆分成多个步骤的，比如`A a=new A(2)`这样一条语句对应的字节码如下：
 
-```
+```java
 0: new           #1                  // class A
 3: dup
 4: iconst_2
@@ -129,7 +129,7 @@ final class Finalizer extends FinalReference {
 
 这个实现比较有意思，在这简单提一下，我们知道执行一个构造函数时，会去调用父类的构造函数，主要是为了初始化继承自父类的属性，那么任何一个对象的初始化最终都会调用到`Object`的空构造函数里（任何空的构造函数其实并不空，会含有三条字节码指令，如下代码所示），为了不对所有类的构造函数都埋点调用`Finalizer.register`方法，hotspot的实现是，在初始化`Object`类时将构造函数里的`return`指令替换为`_return_register_finalizer`指令，该指令并不是标准的字节码指令，是hotspot扩展的指令，这样在处理该指令时调用`Finalizer.register`方法，以很小的侵入性代价完美地解决了这个问题。
 
-```
+```java
 0: aload_0
 1: invokespecial #21                 // Method java/lang/Object."&lt;init&gt;":()V
 4: return
@@ -141,7 +141,7 @@ final class Finalizer extends FinalReference {
 
 在`Finalizer`类的`clinit`方法（静态块）里，我们看到它会创建一个`FinalizerThread`守护线程，这个线程的优先级并不是最高的，意味着在CPU很紧张的情况下其被调度的优先级可能会受到影响
 
-```
+```java
   private static class FinalizerThread extends Thread {
         private volatile boolean running;
         FinalizerThread(ThreadGroup g) {
@@ -176,7 +176,7 @@ final class Finalizer extends FinalReference {
 
 这个线程用来从queue里获取`Finalizer`对象，然后执行该对象的`runFinalizer`方法，该方法会将`Finalizer`对象从`Finalizer`对象链里剥离出来，这样意味着下次GC发生时就可以将其关联的f对象回收了，最后将这个`Finalizer`对象关联的f对象传给一个native方法`invokeFinalizeMethod`
 
-```
+```java
 private void runFinalizer() {
         synchronized (this) {
             if (hasBeenFinalized()) return;
@@ -199,7 +199,7 @@ private void runFinalizer() {
 
 其实`invokeFinalizeMethod`方法就是调了这个f对象的finalize方法，看到这里大家应该恍然大悟了，整个过程都串起来了。
 
-```
+```java
 JNIEXPORT void JNICALL
 Java_java_lang_ref_Finalizer_invokeFinalizeMethod(JNIEnv *env, jclass clazz,
                                                   jobject ob)
@@ -233,7 +233,7 @@ Java_java_lang_ref_Finalizer_invokeFinalizeMethod(JNIEnv *env, jclass clazz,
 
 这里举一个简单的例子，我们使用挺广的Socket通信，`SocksSocketImpl`的父类其实就实现了`finalize`方法:
 
-```
+```java
 /**
  * Cleans up if the user forgets to close it.
  */
@@ -255,4 +255,5 @@ protected void finalize() throws IOException {
 - f对象的`finalize`方法被调用后，这个对象其实还并没有被回收，虽然可能在不久的将来会被回收。
 
 ## 参考
-1. [JVM 源码分析之 FinalReference 完全解读](https://www.infoq.cn/articles/jvm-source-code-analysis-finalreference)
+
+1. [JVM源码分析之FinalReference完全解读](https://www.infoq.cn/articles/jvm-source-code-analysis-finalreference)
