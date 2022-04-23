@@ -13,35 +13,36 @@ date: 2019-03-18 00:27:00
 
 本章，我们会讲解线程获取和释放公平锁的原理；在讲解之前，需要了解几个基本概念。后面的内容，都是基于这些概念的；这些概念可能比较枯燥，但从这些概念中，能窥见java锁的一些架构，这对我们了解锁是有帮助的。
 
-1. **AQS** -- 指AbstractQueuedSynchronizer类。
+**AQS** -- 指AbstractQueuedSynchronizer类。
 
-   AQS是JUC中所有锁内部具体实现依赖的的抽象类，锁的许多公共方法都是在这个类中实现。AQS是独占锁(例如，ReentrantLock)和共享锁(例如，Semaphore)的公共父类。
+AQS是JUC中所有锁内部具体实现依赖的的抽象类，锁的许多公共方法都是在这个类中实现。AQS是独占锁(例如，ReentrantLock)和共享锁(例如，Semaphore)的公共父类。
 
-   AQS需要下面三个基本组件的相互协作：
+AQS需要下面三个基本组件的相互协作：
 
-   - 同步状态的原子性管理；
-   - 线程的阻塞与解除阻塞；
-   - 队列的管理；
+- 同步状态的原子性管理；
+- 线程的阻塞与解除阻塞；
+- 队列的管理；
 
-   创建一个框架分别实现这三个组件是有可能的。但是，这会让整个框架既难用又没效率。例如：存储在队列节点的信息必须与解除阻塞所需要的信息一致，而暴露出的方法的签名必须依赖于同步状态的特性。
+创建一个框架分别实现这三个组件是有可能的。但是，这会让整个框架既难用又没效率。例如：存储在队列节点的信息必须与解除阻塞所需要的信息一致，而暴露出的方法的签名必须依赖于同步状态的特性。
 
-   同步器框架的核心决策是为这三个组件选择一个具体实现，同时在使用方式上又有大量选项可用。这里有意地限制了其适用范围，但是提供了足够的效率，使得实际上没有理由在合适的情况下不用这个框架而去重新建造一个。
-   <!-- more -->
+同步器框架的核心决策是为这三个组件选择一个具体实现，同时在使用方式上又有大量选项可用。这里有意地限制了其适用范围，但是提供了足够的效率，使得实际上没有理由在合适的情况下不用这个框架而去重新建造一个。
 
-2. **AQS**锁的类别 -- 分为“**独占锁**”和“**共享锁**”两种。
+<!-- more -->
 
-   * **独占锁** -- 锁在一个时间点只能被一个线程锁占有。根据锁的获取机制，它又划分为“**公平锁**”和“**非公平锁**”。公平锁，是按照通过CLH等待线程按照先来先得的规则，公平的获取锁；而非公平锁，则当线程要获取锁时，它会无视CLH等待队列而直接获取锁。独占锁的典型实例子是ReentrantLock，此外，ReentrantReadWriteLock.WriteLock也是独占锁。
-   *  **共享锁** -- 能被多个线程同时拥有，能被共享的锁。JUC包中的ReentrantReadWriteLock.ReadLock，CyclicBarrier、CountDownLatch和Semaphore都是共享锁。
+**AQS**锁的类别 -- 分为“**独占锁**”和“**共享锁**”两种。
 
-3. **CLH队列** -- Craig, Landin, and Hagersten lock queue
+* **独占锁** -- 锁在一个时间点只能被一个线程锁占有。根据锁的获取机制，它又划分为“**公平锁**”和“**非公平锁**”。公平锁，是按照通过CLH等待线程按照先来先得的规则，公平的获取锁；而非公平锁，则当线程要获取锁时，它会无视CLH等待队列而直接获取锁。独占锁的典型实例子是ReentrantLock，此外，ReentrantReadWriteLock.WriteLock也是独占锁。
+*  **共享锁** -- 能被多个线程同时拥有，能被共享的锁。JUC包中的ReentrantReadWriteLock.ReadLock，CyclicBarrier、CountDownLatch和Semaphore都是共享锁。
 
-   CLH是自旋锁实现方式的一种，如果你对这个还不是特别了解，可以看这篇文章[自旋锁](http://fengxiutianya.top/posts/6d00129c/)
+**CLH队列** -- Craig, Landin, and Hagersten lock queue
+CLH是自旋锁实现方式的一种，如果你对这个还不是特别了解，可以看这篇文章[自旋锁](/archives/6d00129c.html)
 
-   CLH队列是AQS中等待获取锁的线程队列。在多线程中，为了保护竞争资源不被多个线程同时操作而引起错误，我们常常需要通过锁来保护这些资源。在独占锁中，竞争资源在一个时间点只能被一个线程锁访问；而其它线程则需要等待。CLH就是管理这些“等待锁”的线程的队列。
-    CLH是一个非阻塞的FIFO列。也就是说往里面插入或移除一个节点的时候，在并发条件下不会阻塞，而是通过自旋锁和CAS保证节点插入和移除的原子性。
+CLH队列是AQS中等待获取锁的线程队列。在多线程中，为了保护竞争资源不被多个线程同时操作而引起错误，我们常常需要通过锁来保护这些资源。在独占锁中，竞争资源在一个时间点只能被一个线程锁访问；而其它线程则需要等待。CLH就是管理这些“等待锁”的线程的队列。
 
-4. **CAS函数** -- Compare And Swap 
-   CAS函数，是比较并交换函数，它是原子操作函数；通过CAS操作的数据都是以**原子方式**进行的。例如，compareAndSetHead(), compareAndSetTail(), compareAndSetNext()等函数。它们共同的特点是，这些函数所执行的动作是以原子的方式进行的。
+CLH是一个非阻塞的FIFO列。也就是说往里面插入或移除一个节点的时候，在并发条件下不会阻塞，而是通过自旋锁和CAS保证节点插入和移除的原子性。
+
+**CAS函数** -- Compare And Swap 
+CAS函数，是比较并交换函数，它是原子操作函数；通过CAS操作的数据都是以**原子方式**进行的。例如，compareAndSetHead(), compareAndSetTail(), compareAndSetNext()等函数。它们共同的特点是，这些函数所执行的动作是以原子的方式进行的。
 
 ## **ReentrantLock数据结构**
 
@@ -115,15 +116,21 @@ static final class Node {
 公平锁的获取是通过lock来获取，源码如下
 
 ```java
+
+// FairSync
 public void lock() {
 	sync.lock();
 }
- final void lock() {
+
+// FairSync
+final void lock() {
     acquire(1);
 }
 ```
 
-上面代码可以看出当前线程实际上是通过acquire(1)获取锁的。这里说明一下“**1**”的含义，它是设置锁的状态的参数。对于“独占锁”而言，锁处于可获取状态时，它的状态值是0；锁被线程初次获取到，它的状态值就变成1。由于ReentrantLock(公平锁/非公平锁)是可重入锁，所以独占锁可以被同一个线程多此获取，每获取1次就将锁的状态+1。也就是说，初次获取锁时，通过acquire(1)将锁的状态值设为1；再次获取锁时，将锁的状态值设为2；依次类推，这就是为什么获取锁时，传入的参数是1的原因。
+上面代码可以看出当前线程实际上是通过acquire(1)获取锁的。这里说明一下**1**的含义，它是设置锁的状态的参数。对于“独占锁”而言，锁处于可获取状态时，它的状态值是0；锁被线程初次获取到，它的状态值就变成1。
+
+由于ReentrantLock(公平锁/非公平锁)是可重入锁，所以独占锁可以被同一个线程多此获取，每获取1次就将锁的状态+1。也就是说，初次获取锁时，通过acquire(1)将锁的状态值设为1；再次获取锁时，将锁的状态值设为2；依次类推，这就是为什么获取锁时，传入的参数是1的原因。
 
 另外**可重入**是指锁可以被单个线程多次获取。
 
@@ -153,6 +160,7 @@ public final void acquire(int arg) {
 这里说的是公平锁，源码如下
 
 ```java
+// FairSync类中实现
 protected final boolean tryAcquire(int acquires) {
     // 获取当前线程
     final Thread current = Thread.currentThread();
@@ -348,8 +356,7 @@ final boolean acquireQueued(final Node node, int arg) {
 private static boolean shouldParkAfterFailedAcquire(Node pred, Node node) {
     // 获取前一个线程的状态
     int ws = pred.waitStatus;
-    // 如果前继节点是SINGAL状态，则意味着当前下次呢很难过需要被
-    // unPark唤醒，此时返回true
+    // 如果前继节点是SINGAL状态，则意味着当前节点需要被unPark唤醒，此时返回true
     if (ws == Node.SIGNAL)
         return true;
     // 如果前继节点是取消状态，则设置当前节点的前继节点为前继节点的前继节点
@@ -361,7 +368,7 @@ private static boolean shouldParkAfterFailedAcquire(Node pred, Node node) {
         pred.next = node;
     } else {
         // 如果前继节点的状态是0或者PROPAGATE，则设置前继节点状态为SIGNAL
-        // 此外调用者，需要一直尝试，确保在获取锁之前没有被暂停
+        // 此外调用者，需要一直尝试，确保在获取锁之前被暂停
         compareAndSetWaitStatus(pred, ws, Node.SIGNAL);
     }
     return false;

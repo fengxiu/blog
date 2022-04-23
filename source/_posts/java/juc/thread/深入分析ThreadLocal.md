@@ -3,28 +3,24 @@ title: 深入分析ThreadLocal
 author: zhangke
 abbrlink: 400f00a6
 tags:
-  - java
   - 并发
 categories:
   - java
-  - juc
   - thread
 date: 2018-09-12 10:28:00
+updated: 2018-09-12 10:28:00
 ---
-###  概述
-1. ThreadLocal是什么
-2. 如何使用ThreadLocal
-3. ThreadLocal源码分析
-4. 总结
 
-### ThreadLocal 是什么
+## ThreadLocal是什么
+
 首先我们要明白一点，线程同步主要是为了完成线程间数据共享和同步，保持数据的完整性。而ThreadLocal正如他的名字一样是线程的本地变量，也就是线程所私有的。因此他和线程同步无关，（因为不存在线程之间共享变量的问题，就不需要使用同步机制）。ThreadLocal虽然提供了一种解决多线程环境下成员变量的问题，但是它并不是解决多线程共享变量的问题。那么ThreadLocal到底是什么呢？
 <!-- more --->
-#### API是这样介绍它的：
+
+官方文档是这样介绍它的：
 
 **This class provides thread-local variables. These variables differ from their normal counterparts in that each thread that accesses one (via its {@code get} or {@code set} method) has its own, independently initialized copy of the variable. {@code ThreadLocal} instances are typically private static fields in classes that wish to associate state with a thread (e.g.,a user ID or Transaction ID).**
 
-#### 中文翻译
+中文翻译
 
 该类提供了线程局部 (thread-local) 变量。这些变量不同于它们的普通对应物，因为访问某个变量（通过其`get` 或 `set`方法）的每个线程都有自己的局部变量，它独立于变量的初始化副本。`ThreadLocal`实例通常是类中的 private static 字段，它们希望将状态与某一个线程（例如，用户 ID 或事务 ID）相关联。正如这句话所说，spring 中的事务就使用了ThreadLocal来保证同一个线程中的所有操作使用的是同一个数据库连接。
 
@@ -137,7 +133,7 @@ private statis ThreadLocal<T> objectName = new  ThreadLocal(){
 }
 ```
 
-### ThreadLocal源码解析
+## ThreadLocal源码解析
 
 ThreadLocal定义了四个方法：
 
@@ -159,13 +155,246 @@ ThreadLocal定义了四个方法：
 
 ThreadLocal虽然解决了这个多线程变量的复杂问题，但是它的源码实现却是比较简单的。ThreadLocalMap是实现ThreadLocal的关键，我们先从它入手。
 
-#### ThreadLocalMap
+<!-- ### ThreadLocalMap
 
-ThreadLocalMap其内部利用Entry来实现key-value的存储，如下：
+这个对象实现了一个简单的Map，用于存储数据，其中key就是ThreadLocal对象本身，value是其对应的值。下面先来看下重要的属性
+
 
 ```java
+
+// 定义map存储的键值对，使用了弱引用
 static class Entry extends WeakReference<ThreadLocal<?>> {
-    /** The value associated with this ThreadLocal. */
+    /** ThreadLocal关联的对象 */
+    Object value;
+
+    Entry(ThreadLocal<?> k, Object v) {
+        super(k);
+        value = v;
+    }
+}
+
+/**
+ * 初始容量，必须是2的幂次方
+ */
+private static final int INITIAL_CAPACITY = 16;
+
+/**
+ * 存储键值对，必须是2的幂次方
+ */
+private Entry[] table;
+
+/**
+ * 已经存储的数量
+ */
+private int size = 0;
+
+/**
+ * 最大存储多少个键值对时，就需要扩大数组
+ */
+private int threshold; // Default to 0
+```
+
+上面重点关注的是Entry对象，它用于存储Map的键值对，本身继承自弱引用，也就是，当value属性值关联的对象，只有entry与其关联时，也就是若可达性，则value值就有可能被GC进行回收。
+
+#### 构造函数
+
+构造函数有俩个：
+
+1. ThreadLocalMap(ThreadLocal<?> firstKey, Object firstValue) :初始化一个新的ThreadLocalMap
+2. ThreadLocalMap(ThreadLocalMap parentMap)：使用已有的ThreadLocalMap来初始化
+
+```java
+
+ThreadLocalMap(ThreadLocal<?> firstKey, Object firstValue) {
+    table = new Entry[INITIAL_CAPACITY];
+    int i = firstKey.threadLocalHashCode & (INITIAL_CAPACITY - 1);
+    table[i] = new Entry(firstKey, firstValue);
+    size = 1;
+    setThreshold(INITIAL_CAPACITY);
+}
+
+
+private ThreadLocalMap(ThreadLocalMap parentMap) {
+    Entry[] parentTable = parentMap.table;
+    int len = parentTable.length;
+    setThreshold(len);
+    table = new Entry[len];
+
+    // 循环将所有的key值存储到当前map，在没有处理完成之前，单线程内是不会有其它方法被调用
+    // 因此值是不会被扩大
+    for (int j = 0; j < len; j++) {
+        Entry e = parentTable[j];
+        if (e != null) {
+            @SuppressWarnings("unchecked")
+            ThreadLocal<Object> key = (ThreadLocal<Object>) e.get();
+            if (key != null) {
+                Object value = key.childValue(e.value);
+                Entry c = new Entry(key, value);
+                int h = key.threadLocalHashCode & (len - 1);
+                while (table[h] != null)
+                    h = nextIndex(h, len);
+                table[h] = c;
+                size++;
+            }
+        }
+    }
+}
+
+/**
+ * 加载因此为：长度的2/3
+ */
+private void setThreshold(int len) {
+    threshold = len * 2 / 3;
+}
+```
+
+#### 插入map
+
+
+
+ThreadLocalMap处理hash冲突的方式是开放地址法，简单的说，当key冲突时，将当前hash值加1继续比较，直到找到一个数组索引存储为空的的下标时，就存储当前的值。具体代码如下
+
+```java
+
+private void set(ThreadLocal<?> key, Object value) {
+
+    Entry[] tab = table;
+    int len = tab.length;
+
+    // 获取下标索引
+    int i = key.threadLocalHashCode & (len-1);
+
+    // 循环找到可以存储当前key的下标：
+    // 判断依据有俩个，1： 当前下标为null或者等于当前key，2：当前下标存储的value值被回收
+    for (Entry e = tab[i];e != null;e = tab[i = nextIndex(i, len)]) {
+
+        ThreadLocal<?> k = e.get();
+        if (k == key) {
+            e.value = value;
+            return;
+        }
+
+        if (k == null) {
+            // 取代旧的key值
+            replaceStaleEntry(key, value, i);
+            return;
+        }
+    }
+
+    // 找到
+    tab[i] = new Entry(key, value);
+    int sz = ++size;
+    if (!cleanSomeSlots(i, sz) && sz >= threshold)
+        rehash();
+}
+
+/**
+ * Increment i modulo len.
+ */
+private static int nextIndex(int i, int len) {
+    return ((i + 1 < len) ? i + 1 : 0);
+}
+
+```
+
+上面整体的步骤是
+
+1. 根据hash值以及数组长度，获取对应的下标
+2. 循环找到可以存储的下标，有以下三种情况
+    1. 如果下标存储值为null，则结束循环，调到第三步
+    2. 如果key值相等，则替换value值
+    3. 如果key值为null，表示被回收，取代原来的值
+3. 生成新的节点并添加到指定位置
+4. 清理空值节点
+5. 判断是否需要rehash
+
+按照上面的流程，具体看每一步。
+
+**去待旧的key值**
+源码如下
+
+
+```java
+ /**
+         * Replace a stale entry encountered during a set operation
+         * with an entry for the specified key.  The value passed in
+         * the value parameter is stored in the entry, whether or not
+         * an entry already exists for the specified key.
+         *
+         * As a side effect, this method expunges all stale entries in the
+         * "run" containing the stale entry.  (A run is a sequence of entries
+         * between two null slots.)
+         *
+         * @param  key the key
+         * @param  value the value to be associated with key
+         * @param  staleSlot index of the first stale entry encountered while
+         *         searching for key.
+         */
+        private void replaceStaleEntry(ThreadLocal<?> key, Object value,
+                                       int staleSlot) {
+            Entry[] tab = table;
+            int len = tab.length;
+            Entry e;
+
+            // Back up to check for prior stale entry in current run.
+            // We clean out whole runs at a time to avoid continual
+            // incremental rehashing due to garbage collector freeing
+            // up refs in bunches (i.e., whenever the collector runs).
+            int slotToExpunge = staleSlot;
+            for (int i = prevIndex(staleSlot, len);(e = tab[i]) != null; i = prevIndex(i, len)){
+                if (e.get() == null){
+                    slotToExpunge = i;
+                }
+            }
+
+            // Find either the key or trailing null slot of run, whichever
+            // occurs first
+            for (int i = nextIndex(staleSlot, len);(e = tab[i]) != null;
+                 i = nextIndex(i, len)) {
+
+                ThreadLocal<?> k = e.get();
+
+                // If we find key, then we need to swap it
+                // with the stale entry to maintain hash table order.
+                // The newly stale slot, or any other stale slot
+                // encountered above it, can then be sent to expungeStaleEntry
+                // to remove or rehash all of the other entries in run.
+                if (k == key) {
+                    e.value = value;
+
+                    tab[i] = tab[staleSlot];
+                    tab[staleSlot] = e;
+
+                    // Start expunge at preceding stale entry if it exists
+                    if (slotToExpunge == staleSlot)
+                        slotToExpunge = i;
+                    cleanSomeSlots(expungeStaleEntry(slotToExpunge), len);
+                    return;
+                }
+
+                // If we didn't find stale entry on backward scan, the
+                // first stale entry seen while scanning for key is the
+                // first still present in the run.
+                if (k == null && slotToExpunge == staleSlot)
+                    slotToExpunge = i;
+            }
+
+            // If key not found, put new entry in stale slot
+            tab[staleSlot].value = null;
+            tab[staleSlot] = new Entry(key, value);
+
+            // If there are any other stale entries in run, expunge them
+            if (slotToExpunge != staleSlot)
+                cleanSomeSlots(expungeStaleEntry(slotToExpunge), len);
+        }
+
+``` -->
+
+
+```java
+// 定义map存储的键值对，使用了弱引用
+static class Entry extends WeakReference<ThreadLocal<?>> {
+    /** ThreadLocal关联的对象 */
     Object value;
 
     Entry(ThreadLocal<?> k, Object v) {
@@ -175,7 +404,10 @@ static class Entry extends WeakReference<ThreadLocal<?>> {
 }
 ```
 
-从上面代码中可以看出Entry的key就是ThreadLocal，而value就是值。同时，Entry也继承WeakReference，所以说Entry所对应key（ThreadLocal实例）的引用为一个弱引用（关于弱引用这里就不多说了，感兴趣的可以关注这篇博客：[Java 理论与实践: 用弱引用堵住内存泄漏](https://www.ibm.com/developerworks/cn/java/j-jtp11225/)）
+
+从上面代码中可以看出Entry的key就是ThreadLocal，而value就是值。同时，Entry也继承WeakReference，所以说Entry所对应key（ThreadLocal实例）的引用为一个弱引用（关于弱引用这里就不多说了，感兴趣的可以关注这篇博客：[Java Reference详解](/archives/2e7bd07f.html)
+
+
 
 ThreadLocalMap的源码稍微多了点，我们就看两个最核心的方法getEntry()、set(ThreadLocal> key, Object value)方法。
 
@@ -215,7 +447,7 @@ private void set(ThreadLocal<?> key, Object value) {
     int sz = ++size;
 
     // cleanSomeSlots 清楚陈旧的Entry（key == null）
-    // 如果没有清理陈旧的 Entry 并且数组中的元素大于了阈值，则进行 rehash
+    // 如果没有清理陈旧的 Entry 并且数组中的元素大于了阈值，则进行rehash
     if (!cleanSomeSlots(i, sz) && sz >= threshold)
         rehash();
 }
@@ -249,7 +481,9 @@ private static int nextHashCode() {
 }
 ```
 
-nextHashCode表示分配下一个ThreadLocal实例的threadLocalHashCode的值，HASH_INCREMENT则表示分配两个ThradLocal实例的threadLocalHashCode的增量，从nextHashCode就可以看出他们的定义。
+nextHashCode表示分配下一个ThreadLocal实例的threadLocalHashCode的初始值，
+HASH_INCREMENT则表示分配两个ThradLocal实例的threadLocalHashCode的增量，
+通过nextHashCode返回。
 
 **getEntry()**
 

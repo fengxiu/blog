@@ -5,11 +5,12 @@ categories:
   - java
   - juc
   - atomic
-date: 2019-06-17 21:38:22
+
 tags:
-  - JUC
   - Atomic
-  - LongAdder
+  - java8
+date: 2019-06-17 21:38:22
+updated: 2019-06-17 21:38:22
 ---
 `java.util.concurrency.atomic.LongAdder`是Java8新增的一个类，提供了原子累计值的方法。根据文档的描述其性能要优于AtomicLong，下面是一个简单的测试对比demo(平台:MBP):
 <!-- more -->
@@ -149,11 +150,11 @@ abstract class Striped64 extends Number {
     }
 }
 ```
-数组的元素是Cell类，可以看到Cell类用Contended注解修饰，这里主要是解决false sharing(伪共享的问题)，具体的可以看这篇文章[伪共享（false sharing）并发编程无声的性能杀手](/posts/50d898f6)。
+数组的元素是Cell类，可以看到Cell类用Contended注解修饰，这里主要是解决false sharing(伪共享的问题)，具体的可以看这篇文章[伪共享（false sharing）并发编程无声的性能杀手](/archives/50d898f6.html)。
 下面是LongAdder中的部分源码：
 ``` java
 /**
- * 底竞争下直接更新base，类似AtomicLong
+ * 低竞争下直接更新base，类似AtomicLong
  * 高并发下，会将每个线程的操作hash到不同的
  * cells数组中，从而将AtomicLong中更新
  * 一个value的行为优化之后，分散到多个value中

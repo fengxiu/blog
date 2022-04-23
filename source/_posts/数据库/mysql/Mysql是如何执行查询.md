@@ -2,10 +2,10 @@
 title: Mysql是如何执行查询
 tags:
   - 索引
+  - 读书笔记
 categories:
   - 数据库
   - mysql
-  - 读书笔记
 abbrlink: 63372
 date: 2022-04-11 14:04:42
 updated: 2022-04-11 14:04:42

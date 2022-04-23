@@ -3,10 +3,10 @@ title: Innodb索引深入研究
 tags:
   - innodb
   - 索引
+  - 读书笔记
 categories:
   - 数据库
   - mysql
-  - 读书笔记
 abbrlink: 27224
 date: 2022-04-08 11:03:28
 updated: 2022-04-08 11:03:28

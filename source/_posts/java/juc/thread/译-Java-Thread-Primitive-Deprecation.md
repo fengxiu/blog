@@ -1,13 +1,13 @@
 ---
-title: 译|Java Thread Primitive Deprecation
+title: 译Java Thread Primitive Deprecation
 abbrlink: 837ff6d6
 categories:
   - java
-  - juc
   - thread
 tags:
-  - thread
+  - 并发
 date: 2019-07-28 15:36:15
+updated: 2019-07-28 15:36:15
 ---
 [原文](https://docs.oracle.com/javase/8/docs/technotes/guides/concurrency/threadPrimitiveDeprecation.html)
 
@@ -15,6 +15,7 @@ date: 2019-07-28 15:36:15
 
 因为它本质上是不安全的。stop线程将导致释放其持有的全部monitor（ThreadDeath异常在栈中传播时，monitor被解锁），若在当前线程中，这些monitor保护的对象处于不一致状态，则stop后这种不一致状态对其他线程可见。我们视为这种不一致状态的对象被“损坏”，当线程操作“损坏”对象时，可能发生任意（无法预测）行为，它们可能非常微妙且难以检测，也可能抛出这些异常。与其他非检查异常不同，ThreadDeath悄悄杀死线程，用户无法收到任何警告，用户可能到几个小时，或几天会才能发现问题。
 <!-- more -->
+
 ## 是否可以捕获ThreadDeath并修复“损坏”对象
 
 理论上可行，但这将极大地使编写正确的多线程代码的任务复杂化。由于两个原因几乎不可能做到：
@@ -114,9 +115,9 @@ Thread.currentThread().interrupt();
 
 thread.suspend天生就容易死锁。如果目标线程在挂起时在保护关键系统资源的监视器上持有锁，则在恢复目标线程之前，任何线程都无法访问此资源。如果要恢复目标线程的线程在调用resume之前尝试锁定此监视器，则会导致死锁。这种死锁通常表现为“冻结”的进程。
 
-若线程一 suspend 时通过 monitor A 保护稀有资源，则 suspend 后线程一 不释放 minotor A，因此其他线程无法访问该资源，直至线程一 resume。若恢复线程一的线程在调用 resume 前需要获取 monitor A，则发生死锁。
+若线程一 suspend时通过monitorA保护稀有资源，则suspend后线程一不释放minotorA，因此其他线程无法访问该资源，直至线程一resume。若恢复线程一的线程在调用resume 前需要获取monitorA，则发生死锁。
 
-resume 为服务 suspend 而存在。
+resume为服务suspend而存在。
 
 对此 Thread.suspend 方法的注释也有解释：
 
@@ -133,7 +134,7 @@ to lock this monitor prior to calling resume, deadlock results.
 Such deadlocks typically manifest themselves as "frozen" processes.
 ```
 
-suspend 容易死锁的根因是它 不释放锁，resume 它的线程如果要请求同样的锁，则挂起线程永远无法恢复。
+suspend容易死锁的根因是它不释放锁，resume它的线程如果要请求同样的锁，则挂起线程永远无法恢复。
 
 ## 用什么替代 Thread.suspend 和 Thread.resume
 

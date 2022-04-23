@@ -1,66 +1,58 @@
 ---
-title: java多线程系列 06  线程优先级和守护线程
+title: java多线程系列06 线程优先级和守护线程
 tags:
-  - java
   - 并发
 categories:
   - java
-  - juc
   - thread
 author: zhangke
 abbrlink: 385b4be6
 date: 2018-07-13 11:16:00
+updated: 2018-07-13 11:16:00
 ---
-# java多线程系列 06  线程优先级和守护线程
 
-### **概要**
+java中的线程优先级的范围是1～10，默认的优先级是5。“高优先级线程”会优先于“低优先级线程”执行。
 
-> 1. 线程优先级的介绍
-> 2. 线程优先级的示例
-> 3. 守护线程的示例
+java中有两种线程：**用户线程**和**守护线程**。可以通过isDaemon()方法来区别它们：如果返回false，则说明该线程是“用户线程”；否则就是“守护线程”。
+
+用户线程一般用户执行用户级任务，而守护线程也就是“后台线程”，一般用来执行后台任务。需要注意的是：Java虚拟机在“用户线程”都结束后会后退出。
+
 
 <!-- more -->
 
-### **1. 线程优先级的介绍**
+ JDK 中关于线程优先级和守护线程的介绍如下：
 
-> java 中的线程优先级的范围是1～10，默认的优先级是5。“高优先级线程”会优先于“低优先级线程”执行。
->
-> java 中有两种线程：**用户线程**和**守护线程**。可以通过isDaemon()方法来区别它们：如果返回false，则说明该线程是“用户线程”；否则就是“守护线程”。
-> 用户线程一般用户执行用户级任务，而守护线程也就是“后台线程”，一般用来执行后台任务。需要注意的是：Java虚拟机在“用户线程”都结束后会后退出。
->
-> JDK 中关于线程优先级和守护线程的介绍如下：
->
-> ```
-> Every thread has a priority. Threads with higher priority are executed in preference to threads with lower priority. Each thread may or may not also be marked as a daemon. When code running in some thread creates a new Thread object, the new thread has its priority initially set equal to the priority of the creating thread, and is a daemon thread if and only if the creating thread is a daemon.
-> 
-> When a Java Virtual Machine starts up, there is usually a single non-daemon thread (which typically calls the method named main of some designated class). The Java Virtual Machine continues to execute threads until either of the following occurs:
-> 
-> The exit method of class Runtime has been called and the security manager has permitted the exit operation to take place.
-> All threads that are not daemon threads have died, either by returning from the call to the run method or by throwing an exception that propagates beyond the run method. 
-> Marks this thread as either a daemon thread or a user thread. The Java Virtual Machine exits when the only threads running are all daemon threads.
-> ```
->
-> 大致意思是：
->
-> ```
-> 每个线程都有一个优先级。“高优先级线程”会优先于“低优先级线程”执行。每个线程都可以被标记为一个守护进程或非守护进程。在一些运行的主线程中创建新的子线程时，子线程的优先级被设置为等于“创建它的主线程的优先级”，当且仅当“创建它的主线程是守护线程”时“子线程才会是守护线程”。
-> 
-> 当Java虚拟机启动时，通常有一个单一的非守护线程（该线程通过是通过main()方法启动）。JVM会一直运行直到下面的任意一个条件发生，JVM就会终止运行：
-> (01) 调用了exit()方法，并且exit()有权限被正常执行。
-> (02) 所有的“非守护线程”都死了(即JVM中仅仅只有“守护线程”)。
-> 
-> 每一个线程都被标记为“守护线程”或“用户线程”。当只有守护线程运行时，JVM会自动退出。
-> ```
->
-> 
->
->  
+ ```text
+ Every thread has a priority. Threads with higher priority are executed in preference to threads with lower priority. Each thread may or may not also be marked as a daemon. When code running in some thread creates a new Thread object, the new thread has its priority initially set equal to the priority of the creating thread, and is a daemon thread if and only if the creating thread is a daemon.
+ 
+ When a Java Virtual Machine starts up, there is usually a single non-daemon thread (which typically calls the method named main of some designated class). The Java Virtual Machine continues to execute threads until either of the following occurs:
+ 
+ The exit method of class Runtime has been called and the security manager has permitted the exit operation to take place.
+ All threads that are not daemon threads have died, either by returning from the call to the run method or by throwing an exception that propagates beyond the run method. 
+ Marks this thread as either a daemon thread or a user thread. The Java Virtual Machine exits when the only threads running are all daemon threads.
+ ```
 
-### **2. 线程优先级的示例**
+ 大致意思是：
+
+ ```text
+ 每个线程都有一个优先级。“高优先级线程”会优先于“低优先级线程”执行。每个线程都可以被标记为一个守护进程或非守护进程。在一些运行的主线程中创建新的子线程时，子线程的优先级被设置为等于“创建它的主线程的优先级”，当且仅当“创建它的主线程是守护线程”时“子线程才会是守护线程”。
+ 
+ 当Java虚拟机启动时，通常有一个单一的非守护线程（该线程通过是通过main()方法启动）。JVM会一直运行直到下面的任意一个条件发生，JVM就会终止运行：
+ (01) 调用了exit()方法，并且exit()有权限被正常执行。
+ (02) 所有的“非守护线程”都死了(即JVM中仅仅只有“守护线程”)。
+ 
+ 每一个线程都被标记为“守护线程”或“用户线程”。当只有守护线程运行时，JVM会自动退出。
+ ```
+
+ 
+
+  
+
+## 线程优先级的示例
 
 我们先看看优先级的示例 
 
-```
+```java
 class MyThread extends Thread{  
     public MyThread(String name) {
         super(name);
@@ -96,26 +88,26 @@ public class Demo {
 ```
 main(5)
 t1(1), loop 0
-t2(10), loop 0
 t1(1), loop 1
-t2(10), loop 1
+t2(10), loop 0
 t1(1), loop 2
-t2(10), loop 2
+t2(10), loop 1
 t1(1), loop 3
-t2(10), loop 3
+t2(10), loop 2
 t1(1), loop 4
+t2(10), loop 3
 t2(10), loop 4
 ```
 
 **结果说明**：
 (01) 主线程main的优先级是5。
-(02) t1的优先级被设为1，而t2的优先级被设为10。cpu在执行t1和t2的时候，根据时间片轮循调度，所以能够并发执行。
+(02) t1的优先级被设为1，而t2的优先级被设为10。cpu在执行t1和t2的时候，根据时间片轮循调度，所以能够并发执行。但是会优先执行t1线程，因为这个线程的优先级高，（数字越小优先级越高）
 
-### **3. 守护线程的示例**
+## 守护线程的示例
 
 下面是守护线程的示例。
 
-```
+```java
 // Demo.java
 class MyThread extends Thread{  
     public MyThread(String name) {
