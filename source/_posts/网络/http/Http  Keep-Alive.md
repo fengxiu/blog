@@ -136,7 +136,7 @@ keepalive是TCP保鲜定时器，当网络两端建立了TCP连接之后，闲�
 
 我想用一张示意图片来说明使用启用keepalive的不同。另外，http keepalive是客户端浏览器与服务端httpd守护进程协作的结果，所以，我们另外安排篇幅介绍不同浏览器的各种情况对keepalive的利用。
 
-![img](http://www.nowamagic.net/librarys/images/201312/2013_12_20_02.png)
+![img](http://www.nowamagic.net/libraryshttps://cdn.jsdelivr.net/gh/fengxiu/img/201312/2013_12_20_02.png)
 
 ### 参考
 

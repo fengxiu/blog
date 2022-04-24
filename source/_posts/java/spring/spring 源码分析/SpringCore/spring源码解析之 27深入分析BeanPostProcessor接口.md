@@ -166,11 +166,11 @@ BeanPostProcessor 可以理解为是Spring 的一个工厂钩子（其实 Spring
 
 `postProcessBeforeInitialization()` 和 `postProcessAfterInitialization()` 两个方法都接收一个 Object 类型的 bean，一个 String 类型的 beanName，其中 bean 是已经实例化了的 instanceBean，能拿到这个你是不是可以对它为所欲为了？ 这两个方法是初始化 bean 的前后置处理器，他们应用 `invokeInitMethods()` 前后。如下图：
 
-![upload successful](/images/pasted-18.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-18.png)
 
 代码层次上面已经贴出来，这里再贴一次：
 
-![upload successful](/images/pasted-19.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-19.png)
 
 两者源码如下：
 

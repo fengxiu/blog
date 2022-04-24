@@ -110,7 +110,7 @@ URL地址格式排列为：`schema://host:port/path`，如：`http://www.maogoo.
 
 请求的格式如下图：
 
-![upload successful](/images/pasted-206.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-206.png)
 
 下面以一个具体的例子来解释请求的消息格式,
 

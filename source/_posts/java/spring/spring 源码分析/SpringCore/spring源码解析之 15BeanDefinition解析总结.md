@@ -18,7 +18,7 @@ date: 2019-01-14 06:19:00
 在前文提过，IOC 容器的初始化过程分为三步骤：Resource 定位、BeanDefinition的解析，BeanDefinition 注册。
 <!-- more-->
 
-![upload successful](/images/pasted-11.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-11.png)
 
 - **Resource 定位**。我们一般用外部资源来描述 Bean 对象，所以在初始化 IOC 容器的第一步就是需要定位这个外部资源。
 - **BeanDefinition 解析:**。装载就是 BeanDefinition 的载入。BeanDefinitionReader 读取、解析 Resource 资源，也就是将用户定义的 Bean 表示成 IOC 容器的内部数据结构：BeanDefinition。在 IOC 容器内部维护着一个 BeanDefinition Map 的数据结构，在配置文件中每一个都对应着一个BeanDefinition对象。

@@ -48,7 +48,7 @@ CAS函数，是比较并交换函数，它是原子操作函数；通过CAS操�
 
 ReentrantLock的UML类图
 
-![upload successful](/images/pasted-299.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-299.png)
 
 从图中可以看出：
 

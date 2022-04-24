@@ -151,7 +151,7 @@ ThreadLocal定义了四个方法：
 
 下图是Thread、ThreadLocal、ThreadLocalMap的关系
 
-![upload successful](/images/pasted-301.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-301.png)
 
 ThreadLocal虽然解决了这个多线程变量的复杂问题，但是它的源码实现却是比较简单的。ThreadLocalMap是实现ThreadLocal的关键，我们先从它入手。
 

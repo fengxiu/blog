@@ -90,9 +90,9 @@ int send_request() {
 ### 引用计数
 
 我们用C++的共享指针演示的想法可以应用于所有对象。许多语言，如Perl，Python或PHP都采用这种方法。最好用图片说明：
-![引用计数](/images/Java-GC-counting-references1.png)
+![引用计数](https://cdn.jsdelivr.net/gh/fengxiu/img/Java-GC-counting-references1.png)
 绿色云表示他们指向的对象仍然由程序使用。从技术上讲，这些可能是当前正在执行的方法中的局部变量或静态变量或其他内容。它可能因编程语言而异，因此我们不会在此处关注它。蓝色圆圈是内存中的活动对象，其中的数字表示其引用计数。最后，灰色圆圈是未从任何仍明确使用的对象引用的对象（这些对象由绿色云直接引用）。灰色对象因此是垃圾，可以由垃圾收集器清理。这一切看起来都很好，不是吗？嗯，确实如此，但整个方法都有很大的缺点。由于循环引用，它们的引用计数不为零，因此很容易最终得到一个分离的对象循环，这些对象都不在范围内。这是一个例子：
-![Java-GC-cyclical-dependencies](/images/Java-GC-cyclical-dependencies.png)
+![Java-GC-cyclical-dependencies](https://cdn.jsdelivr.net/gh/fengxiu/img/Java-GC-cyclical-dependencies.png)
 
 ### 标记-清除
 
@@ -109,6 +109,6 @@ JVM用于跟踪所有可到达（实时）对象并确保不可访问对象声�
 * **扫描：**确保下一次分配可以重用不可到达对象占用的内存地址。
 
 JVM中的不同GC算法（例如并行清除，并行标记+复制或CMS）正在以稍微不同的方式实现这些阶段，但在概念级别，该过程仍然类似于上述两个步骤。关于这种方法的一个至关重要的事情是循环不再泄漏：
-![Java-GC-mark-and-sweep](/images/Java-GC-mark-and-sweep.png)
+![Java-GC-mark-and-sweep](https://cdn.jsdelivr.net/gh/fengxiu/img/Java-GC-mark-and-sweep.png)
 
 不太好的事情是需要停止应用程序线程以便于收集无用对象的程序执行，因为如果它们一直在不断变化，你就无法真正计算引用。当应用程序暂时停止以便JVM可以专门来进行信息的收集，这种情况称为“stop the world”（STW）。它们可能由于多种原因而发生，但垃圾收集是迄今为止最受欢迎的一种。

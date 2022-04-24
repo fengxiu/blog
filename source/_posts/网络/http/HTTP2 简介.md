@@ -80,7 +80,7 @@ SPDY 与 HTTP/2 的共同演化让服务器、浏览器和网站开发者可以�
 
 HTTP/2 所有性能增强的核心在于新的二进制分帧层，它定义了如何封装 HTTP 消息并在客户端与服务器之间传输。
 
-![HTTP/2 二进制分帧层](https://developers.google.com/web/fundamentals/performance/http2/images/binary_framing_layer01.svg?hl=zh-cn)
+![HTTP/2 二进制分帧层](https://developers.google.com/web/fundamentals/performance/http2https://cdn.jsdelivr.net/gh/fengxiu/img/binary_framing_layer01.svg?hl=zh-cn)
 
 这里所谓的“层”，指的是位于套接字接口与应用可见的高级 HTTP API 之间一个经过优化的新编码机制：HTTP 的语义（包括各种动词、方法、标头）都不受影响，不同的是传输期间对它们的编码方式变了。 HTTP/1.x 协议以换行符作为纯文本的分隔符，而 HTTP/2 将所有传输的信息分割为更小的消息和帧，并采用二进制格式对它们编码。
 
@@ -101,7 +101,7 @@ HTTP/2 所有性能增强的核心在于新的二进制分帧层，它定义了�
 - 每条消息都是一条逻辑 HTTP 消息（例如请求或响应），包含一个或多个帧。
 - 帧是最小的通信单位，承载着特定类型的数据，例如 HTTP 标头、消息负载等等。 来自不同数据流的帧可以交错发送，然后再根据每个帧头的数据流标识符重新组装。
 
-![HTTP/2 数据流、消息和帧](https://developers.google.com/web/fundamentals/performance/http2/images/streams_messages_frames01.svg?hl=zh-cn)
+![HTTP/2 数据流、消息和帧](https://developers.google.com/web/fundamentals/performance/http2https://cdn.jsdelivr.net/gh/fengxiu/img/streams_messages_frames01.svg?hl=zh-cn)
 
 简言之，HTTP/2 将 HTTP 协议通信分解为二进制编码帧的交换，这些帧对应着特定数据流中的消息。所有这些都在一个 TCP 连接内复用。 这是 HTTP/2 协议所有其他功能和性能优化的基础。
 
@@ -111,7 +111,7 @@ HTTP/2 所有性能增强的核心在于新的二进制分帧层，它定义了�
 
 HTTP/2 中新的二进制分帧层突破了这些限制，实现了完整的请求和响应复用：客户端和服务器可以将 HTTP 消息分解为互不依赖的帧，然后交错发送，最后再在另一端把它们重新组装起来。
 
-![一个共享连接内的 HTTP/2 请求和响应复用](https://developers.google.com/web/fundamentals/performance/http2/images/multiplexing01.svg?hl=zh-cn)
+![一个共享连接内的 HTTP/2 请求和响应复用](https://developers.google.com/web/fundamentals/performance/http2https://cdn.jsdelivr.net/gh/fengxiu/img/multiplexing01.svg?hl=zh-cn)
 
 快照捕捉了同一个连接内并行的多个数据流。 客户端正在向服务器传输一个 `DATA` 帧（数据流 5），与此同时，服务器正向客户端交错发送数据流 1 和数据流 3 的一系列帧。因此，一个连接上同时有三个并行数据流。
 
@@ -135,7 +135,7 @@ HTTP/2 中的新二进制分帧层解决了 HTTP/1.x 中存在的队首阻塞问
 
 数据流依赖关系和权重的组合让客户端可以构建和传递“优先级树”，表明它倾向于如何接收响应。 反过来，服务器可以使用此信息通过控制 CPU、内存和其他资源的分配设定数据流处理的优先级，在资源数据可用之后，带宽分配可以确保将高优先级响应以最优方式传输至客户端。
 
-![HTTP/2 数据流依赖关系和权重](https://developers.google.com/web/fundamentals/performance/http2/images/stream_prioritization01.svg?hl=zh-cn)
+![HTTP/2 数据流依赖关系和权重](https://developers.google.com/web/fundamentals/performance/http2https://cdn.jsdelivr.net/gh/fengxiu/img/stream_prioritization01.svg?hl=zh-cn)
 
 HTTP/2 内的数据流依赖关系通过将另一个数据流的唯一标识符作为父项引用进行声明；如果忽略标识符，相应数据流将依赖于“根数据流”。 声明数据流依赖关系指出，应尽可能先向父数据流分配资源，然后再向其依赖项分配资源。 换句话说，“请先处理和传输响应 D，然后再处理和传输响应 C”。
 

@@ -110,7 +110,7 @@ public class CMS {
 #### 阶段1：Initial Mark
 
 这个是 CMS 两次 stop-the-wolrd 事件的其中一次，这个阶段的目标是：标记那些直接被 GC root 引用或者被年轻代存活对象所引用的所有对象，标记后示例如下所示
-![cms-1](/images/cms-1.png)
+![cms-1](https://cdn.jsdelivr.net/gh/fengxiu/img/cms-1.png)
 上述例子对应的日志信息为：
 
 ```txt
@@ -129,7 +129,7 @@ public class CMS {
 #### 阶段2 concurrent Mark
 
 在这个阶段GC垃圾回收器会遍历老年代，然后标记所有存活的对象，它会根据上个阶段找到的 GC Roots 遍历查找。并发标记阶段，它会与用户的应用程序并发运行。并不是老年代所有的存活对象都会被标记，因为在标记期间用户的程序可能会改变一些引用，如下图所示：
-![g1-07-591x187](/images/g1-07-591x187.png)
+![g1-07-591x187](https://cdn.jsdelivr.net/gh/fengxiu/img/g1-07-591x187.png)
 在上面的图中，与阶段1的图进行对比，就会发现有一个对象的引用已经发生了变化，这个阶段相应的日志信息如下：
 ```
 2019-04-18T15:38:27.141+0800: 0.139: [CMS-concurrent-mark-start]
@@ -142,9 +142,9 @@ public class CMS {
 #### 阶段3：concurrent Preclean
 
 Concurrent Preclean：这也是一个并发阶段，与应用的线程并发运行，并不会stop应用的线程。上面一个阶段和应用并发运行的过程中，一些对象的引用可能会发生变化，但是这种情况发生时，JVM会将包含这个对象的区域（Card）标记为 Dirty，这也就是 Card Marking。
-![cms-3](/images/cms-3.png)
+![cms-3](https://cdn.jsdelivr.net/gh/fengxiu/img/cms-3.png)
 在pre-clean阶段，那些能够从 Dirty 对象到达的对象也会被标记，这个标记做完之后，dirty card 标记就会被清除了
-![cms-4](/images/cms-4.png)
+![cms-4](https://cdn.jsdelivr.net/gh/fengxiu/img/cms-4.png)
 
 ```这个阶段日志信息如下
 2019-04-18T15:38:27.141+0800: 0.139: [CMS-concurrent-preclean-start]
@@ -188,7 +188,7 @@ Concurrent Preclean：这也是一个并发阶段，与应用的线程并发运�
 10. `[Times: user=0.01 sys=0.00, real=0.00 secs]` ：在不同态下执行的时间。
 
 经历过这五个阶段之后，老年代所有存活的对象都被标记过了，现在可以通过清除算法去清理那些老年代不再使用的对象。
-![g1-10-591x187](/images/g1-10-591x187.png)
+![g1-10-591x187](https://cdn.jsdelivr.net/gh/fengxiu/img/g1-10-591x187.png)
 
 #### 阶段6：Concurrent Sweep
 

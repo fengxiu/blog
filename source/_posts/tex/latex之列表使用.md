@@ -21,7 +21,7 @@ tags:
 ```
 
 生成效果如下
-![181604170295824](/images/181604170295824.png)
+![181604170295824](https://cdn.jsdelivr.net/gh/fengxiu/img/181604170295824.png)
 
 ### itemize 是无序列表
 
@@ -34,7 +34,7 @@ tags:
 ```
 
 生成效果如下
-![181609245917394](/images/181609245917394.png)
+![181609245917394](https://cdn.jsdelivr.net/gh/fengxiu/img/181609245917394.png)
 
 ### description 是解说列表，可以指定标签
 
@@ -48,7 +48,7 @@ tags:
 ```
 
 生成效果如下
-![181615512164578](/images/181615512164578.png)
+![181615512164578](https://cdn.jsdelivr.net/gh/fengxiu/img/181615512164578.png)
 
 列表环境也可以互相嵌套，默认情况下不同层级的标签不同，以体现分级层次。
 同时为也可以定制列表前的序号，可以使用 A，a，I，i，1 作为可选项产生 \Alph，\alph，\Roman，\roman，\arabic的效果。比如下面这个例子:
@@ -62,7 +62,7 @@ tags:
 ```
 
 效果如下
-![Xnip2020-02-15_21-30-18](/images/Xnip2020-02-15_21-30-18.jpg)
+![Xnip2020-02-15_21-30-18](https://cdn.jsdelivr.net/gh/fengxiu/img/Xnip2020-02-15_21-30-18.jpg)
 
 
 

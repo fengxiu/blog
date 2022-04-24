@@ -31,12 +31,12 @@ JSR，全称 Java Specification Requests， 即Java规范提案， 主要是用�
 ### 膜拜
 
 那么，JSR 166以及J.U.C包的作者是谁呢，没错，就是Doug Lea大神，挺牛逼的，大神级别任务，贴张照片膜拜下。
-![879896-20160624160226063-830249727](/images/879896-20160624160226063-830249727.jpg)
+![879896-20160624160226063-830249727](https://cdn.jsdelivr.net/gh/fengxiu/img/879896-20160624160226063-830249727.jpg)
 <!-- more -->
 ## 什么是Executor框架
 
 简单的说，就是一个任务的执行和调度框架，涉及的类如下图所示：
-![Executor 框架](/images/pasted-345.png)
+![Executor 框架](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-345.png)
 其中，最顶层是Executor接口，它的定义很简单，一个用于执行任务的execute方法，如下所示：
 
 ``` java

@@ -31,18 +31,18 @@ ScheduledThreadPoolExecutor继承ThreadPoolExecutor来重用线程池的功能�
 
 通过如上的介绍，可以对比一下Timer和ScheduledThreadPoolExecutor：
 
-| Timer                    | ScheduledThreadPoolExecutor |
-|--------------------------|-----------------------------|
-| 单线程                      | 多线程                         |
-| 单个任务执行时间影响其他任务调度         | 多线程，不会影响                    |
-| 基于绝对时间                   | 基于相对时间                      |
-| 一旦执行任务出现异常不会捕获，其他任务得不到执行 | 多线程，单个任务的执行不会影响其他线程         |
+| Timer                                            | ScheduledThreadPoolExecutor            |
+| ------------------------------------------------ | -------------------------------------- |
+| 单线程                                           | 多线程                                 |
+| 单个任务执行时间影响其他任务调度                 | 多线程，不会影响                       |
+| 基于绝对时间                                     | 基于相对时间                           |
+| 一旦执行任务出现异常不会捕获，其他任务得不到执行 | 多线程，单个任务的执行不会影响其他线程 |
 
 ## ScheduledThreadPoolExecutor的实现
 
  ScheduledThreadPoolExecutor的类结构
 
-![upload successful](/images/pasted-172.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-172.png)
 
 ScheduledThreadPoolExecutor继承自ThreadPoolExecutor，实现了ScheduledExecutorService接口，该接口定义了schedule等任务调度的方法。
 

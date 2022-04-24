@@ -15,7 +15,7 @@ Atomic这个包主要是一个小型工具包，支持**单个变量**上的无�
 
 主要的类如下图
 
-![upload successful](/images/pasted-298.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-298.png)
 
 其中other这一类是java 8中新增加的类，后面会介绍。
 

@@ -29,7 +29,7 @@ Java 的 I/O 操作类在包 java.io 下，大概有将近 80 个类，但是这
 
 **InputStream 输入流的类继承层次如下图所示：**
 
-![upload successful](/images/pasted-286.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-286.png)
 
 输入流根据数据类型和操作方式又被划分成若干个子类，每个子类分别处理不同操作类型，解释如下
 
@@ -51,7 +51,7 @@ Java 的 I/O 操作类在包 java.io 下，大概有将近 80 个类，但是这
 
 **OutputStream 输出流的类层次结构也是类似，如下图所示：**
 
-![upload successful](/images/pasted-287.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-287.png)
 
 输出流根据数据类型和操作方式又被划分成若干个子类，每个子类分别处理不同操作类型，解释如下：
 
@@ -81,7 +81,7 @@ OutputStream out = new BufferedOutputStream(
 
 下图是写字符的 I/O 操作接口涉及到的类，Writer 类提供了一个抽象方法 write(char cbuf[], int off, int len) 由子类去实现。
 
-![upload successful](/images/pasted-288.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-288.png)
 
 * Writer 是以字符为单位的输出流的超类。它提供了write()接口往其中写入数据。
 * CharArrayWriter 是字符数组输出流。它用于读取字符数组，它继承于Writer。操作的数据是以字符为单位！
@@ -93,7 +93,7 @@ OutputStream out = new BufferedOutputStream(
 * PrintWriter 是字符类型的打印输出流。它是用来装饰其它输出流，能为其他输出流添加了功能，使它们能够方便地打印各种数据值表示形式。
 
 读字符的操作接口也有类似的类结构，如下图所示：
-![upload successful](/images/pasted-289.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-289.png)
 
 * Reader 是以字符为单位的输入流的超类。它提供了read()接口来取字符数据。
 *  CharArrayReader 是字符数组输入流。它用于读取字符数组，它继承于Reader。操作的数据是以字符为单位！
@@ -107,7 +107,7 @@ OutputStream out = new BufferedOutputStream(
 
 另外数据持久化或网络传输都是以字节进行的，所以必须要有字符到字节或字节到字符的转化。字符到字节需要转化，其中读的转化过程如下图所示：
 
-![upload successful](/images/pasted-292.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-292.png)
 
 InputStreamReader 类是字节到字符的转化桥梁，InputStream 到 Reader 的过程要指定编码字符集，否则将采用操作系统默认字符集，很可能会出现乱码问题。StreamDecoder 正是完成字节到字符的解码的实现类。也就是当你用如下方式读取一个文件时：
 
@@ -121,7 +121,7 @@ FileReader 类就是按照上面的工作方式读取文件的，FileReader 是�
 
 写入也是类似的过程如下图所示：
 
-![upload successful](/images/pasted-293.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-293.png)
 
 通过 OutputStreamWriter 类完成，字符到字节的编码过程，由 StreamEncoder 完成编码过程。
 
@@ -135,7 +135,7 @@ FileReader 类就是按照上面的工作方式读取文件的，FileReader 是�
 
 下面以清单 1 的程序为例，介绍下如何从磁盘读取一段文本字符。如下图所示：
 
-![upload successful](/images/pasted-294.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-294.png)
 
 当传入一个文件路径，将会根据这个路径创建一个 File 对象来标识这个文件，然后将会根据这个 File 对象创建真正读取文件的操作对象，这时将会真正创建一个关联真实存在的磁盘文件的文件描述符 FileDescriptor，通过这个对象可以直接控制这个磁盘文件。由于我们需要读取的是字符格式，所以需要 StreamDecoder 类将 byte 解码为 char 格式，至于如何从磁盘驱动器上读取一段数据，由操作系统帮我们完成。至于操作系统是如何将数据持久化到磁盘以及如何建立数据结构需要根据当前操作系统使用何种文件系统来回答，至于文件系统的相关细节可以参考另外的文章。
 
@@ -145,7 +145,7 @@ Socket 这个概念没有对应到一个具体的实体，它是描述计算机�
 
 下图是典型的基于 Socket 的通信的场景：
 
-![upload successful](/images/pasted-295.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-295.png)
 
 主机 A 的应用程序要能和主机 B 的应用程序通信，必须通过 Socket 建立连接，而建立 Socket 连接必须需要底层 TCP/IP 协议来建立 TCP 连接。建立 TCP 连接需要底层 IP 协议来寻址网络中的主机。我们知道网络层使用的 IP 协议可以帮助我们根据 IP 地址来找到目标主机，但是一台主机上可能运行着多个应用程序，如何才能与指定的应用程序通信就要通过 TCP 或 UPD 的地址也就是端口号来指定。这样就可以通过一个 Socket 实例唯一代表一个主机上的一个应用程序的通信链路了。
 
@@ -171,7 +171,7 @@ BIO 即阻塞 I/O，不管是磁盘 I/O 还是网络 I/O，数据在写入 Outpu
 
 我们先看一下 NIO 涉及到的关联类图，如下：
 
-![upload successful](/images/pasted-296.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-296.png)
 
 上图中有两个关键类：Channel 和 Selector，它们是 NIO 中两个核心概念。我们还用前面的城市交通工具来继续比喻 NIO 的工作方式，这里的 Channel 要比 Socket 更加具体，它可以比作为某种具体的交通工具，如汽车或是高铁等，而 Selector 可以比作为一个车站的车辆运行调度系统，它将负责监控每辆车的当前运行状态：是已经出战还是在路上等等，也就是它可以轮询每个 Channel 的状态。这里还有一个 Buffer 类，它也比 Stream 更加具体化，我们可以将它比作为车上的座位，Channel 是汽车的话就是汽车上的座位，高铁上就是高铁上的座位，它始终是一个具体的概念，与 Stream 不同。Stream 只能代表是一个座位，至于是什么座位由你自己去想象，也就是你在去上车之前并不知道，这个车上是否还有没有座位了，也不知道上的是什么车，因为你并不能选择，这些信息都已经被封装在了运输工具（Socket）里面了，对你是透明的。NIO 引入了 Channel、Buffer 和 Selector 就是想把这些信息具体化，让程序员有机会控制它们，如：当我们调用 write() 往 SendQ 写数据时，当一次写的数据超过 SendQ 长度是需要按照 SendQ 的长度进行分割，这个过程中需要有将用户空间数据和内核地址空间进行切换，而这个切换不是你可以控制的。而在 Buffer 中我们可以控制 Buffer 的 capacity，并且是否扩容以及如何扩容都可以控制。
 
@@ -221,7 +221,7 @@ public void selector() throws IOException {
 
 下图是描述了基于 NIO 工作方式的 Socket 请求的处理过程：
 
-![upload successful](/images/pasted-297.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-297.png)
 
 上图中的 Selector 可以同时监听一组通信信道（Channel）上的 I/O 状态，前提是这个 Selector 要已经注册到这些通信信道中。选择器 Selector 可以调用 select() 方法检查已经注册的通信信道上的是否有 I/O 已经准备好，如果没有至少一个信道 I/O 状态有变化，那么 select 方法会阻塞等待或在超时时间后会返回 0。上图中如果有多个信道有数据，那么将会将这些数据分配到对应的数据 Buffer 中。所以关键的地方是有一个线程来处理所有连接的数据交互，每个连接的数据交互都不是阻塞方式，所以可以同时处理大量的连接请求。
 

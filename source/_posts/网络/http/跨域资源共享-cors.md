@@ -16,7 +16,7 @@ tags:
 
 出于安全原因，浏览器限制从脚本内发起的跨源HTTP请求。 例如，XMLHttpRequest和Fetch API遵循同源策略。这意味着使用这些API的Web应用程序只能从加载应用程序的同一个域请求HTTP资源，除非响应报文包含了正确CORS响应头。
 <!-- more -->
-![CORS_principle](/images/CORS_principle.png)
+![CORS_principle](https://cdn.jsdelivr.net/gh/fengxiu/img/CORS_principle.png)
 
 跨域资源共享标准新增了一组HTTP首部字段，允许服务器声明哪些源站通过浏览器有权限访问哪些资源。另外，规范要求，对那些可能对服务器数据产生副作用的HTTP请求方法（特别是GET以外的 HTTP 请求，或者搭配某些MIME类型的POST请求），浏览器必须首先使用OPTIONS方法发起一个预检请求（preflight request），从而获知服务端是否允许该跨域请求。服务器确认允许之后，才发起实际的HTTP请求。在预检请求的返回中，服务器端也可以通知客户端，是否需要携带身份凭证（包括 Cookies 和 HTTP 认证相关数据）。
 
@@ -43,7 +43,7 @@ CORS请求失败会产生错误，但是为了安全，在JavaScript代码层面
 ## 跨域处理基本流程
 ### 简单请求
 简单请求主要处理流程如下图
-![simple_req](/images/simple_req.png)
+![simple_req](https://cdn.jsdelivr.net/gh/fengxiu/img/simple_req.png)
 对于简单请求，浏览器直接发出CORS请求。具体来说，就是在头信息之中，增加一个Origin字段。
 下面是一个例子，浏览器发现这次跨源AJAX请求是简单请求，就自动在头信息之中，添加一个Origin字段。
 ``` http
@@ -76,7 +76,7 @@ Content-Type: text/html; charset=utf-8
 
 ### 非简单请求
 非简单请求的主要处理流程如下：
-![prelight](/images/prelight.png)
+![prelight](https://cdn.jsdelivr.net/gh/fengxiu/img/prelight.png)
 非简单请求是那种对服务器有特殊要求的请求，比如请求方法是PUT或DELETE，或者Content-Type字段的类型是application/json。
 非简单请求的CORS请求，会在正式通信之前，增加一次HTTP查询请求，称为"预检"请求（preflight）。
 浏览器先询问服务器，当前网页所在的域名是否在服务器的许可名单之中，以及可以使用哪些HTTP请求方式和头信息字段。只有得到肯定答复，浏览器才会发出正式的XMLHttpRequest请求，否则就报错。
@@ -196,7 +196,7 @@ function callOtherDomain(){
 第 7 行将 XMLHttpRequest 的 withCredentials 标志设置为 true，从而向服务器发送 Cookies。因为这是一个简单 GET 请求，所以浏览器不会对其发起“预检请求”。但是，如果服务器端的响应中未携带 Access-Control-Allow-Credentials: true ，浏览器将不会把响应内容返回给请求的发送者。
 
 客户端与服务器端交互示例如下：
-![cred-req](/images/cred-req.png)
+![cred-req](https://cdn.jsdelivr.net/gh/fengxiu/img/cred-req.png)
 ``` http
 ## 请求
 GET /resources/access-control-with-credentials/ HTTP/1.1

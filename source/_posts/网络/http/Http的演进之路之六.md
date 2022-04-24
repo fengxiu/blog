@@ -16,7 +16,7 @@ date: 2019-03-10 12:23:00
 
 鉴于SPDY的成功，HTTP/2的开发计划也呼之欲出并且众望所归的采用了SPDY作为整个方案的蓝图进行开发。由[IETF](http://link.zhihu.com/?target=https%3A//www.ietf.org/)推动，Google等公司重点参与并于2015年3月公布了[草案](http://link.zhihu.com/?target=http%3A//http2.github.io/http2-spec/)。其最终RFC可以参考[这里](http://link.zhihu.com/?target=https%3A//tools.ietf.org/html/rfc7540)。
 
-![upload successful](/images/pasted-266.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-266.png)
 <!-- more -->
 
 ## 与SPDY的差异
@@ -31,7 +31,7 @@ date: 2019-03-10 12:23:00
 
 **不一样的层次结构**
 
-![upload successful](/images/pasted-267.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-267.png)
 
 对于SPDY而言，在使用SPDY协议之前可以通过NPN（Next Protocol Negotiation）进行协议沟通来协商使用的具体协议（HTTP/1.X或SPDY），一旦决定使用SPDY则必须建立在TLS之上。
 
@@ -41,15 +41,15 @@ date: 2019-03-10 12:23:00
 
 在HTTP/2中使用ALPN（Application Layer Protocol Negotiation）替代了SPDY中的NPN（Next Protocol Negotiation）来协商使用的具体协议。ALPN与NPN都是TLS扩展协议，他们发生在ClientHello和ServerHello阶段。他们用来client端与server端协商使用的协议，由于并不是所有server端或client端都支持SPDY或HTTP/2，因此在正式启用相关协议之前，客户端与服务端要进行协商。以下是ALPN的一个具体示例，首先看到的是ClientHello中向server端问询可以使用的协议：
 
-![upload successful](/images/pasted-268.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-268.png)
 
 从图中我们可以看到，Client端向Server端问询了HTTP/2和HTTP/1.1可以使用哪个协议。下面是server端通过ServerHello来答复client端：
 
-![upload successful](/images/pasted-269.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-269.png)
 
 从Server端的答复来看可以使用HTTP/2来进行通信。而下图是另一个server的答复，这个server目前只能支持HTTP/1.1：
 
-![upload successful](/images/pasted-270.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-270.png)
 
 **HPACK压缩(见**[Http演进之路之六](https://zhuanlan.zhihu.com/p/51241802)**)**
 

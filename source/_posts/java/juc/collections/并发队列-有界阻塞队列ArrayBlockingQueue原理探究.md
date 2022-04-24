@@ -28,7 +28,7 @@ ArrayBlockingQueue是数组实现的线程安全的有界的阻塞队列。线�
 
 类图如下
 
-![upload successful](/images/pasted-164.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-164.png)
 
 ## 源码分析
 

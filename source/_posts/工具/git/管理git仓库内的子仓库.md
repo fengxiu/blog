@@ -17,7 +17,7 @@ tags:
 
 我创建的目录结构如下
 
-![Xnip2019-04-14_00-30-14](/images/Xnip2019-04-14_00-30-14.jpg)
+![Xnip2019-04-14_00-30-14](https://cdn.jsdelivr.net/gh/fengxiu/img/Xnip2019-04-14_00-30-14.jpg)
 <!-- more -->
 添加完这个模块后会报下面错误：
 ``` bash

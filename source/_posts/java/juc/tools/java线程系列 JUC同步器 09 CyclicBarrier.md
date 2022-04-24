@@ -15,7 +15,7 @@ date: 2019-03-19 11:32:00
 可以看下面这个图来理解下:
 一共4个线程A、B、C、D，它们到达栅栏的顺序可能各不相同。当A、B、C到达栅栏后，由于没有满足总数4的要求，所以会一直等待，当线程D到达后，栅栏才会放行。
 
-![upload successful](/images/pasted-306.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-306.png)
 <!-- more -->
 
 ## 使用案例
@@ -222,7 +222,7 @@ Barrier是否损坏：true
 
 ## 源码分析
 
-![upload successful](/images/pasted-305.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-305.png)
 
 CyclicBarrier是通过ReentrantLock(独占锁)和Condition来实现的。下面，我们分析CyclicBarrier中俩个个核心函数: 构造函数和await()作出分析。
 

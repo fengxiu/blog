@@ -80,7 +80,7 @@ public class Parallel {
     3.  **real：**GC垃圾回收器执行的时间。这里因为是多线程执行，因此这个值理论上应该是`(user + sys) /core numbers`的值接近。此外由于一些任务是不能并行，所以这个值一直超过前面计算出来的值。
 
 从这些信息可以看出，经过在年轻代执行垃圾回收，年轻代可被使用的空间增加了`5211K`，但是整个堆区可被使用的空间只增加了`1115K`，所以可以得到，有`5211k - 1115k=4096K`内存从年轻代移动到老年代。，如下图所示
-![ParallelGC-in-Young-Generation-Java](/source/images/ParallelGC-in-Young-Generation-Java.png)
+![ParallelGC-in-Young-Generation-Java](/sourcehttps://cdn.jsdelivr.net/gh/fengxiu/img/ParallelGC-in-Young-Generation-Java.png)
 
 ### Full GC
 日志信息如下：
@@ -98,7 +98,7 @@ public class Parallel {
 9. `[Times: user=0.02 sys=0.00, real=0.01 secs]`：和上面一样，这里就不解释了。
 
 再次，与Minor GC的区别很明显 - 除了年轻代被回收之外，在此GC执行期间，老年代和Metaspace也被清理干净。GC之前和之后的内存布局看起来如下：
-![Java-ParallelGC-in-Old-Generation](/source/images/Java-ParallelGC-in-Old-Generation.png)
+![Java-ParallelGC-in-Old-Generation](/sourcehttps://cdn.jsdelivr.net/gh/fengxiu/img/Java-ParallelGC-in-Old-Generation.png)
 ## 参考
 1. [GC Algorithms Implementations](https://plumbr.io/handbook/garbage-collection-algorithms-implementations)
 2. 

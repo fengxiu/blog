@@ -11,7 +11,7 @@ date: 2019-03-20 14:51:38
 ---
 从字面意思理解就是信号量，本质上来说是用于线程之间访问共享资源，是一种同步原语，只是访问的资源可能有多个，其实现是通过AQS框架。在我们开发中，经常会碰见使用信号量的场景，比如出于系统性能的考虑需要限流，这时需要控制同时访问共享资源的最大线程数量，或者共享资源是稀缺资源，我们需要有一种办法能够协调各个线程，以保证合理的使用公共资源。
 可以看下图来理解
-![upload successful](/images/pasted-309.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-309.png)
 有四个线程来共同竞争资源，现在信号量是5，则表明共享资源的数量是5。如果每个线程申请一个资源，则可以同时满足5个线程申请资源，每个线程在使用完之后，需要释放资源。如果在线程在申请资源的时候，没有足够的资源来满足，则会阻塞线程。
 <!-- more  -->
 ## 示例
@@ -97,7 +97,7 @@ pool-1-thread-3 release 7
 
 类图如下：
 
-![upload successful](/images/pasted-308.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-308.png)
 
 1.  Semaphore也包含sync对象，sync是Sync类型；而且，Sync是一个继承于AQS的抽象类。
 2. Sync包括两个子类："公平信号量"FairSync 和 "非公平信号量"NonfairSync。sync是"FairSync的实例"，或者"NonfairSync的实例"；默认情况下，sync是NonfairSync(即，默认是非公平信号量)。

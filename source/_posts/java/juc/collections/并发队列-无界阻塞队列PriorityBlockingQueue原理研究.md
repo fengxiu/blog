@@ -24,7 +24,7 @@ PriorityBlockingQueue是带优先级的无界阻塞队列，每次出队都返�
 
 类图如下
 
-![upload successful](/images/pasted-168.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-168.png)
 
 如图PriorityBlockingQueue实现类队列接口，是无界队列的一种。内部其实是通过数组来存放元素的。另外由于这是一个优先级队列所以有个比较器comparator用来比较元素大小。通过全局独占锁对象用来控制同时只能有一个线程可以进行入队出队操作。**另外有一点需要特别注意的是：如果没有指定比较器，所有插入的元素都必须实现了比较器接口，否则会抛出异常**
 

@@ -187,7 +187,7 @@ class DelayedElement implements Delayed {
 
 类图如下
 
-![upload successful](/images/pasted-167.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-167.png)
 
 使用场景主要有以下俩个：
 

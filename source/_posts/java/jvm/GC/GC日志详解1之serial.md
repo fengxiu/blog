@@ -88,7 +88,7 @@ public class SerialGC {
 
 
 从上面的分析，我们知道在整个GC执行的过程中，伴随着内存的回收。不过有一点需要注意的是，年轻代减少的内存是`5643K  -  360K=5283k`，但是从后面的整个堆区已被使用的空间仅减少了` 5643K - 4456K=1187k`。从这可以看出，应该有4096的对象被移动到堆区。也就是下面这幅图所描述的：
-![serial-gc-in-young-generation ](/images/serial-gc-in-young-generation.png)
+![serial-gc-in-young-generation ](https://cdn.jsdelivr.net/gh/fengxiu/img/serial-gc-in-young-generation.png)
 ### Full GC
 如果你看懂了上面的解释，在看第二条日志信息应该hi轻松点。
 ```
@@ -108,7 +108,7 @@ public class SerialGC {
 
 与年轻代垃圾回收的区别很明显 - 除了Young Generation之外，在此GC执行期间，Old Generation和Metaspace也被清理干净。GC执行之前和之后的内存布局看起来如下图所示：
 
-![serial-gc-in-old-gen-java](/images/serial-gc-in-old-gen-java.png)
+![serial-gc-in-old-gen-java](https://cdn.jsdelivr.net/gh/fengxiu/img/serial-gc-in-old-gen-java.png)
 
 
 

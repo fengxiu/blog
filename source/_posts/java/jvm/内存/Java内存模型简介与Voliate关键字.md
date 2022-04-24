@@ -280,7 +280,7 @@ r = a*a;     //语句4
 
 这段代码有4个语句，那么可能的一个执行顺序是：
 
-![3985563-dcefcb1390cb3ed8](/images/3985563-dcefcb1390cb3ed8.jpg)
+![3985563-dcefcb1390cb3ed8](https://cdn.jsdelivr.net/gh/fengxiu/img/3985563-dcefcb1390cb3ed8.jpg)
 
 那么可不可能是这个执行顺序呢： 语句2 语句1 语句4 语句3
 

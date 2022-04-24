@@ -54,7 +54,7 @@ reader.loadBeanDefinitions(resource);
 
    DefaultListableBeanFactory是整个bean加载核心部分，是spring注册及加载bean的默认实现，DefaultListableBeanFactory继承了AbstractAutowireCapableBeanFactory并实现了ConfigurableListableBeanFactory以及BeanDefinitionRegistry接口。下面是DefaultListableBeanFactory继承关系图。
 
-   ![DefaultListableBeanFactory](/images/pasted-9.png)
+   ![DefaultListableBeanFactory](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-9.png)
 
    这里先简单介绍一下上面类图中各个类的作用
 

@@ -17,7 +17,7 @@ date: 2019-03-10 11:23:00
 在上面的章节中我们介绍了HTTP协议的一些特点，包括长连接、pipeline、并行连接等。2012年Google推出了SPDY（speedy，翻译为“快速的”）协议，旨在根本上解决HTTP协议中存在的一些问题、提升HTTP的传输效率。而随后诞生的HTTP/2也继承了SPDY的很多特性。因此，在介绍HTTP/2之前，有必要先简单了解一下SPDY的基本特征。首先，我们看一下SPDY的协议栈。由下图可见，SPDY位于HTTP和SSL之间，它属于应用层协议，当发现对端不支持SPDY的情况下，仍然可以延用HTTP/HTTPS协议，因此它可以最大程度的兼容HTTP协议。
 <!-- more -->
 
-![upload successful](/images/pasted-254.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-254.png)
 
 ## SPDY的特性
 
@@ -25,11 +25,11 @@ date: 2019-03-10 11:23:00
 
 从上面关于http connection的介绍可以看出，为了提高传输效率，研发人员总是想在每条connection上面尽可能多的传递资源（这是因为建立每条connection都需要消耗较多的资源，例如dns和connect的过程），因此有了keep-alive、pipeline、并行连接等技术。这些技术无不都是在connection上做文章，尽可能的复用这些连接，将它们利用到极致。但是他们都没有彻底解决在一个connection上面同时“收发”多组数据（来自于不同的资源）的问题，虽然pipleline可以同时请求多个资源，但受限于Http层的队头阻塞机制（见上文），在接收的过程中必须按照发送顺序接收。而SPDY的多路复用功能正是解决这个问题。
 
-![upload successful](/images/pasted-255.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-255.png)
 
 上图显示了Http/1.1与SPDY的对比。从图中可以看出前者虽然采用了pipeline的方式，在一条连接上同时发起了三个请求，但碍于队头阻塞机制，只能按照发送顺序来接收数据，即必须得到index.html后才能得到sample.png的数据。而SPDY则引入了“流（stream）”和“帧（frame）”的概念，将每个完整的request/response过程称为一个“流”（例如图中的GET index.html），再将每个流拆分为多个“帧”（包括数据帧，控制帧等）。通过“流”和“帧”将一个完成request/response过程“打碎”，再将多个“流”的“帧”数据“混在一起”（按照优先级）发送到服务端，服务端再通过流ID和帧ID将数据“还原”，以同样的方式将数据传回给客户端。这样就不会再有队头阻塞的困扰了。
 
-![upload successful](/images/pasted-256.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-256.png)
 
 有几点需要注意：
 
@@ -65,11 +65,11 @@ Google在2012年推出Spdy的方案旨在从根本解决HTTP/1.X中存在的诸�
 
 在HTTP/1.X中，头部信息是没有压缩的，有些内容是冗余且很占流量（例如User-Agent、Cookie等信息）。因此，在SPDY中引入了头部压缩的机制，它采用[DEFLATE](http://link.zhihu.com/?target=https%3A//en.wikipedia.org/wiki/DEFLATE)算法（存在[CRIME](http://link.zhihu.com/?target=https%3A//blog.qualys.com/ssllabs/2012/09/14/crime-information-leakage-attack-against-ssltls)的问题），而在HTTP/2中则使用新的压缩算法[HPACK](http://link.zhihu.com/?target=https%3A//www.rfc-editor.org/rfc/rfc7541.txt)。简单来说，HPACK将索引加入到了头部压缩的过程中。即HPACK中会维护一张静态列表和一张动态列表，在静态列表中会预置一些常用的header(详见[RFC](http://link.zhihu.com/?target=https%3A//www.rfc-editor.org/rfc/rfc7541.txt))，当要发送的请求符合静态列表中的内容时，会使用其对应的index进行替换，这样就可以大大压缩头部的size了。下图大体上描述了HPACK的原理：
 
-![upload successful](/images/pasted-257.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-257.png)
 
 从下面静态列表可以看出，表中都是一些常用的header信息，当request或response的header中内容与表内的内容相符时，可以使用表中对应的index进行替换。静态表的index大小是固定的61，因此静态表index是从1到61的索引。
 
-![upload successful](/images/pasted-258.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-258.png)
 
 动态列表是一个FIFO（队列）的映射表，从index62开始递增。表中的第一个值是最新入队的值，其索引号也是最小的；动态表的大小也是有限制的，当有新的数据要入队列时，就要移除队尾（最老）的数据。每个动态列表与一个TCP连接是一一对应的，即每个动态列表只针对一个TCP连接，每个连接仅有一个动态列表。在HTTP/2中引入了multiplexing机制（准确的说是SPDY引入了multiplexing），对于同一个域名的多个请求都会复用同一个TCP连接。当一个头部没有出现过的时候，就会把其插入到动态列表中，当再有相同内容的头域时就可以通过index替换了。然而，动态列表的大小是有限制的：
 
@@ -88,7 +88,7 @@ Google在2012年推出Spdy的方案旨在从根本解决HTTP/1.X中存在的诸�
 
 即当头域的键值都在列表中时，第一个bit的值为1，后面是其index值：
 
-![upload successful](/images/pasted-259.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-259.png)
 
 从图中可以看到这里有三个头域分别是cache-control: xxx last-modified: xxx x-content-type-options: xxx 由于这三个头域的键值都已经在列表里面了，因此在这里显示“Indexed Header Field”并且仅仅使用了一个字节来替代。
 
@@ -116,7 +116,7 @@ Google在2012年推出Spdy的方案旨在从根本解决HTTP/1.X中存在的诸�
 
 从下面的抓包可以看到last-modifed是在index中的，但是其值并不在，因此这里如果想要将其加入到列表中的话，它的第一个字节为0x6C（01101100），其中前两位是01，后面是101100（index为44）。接下来的一个字节0x96 （10010110）的第一位表示是否使用了霍夫曼编码（此处是），余下的7个字节表示编码长度（此处为22），剩下的内容为霍夫曼编码内容。这里显示为“Incremental Indexing - Indexed Name”，客户端或服务端看到这种格式的头部键值对，会将其添加到自己的动态字典中。后续传输这样的内容，就符合键值都在索引中的情况了
 
-![upload successful](/images/pasted-260.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-260.png)
 
 ## 键值都不在索引中
 
@@ -137,7 +137,7 @@ Google在2012年推出Spdy的方案旨在从根本解决HTTP/1.X中存在的诸�
 
 从下面的抓包来看x-content-type-options不在索引中，它属于一个新的头域并且会被加入到索引中（从上面的截图可以看到它后来被加入到了index 64里面）。因此它的第一字节为0x40（01000000）。随后的一个字节是是否使用霍夫曼编码以及编码长度，此处是0x90（10010000），表示键使用霍夫曼，长度为16。随后为0x85（10000101），表示值使用霍夫曼，长度为5。显示为“Incremental Indexing - New Name”，客户端或服务端看到这种格式的头部键值对，会将其添加到自己的动态字典中。后续传输这样的内容，就符合键值都在索引中的情况了
 
-![upload successful](/images/pasted-261.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-261.png)
 
 ## 键在索引中，但值不在，且不要加入到索引中
 
@@ -154,7 +154,7 @@ Google在2012年推出Spdy的方案旨在从根本解决HTTP/1.X中存在的诸�
 
 从下面的抓包来看path已经在索引中了，但是客户端不希望该值被保存到索引中，因此设置其为0x05（00000101），后面的一个字节为0xab（10101011），使用霍夫曼编码且长度为43。显示为“without Indexing - Indexed Name”，这种格式的头部键值对，不允许被添加到动态字典中（但可以使用霍夫曼编码）。对于一些敏感头部，比如 Cookie，这么做可以提高安全性。
 
-![upload successful](/images/pasted-262.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-262.png)
 
 ## 键值都不在索引中，且不要加入到索引中
 
@@ -175,7 +175,7 @@ Google在2012年推出Spdy的方案旨在从根本解决HTTP/1.X中存在的诸�
 
 从下面的抓包set-cookie不在索引中且服务端不希望其加入到索引中因此这里的第一个字节为0x00，下一个字节为0x87（10000111），键使用霍夫曼编码且长度为7，值为0xc0（11000000），值使用霍夫曼编码且长度为64。显示为“without indexing - New Name”
 
-![upload successful](/images/pasted-263.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-263.png)
 
 ## 键在索引中，但值不在，且绝对不要加入到索引中
 
@@ -222,7 +222,7 @@ Google在2012年推出Spdy的方案旨在从根本解决HTTP/1.X中存在的诸�
 
 上图是列表大小更新的消息体格式。列表大小可以用至少5个bit表示且最大不超过SETTINGS_HEADER_TABLE_SIZE
 
-![upload successful](/images/pasted-264.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-264.png)
 
 在HPACK中，会用到一个或多个字节表示无符号整数，整数的开始并不是在一个字节的开始，但总在一个字节的末尾结束。如下所示，0-2bit可以用于其他标识，那么数值只占了5个bit，因此只能表示2^5-1（例如上面的“更新动态列表大小”的消息）。因此当需要表达的值小于32时，一个字节足够了。
 
@@ -278,6 +278,6 @@ HPACK中的霍夫曼编解码可以参考[这里](http://link.zhihu.com/?target=
 
 参照霍夫曼编码：
 
-![upload successful](/images/pasted-265.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-265.png)
 
 可以得到对应的结果：nosniff

@@ -121,7 +121,7 @@ protected <T> RunnableFuture<T> newTaskFor(Callable<T> callable) {
 
 Future继承体系如下
 
-![upload successful](/images/pasted-170.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-170.png)
 
 从上面可以看出FutureTask实现了RunnableFuture，而这个接口就是讲Future和Runnable俩个接口集成在一起。所以上面newTaskFor方法返回RunnableFuture，这也体现了面向接口编程，方便以后进行扩展。
 

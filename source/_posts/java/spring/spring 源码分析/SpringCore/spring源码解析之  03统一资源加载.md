@@ -109,7 +109,7 @@ public interface Resource extends InputStreamSource {
 }
 ```
 
-![resource](/images/pasted-6.png)
+![resource](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-6.png)
 
 从上图可以看到，Resource 根据资源的不同类型提供不同的具体实现，如下：
 
@@ -322,7 +322,7 @@ ResourceLoader 接口提供两个方法：`getResource()`、`getClassLoader()`�
 `getClassLoader()` ：获取 ResourceLoader 对象使用的ClassLoader，在分析 Resource 时，提到了一个类 `ClassPathResource` ，这个类是可以根据指定的 ClassLoader 来加载资源的。
 
 作为 Spring 统一的资源加载器，它提供了统一的抽象，具体的实现则由相应的子类来负责实现，其类的类结构图如下：
-![resourceloader](/images/pasted-6.png)
+![resourceloader](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-6.png)
 
 #### DefaultResourceLoader
 
@@ -645,7 +645,7 @@ PathMatchingResourcePatternResolver 在实例化的时候，可以指定一个 R
 ```
 
 处理逻辑如下
-![pathResourceLoader 逻辑图](/images/pasted-8.png)
+![pathResourceLoader 逻辑图](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-8.png)
 
 下面就 `findAllClassPathResources()`、`findAllClassPathResources()` 做详细分析。
 
@@ -793,8 +793,8 @@ protected Resource[] findPathMatchingResources(String locationPattern) throws IO
 
 确定根路径如下:
 
-| 原路径                                | 确定根路径                 |
-|------------------------------------|-----------------------|
+| 原路径                             | 确定根路径            |
+| ---------------------------------- | --------------------- |
 | `classpath*:test/cc*/spring-*.xml` | `classpath*:test/`    |
 | `classpath*:test/aa/spring-*.xml`  | `classpath*:test/aa/` |
 

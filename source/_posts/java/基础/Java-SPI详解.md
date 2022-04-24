@@ -11,7 +11,7 @@ tags:
 ---
 ## 什么是SPI
 SPI全称为 (Service Provider Interface) ，是JDK内置的一种服务提供发现机制。SPI是一种动态替换发现的机制，比如有个接口，想运行时动态的给它添加实现，你只需要添加一个实现。我们经常遇到的就是java.sql.Driver接口，不同厂商可以针对同一接口做出不同的实现，mysql和postgresql都有不同的实现提供给用户，而Java的SPI机制可以为某个接口寻找服务实现。
-![1635dec2151e31e](/images/1635dec2151e31e4)
+![1635dec2151e31e](https://cdn.jsdelivr.net/gh/fengxiu/img/1635dec2151e31e4)
 类图中，接口是定义的抽象SPI接口；实现方实现SPI接口；调用方依赖SPI接口。
 SPI接口的定义在调用方，在概念上更依赖调用方；组织上位于调用方所在的包中；实现位于独立的包中。
 当接口属于实现方的情况，实现方提供了接口和实现，这个用法很常见，属于API调用。我们可以引用接口来达到调用某实现类的功能。
@@ -60,7 +60,7 @@ public class DatabaseSearch implements Search {
 ```
 ### 增加META-INF目录文件
 Resources下面创建META-INF/services目录里创建一个以服务接口命名的文件
-![Xnip2019-05-30_11-10-34](/images/Xnip2019-05-30_11-10-34.jpg)
+![Xnip2019-05-30_11-10-34](https://cdn.jsdelivr.net/gh/fengxiu/img/Xnip2019-05-30_11-10-34.jpg)
 
 ### 调用实现类
 ```java

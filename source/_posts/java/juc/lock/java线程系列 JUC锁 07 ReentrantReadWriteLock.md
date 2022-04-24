@@ -16,7 +16,7 @@ date: 2019-03-19 03:46:00
 
 类如如下：
 
-![upload successful](/images/pasted-300.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-300.png)
 
 从上图可以看出ReentrantReadWriteLock实现了ReadWriteLock接口，而这个接口从名字就可以看出是读写锁。它维护了一对相关连的锁：读锁和写锁。作用如下
 

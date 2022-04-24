@@ -37,14 +37,14 @@ ssh-keygen -t rsa -b 4096 -C "$(git config user.email)" -f github-deploy-key -N 
 
 ### github网站配置公钥
 
-在 GitHub中博客工程中按照 Settings->Deploye keys->Add deploy key 找到对应的页面，然后进行公钥添加。该页面中 Title 自定义即可，Key中添加github-deploy-key.pub 文件中的内容，或者是你自己本地ssh秘钥中的id_rsa.pub公钥文件中的内容。![Xnip2020-07-18_22-11-21](/images/Xnip2020-07-18_22-11-21.jpg)
+在 GitHub中博客工程中按照 Settings->Deploye keys->Add deploy key 找到对应的页面，然后进行公钥添加。该页面中 Title 自定义即可，Key中添加github-deploy-key.pub 文件中的内容，或者是你自己本地ssh秘钥中的id_rsa.pub公钥文件中的内容。![Xnip2020-07-18_22-11-21](https://cdn.jsdelivr.net/gh/fengxiu/img/Xnip2020-07-18_22-11-21.jpg)
 
 同时要注意的一点是，记得勾选，Allow Write access选项，否则会出现上传git失败问题。
 
 ### github网站配置私钥
 
 在GitHub中博客工程中按照 Settings->Secrets->Add a new secrets 找到对应的页面，然后进行私钥添加。该页面中 Name 自定义即可，Value中添加 github-deploy-key 文件中的内容或者你本地id_rsa中的内容。
-![Xnip2020-07-18_22-14-21](/images/Xnip2020-07-18_22-14-21.jpg)
+![Xnip2020-07-18_22-14-21](https://cdn.jsdelivr.net/gh/fengxiu/img/Xnip2020-07-18_22-14-21.jpg)
 
 ### hexo 配置
 
@@ -154,5 +154,5 @@ jobs:
 ### 验证
 
 通过上面配置，已经完成自动部署hexo的功能，可以在Actions选项中看
-![Xnip2020-07-18_22-27-07](/images/Xnip2020-07-18_22-27-07.jpg)
+![Xnip2020-07-18_22-27-07](https://cdn.jsdelivr.net/gh/fengxiu/img/Xnip2020-07-18_22-27-07.jpg)
 如果配置过程中出现问题，可以点击其中错误的build过程，就可以找出具体的问题。

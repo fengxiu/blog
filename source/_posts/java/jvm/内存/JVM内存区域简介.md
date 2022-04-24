@@ -18,11 +18,11 @@ Java虚拟机执行Java程序的过程中，会把所管理的内存划分为若
 
 JVM内存区域也成为Java运行时数据区域。其中包括:程序计数器、虚拟机栈、本地方法栈、堆和方法区。
 
-![upload successful](/images/pasted-282.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-282.png)
 
 上图中，方法区和堆是线程共享，虚拟机栈、程序计数器和本地方法栈是线程私有。大概的结构如下图：
 
-![upload successful](/images/pasted-283.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-283.png)
 
 下面对每部分进行详细的介绍
 <!-- more -->
@@ -129,7 +129,7 @@ Exception in thread "main" java.lang.OutOfMemoryError: Java heap space
 
 你可以打开`VisualVM`导入`Heap`内存运行时的`dump`文件，就会出现类似下面这个图：
 
-![upload successful](/images/pasted-334.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-334.png)
 
 静态类OOMObject的对象不停地被创建，堆内存使用达到99%。垃圾回收器不断地尝试回收但都以失败告终。
 

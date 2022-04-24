@@ -30,7 +30,7 @@ CopyOnWrite容器即写时复制的容器。通俗的理解是当我们往一个
 
 类图如下
 
-![upload successful](/images/pasted-163.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-163.png)
 
 从类图可以看出，CopyOnWriteArrayList是List的一种，从名字其实也可以猜到，他是线程安全的ArrrayList，底层的实现也是数组，这个后面会详细介绍。
 

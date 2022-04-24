@@ -52,7 +52,7 @@ public class Hello extends HttpServlet {
 这里先不解释Web.xml中所有的配置，我们讲到Servlet对应部分的时候，会讲其相对应的在Web.xml中如何配置，这样便于理解，最后在完整的讲解Web.xml中的配置，具体的可以看这篇文章[web.xml配置详解](/posts/85b1c334/)。
 
 将上面的代码打包部署到java的web容器中，就可以访问。效果如下：
-![Xnip2019-03-25_14-48-05](/images/Xnip2019-03-25_14-48-05.jpg)
+![Xnip2019-03-25_14-48-05](https://cdn.jsdelivr.net/gh/fengxiu/img/Xnip2019-03-25_14-48-05.jpg)
 这里我省略了如何部署项目，其实很简单，在网上搜一下就会明白，因此就不在这里具体的讲解。
 
 从上面的小demo中可以看出，用户若想开发一个动态web资源(即开发一个Java程序向浏览器输出数据)，需要完成以下2个步骤：
@@ -68,7 +68,7 @@ public class Hello extends HttpServlet {
 5. WEB应用程序被停止或重新启动之前，Servlet引擎将卸载Servlet，并在卸载之前调用Servlet的destroy()方法。 
 
 与上面步骤相对应的流程图如下：
-![311054556978749](/images/311054556978749.png)
+![311054556978749](https://cdn.jsdelivr.net/gh/fengxiu/img/311054556978749.png)
 ### Servlet生命周期
 有了上面Servlet调用的整个过程，Servlet生命周期就相对来说好理解写。Servlet生命周期可被定义为从创建直到毁灭的整个过程。以下是Servlet遵循的过程：
 1. Servlet 通过调用 init () 方法进行初始化。
@@ -137,7 +137,7 @@ destroy()方法只会被调用一次，在Servlet生命周期结束时被调用�
 1. 第一个到达服务器的HTTP请求被委派到 Servlet 容器。
 2. Servlet容器在调用service()方法之前加载Servlet。
 3. 然后Servlet容器使用一个请求对应一个线程的方案来处理请求，每个线程执行一个单一的 Servlet实例的service()方法，前面已经说过，如果当前请求的Servlet对象已经创建，则复用此对象，因此会出现多个线程操作同一个Servlet对象的情况，因此需要考虑线程安全问题。
-![Servlet-LifeCycle](/images/Servlet-LifeCycle.jpg)
+![Servlet-LifeCycle](https://cdn.jsdelivr.net/gh/fengxiu/img/Servlet-LifeCycle.jpg)
 
 ## 参考
 1. [javaweb学习总结(五)——Servlet开发(一)](https://www.cnblogs.com/xdp-gacl/p/3760336.html)

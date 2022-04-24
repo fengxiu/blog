@@ -255,9 +255,9 @@ public class PlainNioEchoServer {
 Acceptor线程是服务的入口，任何发生在其上面的堵塞操作，都将严重影响Server性能，假设建立一个TCP连接需要4ms，无论你后面的业务处理有多快，因为Acceptor的堵塞，这个Server最多每秒钟只能接受250个请求。而NIO则是另外一番风景，因为所有的IO操作都是非堵塞的，毫无疑问，Acceptor可以接受更大的并发量，并能最大限度的利用CPU和硬件资源处理这些请求。
 
 BIO通信模型图
-![8de4fec77b5e66a0f30380dd6f34d306ee051742](/images/8de4fec77b5e66a0f30380dd6f34d306ee051742.jpeg)
+![8de4fec77b5e66a0f30380dd6f34d306ee051742](https://cdn.jsdelivr.net/gh/fengxiu/img/8de4fec77b5e66a0f30380dd6f34d306ee051742.jpeg)
 BIO序列图
-![ce5eb30ec17b6ea31a914e02a8eac224270ee89f](/images/ce5eb30ec17b6ea31a914e02a8eac224270ee89f.jpeg)
+![ce5eb30ec17b6ea31a914e02a8eac224270ee89f](https://cdn.jsdelivr.net/gh/fengxiu/img/ce5eb30ec17b6ea31a914e02a8eac224270ee89f.jpeg)
 
 ### NIO Server
 
@@ -270,7 +270,7 @@ BIO序列图
 所以可以这样说，NIO极大的提升了服务器接受并发请求的能力，而服务器性能还是要取决于业务处理时间和业务线程池模型。
 
 NIO序列图
-![612710e524d3e5a94e8c9c8325d222ab73e90485](/images/612710e524d3e5a94e8c9c8325d222ab73e90485.jpeg)
+![612710e524d3e5a94e8c9c8325d222ab73e90485](https://cdn.jsdelivr.net/gh/fengxiu/img/612710e524d3e5a94e8c9c8325d222ab73e90485.jpeg)
 
 ## 如何选择
 

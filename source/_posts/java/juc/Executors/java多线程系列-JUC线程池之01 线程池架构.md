@@ -19,7 +19,7 @@ date: 2018-07-23 14:07:00
 ## 线程池整体架构介绍
 
 线程池类图如下：
-![Executor 框架](/images/pasted-345.png)
+![Executor 框架](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-345.png)
 
 ### Executor
 

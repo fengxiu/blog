@@ -161,7 +161,7 @@ name : chenssy 3 号
 
 完全可以达到和 InitializingBean 一样的效果，而且在代码中我们没有看到丝毫 Spring 侵入的现象。所以通过 init-method 我们可以使用业务对象中定义的任何方法来实现 bean 实例对象的初始化定制化，而不再受制于 InitializingBean的 `afterPropertiesSet()`。同时我们可以使用 `<beans>` 标签的 `default-init-method` 属性来统一指定初始化方法，这样就省了需要在每个 `<bean>` 标签中都设置 `init-method` 这样的繁琐工作了。比如在 `default-init-method` 规定所有初始化操作全部以 `initBean()` 命名。如下：
 
-![upload successful](/images/pasted-21.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-21.png)
 
 从 `invokeInitMethods()` 中，我们知道 `init-method` 指定的方法会在 `afterPropertiesSet()` 之后执行，如果 `afterPropertiesSet()` 中出现了异常，则 `init-method` 是不会执行的，而且由于 `init-method` 采用的是反射执行的方式，所以 `afterPropertiesSet()` 的执行效率一般会高些，但是并不能排除我们要优先使用 `init-method`，主要是因为它消除了 bean 对 Spring 的依赖，Spring 没有侵入到我们业务代码，这样会更加符合 Spring 的理念。诚然，`init-method` 是基于XML 配置文件的，就目前而言，我们的工程几乎都摒弃了配置，而采用注解的方式，那么 `@PreDestory` 可能适合你，当然这个注解我们后面分析。
 

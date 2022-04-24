@@ -18,7 +18,7 @@ date: 2019-01-15 03:30:00
 
 ## spring Ioc功能简介
 
-![upload successful](/images/pasted-12.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-12.png)
 
 (此图来自《Spring 揭秘》)
 

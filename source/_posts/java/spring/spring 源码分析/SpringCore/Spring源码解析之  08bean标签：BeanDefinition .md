@@ -30,7 +30,7 @@ BeanDefinition 是一个接口，它描述了一个 Bean 实例，包括属性�
 
 BeanDefinition继承关系图
 
-![BeanDefinition继承关系图](/images/pasted-10.png)
+![BeanDefinition继承关系图](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-10.png)
 
 我们常用的三个实现类有：ChildBeanDefinition、GenericBeanDefinition、RootBeanDefinition，三者都继承 AbstractBeanDefinition。如果配置文件中定义了父 `<bean>` 和 子 `<bean>` ，则父 `<bean>` 用 RootBeanDefinition表示，子 `<bean>` 用 ChildBeanDefinition 表示，而没有父 `<bean>` 的就使用RootBeanDefinition 表示。GenericBeanDefinition是提供的一站式服务类,通常在解析xml配置文件时，先将BeanDefinition解析为此类型。AbstractBeanDefinition对三个子类共同的类信息进行抽象。
 

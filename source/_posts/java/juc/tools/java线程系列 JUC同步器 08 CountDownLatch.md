@@ -18,7 +18,7 @@ CountDownLatch是在java1.5被引入的，跟它一起被引入的并发工具�
 
 CountDownLatch是通过一个计数器来实现的，计数器的初始值为线程的数量。每当一个线程完成了自己的任务后，计数器的值就会减1。当计数器值到达0时，它表示所有的线程已经完成了任务，然后在闭锁上等待的线程就可以恢复执行任务。
 
-![upload successful](/images/pasted-302.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-302.png)
 
 如上图：TA主线程会一直等待，等待T1、T2和T3将计数器减为0，才继续执行。
 
@@ -217,7 +217,7 @@ External services validation completed !! Result was :: true
 
 CountDownLath的类图如下
 
-![upload successful](/images/pasted-304.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-304.png)
 
 CountDownLatch是通过共享锁实现的。下面，我们分析CountDownLatch中3个核心函数: CountDownLatch(int count), await(), countDown()。
 

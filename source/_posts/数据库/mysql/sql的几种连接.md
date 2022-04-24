@@ -40,7 +40,7 @@ insert  into course value  (5,"test编程",10);
 select * from course inner join student on course.stuid=student.id;
 select * from course,student where course.stuid=student.id;
 ```
-![Xnip2019-03-28_20-24-55](/images/Xnip2019-03-28_20-24-55.jpg)
+![Xnip2019-03-28_20-24-55](https://cdn.jsdelivr.net/gh/fengxiu/img/Xnip2019-03-28_20-24-55.jpg)
 
 ## 外连接
 ### 左连接
@@ -48,13 +48,13 @@ select * from course,student where course.stuid=student.id;
 ```sql
 select *from course as a left join student as b on a.stuid=b.id;
 ```
-![Xnip2019-03-28_20-27-01](/images/Xnip2019-03-28_20-27-01.jpg)
+![Xnip2019-03-28_20-27-01](https://cdn.jsdelivr.net/gh/fengxiu/img/Xnip2019-03-28_20-27-01.jpg)
 ### 右连接
 是以右表为基准，将a.stuid = b.stuid的数据进行连接，然以将右表没有的对应项显示，左表的列为NULL
 ```sql
 select *from course as a right join student as b on a.stuid=b.id;
 ```
-![Xnip2019-03-28_20-28-30](/images/Xnip2019-03-28_20-28-30.jpg)
+![Xnip2019-03-28_20-28-30](https://cdn.jsdelivr.net/gh/fengxiu/img/Xnip2019-03-28_20-28-30.jpg)
 
 ### 全连接
 完整外部联接返回左表和右表中的所有行。当某行在另一个表中没有匹配行时，则另一个表的选择列表列包含空值。如果表之间有匹配行，则整个结果集行包含基表的数据值。

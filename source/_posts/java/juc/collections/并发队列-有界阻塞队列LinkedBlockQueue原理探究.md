@@ -24,7 +24,7 @@ LinkedBlockingQueue是一个单向链表实现的阻塞队列。该队列按 FIF
 
 类图如下
 
-![upload successful](/images/pasted-166.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-166.png)
 
 1. LinkedBlockingQueue继承于AbstractQueue，它本质上是一个FIFO(先进先出)的队列。
 2. LinkedBlockingQueue实现了BlockingQueue接口，它支持多线程并发。当多线程竞争同一个资源时，某线程获取到该资源之后，其它线程需要阻塞等待。

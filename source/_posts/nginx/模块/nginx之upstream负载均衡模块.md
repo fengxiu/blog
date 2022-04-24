@@ -112,7 +112,7 @@ Context:	upstream
 
 场景大概就是这样，当url请求过来时候，通过url中的一个特定数值，进行提取，然后进行hash
 
-![upload successful](/images/pasted-344.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-344.png)
 
 下面是通常的配置
 ``` nginx

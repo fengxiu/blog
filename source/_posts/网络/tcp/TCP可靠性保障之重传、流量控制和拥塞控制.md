@@ -105,7 +105,7 @@ RTO默认值是1S，得到了具体的RTO，下面来看下重传的具体步骤
 
  **举例2：**
 
-![upload successful](/images/pasted-193.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-193.png)
 
 一：初始态，发送方没有帧发出，发送窗口前后沿相重合。接收方0号窗口打开，等待接收0号帧； 
 二：发送方打开0号窗口，表示已发出0帧但尚确认返回信息。 此时接收窗口状态不变； 
@@ -121,7 +121,7 @@ RTO默认值是1S，得到了具体的RTO，下面来看下重传的具体步骤
 
 上面说的只是滑动窗口协议的理论，实际应用中又有不同。首先就是停等协议(stop－and－wait)，这时接受方的窗口和发送方的窗口大小都是1，1个比特就够表示了，所以也叫1比特滑动窗口协议。发送方这时自然发送每次只能发送一个，并且必须等待这个数据包的ACK，才能发送下一个。虽然在效率上比较低，带宽利用率明显较低，不过在网络环境较差，或是带宽本身很低的情况下，还是适用的。看下面的流程图： 
 
-![upload successful](/images/pasted-194.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-194.png)
 
 **后退n协议**
 停等协议虽然实现简单，也能较好的适用恶劣的网络环境，但是显然效率太低。所以有了后退n协议，这也是滑动窗口协议真正的用处，这里发送的窗口大小为n，接受方的窗口仍然为1。具体看下面的图，这里假设n=9： 
@@ -129,7 +129,7 @@ RTO默认值是1S，得到了具体的RTO，下面来看下重传的具体步骤
 
 后退n协议的好处无疑是提高了效率，但是一旦网络情况糟糕，则会导致大量数据重发，反而不如上面的停等协议，实际上这是很常见的，具体可以参考TCP拥塞控制。 
 
-![upload successful](/images/pasted-195.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-195.png)
 
 **选择重传协议**
 

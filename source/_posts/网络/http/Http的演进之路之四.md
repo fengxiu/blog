@@ -15,7 +15,7 @@ updated: 2019-03-10 10:23:00
 同源策略（Same-Origin Policy）是浏览器访问网页过程中最基础的安全策略。它仍然是由大名鼎鼎的网景公司提出的（网景公司对HTTP、SSL等协议的制定做出了巨大贡献，只是在随后的浏览器大战中输给了以垄断见长的微软IE）。所谓同源是指浏览器访问目标url的域名（domain）、协议（protocol）、端口（port）这三个要素是相同的。所谓“同源策略”是指A页面里的脚本通过[XHR](http://link.zhihu.com/?target=https%3A//developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequest)和[Fetch](http://link.zhihu.com/?target=https%3A//developer.mozilla.org/zh-CN/docs/Web/API/Fetch_API)等方式加载B页面资源时，如果发现B页面与A页面不是“同源”的，则会禁止访问（准确的说是对跨域请求的返回结果进行屏蔽）。下图显示了一个由script发出的非同源请求，数据最终会在browser端被屏蔽。
 <!-- more -->
 
-![upload successful](/images/pasted-241.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-241.png)
 
 为了验证一下同源策略的有效性，我进行了如下测试，首先在本地Mac上搭建一个nignx服务器，可以参照这个[方法](http://link.zhihu.com/?target=https%3A//blog.csdn.net/snowrain1108/article/details/50072057)搭建。然后在首页（/usr/local/var/www/index.html）中添加如下script内容：
 
@@ -38,17 +38,17 @@ xhr.send(null);
 
 在shell中开启nignx，然后通过chrome浏览器输入http://localhost:8080会显示以下内容。这表示由xhr发起的跨域请求没有成功。
 
-![upload successful](/images/pasted-242.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-242.png)
 
 再通过chrome浏览器的开发者工具中的console可以看到如下信息。从红色信息中可以看到，由于跨域请求的资源 [http://api.yunos.com](http://api.yunos.com)的response header中没有Access-Control-Allow-Origin头域（后面会讲到），因此本次跨域请求的返回结果被屏蔽。
 
-![upload successful](/images/pasted-243.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-243.png)
 
 为了进一步验证数据是在浏览器侧被屏蔽的，我们通过wireshark进行了抓包处理，从抓包中可以清楚的看到[http://api.yunos.com](http://api.yunos.com)的内容已经下载到了客户端：
 
-![upload successful](/images/pasted-244.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-244.png)
 
-![upload successful](/images/pasted-245.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-245.png)
 
 从上面的实验可以验证同源测试的有效性。
 
@@ -82,11 +82,11 @@ xhr.send(null);
 
 通过chrome的开发者工具来看具体的request请求。当在arunranga中发起对[http://aruner.net](http://aruner.net)的资源的请求后，[http://aruner.net](http://aruner.net)返回的response header中添加了Access-Control-Allow-Origin头域并告知可以允许[http://arunrange.com](http://arunrange.com)使用该资源。
 
-![upload successful](/images/pasted-246.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-246.png)
 
 下面是通过wireshark抓包的情况：
 
-![upload successful](/images/pasted-247.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-247.png)
 
 简单请求的原理是在浏览器中设置了一个白名单，符合以上条件的才是简单请求。当我们要发送一个跨域请求的时候，浏览器会先检查该请求，如果满足以上条件，浏览器会立即发送该请求。如果发现为非简单请求（比如头域中包含一个X-Forwarded-For字段），此时浏览器不会马上发送该请求，而是发送一个Preflight Request，有一个与服务器进行验证的过程。
 
@@ -115,15 +115,15 @@ xhr.send(null);
 
 服务器在response header中对OPTIONS请求中的问询内容进行了反馈，具体可以看到Access-Control-Allow-Methods: POST, GET, OPTIONS 表明服务端允许客户端使用POST、GET、OPTIONS方法；Access-Control-Allow-Headers: X-PINGARUNER, CONTENT-TYPE表明服务端允许客户端使用携带X-PINGARUNER和CONTENT-TYPE的头域；Access-Control-Max-Age表明该响应的时效为20天，即20天内浏览器无需再为同一个请求发起预检请求（浏览器自身维护了一个最大有效时间，以两者中较小值为准）。
 
-![upload successful](/images/pasted-248.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-248.png)
 
 下面的这个请求就是OPTIONS返回后实际发出的POST请求。在该请求中包含了OPTIONS向服务端查询的那些头域：
 
-![upload successful](/images/pasted-249.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-249.png)
 
 下面是wireshark抓包的情况。从抓包可以看到，两次请求是通过一个tcp connection发出的。首先发送了OPTIONS进行问询，随后发送了真正的POST请求：
 
-![upload successful](/images/pasted-250.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-250.png)
 
 ### 附带身份凭证请求（Request with Credential）
 
@@ -146,17 +146,17 @@ xhr.send(null);
 
 由于这是一个GET请求，因此浏览器不会视其为“预检请求”，她会直接发送GET请求。当第一次发起请求的时候，服务端会通过Set-Cookie头域返回Cookie信息，并且通过Access-Control-Allow-Credentials: true 头域告知浏览器可以将响应内容传递给用户（如果响应头域中未包含该项，则浏览器将屏蔽返回内容）。
 
-![upload successful](/images/pasted-251.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-251.png)
 
 当二次发起该请求的时候，可以看到此时已经将Cookie信息带上了。从返回的内容也可以看出，服务端已经识别了客户端的Cookie信息：
 
-![upload successful](/images/pasted-252.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-252.png)
 
 需要注意的是：对于“附带身份凭证请求”，服务器响应的Access-Control-Allow-Origin的值不能为“*”（即不能设置对所有人可见），这是因为在第一次的响应请求头域中携带了Set-Cookie信息、在第二次的请求头域中携带了Cookie信息。
 
 **相关头域**
 
-![upload successful](/images/pasted-253.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-253.png)
 
 ## 参考
 1. [lonnieZ http的演进之路](https://www.zhihu.com/people/lonniez/activities)

@@ -18,7 +18,7 @@ date: 2019-01-15 03:38:00
 
 循环依赖其实就是循环引用，就是两个或者两个以上的 bean 互相引用对方，最终形成一个闭环，如 A 依赖 B，B 依赖 C，C 依赖 A，如下：
 
-![upload successful](/images/pasted-13.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-13.png)
 
 循环依赖 其实就是一个死循环的过程，在初始化 A 的时候发现引用了 B，这时就会去初始化 B，然后又发现 B 引用 C，跑去初始化 C，初始化 C 的时候发现引用了 A，则又会去初始化 A，依次循环永不退出，除非有终结条件。
 
@@ -117,9 +117,9 @@ if (earlySingletonExposure) {
 
 经过上面分析，我们了解添加addSingletonFactory满足什么条件才能调用，但是调用addSingletonFactory起到什么作用呢，我们还是以最简单AB循环依赖为例，类A中含有属性类B，类B中又含有属性A，那么初始化BeanA的过程入下图
 
-![upload successful](/images/pasted-23.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-23.png)
 
-![upload successful](/images/pasted-24.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-24.png)
 
 `addSingletonFactory()` 代码如下：
 
@@ -158,7 +158,7 @@ protected Object getEarlyBeanReference(String beanName,
 }
 ```
 
-![upload successful](/images/pasted-25.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-25.png)
 
 介绍到这里我们发现三级缓存 singletonFactories 和 二级缓存 earlySingletonObjects 中的值都有出处了，那一级缓存在哪里设置的呢？在类 DefaultSingletonBeanRegistry 中可以发现这个 `addSingleton()` 方法，源码如下：
 

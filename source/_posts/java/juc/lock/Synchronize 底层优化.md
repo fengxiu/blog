@@ -114,11 +114,11 @@ synchronized用的锁存在Java对象头里的，对象相关的信息可以参�
 **加锁过程**:
 
 1. 在代码进入同步块的时候，如果同步对象锁状态为无锁状态（锁标志位为“01”状态，是否为偏向锁为“0”），虚拟机首先将在当前线程的栈帧中建立一个名为锁记录（Lock Record）的空间，用于存储锁对象目前的Mark Word的拷贝，官方称之为`Displaced Mark Word`。这时候线程堆栈与对象头的状态如图所示。
-![upload successful](/images/pasted-149.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-149.png)
 2. 拷贝对象头中的Mark Word复制到锁记录中。
 3. 拷贝成功后，虚拟机将使用CAS操作尝试将对象的Mark Word更新为指向Lock Record的指针，并将Lock record里的owner指针指向object mark word。如果更新成功，则执行步骤4，否则执行步骤5。
 4. 如果这个更新动作成功了，那么这个线程就拥有了该对象的锁，并且对象Mark Word的锁标志位设置为“00”，即表示此对象处于轻量级锁定状态，这时候线程堆栈与对象头的状态如图所示。
-![upload successful](/images/pasted-150.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-150.png)
 5. 如果这个更新操作失败了，虚拟机首先会检查对象的Mark Word是否指向当前线程的栈帧，如果是就说明当前线程已经拥有了这个对象的锁，那就可以直接进入同步块继续执行。否则说明多个线程竞争锁，轻量级锁就要膨胀为重量级锁，锁标志的状态值变为“10”，Mark Word中存储的就是指向重量级锁（互斥量）的指针，后面等待锁的线程也要进入阻塞状态。
 
 
@@ -154,7 +154,7 @@ synchronized用的锁存在Java对象头里的，对象相关的信息可以参�
 
 重量级锁、轻量级锁和偏向锁之间转换
 
-![upload successful](/images/pasted-151.png)
+![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-151.png)
 
 补充一点的是：当对象进入偏向状态的时候，Mark Word大部分的空间（23个比特）都用于存储持有锁的线程ID了，这部分空间占用了原有存储对象哈希码的位置，那原来对象的哈希码怎么办呢？ 在Java语言里面一个对象如果计算过哈希码，就应该一直保持该值不变（强烈推荐但不强制，因为用户可以重载hashCode()方法按自己的意愿返回哈希码），否则很多依赖对象哈希码的API都可能存 在出错风险。而作为绝大多数对象哈希码来源的Object::hashCode()方法，返回的是对象的一致性哈希码（Identity Hash Code），这个值是能强制保证不变的，它通过在对象头中存储计算结果来保证第一次计算之后，再次调用该方法取到的哈希码值永远不会再发生改变。因此，当一个对象已经计算过一 致性哈希码后，它就再也无法进入偏向锁状态了；而当一个对象当前正处于偏向锁状态，又收到需要计算其一致性哈希码请求时，它的偏向状态会被立即撤销，并且锁会膨胀为重量级锁。
 

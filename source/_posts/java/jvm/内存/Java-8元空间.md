@@ -43,13 +43,13 @@ public class PermGenOomMock{
 ```
 
 运行结果如下
-![820406-20160327005846979-1124627174](/images/820406-20160327005846979-1124627174.png)
+![820406-20160327005846979-1124627174](https://cdn.jsdelivr.net/gh/fengxiu/img/820406-20160327005846979-1124627174.png)
 本例中使用的JDK版本是1.7，指定的PermGen区的大小为8M。通过每次生成不同URLClassLoader对象来加载Test类，从而生成不同的类对象，这样就能看到我们熟悉的 "java.lang.OutOfMemoryError: PermGen space "异常。这里之所以采用JDK 1.7，是因为在JDK1.8 中， HotSpot已经没有 “PermGen space”这个区间了，取而代之是一个叫做Metaspace（元空间）的东西。
 其实，移除永久代的工作从JDK1.7就开始了。JDK1.7中，存储在永久代的部分数据就已经转移到了Java Heap或者是 Native Heap。但永久代仍存在于JDK1.7中，并没完全移除，譬如符号引用(Symbols)转移到了native heap；字面量(interned strings)转移到了java heap；类的静态变量(class statics)转移到了java heap。
 <!-- more  -->
 
 java 6中JVM的内存结构如下：
-![java_memory_permGen](/images/java_memory_permGen.png)
+![java_memory_permGen](https://cdn.jsdelivr.net/gh/fengxiu/img/java_memory_permGen.png)
 
 持久代中包含了虚拟机中所有可通过反射获取到的数据，比如Class和Method对象。不同的Java虚拟机之间可能会进行类共享，因此持久代又分为只读区和读写区。
 
@@ -90,7 +90,7 @@ JVM用于描述应用程序中用到的类和方法的元数据也存储在持�
 
 ## 元空间
 
-![jvm_metapsace](/images/jvm_metapsace.png)
+![jvm_metapsace](https://cdn.jsdelivr.net/gh/fengxiu/img/jvm_metapsace.png)
 持久代的空间被彻底地删除了，它被一个叫元空间的区域所替代了。持久代删除了之后，很明显，JVM会忽略PermSize和MaxPermSize这两个参数，还有就是你再也看不到java.lang.OutOfMemoryError: PermGen error的异常。
 
 JDK 8的HotSpot JVM现在使用的是本地内存来表示类的元数据，这个区域就叫做元空间。
@@ -118,7 +118,7 @@ JDK 8的HotSpot JVM现在使用的是本地内存来表示类的元数据，这�
 * 减少碎片的策略
 
 我们来看下JVM是如何给元数据分配虚拟内存的空间的
-![metaspace_allocation_java_latte](/images/metaspace_allocation_java_latte.png)
+![metaspace_allocation_java_latte](https://cdn.jsdelivr.net/gh/fengxiu/img/metaspace_allocation_java_latte.png)
 
 你可以看到虚拟内存空间是如何分配的(vs1,vs2,vs3) ，以及类加载器的内存块是如何分配的。CL是Class Loader的缩写。
 
@@ -137,12 +137,12 @@ _klass: 指向类的8字节的指针
 
 ### java对象的内存布局
 
-![java_object_layout_java_latte](/images/java_object_layout_java_latte.png)
+![java_object_layout_java_latte](https://cdn.jsdelivr.net/gh/fengxiu/img/java_object_layout_java_latte.png)
 **类指针压缩空间（Compressed Class Pointer Space）**
 只有是64位平台上启用了类指针压缩才会存在这个区域。对于64位平台，为了压缩JVM对象中的_klass指针的大小，引入了类指针压缩空间（Compressed Class Pointer Space）。
-![compressed_class_pointer_space_java_latte](/images/compressed_class_pointer_space_java_latte.png)
+![compressed_class_pointer_space_java_latte](https://cdn.jsdelivr.net/gh/fengxiu/img/compressed_class_pointer_space_java_latte.png)
 **类指针压缩空间（Compressed Class Pointer Space）**
-![java_object_layout_compressed_java_latte](/images/java_object_layout_compressed_java_latte.png)
+![java_object_layout_compressed_java_latte](https://cdn.jsdelivr.net/gh/fengxiu/img/java_object_layout_compressed_java_latte.png)
 **指针压缩概要**
 64位平台上默认打开。
 
