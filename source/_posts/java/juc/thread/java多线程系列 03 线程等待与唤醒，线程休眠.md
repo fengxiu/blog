@@ -96,7 +96,7 @@ main continue
 (04) “线程t1”运行之后，通过synchronized(this)获取“当前对象的锁”；接着调用notify()唤醒“当前对象上的等待线程”，也就是唤醒“主线程”。
 (05) “线程t1”运行完毕之后，释放“当前对象的锁”。紧接着，“主线程”获取“t1对象的锁”，然后接着运行。
 
-![img](https://raw.githubusercontent.com/fengxiu/img/master/20220422150931.png)
+![img](https://cdn.jsdelivr.net/gh/fengxiu/img/20220422150931.png)
 
 t1.wait()应该是让“线程t1”等待；但是，为什么却是让“主线程main”等待了呢？
 在解答该问题前，我们先看看jdk文档中关于wait的一段介绍：
@@ -180,7 +180,7 @@ main continue
 (04) “线程t1”运行之后，进入了死循环，一直不断的运行。
 (05) 超时3000ms之后，主线程main会进入到“就绪状态”，然后接着进入“运行状态”。
 
-![img](https://raw.githubusercontent.com/fengxiu/img/master/20220422152243.png)
+![img](https://cdn.jsdelivr.net/gh/fengxiu/img/20220422152243.png)
 
 ## wait()和notifyAll()
 
@@ -262,7 +262,7 @@ t1 continue
 (02) 主线程通过sleep(3000)休眠3秒。在主线程休眠3秒的过程中，我们假设"t1", "t2"和"t3"这3个线程都运行了。以"t1"为例，当它运行的时候，它会执行obj.wait()等待其它线程通过notify()或额nofityAll()来唤醒它；相同的道理，"t2"和"t3"也会等待其它线程通过nofity()或nofityAll()来唤醒它们。
 (03) 主线程休眠3秒之后，接着运行。执行 obj.notifyAll() 唤醒obj上的等待线程，即唤醒"t1", "t2"和"t3"这3个线程。 紧接着，主线程的synchronized(obj)运行完毕之后，主线程释放“obj锁”。这样，"t1", "t2"和"t3"就可以获取“obj锁”而继续运行了！
 
-![img](https://raw.githubusercontent.com/fengxiu/img/master/20220422152406.png)
+![img](https://cdn.jsdelivr.net/gh/fengxiu/img/20220422152406.png)
 
 **需要注意的一点是：notifyAll会唤醒所有等待获取此对象的线程，他们会彼此竞争，但是他们已经退出了等待，但是由于同步锁的原因，因此同一时刻只会有一个线程获取到锁，所以也只有一个线程会运行，但最终所有的线程都是依次获取到锁，接着运行**
 

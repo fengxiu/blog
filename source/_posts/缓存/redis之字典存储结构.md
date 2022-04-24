@@ -38,7 +38,7 @@ typedef struct dictht {
 
 table属性是一个数组，数组中的每个元素都是一个指向 dict.h/dictEntry结构的指针，每个dictEntry结构保存着一个键值对。size 属性记录了哈希表的大小，也即是table数组的大小，而used属性则记录了哈希表目前已有节点（键值对）的数量。sizemask属性的值总是等于size-1，这个属性和哈希值一起决定一个键应该被放到table数组的哪个 索引上面。
 下图是一个具体的例子
-![具体实现](https://raw.githubusercontent.com/fengxiu/img/master/20220419223309.png)
+![具体实现](https://cdn.jsdelivr.net/gh/fengxiu/img/20220419223309.png)
 
 **哈希表节点**
 哈希表节点使用dictEntry结构表示，每个dictEntry结构都保存着一 个键值对：
@@ -61,7 +61,7 @@ typedef struct dictEntry {
 key属性保存着键值对中的键，而v属性则保存着键值对中的值，其 中键值对的值可以是一个指针，或者是一个uint64_t整数，又或者是一 个int64_t整数。 next属性是指向另一个哈希表节点的指针，这个指针可以将多个哈希值相同的键值对连接在一次，以此来解决键冲突（collision）的问题。
 
 具体的例子如下
-![具体例子](https://raw.githubusercontent.com/fengxiu/img/master/20220419223628.png)
+![具体例子](https://cdn.jsdelivr.net/gh/fengxiu/img/20220419223628.png)
 
 **字典**
 
@@ -83,7 +83,7 @@ rehashidx;
 ```
 
 未进行rehash下的具体实例
-![](https://raw.githubusercontent.com/fengxiu/img/master/20220419224017.png)
+![](https://cdn.jsdelivr.net/gh/fengxiu/img/20220419224017.png)
 
 ## hash算法
 

@@ -75,7 +75,7 @@ Resource resource = urlClassPath.getResource("org/apache/log4j/Appender.class");
 
 首先补充一点知识，方便后面理解，URLClassPath是通过根据文件类型创建不通的Loader来加载具体的资源。这些Loader是URLClassPath的内部类，具体继承关系如下图。
 
-![loader](https://raw.githubusercontent.com/fengxiu/img/master/loader.jpg) 
+![loader](https://cdn.jsdelivr.net/gh/fengxiu/img/loader.jpg) 
 
 ### URLClassPath#getResource
 

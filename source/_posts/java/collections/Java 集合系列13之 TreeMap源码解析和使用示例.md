@@ -23,11 +23,11 @@ TreeMap底层通过红黑树(Red-Black tree)实现，也就意味着containsKey(
 
 在树的结构发生改变时(插入或者删除操作)，往往会破坏上述条件3或条件4，需要通过调整使得查找树重新满足红黑树的约束条件。
 
-![红黑树](https://raw.githubusercontent.com/fengxiu/img/master/20220421191341.png)
+![红黑树](https://cdn.jsdelivr.net/gh/fengxiu/img/20220421191341.png)
 
 TreeMap整体结构如下图所示
 
-![类图结构](https://raw.githubusercontent.com/fengxiu/img/master/20220421191456.png)
+![类图结构](https://cdn.jsdelivr.net/gh/fengxiu/img/20220421191456.png)
 
 TreeMap实现了NavigableMap接口，该接口主要是扩展SortedMap接口，用于搜锁离指定接口最近的匹配数据。SortedMap接口主要定义根据key值的排序来定义Map的视图顺序，如果key值实现了Comparable，则会根据返回结果进行排序，如果指定了Comparator，则会根据其进行排序。
 

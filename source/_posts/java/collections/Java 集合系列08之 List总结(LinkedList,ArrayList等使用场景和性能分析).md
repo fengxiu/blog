@@ -21,7 +21,7 @@ updated: 2019-03-04 17:39:00
 
 ## List概括
 
-![](https://raw.githubusercontent.com/fengxiu/img/master/pasted-160.png)
+![](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-160.png)
 
 1. List 是一个接口，它继承于Collection的接口。它代表着有序的队列。
 2. AbstractList是一个抽象类，它继承于AbstractCollection。AbstractList实现List接口中除size()、get(int location)之外的函数。

@@ -24,7 +24,7 @@ TCP是一个面向连接的(connection-oriented)、可靠的(reliable)、字节�
 
 TCP首部的数据格式如下。（如果不计任选字段，通常是20个字节）
 
-![tcp](https://raw.githubusercontent.com/fengxiu/img/master/pasted-177.png)
+![tcp](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-177.png)
 
 ### 字段分析
 
@@ -79,7 +79,7 @@ FIN(Finish)：带有该标志置位的数据包用来结束一个TCP会话，但
 
 在TCP的发送端和接收端都会维持一个窗口，因为一个TCP连接是双向的，因此实际上一个TCP连接一共有四个窗口。此处我们先简单介绍一个发送端的窗口如下。图中的数字表示byte也就是和上面介绍的TCP协议头中的SN是对应的，3号byte以及3号之前的数据表示已经发送并且收到了接收端的ACK确认包的数据；4、5、6三个byte表示当前可以发送的数据包，也有可能已经已经发送了但是还没有收到ACK确认包；7号byte及之后的数据表示为了控制发送速率暂时不能发送的数据。其中4-6这三个byte就称呼为窗口大小(window size)。当TCP连接建立的时候，双方会通过TCP头中的窗口大小字段向对方通告自己接收端的窗口大小，发送端依据接收端通告的窗口大小来设置发送端的发送窗口大小，另外在拥塞控制的时候也是通过调整发送端的发送窗口来调整发送速率的。窗口这个词的来源就是当我们从这一个数据序列中单独看4、5、6这几个byte的时候，我们仿佛是从一个"窗口"中观察的一样。此处先简单有个滑窗的概念后续我们讲到TCP的窗口管理的时候会继续进一步介绍TCP的滑窗。
 
-![滑动窗口](https://raw.githubusercontent.com/fengxiu/img/master/20220415170059.png)
+![滑动窗口](https://cdn.jsdelivr.net/gh/fengxiu/img/20220415170059.png)
 
 ## 参考
 

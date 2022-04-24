@@ -16,7 +16,7 @@ updated: 2019-03-04 12:09:00
 ArrayList是一个有序集合，底层是通过数组来实现的，可以动态的改变大小，相当于动态数组。与Java中的数组相比，它的容量能动态增长。他继承于AbstractList，实现了List，RandomAccess，Cloneable，java.io.Serializable接口。
 类如如下：
 
-![list](https://raw.githubusercontent.com/fengxiu/img/master/Xnip2019-09-04_10-04-56.jpg)
+![list](https://cdn.jsdelivr.net/gh/fengxiu/img/Xnip2019-09-04_10-04-56.jpg)
 
 ArrayList继承AbstractList，实现List接口。因此就具有相关的添加、删除、修改、遍历等功能。
 

@@ -13,7 +13,7 @@ updated: 2019-03-04 17:40:00
 
 首先，我们看看Map架构。
 
-![架构图](https://raw.githubusercontent.com/fengxiu/img/master/pasted-161.png)
+![架构图](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-161.png)
 
 如上图：
 

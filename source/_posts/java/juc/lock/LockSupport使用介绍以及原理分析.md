@@ -237,7 +237,7 @@ after wait
   
 说明: 具体的流程图如下  
 
-![](https://raw.githubusercontent.com/fengxiu/img/master/20220423174308.png)
+![](https://cdn.jsdelivr.net/gh/fengxiu/img/20220423174308.png)
 
 使用wait/notify实现同步时，必须先调用wait，后调用notify，如果先调用notify，再调用wait，将起不了作用。
 

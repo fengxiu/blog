@@ -21,7 +21,7 @@ updated: 2019-07-09 21:07:04
 
 一个类型从被加载到虚拟机内存中开始，到卸载出内存为止，它的整个生命周期将会经历加载 （Loading）、验证（Verification）、准备（Preparation）、解析（Resolution）、初始化 （Initialization）、使用（Using）和卸载（Unloading）七个阶段，其中验证、准备、解析三个部分统称为连接（Linking）。这七个阶段的发生顺序如下图所示。
 
-![雷家挨过程](https://raw.githubusercontent.com/fengxiu/img/master/20220419173111.png)
+![雷家挨过程](https://cdn.jsdelivr.net/gh/fengxiu/img/20220419173111.png)
 
 ### 类加载的时机
 
@@ -80,7 +80,7 @@ updated: 2019-07-09 21:07:04
 
 类加载器就是对上面描述类加载整个过程的实现，首先看下类加载器的整个继承体系
 
-![类加载器继承体系](https://raw.githubusercontent.com/fengxiu/img/master/20170211112754197.png)
+![类加载器继承体系](https://cdn.jsdelivr.net/gh/fengxiu/img/20170211112754197.png)
 
 从上面可以看到平常我们经常听到到的扩展类加载器，系统类加载器等等，下面会对上面的类加载器一一进行介绍。
 
@@ -102,7 +102,7 @@ updated: 2019-07-09 21:07:04
 
 双亲委派模式要求除了顶层的启动类加载器外，其余的类加载器都应当有自己的父类加载器，**请注意双亲委派模式中的父子关系并非通常所说的类继承关系，而是采用组合关系来复用父类加载器的相关代码**，类加载器间的关系如下：
 
-![](https://raw.githubusercontent.com/fengxiu/img/master/20180428160028362.png)
+![](https://cdn.jsdelivr.net/gh/fengxiu/img/20180428160028362.png)
 
 双亲委派模式是在Java 1.2后引入的，其工作原理的是，如果一个类加载器收到了类加载请求，它并不会自己先去加载，而是把这个请求委托给父类的加载器去执行，如果父类加载器还存在父类加载器，则进一步向上委托，依次递归，请求最终将到达顶层的启动类加载器，如果父类加载器可以完成类加载任务，就成功返回，倘若父类加载器无法完成此加载任务，子加载器才会尝试自己去加载，这就是双亲委派模式，即每个儿子都很懒，每次有活就丢给父亲去干，直到父亲说这件事我也干不了时，儿子自己想办法去完成，这不就是传说中的实力坑爹啊？那么采用这种模式有啥用呢?
 
@@ -141,7 +141,7 @@ Exception in thread "main" java.lang.SecurityException: Prohibited package name:
 
 前面已经将类加载的基本信息进行了介绍，下面开始详细分析java中关于类加载的几个类，主要的类继承关系图如下：
 
-![类加载类图](https://raw.githubusercontent.com/fengxiu/img/master/Xnip2019-07-11_22-42-28.jpg)
+![类加载类图](https://cdn.jsdelivr.net/gh/fengxiu/img/Xnip2019-07-11_22-42-28.jpg)
 由于ClassLoader中函数众多，这里我们只关注我们比较常用的一些函数。
 
 ### ClassLoader
@@ -236,7 +236,7 @@ protected Class<?> findClass(String name) throws ClassNotFoundException {
 
 在我们代码中，更多是URLClassLoader类关联，前面说过，ClassLoader是一个抽象类，很多方法是空的没有实现，比如findClass()、findResource()等。而URLClassLoader这个实现类为这些方法提供了具体的实现，并新增了URLClassPath类协助取得Class字节码流等功能，在编写自定义类加载器时，如果没有太过于复杂的需求，可以直接继承URLClassLoader类，这样就可以避免自己去编写findClass()方法及其获取字节码流的方式，使自定义类加载器编写更加简洁，下面是URLClassLoader的类图(利用IDEA生成的类图)
 
-![](https://raw.githubusercontent.com/fengxiu/img/master/20170620232230987.png)
+![](https://cdn.jsdelivr.net/gh/fengxiu/img/20170620232230987.png)
 
 从类图结构看出URLClassLoader中存在一个URLClassPath类，通过这个类就可以找到要加载的字节码流，也就是说URLClassPath类负责找到要加载的字节码，再读取成字节流，最后通过defineClass()方法创建类的Class对象。
 从URLClassLoader类的结构图可以看出其构造方法都有一个必须传递的参数URL[\]，该参数的元素是代表字节码文件的路径,换句话说在创建URLClassLoader对象时必须要指定这个类加载器的到那个目录下找class文件。同时也应该注意URL[]也是URLClassPath类的必传参数，在创建URLClassPath对象时，会根据传递过来的URL数组中的路径判断是文件还是jar包，然后根据不同的路径创建FileLoader或者JarLoader或默认Loader类去加载相应路径下的class文件，而当JVM调用findClass()方法时，就由这3个加载器中的一个将class文件的字节码流加载到内存中，最后利用字节码流创建类的class对象。**请记住，如果我们在定义类加载器时选择继承ClassLoader类而非URLClassLoader，必须手动编写findclass()方法的加载逻辑以及获取字节码流的逻辑。**
@@ -245,7 +245,7 @@ protected Class<?> findClass(String name) throws ClassNotFoundException {
 
 了解完URLClassLoader后接着看看剩余的两个类加载器，即拓展类加载器ExtClassLoader和系统类加载器AppClassLoader，这两个类都继承自URLClassLoader，是`sun.misc.Launcher`的静态内部类。`sun.misc.Launcher`主要被系统用于启动主应用程序，ExtClassLoader和AppClassLoader都是由sun.misc.Launcher创建的，如果想要，详细了解Launcher这个类，可以看这篇文章[main函数启动流程](/archives/ddfbbdfc.html)其类主要类结构如下：
 
-![](https://raw.githubusercontent.com/fengxiu/img/master/20170621075845201.png)
+![](https://cdn.jsdelivr.net/gh/fengxiu/img/20170621075845201.png)
 
 它们间的关系正如前面所阐述的那样，同时我们发现ExtClassLoader并没有重写loadClass()方法，这足矣说明其遵循双亲委派模式，而AppClassLoader重载了loadCass()方法，但最终调用的还是父类loadClass()方法，因此依然遵守双亲委派模式，重载方法源码如下：
 

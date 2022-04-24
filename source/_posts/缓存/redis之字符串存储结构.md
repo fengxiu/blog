@@ -33,7 +33,7 @@ char buf[];
 
 具体存储实例如下
 
-![具体实例](https://raw.githubusercontent.com/fengxiu/img/master/20220419221402.png)
+![具体实例](https://cdn.jsdelivr.net/gh/fengxiu/img/20220419221402.png)
 
 ## SDS与C字符串的区别
 

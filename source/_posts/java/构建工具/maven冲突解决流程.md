@@ -31,13 +31,13 @@ date: 2021-07-28 10:09:53
 
 通过上方的命令解析之后会构成依赖树，利用依赖树可以清楚看到依赖引入的传递路径
 
-![tree](https://raw.githubusercontent.com/fengxiu/img/master/tree.png)
+![tree](https://cdn.jsdelivr.net/gh/fengxiu/img/tree.png)
 
 ### 查看已解析的依赖
 
 一层为顶层依赖，顶层依赖的依赖为二级依赖，以此类推
 
-![list](https://raw.githubusercontent.com/fengxiu/img/master/list.png)
+![list](https://cdn.jsdelivr.net/gh/fengxiu/img/list.png)
 
 ### 分析项目当前依赖
 

@@ -16,7 +16,7 @@ updated: 2019-03-04 19:50:00
 
 HashMap类图如下：
 
-![hashMap结构示意图](https://raw.githubusercontent.com/fengxiu/img/master/pasted-162.png)
+![hashMap结构示意图](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-162.png)
 
 HashMap是一个散列表，他存储的内容是键值对(key-value)，其中key允许为null。这也是他与HashTable的一个重要区别。
 HashMap继承于AbstractMap，实现了Map，Cloneable，java.io.Serualizable接口
@@ -37,7 +37,7 @@ HashMap 的实例有两个参数影响其性能：“**初始容量**” 和 “
 
 从结构实现来讲，HashMap是数组+链表+红黑树（JDK1.8增加了红黑树部分）实现的，如下如所示。
 
-![结构示意图](https://raw.githubusercontent.com/fengxiu/img/master/20220420165025.png)
+![结构示意图](https://cdn.jsdelivr.net/gh/fengxiu/img/20220420165025.png)
 这里需要讲明白两个问题：
 
 1. 数据底层具体存储的是什么？
@@ -127,12 +127,12 @@ static int indexFor(int h, int length) {  // length对应着table的长度
 
 下面举例说明下，n为table的长度。
 
-![索引位置计算过程](https://raw.githubusercontent.com/fengxiu/img/master/20220420153056.png)
+![索引位置计算过程](https://cdn.jsdelivr.net/gh/fengxiu/img/20220420153056.png)
 
 **分析HashMap的put方法**
 HashMap的put方法执行过程可以通过下图来理解，自己有兴趣可以去对比源码更清楚地研究学习。
 
-![hashMap插入整个过程](https://raw.githubusercontent.com/fengxiu/img/master/20220420153125.png)
+![hashMap插入整个过程](https://cdn.jsdelivr.net/gh/fengxiu/img/20220420153125.png)
 
 1. 判断键值对数组table[i]是否为空或为null，否则执行resize()进行扩容； 
 2. 根据键值key计算hash值得到插入的数组索引i，如果table[i]==null，直接新建节点添加，转向⑥，如果table[i]不为空，转向③；
@@ -258,19 +258,19 @@ newTable[i]的引用赋给了e.next，也就是使用了单链表的头插入方
 
 下面举个例子说明下扩容过程。假设了我们的hash算法就是简单的用key mod 一下表的大小（也就是数组的长度）。其中的哈希桶数组table的size=2， 所以key = 3、7、5，put顺序依次为 5、7、3。在mod 2以后都冲突在table[1]这里了。这里假设负载因子loadFactor=1，即当键值对的实际大小size 大于 table的实际大小时进行扩容。接下来的三个步骤是哈希桶数组 resize成4，然后所有的Node重新rehash的过程。
 
-![](https://raw.githubusercontent.com/fengxiu/img/master/20220420153346.png)
+![](https://cdn.jsdelivr.net/gh/fengxiu/img/20220420153346.png)
 
 下面我们讲解下JDK1.8做了哪些优化。经过观测可以发现，我们使用的是2次幂的扩展(指长度扩为原来2倍)，所以，元素的位置要么是在原位置，要么是在原位置再移动2次幂的位置。看下图可以明白这句话的意思，n为table的长度，图（a）表示扩容前的key1和key2两种key确定索引位置的示例，图（b）表示扩容后key1和key2两种key确定索引位置的示例，其中hash1是key1对应的哈希与高位运算结果。
 
-![](https://raw.githubusercontent.com/fengxiu/img/master/20220420153518.png)
+![](https://cdn.jsdelivr.net/gh/fengxiu/img/20220420153518.png)
 
 元素在重新计算hash之后，因为n变为2倍，那么n-1的mask范围在高位多1bit(红色)，因此新的index就会发生这样的变化：
 
-![](https://raw.githubusercontent.com/fengxiu/img/master/20220420153505.png)
+![](https://cdn.jsdelivr.net/gh/fengxiu/img/20220420153505.png)
 
 因此，我们在扩充HashMap的时候，不需要像JDK1.7的实现那样重新计算hash，只需要看看原来的hash值新增的那个bit是1还是0就好了，是0的话索引没变，是1的话索引变成“原索引+oldCap”，可以看看下图为16扩充为32的resize示意图：
 
-![](https://raw.githubusercontent.com/fengxiu/img/master/20220420153440.png)
+![](https://cdn.jsdelivr.net/gh/fengxiu/img/20220420153440.png)
 
 这个设计确实非常的巧妙，既省去了重新计算hash值的时间，而且同时，由于新增的1bit是0还是1可以认为是随机的，因此resize的过程，均匀的把之前的冲突的节点分散到新的bucket了。这一块就是JDK1.8新增的优化点。有一点注意区别，JDK1.7中rehash的时候，旧链表迁移新链表的时候，如果在新表的数组索引位置相同，则链表元素会倒置，但是从上图可以看出，JDK1.8不会倒置。有兴趣的同学可以研究下JDK1.8的resize源码，写的很赞，如下:
 
@@ -395,18 +395,18 @@ public class HashMapInfiniteLoop {
 
 通过设置断点让线程1和线程2同时debug到transfer方法(3.3小节代码块)的首行。注意此时两个线程已经成功添加数据。放开thread1的断点至transfer方法的“Entry next = e.next;” 这一行；然后放开线程2的的断点，让线程2进行resize。结果如下图。
 
-![](https://raw.githubusercontent.com/fengxiu/img/master/20220420161413.png)
+![](https://cdn.jsdelivr.net/gh/fengxiu/img/20220420161413.png)
 
 注意，Thread1的 e 指向了key(3)，而next指向了key(7)，其在线程二rehash后，指向了线程二重组后的链表。
 
 线程一被调度回来执行，先是执行 newTalbe[i] = e， 然后是e = next，导致了e指向了key(7)，而下一次循环的next = e.next导致了next指向了key(3)。
 
-![](https://raw.githubusercontent.com/fengxiu/img/master/20220420161433.png)
-![](https://raw.githubusercontent.com/fengxiu/img/master/20220420161119.png)
+![](https://cdn.jsdelivr.net/gh/fengxiu/img/20220420161433.png)
+![](https://cdn.jsdelivr.net/gh/fengxiu/img/20220420161119.png)
 
 e.next = newTable[i] 导致 key(3).next 指向了 key(7)。注意：此时的key(7).next 已经指向了key(3)， 环形链表就这样出现了。
 
-![](https://raw.githubusercontent.com/fengxiu/img/master/20220420161004.png)
+![](https://cdn.jsdelivr.net/gh/fengxiu/img/20220420161004.png)
 
 于是，当我们用线程一调用map.get(11)时，悲剧就出现了——Infinite Loop。
 

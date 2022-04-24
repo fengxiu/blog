@@ -20,7 +20,7 @@ Redis有四个不同的命令可以用于设置键的生存时间（键可以存
 
 虽然有多种不同单位和不同形式的设置命令，但实际上EXPIRE、 PEXPIRE、EXPIREAT三个命令都是使用PEXPIREAT命令来实现的： 无论客户端执行的是以上四个命令中的哪一个，经过转换之后，最终的执行效果都和执行PEXPIREAT命令一样。
 
-![设置过期时间](https://raw.githubusercontent.com/fengxiu/img/master/20220421234049.png)
+![设置过期时间](https://cdn.jsdelivr.net/gh/fengxiu/img/20220421234049.png)
 
 <!-- more -->
 
@@ -86,7 +86,7 @@ Redis服务器实际使用的是惰性删除和定期删除两种策略： 通�
 * 如果输入键未过期，那么expireIfNeeded函数不做动作。 
 命令调用expireIfNeeded函数的过程如图9-15所示。
 
-![命令执行过程](https://raw.githubusercontent.com/fengxiu/img/master/20220422102852.png)
+![命令执行过程](https://cdn.jsdelivr.net/gh/fengxiu/img/20220422102852.png)
 
 expireIfNeeded函数就像一个过滤器，它可以在命令真正执行之前，过滤掉过期的输入键，从而避免命令接触到过期键。 另外，因为每个被访问的键都可能因为过期而被expireIfNeeded函数删除，所以每个命令的实现函数都必须能同时处理键存在以及键不存 在这两种情况：
 

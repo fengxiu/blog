@@ -33,7 +33,7 @@ keep-alive在HTTP/1.0中已经诞生，但由于当时没有写入标准，因�
 基于HTTP的工作原理，后面又有了针对DNS和Connection的优化，不过这都是后话了。
 Http0.9 到Http1.1的请求示意图如下：
 
-![](https://raw.githubusercontent.com/fengxiu/img/master/pasted-211.png)
+![](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-211.png)
 
 为了进一步说明keep-alive的重要性，在此进行了一次测试，分别以Keep-Alive的方式和非Keep-Alive的方式对[http://api.yunos.com](http://api.yunos.com)访问5次、10次、15次、20次。以下是测试数据的对比：
 

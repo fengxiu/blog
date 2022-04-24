@@ -51,7 +51,7 @@ updated: 2019-03-24 17:25:00
 
 在内存中存储的布局可以分为3块区域：对象头（header），实例数据（Instance Data）和对齐填充（Padding）对象头。整体结构如下图结构如下图
 
-![对象结构图](https://raw.githubusercontent.com/fengxiu/img/master/1517815118540.png)
+![对象结构图](https://cdn.jsdelivr.net/gh/fengxiu/img/1517815118540.png)
 
 ### 对象头
 
@@ -64,10 +64,10 @@ updated: 2019-03-24 17:25:00
 因此对象头会出现俩种情形
 
 **普通对象**
-![普通对象](https://raw.githubusercontent.com/fengxiu/img/master/20220423114755.png)
+![普通对象](https://cdn.jsdelivr.net/gh/fengxiu/img/20220423114755.png)
 
 **数组对象**
-![数组对象](https://raw.githubusercontent.com/fengxiu/img/master/20220423114808.png)
+![数组对象](https://cdn.jsdelivr.net/gh/fengxiu/img/20220423114808.png)
 
 #### MarkWord
 
@@ -77,12 +77,12 @@ mark word的位长度为JVM的一个Word大小，也就是说32位JVM的Mark wor
 
 为了让一个字大小存储更多的信息，JVM将字的最低两个位设置为标记位，不同标记位下的Mark Word示意如下：
 
-![各种运行时数据](https://raw.githubusercontent.com/fengxiu/img/master/20220423115404.png)
+![各种运行时数据](https://cdn.jsdelivr.net/gh/fengxiu/img/20220423115404.png)
 
 其中各部分的含义如下：
 
 * lock：2位的锁状态标记位，由于希望用尽可能少的二进制位表示尽可能多的信息，所以设置了lock标记。该标记的值不同，整个mark word表示的含义不同。
-![标记](https://raw.githubusercontent.com/fengxiu/img/master/20220423115455.png)
+![标记](https://cdn.jsdelivr.net/gh/fengxiu/img/20220423115455.png)
 
 * bias_lock：对象是否启动偏向锁标记，只占1个二进制位。为1时表示对象启动偏向锁，为0时表示对象没有偏向锁。
 * age：4位的Java对象年龄。在GC中，如果对象在Survivor区复制一次，年龄增加1。当对象达到设定的阈值时，将会晋升到老年代。默认情况下，并行GC的年龄阈值为15，并发GC的年龄阈值为6。由于age只有4位，所以最大值为15，这就是-XX:MaxTenuringThreshold选项最大值为15的原因。
@@ -93,7 +93,7 @@ mark word的位长度为JVM的一个Word大小，也就是说32位JVM的Mark wor
 * ptr_to_heavyweight_monitor：指向monitor对象（也称为管程或监视器锁）的起始地址，每个对象都存在着一个monitor与之关联，对象与其monitor之间的关系存在多种实现方式，如monitor对象可以与对象一起创建销毁或当前线程试图获取对象锁时自动生成，但当一个monitor被某个线程持有后，它便处于锁定状态。
 
 64位下的标记字与32位的相似：
-![64](https://raw.githubusercontent.com/fengxiu/img/master/20220423115818.png)
+![64](https://cdn.jsdelivr.net/gh/fengxiu/img/20220423115818.png)
 
 #### pointer
 
@@ -128,12 +128,12 @@ Java程序需要通过JVM栈上的引用访问堆中的具体对象。对象的�
 
 1. 句柄
 Java堆中划分出一块内存来作为句柄池，引用中存储对象的句柄地址，而句柄中包含了对象实例数据与对象类型数据各自的具体地址信息，具体构造如下图所示：
-![句柄](https://raw.githubusercontent.com/fengxiu/img/master/Xnip2019-03-25_22-34-10.jpg)
+![句柄](https://cdn.jsdelivr.net/gh/fengxiu/img/Xnip2019-03-25_22-34-10.jpg)
 优势：引用中存储的是稳定的句柄地址，在对象被移动（垃圾收集时移动对象是非常普遍的行为）时只会改变句柄中的实例数据指针，而引用本身不需要修改。
 
 2. 直接指针
    如果使用直接指针访问，引用 中存储的直接就是对象地址，那么Java堆对象内部的布局中就必须考虑如何放置访问类型数据的相关信息。
-   ![直接指针](https://raw.githubusercontent.com/fengxiu/img/master/Xnip2019-03-25_22-36-16.jpg)
+   ![直接指针](https://cdn.jsdelivr.net/gh/fengxiu/img/Xnip2019-03-25_22-36-16.jpg)
    优势：速度更快，节省了一次指针定位的时间开销。由于对象的访问在Java中非常频繁，因此这类开销积少成多后也是非常可观的执行成本。
 
 ## 参考

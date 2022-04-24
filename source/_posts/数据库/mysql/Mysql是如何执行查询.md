@@ -170,12 +170,12 @@ SELECT * FROM single_table WHERE key1 > ' a ' AND key3 = 'b'
 1. 首先确定第一个需要查询的表，这个表称为驱动表。确定的依据是查询代价最小的表作为驱动表，下面会介绍如何评估查询的代价。对于外连接则是已经确定的，如果是内连接，则才需要进行选取。
 2. 上一步每获取一条记录，都会到第二张表中查找匹配的记录。被匹配的表称其为被驱动表。
 
-![](https://raw.githubusercontent.com/fengxiu/img/master/20220408150150.png)
+![](https://cdn.jsdelivr.net/gh/fengxiu/img/20220408150150.png)
 
 如果有3个表进行连接，那么步骤2中得到的结果集就像是新的驱动表，然后第3个表就成为了被驱动表，然后重复上面的过程。
 
 上面所介绍的都是查询到一条记录就会到连接的表中进行查找，如果按照这种方式进行查询，会导致大量的随机IO。因此Mysql采取了下面这种策略。提出了一个连接缓冲区(Join buffer)的概念,Join Buffer就是在执行连接查询前申请的一块固定大小的内存。先把若干条驱动表结果集中的记录装在这个Join Buffer中，然后开始扫描被驱动表，每条被驱动表的记录一次性地与Join Buffer中的多条驱动表记录进行匹配。由于匹配的过程都是在内存中完成的，所以这样可以显著减少被驱动表的IO代价。查询过程如下图
-![](https://raw.githubusercontent.com/fengxiu/img/master/20220411202223.png)
+![](https://cdn.jsdelivr.net/gh/fengxiu/img/20220411202223.png)
 
 Join Buffer的大小可以通过启动选项或者系统变量join_buffer_size进行配置，默认大小为256KB ，最小可以设置为128字节。当然，在我们优化对被驱动表的查询时，最好是为被驱动表加上高效率的索引。如果实在不能使用索引，并且自己机器的内存也比较大 ，则可以尝试调大join_buffer_size的值来对连接查询进行优化。另外需要注意的是，buffer中并不会存放驱动表记录的所有列，只有查询列表中的列和过滤条件中的列才会被放到Join Buffer 中，所以这也再次提醒我们，最好不要把`*`作为查询列表，只需要把关心的列放到查询列表就好了，这样可以在Join buffer中放置更多的记录。
 
@@ -227,7 +227,7 @@ SELECT * FROM single_table WHERE
 * 该表中的记录数.
 
 在mysql中，默认会存储每张表的一些统计信息，可以通过`SHOW TABLE STATUS`来查看，比如查看single_table表
-![](https://raw.githubusercontent.com/fengxiu/img/master/20220412114001.png)
+![](https://cdn.jsdelivr.net/gh/fengxiu/img/20220412114001.png)
 
 上面的字段比较多，我们主要关注俩个字段rows和data_length。
 
@@ -271,7 +271,7 @@ SELECT * from  single_table WHERE key1 IN ("aa1" "aa2", "aa3" , ...., "zzz" ) ;
 
 前面我们介绍过表有统计数据，对应的索引也有统计数据，可以使用
 `SHOW INDEX FROM`命令来查看，具体有以下字段
-![](https://raw.githubusercontent.com/fengxiu/img/master/20220412143250.png)
+![](https://cdn.jsdelivr.net/gh/fengxiu/img/20220412143250.png)
 
 需要关注的是上面的Cardinality字段，表示不重复的数量，大体的意思就是，如果有1000条计算，这个值为1，则表示没有重复的值，索引的数量由1000个，如果值为1000，则表示所有的值都是重复的，只有一个索引。根据这个值以及总的行数，可以预估出每个索引大概对应的行数。在乘以单点索引区间的数量就可以预估得到区间总的数量。
 

@@ -24,7 +24,7 @@ categories:
 
 redis使用的是双端链表，如图3-1所示
 
-![链表](https://raw.githubusercontent.com/fengxiu/img/master/20220421210146.png)
+![链表](https://cdn.jsdelivr.net/gh/fengxiu/img/20220421210146.png)
 
 Redis的链表实现的特性可以总结如下：
 
@@ -40,7 +40,7 @@ Redis的链表实现的特性可以总结如下：
 
 Redis使用跳跃表作为有序集合键的底层实现之一，如果一个有序集合包含的元素数量比较多，又或者有序集合中元素的成员 （member）是比较长的字符串时，Redis就会使用跳跃表来作为有序集合键的底层实现。
 
-![跳跃表](https://raw.githubusercontent.com/fengxiu/img/master/20220421213800.png)
+![跳跃表](https://cdn.jsdelivr.net/gh/fengxiu/img/20220421213800.png)
 
 ### 整数集合
 
@@ -67,11 +67,11 @@ Redis使用跳跃表作为有序集合键的底层实现之一，如果一个有
 
 下图是压缩列表的存储结构，以及每个片段对应的含义。
 
-![压缩列表整体构成](https://raw.githubusercontent.com/fengxiu/img/master/20220421220418.png)
+![压缩列表整体构成](https://cdn.jsdelivr.net/gh/fengxiu/img/20220421220418.png)
 
 其中除了entryx不确定外，其它都是定长的。entry的结构如下
 
-![entry](https://raw.githubusercontent.com/fengxiu/img/master/20220421222740.png)
+![entry](https://cdn.jsdelivr.net/gh/fengxiu/img/20220421222740.png)
 
 每个压缩列表节点都由previous_entry_length、encoding、content三个部分组成
 

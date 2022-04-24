@@ -19,7 +19,7 @@ HTTP是一个属于应用层的面向对象的协议，由于其简捷、快速�
 
 HTTP协议工作于客户端-服务端架构为上。浏览器作为HTTP客户端通过URL向HTTP服务端即WEB服务器发送所有请求。Web服务器根据接收到的请求后，向客户端发送响应信息。基本模式如下图：
 
-![](https://raw.githubusercontent.com/fengxiu/img/master/pasted-205.png)
+![](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-205.png)
 
 ## 主要特点
 

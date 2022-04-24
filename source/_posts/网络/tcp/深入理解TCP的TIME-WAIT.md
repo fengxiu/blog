@@ -21,13 +21,13 @@ updated: 2019-03-10 08:23:00
 
 1. 一个数据报在发送途中或者响应过程中有可能成为残余的数据报，因此必须等待足够长的时间避免新的连接会收到先前连接的残余数据报，而造成状态错误。
 
-![](https://raw.githubusercontent.com/fengxiu/img/master/pasted-202.png)
+![](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-202.png)
 
    由于 TIME-WAIT 超时时间过短，旧连接的 `SEQ=3` 由于 **路上太眷顾路边的风景，姗姗来迟** ，混入新连接中，加之 SEQ 回绕正好能够匹配上，被当做正常数据接收，造成数据混乱。
 
 2. 确保被动关闭方已经正常关闭。
 
-![](https://raw.githubusercontent.com/fengxiu/img/master/pasted-203.png)
+![](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-203.png)
 
    如果主动关闭方提前关闭，被动关闭方还在 LAST-ACK 苦苦等待 FIN 的 ACK 。此时对于主动关闭方来说，连接已经得到释放，其端口可以被重用了，如果重用端口建立三次握手，发出友好的 SYN ，谁知 **热脸贴冷屁股**，被动关闭方得不到想要的 ACK ，给出 RST 。所以等待2MSL可以使得主动方发出的ACK确认到达被动关闭的一方，并且如果中间有丢失，被动关闭方还可以在这个时间内进行重发，这就不具体讨论了。
 
@@ -47,7 +47,7 @@ TCP协议推出了一个扩展 [RFC 1323 TCP Extensions for High Performance](ht
 
 2. 即使被动关闭方还处于 LAST-ACK 状态，主动关闭方 **reuse** TIME-WAIT连接，发起三次握手。当被动关闭方收到三次握手的 SYN ，得益于时间戳的存在，并不是回应一个 RST ，而是回应 FIN+ACK，而此时主动关闭方正在 SYN-SENT 状态，对于突如其来的 FIN+ACK，直接回应一个 RST ，被动关闭方接受到这个 RST 后，连接就关闭被回收了。当主动关闭方再次发起 SYN 时，就可以三次握手建立正常的连接。
 
-![](https://raw.githubusercontent.com/fengxiu/img/master/pasted-204.png)
+![](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-204.png)
 
 而对于 **server （被动发起方）主动关闭连接** 的情况，开启 `net.ipv4.tcp_tw_recyle` 来应对 TIME-WAIT 连接过多的情况。开启 recyle 后，系统便会记录来自每台主机的每个连接的分组时间戳。对于新来的连接，如果发现 SYN 包中带的时间戳比之前记录来自同一主机的同一连接的分组所携带的时间戳要比之前记录的时间戳新，则接受复用 TIME-WAIT 连接，否则抛弃。
 

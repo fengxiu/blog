@@ -11,12 +11,12 @@ updated: 2019-03-04 20:58:00
 ---
 
 本文首先对LinkedHashMap整体进行分析，然后在介绍LinkedHashSet，其实它只是针对LinkedHashMap的简单封装。类图如下
-![uml图](https://raw.githubusercontent.com/fengxiu/img/master/20220420174910.png)
+![uml图](https://cdn.jsdelivr.net/gh/fengxiu/img/20220420174910.png)
 
 LinkedHashMap实现了Map接口，即允许放入key为null的元素，也允许插入value为null的元素。从名字上可以看出该容器是linked list和HashMap的混合体，也就是说它同时满足HashMap和linked list的某些特性。可将LinkedHashMap看作采用linked list增强的HashMap。
 存储结构如下
 
-![整体结构](https://raw.githubusercontent.com/fengxiu/img/master/20220420175640.png)
+![整体结构](https://cdn.jsdelivr.net/gh/fengxiu/img/20220420175640.png)
 
 事实上LinkedHashMap是HashMap的直接子类，二者唯一的区别是LinkedHashMap在HashMap的基础上，采用双向链表(doubly-linked list)的形式将所有entry连接起来，这样是为保证元素的迭代顺序跟插入顺序相同。上图给出了LinkedHashMap的结构图，主体部分跟HashMap完全一样，多了header指向双向链表的头部(是一个哑元)，该双向链表的迭代顺序就是entry的插入顺序。
 

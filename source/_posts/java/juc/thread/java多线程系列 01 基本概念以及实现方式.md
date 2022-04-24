@@ -19,7 +19,7 @@ updated: 2018-07-11 16:12:00
 <!-- more -->
 
 线程的基本状态如下：
-![线程状态](https://raw.githubusercontent.com/fengxiu/img/master/20220422114817.png)
+![线程状态](https://cdn.jsdelivr.net/gh/fengxiu/img/20220422114817.png)
 
 线程共包括以下5种状态。
 

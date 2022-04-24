@@ -230,7 +230,7 @@ static URLStreamHandler getURLStreamHandler(String protocol) {
 
 java.net.URLStreamHandlerFactory ，顾名思义，它是URLStreamHandler的工厂，即抽类工厂接口。通过调用 createURLStreamHandler(String protocol) 来创建 java.net.URLStreamHandler 对象。因此，建议java.net.URLStreamHandlerFactory 实现类应该采用 one protocol one hander 的模式， SUN JDK 也采用该模式。
 
-![URL](https://raw.githubusercontent.com/fengxiu/img/master/URL.png)
+![URL](https://cdn.jsdelivr.net/gh/fengxiu/img/URL.png)
 
 ### URLStreamHandlerFactory 方式
 

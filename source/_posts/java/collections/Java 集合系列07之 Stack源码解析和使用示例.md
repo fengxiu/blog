@@ -27,7 +27,7 @@ Stack是继承Vector，因此Stack的数据结构和Vector很相似。在这里�
 
 **Stack类图**：
 
-![栈](https://raw.githubusercontent.com/fengxiu/img/master/pasted-159.png)
+![栈](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-159.png)
 
 Stack的构造函数
 

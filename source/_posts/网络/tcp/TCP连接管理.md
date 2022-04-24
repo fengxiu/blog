@@ -24,14 +24,14 @@ tcp是面向连接的，在通信前会进行三次握手，在断开连接时�
 
 握手过程中传送的包里不包含数据，三次握手完毕后，客户端与服务器才正式开始传送数据。理想状态下，TCP连接一旦建立，在通信双方中的任何一方主动关闭连接之前，TCP 连接都将被一直保持下去。
 
-![三次握手](https://raw.githubusercontent.com/fengxiu/img/master/pasted-178.png)
+![三次握手](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-178.png)
 <!--more -->
 
 ## 四次挥手
 
 数据传输完毕后，双方都可释放连接。最开始的时候，客户端和服务器都是处于ESTABLISHED状态，假设客户端主动关闭，服务器被动关闭。
 
-![四次挥手](https://raw.githubusercontent.com/fengxiu/img/master/pasted-179.png)
+![四次挥手](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-179.png)
 
 **第一次挥手**：客户端发送一个FIN，用来关闭客户端到服务器的数据传送，也就是客户端告诉服务器：我已经不会再给你发数据了(当然，在FIN包之前发送出去的数据，如果没有收到对应的ack确认报文，客户端依然会重发这些数据)，但是，此时客户端还可以接受数据，FIN=1，其序列号为seq=u（等于前面已经传送过来的数据的最后一个字节的序号加1），此时，客户端进入FIN-WAIT-1（终止等待1）状态。 TCP规定，FIN报文段即使不携带数据，也要消耗一个序号。
 
@@ -83,7 +83,7 @@ tcp是面向连接的协议，通信前需要知道彼此都准备好，三次�
 
 **4次挥手过程状态：（可参考下图）**
 
-![四次挥手](https://raw.githubusercontent.com/fengxiu/img/master/pasted-180.png)
+![四次挥手](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-180.png)
 
 1. **FIN_WAIT_1**: 这个状态要好好解释一下，其实FIN_WAIT_1和FIN_WAIT_2状态的真正含义都是表示等待对方的FIN报文。而这两种状态的区别是：FIN_WAIT_1状态实际上是当SOCKET在ESTABLISHED状态时，它想主动关闭连接，向对方发送了FIN报文，此时该SOCKET即进入到FIN_WAIT_1状态。而当对方回应ACK报文后，则进入到FIN_WAIT_2状态，当然在实际的正常情况下，无论对方何种情况下，都应该马上回应ACK报文，所以FIN_WAIT_1状态一般是比较难见到的，而FIN_WAIT_2状态还有时常常可以用netstat看到。（主动方）
 FIN_WAIT_2：上面已经详细解释了这种状态，实际上FIN_WAIT_2状态下的SOCKET，表示半连接，也即有一方要求close连接，但另外还告诉对方，我暂时还有点数据需要传送给你(ACK信息)，稍后再关闭连接。（主动方）
@@ -95,9 +95,9 @@ FIN_WAIT_2：上面已经详细解释了这种状态，实际上FIN_WAIT_2状态
 
 TCP的具体状态图可参考：
 
-![](https://raw.githubusercontent.com/fengxiu/img/master/pasted-185.png)
+![](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-185.png)
 
-![](https://raw.githubusercontent.com/fengxiu/img/master/pasted-181.png)
+![](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-181.png)
 
 ## 补充
 
@@ -122,7 +122,7 @@ M是一个计时器，每隔4微秒加1。 F是一个Hash算法，根据源IP、
 
 只有准备好的请求操作系统才会告诉上层的服务程序，因此为了维护这些还未准备好的请求或者准备好了但是未被上层应用调用的请求，操作系统维护了半连接队列和全连接队列。半连接队列维护的是处于SYN_RCVD状态的请求。全连接队列维护的是已经处于ESTABLISHED状态但仍未被应用程序accept的请求。具体如下图
 
-![接队列](https://raw.githubusercontent.com/fengxiu/img/master/pasted-182.png)
+![接队列](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-182.png)
 
 ```bash
 # 查看是否有连接溢出
@@ -136,7 +136,7 @@ netstat -s | grep LISTEN
 
 目前，Linux下默认会进行5次重发SYN-ACK包，重试的间隔时间从1s开始，下次的重试间隔时间是前一次的双倍，5次的重试时间间隔为1s, 2s, 4s, 8s, 16s, 总共31s, 称为`指数退避`，第5次发出后还要等32s才知道第5次也超时了，所以总共需要 1s + 2s + 4s+ 8s+ 16s + 32s = 63s, TCP才会把断开这个连接。由于，SYN超时需要63秒，那么就给攻击者一个攻击服务器的机会，攻击者在短时间内发送大量的SYN包给Server(俗称SYN flood攻击)，用于耗尽Server的SYN队列。对于应对SYN过多的问题，linux提供了几个TCP参数来调整应对。
 
-![半连接对联参数](https://raw.githubusercontent.com/fengxiu/img/master/20220416093916.png)
+![半连接对联参数](https://cdn.jsdelivr.net/gh/fengxiu/img/20220416093916.png)
 
 **全连接队列满**
 当第三次握手时，当server接收到ACK包之后，会进入一个新的叫 accept 的队列。当accept队列满了之后，即使client继续向server发送ACK的包，也会不被响应，此时ListenOverflows+1，同时server通过tcp_abort_on_overflow来决定如何返回，0表示直接丢弃该ACK，1表示发送RST通知client；相应的，client则会分别返回`read timeout` 或者 `connection reset by peer`。
@@ -145,7 +145,7 @@ netstat -s | grep LISTEN
 
 服务端仅仅只是创建一个定时器，以固定间隔重传syn和ack到服务端
 
-![tcp全连接参数](https://raw.githubusercontent.com/fengxiu/img/master/20220416094500.png)
+![tcp全连接参数](https://cdn.jsdelivr.net/gh/fengxiu/img/20220416094500.png)
 
 ### syn flood攻击
 

@@ -130,8 +130,3 @@ symbols_count_time:
   total_symbols: true
   total_time: true
 
-codeblock:
-  copy_button:
-    enable: false      # 增加复制按钮的开关
-    show_result: false # 点击复制完后是否显示 复制成功 结果提示
-

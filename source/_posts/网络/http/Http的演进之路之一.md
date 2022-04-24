@@ -13,7 +13,7 @@ updated: 2019-03-10 08:23:00
 本文主要介绍了HTTP协议的演进过程，从HTTP/0.9到目前HTTP/2中各个版本的特点以及成因。通过对比各个版本的特点以及相关数据的支持来讲解整个HTTP协议的演进过程。此外，文中还会涉及一些相关协议概念，包括TCP/IP、DNS、HTTPS、QUIC、SPDY等，正是这些协议与HTTP一起为我们展现了一个丰富多彩的互联网的世界。
 ## HTTP的演进
 
-![演进图](https://raw.githubusercontent.com/fengxiu/img/master/pasted-209.png)
+![演进图](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-209.png)
 
 HTTP(HyperText Transfer Protocol)是万维网（World Wide Web）的基础协议，它制定了浏览器与服务器之间的通讯规则，它由Berners-Lee和他的团队在1989-1991年期间开发完成，至今共经历了3个版本的演化。
 
@@ -113,7 +113,7 @@ Content-Type: text/gif
 
 此外，在HTTP/1.0中规定header信息必须是ASCII码，后面的数据可以是任何格式。因此，服务器在应答的时候需要告诉用户数据的格式，即Content-Type的作用。一些常见Content-Type：
 
-![](https://raw.githubusercontent.com/fengxiu/img/master/pasted-210.png)
+![](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-210.png)
 
 Content-Type的每个值包括一级类型和二级类型，之间用斜杠分开；此外还可以自定义Content-Type；还可以在Content-Type中添加参数，如下面的示例，Content-Type表示发送的是网页而编码格式是utf-8.
 

@@ -159,16 +159,16 @@ public interface PropertyEditorRegistry {
 
 由于PropertyEditorRegistry只是定义对PropertyEditor注册和查找的方法，其具体的核心实现类是org.springframework.beans.PropertyEditorRegistrySupport，真正对PropertyEditor管理的操作全部在该类中实现，下面来看看PropertyEditorRegistrySupport的源码，由于PropertyEditorRegistrySupport源码篇幅比较多，这里就采用截图来说明其实现：
 
-![20200903104250](https://raw.githubusercontent.com/fengxiu/img/master/20200903104250.png)
+![20200903104250](https://cdn.jsdelivr.net/gh/fengxiu/img/20200903104250.png)
 
 通过上面的标注我们看到PropertyEditorSupport底层对于不同种类的PropertyEditor使用不同的Map来进行存储，下面我们看下它是如何进行注册的。
 
-![20200903104722](https://raw.githubusercontent.com/fengxiu/img/master/20200903104722.png)
+![20200903104722](https://cdn.jsdelivr.net/gh/fengxiu/img/20200903104722.png)
 
 其注册的实现机制也并没有出人意料的地方，就是判断存储Classs与PropertyEditor之间映射关系的Map是否已经存在，如果不存在则先创建一个LinkedHashMap，如果有就直接进行存储映射关系。
 前面我们提到过在IOC容器中默认就会内置一些PropertyEditor,通过createDefaultEditors()我们可以清楚地看到其默认所添加的PropertyEditor。
 
-![20200903104806](https://raw.githubusercontent.com/fengxiu/img/master/20200903104806.png)
+![20200903104806](https://cdn.jsdelivr.net/gh/fengxiu/img/20200903104806.png)
 
 ### PropertyEditorRegistrar
 
@@ -193,7 +193,7 @@ PropertyEditorRegistrar对于如果我们希望将一组相同的PropertyEditor�
 1.只能完成字符串到Java类型的转换，并不能完成任意类型之间的转换。
 2.由于PropertyEditor是非线程安全，因此对于每一次的类型转换，都需要创建一个新的PropertyEdtitor，如果希望达到共享，那么底层会使用synchronized来对其进行并发地控制。
 
-![20200903113527](https://raw.githubusercontent.com/fengxiu/img/master/20200903113527.png)
+![20200903113527](https://cdn.jsdelivr.net/gh/fengxiu/img/20200903113527.png)
 
 ## convert
 
@@ -229,7 +229,7 @@ final class StringToInteger implements Converter<String, Integer> {
 
 从上面可以看出，如果使用这个自定一类型转换实现起来比较简单。在Spring中已经提供了一些基本类型之间的转换，主要在org.springframework.core.convert.support包下。
 
-![convert](https://raw.githubusercontent.com/fengxiu/img/master/20200825111842.png)
+![convert](https://cdn.jsdelivr.net/gh/fengxiu/img/20200825111842.png)
 
 ### ConverterFactory
 
@@ -523,7 +523,7 @@ public interface Parser<T> {
 
 org.springframework.format下面提供了很多默认的Fromat，具体的类如下
 
-![20200825180414](https://raw.githubusercontent.com/fengxiu/img/master/20200825180414.png)
+![20200825180414](https://cdn.jsdelivr.net/gh/fengxiu/img/20200825180414.png)
 
 下面是一个时间格式化的例子:
 

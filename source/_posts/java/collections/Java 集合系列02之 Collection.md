@@ -13,7 +13,7 @@ updated: 2019-03-04 09:13:00
 
 首先，对Collection进行说明。下面是Collection的继承关系的主要类图，（这里只列举了抽象类和接口，来说明Collection的整体结构）
 
-![collection 整体架构](https://raw.githubusercontent.com/fengxiu/img/master/pasted-155.png)
+![collection 整体架构](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-155.png)
 
 Collection是一个接口，它主要的俩个分支是：**List** 和**Set**。
 

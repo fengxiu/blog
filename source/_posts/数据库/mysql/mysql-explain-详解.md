@@ -48,7 +48,7 @@ date: 2019-03-26 19:57:28
 
 表示了查询的类型，具体的值如下表所示
 
-![select_type](https://raw.githubusercontent.com/fengxiu/img/master/20220413103943.png)
+![select_type](https://cdn.jsdelivr.net/gh/fengxiu/img/20220413103943.png)
 
 - **SIMPLE**：表示此查询不包含 UNION 查询或子查询,也就是简单的select语句。
 - **PRIMARY** 对于包含UNION、UNION ALL或者子查询的大查询来说，它是由几个小查询组成，其中最左边那个查询的select_type值及时PRIMARY。

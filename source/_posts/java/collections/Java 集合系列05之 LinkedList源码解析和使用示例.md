@@ -14,7 +14,7 @@ updated: 2019-03-04 14:20:00
 
 LinkedList的类图如下
 
-![LinkedList](https://raw.githubusercontent.com/fengxiu/img/master/Xnip2019-09-04_10-35-20.jpg)
+![LinkedList](https://cdn.jsdelivr.net/gh/fengxiu/img/Xnip2019-09-04_10-35-20.jpg)
 
 LinkedList是一个继承于AbstractSequentialList双向链表。他可以被当做栈、队列和双端队列来使用。
 

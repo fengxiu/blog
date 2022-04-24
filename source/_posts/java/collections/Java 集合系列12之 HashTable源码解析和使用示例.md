@@ -16,7 +16,7 @@ updated: 2019-03-04 21:58:00
 
 HashTable是一个散列表，和HashMap类似，他存储的内容是键值对(key-value)映射。类图如下
 
-![hashTable](https://raw.githubusercontent.com/fengxiu/img/master/20220421163754.png)
+![hashTable](https://cdn.jsdelivr.net/gh/fengxiu/img/20220421163754.png)
 
 HashTable继承于Dictionary，实现了Map、Cloneable、java.io.Serializable接口。
 
@@ -65,7 +65,7 @@ Hashtable有4个构造方法，如下所示：
 
 ### 内部结构
 
-![内部结构](https://raw.githubusercontent.com/fengxiu/img/master/20220421164401.png)
+![内部结构](https://cdn.jsdelivr.net/gh/fengxiu/img/20220421164401.png)
 
 上图为Hashtable的内部结构，实际上我们通过Entry \<?,?\>[] table就可以看出，Hashtable内部为一个Entry\<?,?\>类型的数组，而Entry的结构如下所示,从而可以看出Hashtable是数组连表，既然是一个数组链表就会存在hash冲突的情况，下面就通过Hashtable中的实现细节，来探寻其中的奥秘。
 

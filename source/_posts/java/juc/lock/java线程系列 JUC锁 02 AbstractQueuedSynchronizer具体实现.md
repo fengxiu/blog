@@ -60,7 +60,7 @@ protected final boolean compareAndSetState(int expect, int update) {
 **队列的管理**
 使用CLH(Craig,Landin,and Hagersten)队列是一个虚拟的双向队列(虚拟的双向队列即不存在队列实例，仅存在结点之间的关联关系)。AQS是将每条请求共享资源的线程封装成一个CLH锁队列的一个结点(Node)来实现锁的分配。其中Sync queue，即同步队列，是双向链表，包括head结点和tail结点，head结点主要用作后续的调度。而Condition queue不是必须的，其是一个单向链表，只有当使用Condition时，才会存在此单向链表。并且可能会有多个Condition queue。
 
-![队列管理](https://raw.githubusercontent.com/fengxiu/img/master/20220423215822.png)
+![队列管理](https://cdn.jsdelivr.net/gh/fengxiu/img/20220423215822.png)
 
 
 ### AQS对资源的共享方式 
@@ -284,7 +284,7 @@ public final void acquire(int arg) {
 
 由上述源码可以知道，当一个线程调用acquire时，调用方法流程如下
 
-![流程](https://raw.githubusercontent.com/fengxiu/img/master/20220423222928.png)
+![流程](https://cdn.jsdelivr.net/gh/fengxiu/img/20220423222928.png)
 
 
 * 首先调用tryAcquire方法，调用此方法的线程会试图在独占模式下获取对象状态。此方法应该查询是否允许它在独占模式下获取对象状态，如果允许，则获取它。在AbstractQueuedSynchronizer源码中默认会抛出一个异常，即需要子类去重写此方法完成自己的逻辑。之后会进行分析。
@@ -529,7 +529,7 @@ private void unparkSuccessor(Node node) {
   
 该方法的作用就是为了释放node节点的后继结点。 对于cancelAcquire与unparkSuccessor方法，如下示意图可以清晰的表示:
 
-![](https://raw.githubusercontent.com/fengxiu/img/master/20220423224519.png)
+![](https://cdn.jsdelivr.net/gh/fengxiu/img/20220423224519.png)
 
 其中node为参数，在执行完cancelAcquire方法后的效果就是unpark了s结点所包含的t4线程。 现在，再来看acquireQueued方法的整个的逻辑。逻辑如下: 
 

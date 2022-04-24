@@ -15,9 +15,9 @@ Java集合主要可以划分为4个部分：列表（List）、集合（Set）�
 
 下图是java集合的整体框架图：
 
-![collection](https://raw.githubusercontent.com/fengxiu/img/master/Collection.png)
+![collection](https://cdn.jsdelivr.net/gh/fengxiu/img/Collection.png)
 
-![集合](https://raw.githubusercontent.com/fengxiu/img/master/pasted-154.png)
+![集合](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-154.png)
 
 [java集合具体的官方描述在这](https://docs.oracle.com/javase/tutorial/collections/index.html)
 

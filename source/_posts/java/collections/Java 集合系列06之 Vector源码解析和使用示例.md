@@ -23,7 +23,7 @@ updated: 2019-03-04 15:23:00
 
 Vector类结构图如下
 
-![Vector ](https://raw.githubusercontent.com/fengxiu/img/master/20220420111808.png)
+![Vector ](https://cdn.jsdelivr.net/gh/fengxiu/img/20220420111808.png)
 
 * Vector是**矢量队列**，它是JDK1.0版本添加的类。继承于AbstractList，实现了List, RandomAccess, Cloneable这些接口。
 * Vector 继承了AbstractList，实现了List；所以，**它是一个队列，支持相关的添加、删除、修改、遍历等功能**。

@@ -32,10 +32,10 @@ date: 2020-09-28 10:09:53
 ## Hibernate Validator简介
 
 验证数据是贯穿所有应用程序层（从应用层到持久层）的常见任务。通常在每一层都实现相同的验证逻辑，这是非常耗时和容易出错的。为了避免这些验证的重复，开发人员经常将验证逻辑直接绑定到域模型中，用验证代码（实际上是关于类本身的元数据）将域类弄乱。
-![application-layers](https://raw.githubusercontent.com/fengxiu/img/master/application-layers.png)
+![application-layers](https://cdn.jsdelivr.net/gh/fengxiu/img/application-layers.png)
 
 Jakarta Bean Validation 2.0——为Entity和方法的验证定义了一个元数据模型和API。默认的元数据源是Annotation，同时也能够通过使用XML覆盖和扩展元数据。API没有绑定到特定的应用层或者programming model.。它与web层或持久层都没有强绑定，可用于服务器端应用程序编程和客户端上应用程序。
-![application-layers2](https://raw.githubusercontent.com/fengxiu/img/master/application-layers2.png)
+![application-layers2](https://cdn.jsdelivr.net/gh/fengxiu/img/application-layers2.png)
 
 Hibernate Validator和Jakarta Bean Validation的区别：Jakarta Bean Validation是一种规范，Hibernate Validator是对个规范的一种实现。
 <!-- more -->

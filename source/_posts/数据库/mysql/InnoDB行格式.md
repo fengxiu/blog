@@ -39,7 +39,7 @@ VALUES ('aaaa' , 'bbb' , " CC' , 'd') , ('eeee' , 'fff', NULL ,NULL) ;
 ```
 
 COMPACT行格式的基本结构如下图
-![行格式](https://raw.githubusercontent.com/fengxiu/img/master/20220401145842.png)
+![行格式](https://cdn.jsdelivr.net/gh/fengxiu/img/20220401145842.png)
 
 一共分成俩部分额外信息和记录的真实数据。额外信息是为了更好的管理记录。
 
@@ -79,7 +79,7 @@ NULL值列表存储比较耗费存储，因此对于NULL值字段，采用二进
 
 记录头信息由固定的5字节组成，用于描述记录的一些属性。主要的内容如下
 
-![记录头](https://raw.githubusercontent.com/fengxiu/img/master/20220401175150.png)
+![记录头](https://cdn.jsdelivr.net/gh/fengxiu/img/20220401175150.png)
 
 可以知道有这些信息，具体用到的时候再回来看。
 
@@ -87,7 +87,7 @@ NULL值列表存储比较耗费存储，因此对于NULL值字段，采用二进
 
 表中除了存储真实的数据，还会为每个记录默认地添加一些列(也称为隐藏列)。
 
-![](https://raw.githubusercontent.com/fengxiu/img/master/20220401180149.png)
+![](https://cdn.jsdelivr.net/gh/fengxiu/img/20220401180149.png)
 
 这里需要提一下InnoDB表的主键生成策略,优先使用用户自定义的主键作为主键，如果用户没有定义主键 则选取一个不允许存储NULL值的UNIQUE键作为主键,如果表中连不允许存储NULL值的UNIQUE键都没有定义，则会为表默认添加一个名为 row_id 隐藏列作为主键.
 
@@ -103,7 +103,7 @@ COMPACT行格式中 ，对于占用存储空间非常多的列 ，在记录的�
 
 例子如下：
 
-![](https://raw.githubusercontent.com/fengxiu/img/master/20220401185343.png)
+![](https://cdn.jsdelivr.net/gh/fengxiu/img/20220401185343.png)
 
 ## DYNAMIC 行格式和 COMPRESSED 行格式
 

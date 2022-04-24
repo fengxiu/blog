@@ -26,15 +26,15 @@ updated: 2019-03-10 12:09:00
 上面说了原理，但可能有人使用TCP通信会出现多包/少包，而一些人不会。那么我们具体分析一下，少包，多包的情况。
 
 - 正常情况，发送及时每消息发送，接收也不繁忙，及时处理掉消息。像UDP一样.
-![](https://raw.githubusercontent.com/fengxiu/img/master/pasted-186.png)
+![](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-186.png)
 - 发送粘包,多次间隔较小且数据量小的数据，合并成一个大的数据块，然后进行封包. 这种情况和客户端处理繁忙，接收缓存区积压，用户一次从接收缓存区多个数据包的接收端处理一样。
-![](https://raw.githubusercontent.com/fengxiu/img/master/pasted-188.png)
+![](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-188.png)
 - 发送粘包或接收缓存区积压，但用户缓冲区大于接收缓存区数据包总大小。此时需要考虑处理一次处理多数据包的情况，但每个数据包都是完整的。
-![](https://raw.githubusercontent.com/fengxiu/img/master/pasted-189.png)
+![](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-189.png)
 - 发送粘包或接收缓存区积压， 用户缓存区是数据包大小的整数倍。 此时需要考虑处理一次处理多数据包的情况，但每个数据包都是完整的。
-![](https://raw.githubusercontent.com/fengxiu/img/master/pasted-190.png)
+![](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-190.png)
 - 发送粘包或接收缓存区积压， 用户缓存区不是数据包大小的整数倍。 此时需要考虑处理一次处理多数据包的情况，同时也需要考虑数据包不完整。
-![](https://raw.githubusercontent.com/fengxiu/img/master/pasted-191.png)
+![](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-191.png)
 
 我们的情况就属于最后一种，发生了数据包不完整的情况。
 

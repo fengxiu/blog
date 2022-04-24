@@ -121,7 +121,7 @@ ObjectMonitor() {
 ```
 
 ObjectMonitor中有两个队列，_WaitSet和_EntryList，用来保存ObjectWaiter对象列表(每个等待锁的线程都会被封装成ObjectWaiter对象)，_owner指向持有ObjectMonitor对象的线程，当多个线程同时访问一段同步代码时，首先会进入_EntryList集合，当线程获取到对象的monitor后进入_Owner 区域并把monitor中的owner变量设置为当前线程同时monitor中的计数器count加1，若线程调用wait()方法，将释放当前持有的monitor，owner变量恢复为null，count自减1，同时该线程进入 WaitSet集合中等待被唤醒,如果调用notify或notifyAll将会把_WaitSet移动到_EntryList里，之后参与竞争获取锁。若当前线程执行完毕也将释放monitor(锁)并复位变量的值，以便其他线程进入获取monitor(锁)。如下图所示:
-![monitor](https://raw.githubusercontent.com/fengxiu/img/master/20220423121701.png)
+![monitor](https://cdn.jsdelivr.net/gh/fengxiu/img/20220423121701.png)
 
 ## 总结
 
