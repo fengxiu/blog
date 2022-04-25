@@ -1,7 +1,7 @@
 title: java线程系列 JUC锁 06 阻塞原语LockSupport
 tags:
-  - 阻塞原语
-  - LockSupport
+  - 并发
+  - lock
 categories:
   - java
   - juc
@@ -9,6 +9,7 @@ categories:
 author: zhangke
 abbrlink: ad8369f2
 date: 2019-03-18 12:56:00
+updated: 2019-03-18 12:56:00
 ---
 
 ### 概述
@@ -19,13 +20,14 @@ date: 2019-03-18 12:56:00
 
 ### 1. 用法简介
 
-LockSupport是用来创建锁和其他同步器的基本**线程阻塞**原语。LockSupport 提供park()和unpark()方法实现阻塞线程和解除线程阻塞。每个使用LockSupport的线程都与一个许可(permit)关联，permit相当于开关，默认是0，调用一次unpark就加1变成1，调用一次park会消费permit, 也就是将1变成0，同时park立即返回。再次调用park会变成block（因为permit为0，会阻塞在这里，直到permit变为1）, 这时调用unpark会把permit置为1。每个线程都有一个相关的permit, permit最多只有一个，重复调用unpark也不会积累。
+LockSupport是用来创建锁和其他同步器的基本**线程阻塞**原语。LockSupport提供park()和unpark()方法实现阻塞线程和解除线程阻塞。每个使用LockSupport的线程都与一个许可(permit)关联，permit相当于开关，默认是0，调用一次unpark就加1变成1，调用一次park会消费permit, 也就是将1变成0，同时park立即返回。再次调用park会变成block（因为permit为0，会阻塞在这里，直到permit变为1）, 这时调用unpark会把permit置为1。每个线程都有一个相关的permit, permit最多只有一个，重复调用unpark也不会积累。
 
 park()和unpark()不会有Thread.suspend和Thread.resume所可能引发的死锁问题。这个死锁问题的产生是由于Thread.resume在Thread.suspend之前调用，使得线程忽略了解除阻塞的信号，而使得线程一直被阻塞。而LockSupport由于许可的存在，调用park的线程和另一个试图将其unpark的线程之间的竞争将保持活性。不会因为前后调用的顺序而产生死锁
 
 如果调用线程被中断，则park方法会返回。同时park也拥有可以设置超时时间的版本。
 <!-- more -->
-需要特别注意的一点：**park 方法还可以在其他任何时间毫无理由地返回，因此通常必须在重新检查返回条件的循环里调用此方法**。至于为什么后面会说到。从这个意义上说，park 是忙碌等待的一种优化，它不会浪费这么多的时间进行自旋，但是必须将它与 unpark 配对使用才更高效。
+
+需要特别注意的一点：**park方法还可以在其他任何时间毫无理由地返回，因此通常必须在重新检查返回条件的循环里调用此方法**。至于为什么后面会说到。从这个意义上说，park 是忙碌等待的一种优化，它不会浪费这么多的时间进行自旋，但是必须将它与 unpark 配对使用才更高效。
 
 官方推介的使用方式如下
 
@@ -36,7 +38,7 @@ while(!canprocess()){
 }
 ```
 
-调用park，可以传入一个blocker对象参数。此对象在线程受阻塞时被记录，以允许监视工具和诊断工具确定线程受阻塞的原因。（这样的工具可以使用方法 getBlocker(java.lang.Thread) 访问 blocker。）建议最好使用这些形式，而不是不带此参数的原始形式。在锁实现中提供的作为blocker的普通参数是Thread.currentThread。
+调用park，可以传入一个blocker对象参数。此对象在线程受阻塞时被记录，以允许监视工具和诊断工具确定线程受阻塞的原因。（这样的工具可以使用方法 getBlocker(java.lang.Thread) 访问blocker）建议最好使用这些形式，而不是不带此参数的原始形式。在锁实现中提供的作为blocker的普通参数是Thread.currentThread。
 看下线程dump的结果来理解blocker的作用。
 
 ![线程dump结果对比](https://segmentfault.com/img/bVJuIP?w=783&h=375)
@@ -175,8 +177,7 @@ private static final sun.misc.Unsafe UNSAFE;
 private static final long parkBlockerOffset;
 ```
 
-unsafe:全名sun.misc.Unsafe可以直接操控内存，被JDK广泛用于自己的包中，如java.nio和java.util.concurrent。但是不建议在生产环境中使用这个类。因为这个API十分不安全、不轻便、而且不稳定。
-LockSupport的方法底层都是调用Unsafe的方法实现。
+unsafe:全名sun.misc.Unsafe可以直接操控内存，被JDK广泛用于自己的包中，如java.nio和java.util.concurrent。但是不建议在生产环境中使用这个类。因为这个API十分不安全、不轻便、而且不稳定。LockSupport的方法底层都是调用Unsafe的方法实现。
 
 再来看parkBlockerOffset:
 parkBlocker就是第一部分说到的用于记录线程被谁阻塞的，用于线程监控和分析工具来定位原因的，可以通过LockSupport的getBlocker获取到阻塞的对象。
@@ -331,7 +332,7 @@ public static void unpark(Thread thread) {
 
 #### HotSpot 里 park/unpark 的实现
 
-每个 java 线程都有一个 Parker 实例，Parker 类是这样定义的：
+每个java线程都有一个Parker实例，Parker类是这样定义的：
 
 ```c++
 class Parker : public os::PlatformParker {
@@ -351,9 +352,9 @@ class PlatformParker : public CHeapObj<mtInternal> {
 }
 ```
 
-可以看到 Parker 类实际上用Posix的 mutex，condition来实现的。
+可以看到Parker类实际上用Posix的 mutex，condition来实现的。
 
-在Parker类里的_counter字段，就是用来记录所谓的 许可的。
+在Parker类里的_counter字段，就是用来记录所谓的许可的。
 
 当调用park时，先尝试直接能否直接拿到许可，即_counter>0 时，如果成功，则把_counter设置为 0, 并返回：
 
@@ -368,7 +369,7 @@ void Parker::park(bool isAbsolute, jlong time) {
   if (Atomic::xchg(0, &_counter) > 0) return;
 ```
 
-如果不成功，则构造一个 ThreadBlockInVM，然后检查_counter 是不是 > 0，如果是，则把_counter 设置为 0，unlock mutex 并返回：
+如果不成功，则构造一个ThreadBlockInVM，然后检查_counter是不大于0，如果是，则把_counter设置为0，unlock mutex 并返回：
 
 ```c++
   ThreadBlockInVM tbivm(jt);
@@ -377,7 +378,7 @@ void Parker::park(bool isAbsolute, jlong time) {
     status = pthread_mutex_unlock(_mutex);
 ```
 
-否则，再判断等待的时间，然后再调用 pthread_cond_wait 函数等待，如果等待返回，则把_counter 设置为 0，unlock mutex 并返回
+否则，再判断等待的时间，然后再调用pthread_cond_wait函数等待，如果等待返回，则把_counter设置为0，unlock mutex 并返回
 
 ```c++
   if (time == 0) {
@@ -389,7 +390,7 @@ void Parker::park(bool isAbsolute, jlong time) {
   OrderAccess::fence();
 ```
 
-当 unpark 时，则简单多了，直接设置_counter 为 1，再 unlock mutext 返回。如果_counter 之前的值是 0，则还要调用 pthread_cond_signal 唤醒在 park 中等待的线程
+当unpark时，则简单多了，直接设置_counter为1，再 unlock mutext 返回。如果_counter之前的值是0，则还要调用pthread_cond_signal唤醒在park中等待的线程
 
 ```c++
 void Parker::unpark() {
@@ -417,11 +418,13 @@ void Parker::unpark() {
 }
 ```
 
-简而言之，是用 mutex 和 condition 保护了一个_counter 的变量，当 park 时，这个变量置为了 0，当 unpark 时，这个变量置为 1。
+简而言之，是用 mutex 和condition保护了一个_counter 的变量，当 park 时，这个变量置为了 0，当 unpark 时，这个变量置为 1。
 
-值得注意的是在 park 函数里，调用 pthread_cond_wait 时，并没有用while来判断，所以 posix condition 里的 "Spurious wakeup" （虚假唤醒）一样会传递到上层Java的代码里，这也是官方为什么推介使用while方式的原因。
+值得注意的是在park函数里，调用pthread_cond_wait时，并没有用while来判断，所以posix condition里的 "Spurious wakeup" （虚假唤醒）一样会传递到上层Java的代码里，这也是官方为什么推介使用while方式的原因。
 
-关于 "Spurious wakeup"，参考这篇文章：[Why does pthread_cond_wait have spurious wakeups?](https://stackoverflow.com/questions/8594591/why-does-pthread-cond-wait-have-spurious-wakeups)
+虚假唤醒简单的理解是虽然被唤醒了，但是还是不满足执行的条件，因此需要在唤醒之后判断是否满足条件，只有满足条件才执行，不然接着阻塞
+
+关于"Spurious wakeup"，参考这篇文章：[Why does pthread_cond_wait have spurious wakeups?](https://stackoverflow.com/questions/8594591/why-does-pthread-cond-wait-have-spurious-wakeups)
 
 不过在看这篇文章之前，最好看看《Unix环境高级编程》这本书第11章节
 

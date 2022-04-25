@@ -1,22 +1,24 @@
 ---
 title: java线程系列 JUC锁 07 ReentrantReadWriteLock
 tags:
-  - ReentrantReadWriteLock
+  - 并发
+  - lock
 categories:
   - java
   - juc
   - lock
 abbrlink: 18178dca
 date: 2019-03-19 03:46:00
+updated: 2019-03-19 03:46:00
 ---
 
 ## ReentrantReadWriteLock 简介
 
 在前面我们已经分析过JUC中的独占锁：ReentrantLock。本篇文章将对JUC的读写锁ReentrantReadWriteLock进行介绍。
 
-类如如下：
+类图如如下：
 
-![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-300.png)
+![类图](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-300.png)
 
 从上图可以看出ReentrantReadWriteLock实现了ReadWriteLock接口，而这个接口从名字就可以看出是读写锁。它维护了一对相关连的锁：读锁和写锁。作用如下
 
@@ -34,13 +36,15 @@ ReentrantReadWriteLock中包含：Sync对象，读锁ReadLock和写锁WriteLock�
 
 ### 公平读写锁源码分析
 
-这里我们先对公平锁方式实现的读写锁进行源码分析，首先把后面要用到的属性在这里写出来，方便后买源码的理解：
+这里我们先对公平锁方式实现的读写锁进行源码分析，首先把后面要用到的属性在这里写出来，方便后面源码的理解：
 
 ```java
+
 // 内部使用的读锁
 private final ReentrantReadWriteLock.ReadLock readerLock;
 // 内部使用的写锁
 private final ReentrantReadWriteLock.WriteLock writerLock;
+
 // 读锁和写锁共同使用的锁类型，可以是公平锁和非公平锁
 final Sync sync;
 
@@ -132,7 +136,7 @@ protected final int tryAcquireShared(int unused) {
 }
 ```
 
-上面流程比较清晰，但是有很多地点你可能看不明白，先跳过，看完后面所有的分析，你就会明白。先总结上面的流程。
+上面流程比较清晰，但是有很多地点可能看不明白，先跳过，看完后面所有的分析，你就会明白。先总结上面的流程。
 
 1. 判断当前锁是否是独占锁，如果是并且独占锁的线程和当前获取锁的线程不相同，则直接返回-1，获取读锁失败。
 2. 如果当前线程不应该被阻塞，并且已获取读锁的数量小于最大值，则尝试使用CAS更改读锁的状态值。如果操作成功，进行下一步，操作失败进入最后一步。
@@ -174,7 +178,7 @@ final boolean readerShouldBlock() {
 
 #### HoldCounter
 
-计算每个线程获取读锁的数量，这里HoldCounter是ThreaLocal类型的变量，如果不了解这个对象，可以看这篇文章[深入分析ThreadLocal](http://fengxiutianya.top/posts/400f00a6/)，在分析这个之前，首先看一些定义在Sync类中的属性：
+计算每个线程获取读锁的数量，这里HoldCounter是ThreaLocal类型的变量，如果不了解这个对象，可以看这篇文章[深入分析ThreadLocal](/archives/400f00a6.html/)，在分析这个之前，首先看一些定义在Sync类中的属性：
 
 ```java
 // 计数器对象，用于记录每个线程保持读锁的数量
@@ -197,12 +201,13 @@ private transient ThreadLocalHoldCounter readHolds;
 
 // 用于记录上一个线程成功获取读锁的数量
 private transient HoldCounter cachedHoldCounter;
+
 // 下面来个一个是记录第一个获取读锁的线程和获取读锁的数量
 private transient Thread firstReader = null;
 private transient int firstReaderHoldCount;
 ```
 
-下面可以解释tryAcquireShared中的如下代码段
+有了上面的预备知识，下面可以解释tryAcquireShared中的代码
 
 ```java
 // 第一次获取读锁
@@ -225,7 +230,7 @@ if (r == 0) {
 }
 ```
 
-1. 首先判断是否是第一个线程获取读锁，如果是，则设置firstReader和firstReaderHoldCount值吗，可以加快后续此线程的获取读锁和记录读锁的数量。
+1. 首先判断是否是第一个线程获取读锁，如果是，则设置firstReader和firstReaderHoldCount值，可以加快后续此线程的获取读锁和记录读锁的数量。
 2. 判断线程是否是firstReader，如果是直接使用firstReaderHoldCount进行累加，可以加快获取的速度。
 3. 前面俩个都不是，则获取cachedHoldCounter，判断这个变量中保存的线程id是否和当前线程对应的id相同，如果是，则判断当前读锁的数量是否为0，如果为0，则调用` readHolds.set(rh)`初始化这个对象然后在原有的读锁数量上加1。
 4. 不是则通过readHold获取当前线程对应的HoldCounter，并缓存在cachedHoldCounter中，加速下一次的操作，接着读锁数量加1。
@@ -249,7 +254,7 @@ final int fullTryAcquireShared(Thread current) {
             if (getExclusiveOwnerThread() != current)
                 return -1;
             
-         // 如果需要阻塞等待。
+        // 如果需要阻塞等待。
         // 当需要阻塞等待的线程是第1个获取锁的线程的话，则继续往下执行。
         // 当需要阻塞等待的线程获取锁的次数为0时，则返回-1。
         } else if (readerShouldBlock()) {
@@ -306,9 +311,14 @@ final int fullTryAcquireShared(Thread current) {
 
 fullTryAcquireShared()会根据是否需要阻塞等待，读取锁的共享计数是否超过限制进行处理。如果不需要阻塞等待，并且锁的共享计数没有超过限制，则通过CAS尝试获取锁，并返回1。
 
-至此tryAcquireShared已经解析完成，这里做一个总结：tryAcquireShared将代码分成俩个大部分，首先通过尝试获取锁，如果获取成功直接返回。这是为了加快获取锁。如果没有获取成功，说明CAS失败，则进入fullTryAcquireShared函数进行获取，这里会循环知道CAS交换成功。当然我只是说了一个精简的过程。具体的可以看上面。其他异常情况我也没有总结。
+至此tryAcquireShared已经解析完成，这里做一个总结：tryAcquireShared将代码分成俩个大部分
 
-#### **doAcquireShared**
+1. 首先通过尝试获取锁，如果获取成功直接返回。这是为了加快获取锁。
+2. 如果没有获取成功，说明CAS失败则进入fullTryAcquireShared函数进行获取，这里会循环获取，直到CAS交换成功。
+
+当然我只是说了一个精简的过程。具体的可以看上面。其他异常情况我也没有总结。
+
+#### doAcquireShared
 
 源码如下：
 
@@ -370,6 +380,7 @@ doAcquireShared()会通过for循环，不断的进行上面的操作；目的就
 public void unlock() {
     sync.releaseShared(1);
 }
+
 public final boolean releaseShared(int arg) {
     if (tryReleaseShared(arg)) {
         doReleaseShared();
@@ -424,7 +435,14 @@ protected final boolean tryReleaseShared(int unused) {
 }
 ```
 
-上面的注释比较清晰，这里就不具体讲流程，下面来看**doReleaseShared**
+主要流程如下：
+
+1. 判断是否是当前线程，如果是，则将当前线程持有的读锁数量减1，
+2. 如果不是，则判断是否是缓存的线程，如果是，将读锁数量减1
+3. 以上都不是，则获取ThreadLocal，并将数量减1
+4. 循环CAS将state值减1，如果变成0，则说明释放锁成功
+
+下面来看**doReleaseShared**
 
 #### **doReleaseShared**
 
@@ -463,7 +481,7 @@ private void doReleaseShared() {
 
 doReleaseShared()会释放共享锁：流程如下：
 
-1. 判断队列是否为空，如果为空则继续循环。
+1. 判断队列是否为空，如果为空则结束循环，不进行唤醒。
 2. 如果不为空，则判断头结点是否为SIGNAL状态吗，如果是，则设置状态为0，然后唤醒后继获取锁的节点可以是独占或者共享锁。如果唤醒成功，头结点会改变，这一在最后一步就会推出这个循环
 3. 如果头结点状态为0，则设置状态为PROPAGATE，然后继续循环。
 4. 如果头结点发生改变，则继续循环。
@@ -647,6 +665,31 @@ Thread-1 setCash end
 ```
 
 从上面可以观察到读锁是可以共享，也就是读锁的打印的语句不一定是start-end连着的。但是写锁一定是。
+
+## 总结
+
+获取锁的流程：
+
+1. 判断当前锁是否是独占锁，如果是并且独占锁的线程和当前获取锁的线程不相同，则直接返回-1，获取读锁失败。
+2. 如果当前线程不应该被阻塞，并且已获取读锁的数量小于最大值，则尝试使用CAS更改读锁的状态值。如果操作成功，将state加1，表示有多少个线程获取过锁，进行下一步，操作失败进入第四步。
+3. 这一步主要设置每一个线程获取读锁的数量，主要分为三类来讨论：
+   1. 如果是第一个线程来获取读锁，则设置firstReader为当前线程和当前线程拥有的读锁数量为1.
+   2. 如果不是，则判断当前线程和firstReader线程是否一样，如果一样，则当前线程获取读锁的数量加1
+   3. 以上都不是，则通过HoldCounter来对当前线程获取读锁的数量加1，而HoldCounter是一个ThreadLocal对象。保证每个线程都有一个不一样的HoldCounter变量。下面会详细解释
+4. 如果上面没有成功获取到读锁，但也没有返回。则通过fullTryAcquireShared来获取锁，就是将第三步包装成一个循环来进行获取。
+5. 如果上面都没有获取到，则通过doAcquireShared进行获取，如果获取失败则阻塞当前线程等待唤醒
+
+释放锁的流程
+1. 判断是否是当前线程，如果是，则将当前线程持有的读锁数量减1，
+2. 如果不是，则判断是否是缓存的线程，如果是，将读锁数量减1
+3. 以上都不是，则获取ThreadLocal，并将数量减1
+4. 循环CAS将state值减1，如果变成0，则说明释放锁成功
+5. 如果释放锁成功，则走下面的流程，如果失败，直接返回false
+6. 判断队列是否为空，如果为空则继续循环。
+2. 如果不为空，则判断头结点是否为SIGNAL状态吗，如果是，则设置状态为0，然后唤醒后继获取锁的节点可以是独占或者共享锁。如果唤醒成功，头结点会改变，这一在最后一步就会推出这个循环
+3. 如果头结点状态为0，则设置状态为PROPAGATE，然后继续循环。
+4. 如果头结点发生改变，则继续循环。
+
 
 ## 参考
 

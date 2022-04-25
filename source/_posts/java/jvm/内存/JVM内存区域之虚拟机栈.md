@@ -1,13 +1,13 @@
 ---
 title: JVM内存区域之虚拟机栈
-abbrlink: 51727
-date: 2021-03-24 21:30:12
-updated: 2021-03-24 21:30:12
+abbrlink: 4797
 tags:
   - 内存模型
 categories:
   - java
   - jvm
+date: 2021-03-24 21:30:12
+updated: 2021-03-24 21:30:12
 ---
 
 ## 参考

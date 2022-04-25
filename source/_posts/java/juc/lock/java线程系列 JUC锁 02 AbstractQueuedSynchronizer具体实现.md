@@ -2,6 +2,7 @@
 title: java线程系列 JUC锁 02 AbstractQueuedSynchronizer具体实现
 tags:
   - lock
+  - 并发
 categories:
   - java
   - juc
@@ -53,7 +54,6 @@ protected final boolean compareAndSetState(int expect, int update) {
 }
 ```
 
-
 **线程的阻塞与解除阻塞**
 通过LockSupport来实现，主要是当所已经被其他线程获取时，阻塞当前线程直到被唤醒。具体可以参考[阻塞原语LockSupport](/archives/ad8369f2.html)
 
@@ -62,24 +62,20 @@ protected final boolean compareAndSetState(int expect, int update) {
 
 ![队列管理](https://cdn.jsdelivr.net/gh/fengxiu/img/20220423215822.png)
 
+### AQS对资源的共享方式
 
-### AQS对资源的共享方式 
-
-AQS定义两种资源共享方式 
+AQS定义两种资源共享方式 :
 
 * Exclusive(独占)：只有一个线程能执行，如ReentrantLock。又可分为公平锁和非公平锁：
   * 公平锁：按照线程在队列中的排队顺序，先到者先拿到锁 
   * 非公平锁：当线程要获取锁时，无视队列顺序直接去抢锁，谁抢到就是谁的 
-* Share(共享)：多个线程可同时执行，如Semaphore/CountDownLatch。Semaphore、CountDownLatCh、 CyclicBarrier、ReadWriteLock 我们都会在后面讲到。 
+* Share(共享)：多个线程可同时执行，如Semaphore/CountDownLatch。Semaphore、CountDownLatCh、 CyclicBarrier、ReadWriteLock 我们都会在后面讲到。
 
-ReentrantReadWriteLock可以看成是组合式，因为ReentrantReadWriteLock也就是读写锁允许多个线程同时对某一资源进行读。 不同的自定义同步器争用共享资源的方式也不同。自定义同步器在实现时只需要实现共享资源state的获取与释放方式即可，至于具体线程等待队列的维护(如获取资源失败入队/唤醒出队等)，AQS已经在上层已经帮我们实现好了。 
+### AQS底层使用了模板方法模式
 
-### AQS底层使用了模板方法模式 
-
-同步器的设计是基于模板方法模式的，如果需要自定义同步器一般的方式是这样(模板方法模式很经典的一个应用)： 使用者继承AbstractQueuedSynchronizer并重写指定的方法。(这些重写方法很简单，无非是对于共享资源state的获取和释放)将AQS组合在自定义同步组件的实现中，并调用其模板方法，而这些模板方法会调用使用者重写的方法。 
+同步器的设计是基于模板方法模式的，如果需要自定义同步器一般的方式是这样(模板方法模式很经典的一个应用)： 使用者继承AbstractQueuedSynchronizer并重写指定的方法。(这些重写方法很简单，无非是对于共享资源state的获取和释放)将AQS组合在自定义同步组件的实现中，并调用其模板方法，而这些模板方法会调用使用者重写的方法。
 
 这和我们以往通过实现接口的方式有很大区别，模板模式具体可以参考[设计模式行为型 - 模板方法(Template Method)详解](https://pdai.tech/md/dev-spec/pattern/17_template.html)
-
 
 AQS使用了模板方法模式，自定义同步器时需要重写下面几个AQS提供的模板方法：
 
@@ -204,14 +200,13 @@ static final class Node {
 
 ```
 
+每个线程被阻塞的线程都会被封装成一个Node结点，放入队列。每个节点包含了一个Thread类型的引用，并且每个节点都存在一个状态，具体状态如下。
 
-每个线程被阻塞的线程都会被封装成一个Node结点，放入队列。每个节点包含了一个Thread类型的引用，并且每个节点都存在一个状态，具体状态如下。 
 * CANCELLED，值为1，表示当前的线程被取消。
 * SIGNAL，值为-1，表示当前节点的后继节点包含的线程需要运行，需要进行unpark操作。 
 * CONDITION，值为-2，表示当前节点在等待condition，也就是在condition queue中。 
 * PROPAGATE，值为-3，表示当前场景下后续的acquireShared能够得以执行。 
 * 值为0，表示当前节点在sync queue中，等待着获取锁。 
-
 
 ### 类的属性 
 
@@ -272,7 +267,6 @@ protected AbstractQueuedSynchronizer() { }
 
 ### 核心方法acquire
 
-
 该方法以独占模式获取(资源)，忽略中断，即线程在aquire过程中，中断此线程是无效的。源码如下: 
 
 ```java
@@ -286,14 +280,15 @@ public final void acquire(int arg) {
 
 ![流程](https://cdn.jsdelivr.net/gh/fengxiu/img/20220423222928.png)
 
-
-* 首先调用tryAcquire方法，调用此方法的线程会试图在独占模式下获取对象状态。此方法应该查询是否允许它在独占模式下获取对象状态，如果允许，则获取它。在AbstractQueuedSynchronizer源码中默认会抛出一个异常，即需要子类去重写此方法完成自己的逻辑。之后会进行分析。
+* 首先调用tryAcquire方法，调用此方法的线程会试图在独占模式下获取对象状态。此方法应该查询是否允许它在独占模式下获取对象状态，如果允许，则获取它。在AbstractQueuedSynchronizer源码中没有实现此方法，即需要子类去重写此方法完成自己的逻辑。
 * 若tryAcquire失败，则调用addWaiter方法，addWaiter方法完成的功能是将调用此方法的线程封装成为一个结点并放入Sync queue。 
 * 调用acquireQueued方法，此方法完成的功能是Sync queue中的结点不断尝试获取资源，若成功，则返回true，否则，返回false。 
-* 由于tryAcquire默认实现是抛出异常，所以此时，不进行分析，之后会结合一个例子进行分析。
+* selfInterrupt是当acquireQueued由于响应中断信号退出时执行，如果是正常退出，则会返回false
 
+由于tryAcquire默认是空，所以此时，不进行分析，之后会结合一个例子进行分析。
 
 **首先分析addWaiter方法**
+addWaiter方法使用快速添加的方式往sync queue尾部添加结点，首先使用compareAndSetTail进行尝试设置，如果成功，说明没有竞争，则添加成功，添加不成功则说明有竞争，使用enq进行添加，如果sync queue队列还没有初始化，也会使用enq插入队列中
 
 ```java
  // 添加等待者
@@ -317,13 +312,10 @@ private Node addWaiter(Node mode) {
 }
 ```
 
-addWaiter方法使用快速添加的方式往sync queue尾部添加结点，也就是上面首先使用compareAndSetTail进行尝试设置，如果成功，说明没有竞争，则添加成功，有则说明有竞争，使用enq进行添加，如果sync queue队列还没有初始化，则会使用enq插入队列中
-
-
-**enq方法源码如下** 
+**enq方法源码如下**
+enq方法会使用无限循环来确保节点的成功插入。
 
 ```java
-
 private Node enq(final Node node) {
     for (;;) { // 无限循环，确保结点能够成功入队列
         // 保存尾结点
@@ -344,10 +336,8 @@ private Node enq(final Node node) {
 }
 ```
 
-enq方法会使用无限循环来确保节点的成功插入。
-
-
-现在，分析acquireQueue方法。其源码如下 
+**acquireQueued**
+现在，分析acquireQueue方法。其源码如下
 
 ```java
 // sync队列中的结点在独占且忽略中断的模式下获取(资源)
@@ -415,8 +405,13 @@ private static boolean shouldParkAfterFailedAcquire(Node pred, Node node) {
     return false;
 }
 ```
-  
-只有当该节点的前驱结点的状态为SIGNAL时，才可以对该结点所封装的线程进行park操作。否则，将不能进行park操作。
+
+主要步骤如下：
+
+1. 只有当该节点的前驱结点的状态为SIGNAL时，才可以对该结点所封装的线程进行park操作。
+2. 一直循环查找前驱节点不为取消状态的情形，并将此节点的后继节点设置为当前节点
+3. 如果前驱节点状态小于等于0，增说明前驱节点是有效状态，设置其状态为acquireQueued
+4. 返回false，表明当前节点不能暂停，从而继续调用acquireQueued，来进入下一次循环
 
 再看parkAndCheckInterrupt方法，源码如下
 
@@ -429,8 +424,10 @@ private final boolean parkAndCheckInterrupt() {
     return Thread.interrupted(); // 当前线程是否已被中断，并清除中断标记位
 }
 ```
-  
-parkAndCheckInterrupt方法里的逻辑是首先执行park操作，即禁用当前线程，然后返回该线程是否已经被中断。再看final块中的cancelAcquire方法，其源码如下 
+
+parkAndCheckInterrupt方法里的逻辑是首先执行park操作，即阻塞当前线程，此时线程已经不能执行，知道被唤醒，才能执行return防范，唤醒后，返回该线程是否已经被中断，同时清楚中断。
+
+再看final块中的cancelAcquire方法，其源码如下
 
 ```java
 // 取消继续获取(资源)
@@ -488,7 +485,9 @@ private void cancelAcquire(Node node) {
 }
 ```
 
-该方法完成的功能就是取消当前线程对资源的获取，即设置该结点的状态为CANCELLED，接着我们再看unparkSuccessor方法，源码如下
+该方法调用的时机是，当前阻塞的线程出现任何异常的情况下调用，正常的获取不会调用此方法。
+
+该方法完成的功能就是取消当前线程对资源的获取，即设置该结点的状态为CANCELLED，然后设置当前节点状态有效的前继节点，同时找到当前节点的后继节点，设置前继节点的next节点指向找到的后继节点，或者唤醒下一个节点，接着我们再看unparkSuccessor方法，源码如下
 
 ```java
 
@@ -529,19 +528,18 @@ private void unparkSuccessor(Node node) {
   
 该方法的作用就是为了释放node节点的后继结点。 对于cancelAcquire与unparkSuccessor方法，如下示意图可以清晰的表示:
 
-![](https://cdn.jsdelivr.net/gh/fengxiu/img/20220423224519.png)
+![acquire](https://cdn.jsdelivr.net/gh/fengxiu/img/20220423224519.png)
 
-其中node为参数，在执行完cancelAcquire方法后的效果就是unpark了s结点所包含的t4线程。 现在，再来看acquireQueued方法的整个的逻辑。逻辑如下: 
+其中node为参数，在执行完cancelAcquire方法后的效果就是unpark了s结点所包含的t4线程。 现在，再来看acquireQueued方法的整个的逻辑。逻辑如下:
 
-* 判断结点的前驱是否为head并且是否成功获取(资源)。 
-* 若步骤1均满足，则设置结点为head，之后会判断是否finally模块，然后返回。 
-* 若步骤2不满足，则判断是否需要park当前线程，是否需要park当前线程的逻辑是判断结点的前驱结点的状态是否为SIGNAL，若是，则park当前结点，否则，不进行park操作。 
+* 判断结点的前驱是否为head并且是否成功获取(资源)。
+* 若步骤1均满足，则设置结点为head，之后会判断是否finally模块，然后返回。
+* 若步骤2不满足，则判断是否需要park当前线程，是否需要park当前线程的逻辑是判断结点的前驱结点的状态是否为SIGNAL，若是，则park当前结点，否则，不进行park操作。
 * 若park了当前线程，之后某个线程对本线程unpark后，并且本线程也获得机会运行。那么，将会继续进行步骤①的判断。
 
+### 类的核心方法 - release方法
 
-### 类的核心方法 - release方法 
-
-以独占模式释放对象，其源码如下: 
+以独占模式释放对象，其源码如下:
 
 ```java
 public final boolean release(int arg) {
@@ -556,4 +554,24 @@ public final boolean release(int arg) {
 }
 ```
   
-其中，tryRelease的默认实现是抛出异常，需要具体的子类实现，如果tryRelease成功，那么如果头节点不为空并且头节点的状态不为0，则释放头节点的后继结点，unparkSuccessor方法已经分析过，不再累赘。 对于其他方法我们也可以分析，与前面分析的方法大同小异，所以，不再累赘。 
+其中，tryRelease的默认实现是抛出异常，需要具体的子类实现，如果tryRelease成功，那么如果头节点不为空并且头节点的状态不为0，则释放头节点的后继结点，unparkSuccessor方法已经分析过，不再累赘。 对于其他方法我们也可以分析，与前面分析的方法大同小异，所以，不再累赘。
+
+## 总结
+
+获取锁的流程可以总结为如下步骤
+
+1. 使用尝试获取锁，如果获取成功则返回，失败进入第二步
+2. 创建阻塞节点，首先尝试插入节点，如果插入成功进入第4步
+3. 插入失败，使用for循环尝试插入节点，直到插入成功
+4. 无限循环，获取锁，首先判断前继节点是否是头结点，如果是则尝试获取锁，获取成功直接返回，获取失败进入第5步
+5. 判断当前节点是否可以阻塞，依据是前继节点是否有效，如果是有效状态则暂停，无效状态，则需要查找到有效节点，并设置当前节点的前继节点为查找到的有效节点，然后返会false，或者前继节点是刚插入的，则设置其状态为SINGAL，告诉其后继节点需要被唤醒
+6. 上一步如果返回false，则说明节点的前继节点有变化，需要从新走一遍4到5，如果返回true，则阻塞当前线程
+7. 如果上面的步骤执行失败，需要设置当前节点为取消状态，并唤醒后继节点，来获取锁，这个过程只走一次，如果失败，说明已有一个线程在进入队列，由其来校正所有节点的状态与连接
+
+释放锁的流程
+
+如果释放锁成功，则判断头结点是否存在并且状态不是0，及后续可能有节点，唤醒后继节点
+
+## 参考
+
+1.[获取锁的流程图](https://segmentfault.com/a/1190000039097765)

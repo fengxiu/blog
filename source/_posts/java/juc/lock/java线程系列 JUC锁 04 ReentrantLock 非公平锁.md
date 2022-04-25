@@ -1,6 +1,7 @@
 ---
 title: java线程系列 JUC锁 04 ReentrantLock 非公平锁
 tags:
+  - 并发
   - lock
 categories:
   - java
@@ -13,12 +14,14 @@ updated: 2019-03-18 08:27:00
 
 上一篇文章已经分析了公平锁的获取与释放，本篇文章在前文的基础上分析非公平锁的获取与释放。如果你看懂跑了前面公平锁的获取与释放主要流程，那么看懂本篇文章将会比较轻松。
 
-<!--more-->
+
 
 ## 获取非公平锁
 
 非公平锁和公平锁在获取锁的方法上，流程是一样的；它们的区别主要表现在“尝试获取锁的机制不同。简单点说，公平锁在每次尝试获取锁时，都是采用公平策略(根据等待队列依次排序等待)；而非公平锁在每次尝试获取锁时，都是采用的非公平策略(无视等待队列，直接尝试获取锁，如果锁是空闲的，即可获取状态，则获取锁)。
-在前面的“[Java多线程系列--“JUC锁”03之 公平锁(一)](http://www.cnblogs.com/skywang12345/p/3496147.html)”中，已经详细介绍了获取公平锁的流程和机制；下面，通过代码分析以下获取非公平锁的流程。
+在前面的[java线程系列 JUC锁 03 ReentrantLock公平锁](/archives/cb19bcd7.html)”中，已经详细介绍了获取公平锁的流程和机制；下面，通过代码分析以下获取非公平锁的流程。
+
+<!--more-->
 
 ### lock
 
@@ -35,7 +38,7 @@ final void lock() {
 
 lock()会先通过compareAndSet(0, 1)来判断锁是不是空闲状态。是的话，当前线程直接获取锁；否则的话，调用acquire(1)获取锁,主要流程如下
 
-1. 通过compareAndSetState()函数设置当前锁的状态。若锁的状态值为0，则设置锁的状态值为1。也就是获取锁成功。然后通过setExclusiveOwnerThread(Thread.currentThread())设置当前线程为锁的持有者。这样就获取锁成功。
+1. 通过compareAndSetState()函数设置当前锁的状态。若锁的状态值为0，则设置锁的状态值为1。也就是获取锁成功。然后通过`setExclusiveOwnerThread(Thread.currentThread())`设置当前线程为锁的持有者,这样就获取锁成功。
 2. 如果上面失败，则通过acquire(1)来获取锁
 
 **公平锁和非公平锁关于lock()的对比**
@@ -43,7 +46,7 @@ lock()会先通过compareAndSet(0, 1)来判断锁是不是空闲状态。是的�
 * **公平锁**   -- 公平锁的lock()函数，会直接调用acquire(1)。
 * **非公平锁** -- 非公平锁会先判断当前锁的状态是不是空闲，是的话，就不排队，而是直接获取锁。
 
-### **acquire()**
+### acquire()
 
 acquire()在AQS中实现的，它的源码如下：
 
@@ -61,7 +64,7 @@ public final void acquire(int arg) {
 
 **公平锁和非公平锁关于acquire()的对比**
 
-公平锁和非公平锁，只有tryAcquire()函数的实现不同；即它们尝试获取锁的机制不同。这就是我们所说的它们获取锁策略的不同所在之处.在“[Java多线程系列--“JUC锁”03之 公平锁(一)](http://www.cnblogs.com/skywang12345/p/3496147.html)”中，已经详细介绍了acquire()涉及到的各个函数。这里仅对它们有差异的函数tryAcquire()进行说明。
+公平锁和非公平锁，只有tryAcquire()函数的实现不同；即它们尝试获取锁的机制不同。这就是我们所说的它们获取锁策略的不同所在之处。在前文中，已经详细介绍了acquire()涉及到的各个函数。这里仅对它们有差异的函数tryAcquire()进行说明。
 
 ### tryAcquire
 
@@ -76,6 +79,8 @@ protected final boolean tryAcquire(int acquires) {
 nonfairTryAcquire()在ReentrantLock的Sync类中实现，源码如下：
 
 ```java
+// sync
+
 final boolean nonfairTryAcquire(int acquires) {
     // 获取“当前线程”
     final Thread current = Thread.currentThread();
@@ -116,11 +121,11 @@ final boolean nonfairTryAcquire(int acquires) {
 
 至于非公平锁的释放和公平锁是一样的，这里就不具体说明，下面主要分析ReentrantLock还剩下和获取锁有关的几个函数。
 
-## lockInterruptibly、tryLock分析
+## lockInterruptibly和tryLock分析
 
 ### lockInterruptibly
 
-这个函数和lock区别是，他响应中断，也就是当等待获取锁的线程在等待获取锁的时候收到中断信号，此方法会抛出中断异常。具体看西面源码
+这个函数和lock区别是，他响应中断，也就是当等待获取锁的线程在等待获取锁的时候收到中断信号，此方法会抛出中断异常。具体看下面源码
 
 ```java
 public void lockInterruptibly() throws InterruptedException {
@@ -271,27 +276,18 @@ private boolean doAcquireNanos(int arg, long nanosTimeout)
 上面流程还是比较清晰，下面总结上面的流程。
 
 1. 判断等待的时间如果小于等于0，则直接返回false
-
 2. 计算等待的截止时间，并将当前节点插入到等待队列中。
-
 3. 进入循环
-
    1. 判断当前节点是否能成功获取锁，如果成功获取则返回true
-
    2. 计算等待的时间，如果小于0，返回失败
-
    3. shouldParkAfterFailedAcquire判断当前节点是否阻塞，如果返回false，进入新一轮的循环。
-
-      如果是，则判断还需等待的时间是否小于spinForTimeoutThreshold，如果小于则不等待，进入自旋。这是一个优化，因为线程的切换需要时间，如果阻塞的时间非常短，则可以进入自旋，从而提升整体的性能。如果大于，则进入有限时间的阻塞。
-
-   4. 判断线程是否中断过，如果是，则抛出中断异常
-
+   4. 上一步如果返回true，则判断还需等待的时间是否小于spinForTimeoutThreshold，如果小于则不等待，进入自旋。这是一个优化，因为线程的切换需要时间，如果阻塞的时间非常短，则可以进入自旋，从而提升整体的性能。如果大于，则进入有限时间的阻塞。
+   5.  判断线程是否中断过，如果是，则抛出中断异常
 4. 进入finally，如果failed=true，则取消当前节点。
-
 
 
 ### 参考
 
-1.  [Java多线程进阶（一）—— J.U.C并发包概述](https://segmentfault.com/a/1190000015558984)](https://segmentfault.com/a/1190000015804888)
+1. [Java多线程进阶（一）—— J.U.C并发包概述](https://segmentfault.com/a/1190000015558984)](https://segmentfault.com/a/1190000015804888)
 2. [Java多线程系列目录(共43篇)](https://www.cnblogs.com/skywang12345/p/java_threads_category.html)
-3.  [JAVA并发编程J.U.C学习总结](https://www.cnblogs.com/chenpi/p/5614290.html)
+3. [JAVA并发编程J.U.C学习总结](https://www.cnblogs.com/chenpi/p/5614290.html)

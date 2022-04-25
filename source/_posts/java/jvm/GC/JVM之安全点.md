@@ -1,13 +1,13 @@
 ---
-title: post
-abbrlink: 51729
+title: JVM之安全点
+abbrlink: 34947
+tags:
+  - 垃圾回收
+categories:
+  - java
+  - jvm
 date: 2019-03-15 14:02:00
 updated: 2019-03-15 14:02:00
-tags:
-    - 垃圾回收
-categories:
-    - java
-    - jvm
 ---
 
 ## 参考

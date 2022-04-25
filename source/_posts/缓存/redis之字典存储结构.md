@@ -1,12 +1,12 @@
 ---
 title: redis之字典存储结构
-abbrlink: 51730
+abbrlink: 48466
+tags:
+  - redis
+categories:
+  - 缓存
 date: 2022-04-19 22:29:30
 updated: 2022-04-19 22:29:30
-tags:
-    - redis
-categories:
-    - 缓存
 ---
 
 字典，又称为符号表（symbol table）、关联数组（associative array）或映射（map），是一种用于保存键值对（key-value pair）的抽 象数据结构。 在字典中，一个键（key）可以和一个值（value）进行关联（或者 说将键映射为值），这些关联的键和值就称为键值对。 字典中的每个键都是独一无二的，程序可以在字典中根据键查找与 之关联的值，或者通过键来更新值，又或者根据键来删除整个键值对， 等等。

@@ -1,6 +1,7 @@
 ---
 tags:
   - lock
+  - 并发
 categories:
   - java
   - juc
@@ -8,10 +9,11 @@ categories:
 title: java线程系列 JUC锁 03 ReentrantLock公平锁
 abbrlink: cb19bcd7
 date: 2019-03-18 00:27:00
+updated: 2019-03-18 00:27:00
 ---
-## **基本概念**
+## 基本概念
 
-本章，我们会讲解线程获取和释放公平锁的原理；在讲解之前，需要了解几个基本概念。后面的内容，都是基于这些概念的；这些概念可能比较枯燥，但从这些概念中，能窥见java锁的一些架构，这对我们了解锁是有帮助的。
+本文讲解线程获取和释放公平锁的原理；在讲解之前，需要了解几个基本概念。后面的内容，都是基于这些概念的；这些概念可能比较枯燥，但从这些概念中，能窥见java锁的一些架构，这对我们了解锁是有帮助的。同时最好看下前面一篇文章：[aqs源码分析](/archives/4b320d61.html)
 
 **AQS** -- 指AbstractQueuedSynchronizer类。
 
@@ -53,71 +55,169 @@ ReentrantLock的UML类图
 从图中可以看出：
 
 * ReentrantLock实现了Lock接口。
-* ReentrantLock与Sync是组合关系。ReentrantLock中，包含了Sync对象；而且，Sync是AQS的子类；更重要的是，Sync有两个子类FairSync(公平锁)和NonFairSync(非公平锁)。ReentrantLock是一个独占锁，至于它到底是公平锁还是非公平锁，就取决于Sync对象是"FairSync的实例"还是"NonFairSync的实例"。
+* ReentrantLock与Sync是组合关系。ReentrantLock中，包含了Sync对象；而且，Sync是AQS的子类；更重要的是，Sync有两个子类FairSync(公平锁)和NonFairSync(非公平锁)
+* ReentrantLock是一个独占锁，至于它到底是公平锁还是非公平锁，就取决于Sync对象是"FairSync的实例"还是"NonFairSync的实例"。
 
 ## ReentrantLock源码分析
 
-在分析源码之前，首先介绍后面要用到的一些属性。
+通过上面ReentrantLock的UML类图可以看出，ReentrantLock类中锁的主要是通过内部类Sync以及其俩个子类FairSync和NonfairSync来实现。其中Sync是AQS的子类，实现了其中大部分抽象方法，但是由于公平锁和非公平锁的获取方式不同，因此Sync中lock方法没有实现，FairSync和NonfairSync不同之处就是在这点实现上。
+
+首先看下sync的源码
 
 ```java
-// AQS 中的代码 
-static final class Node {
-  
-     	// 标记节点为共享节点类型
-        static final Node SHARED = new Node();
-        // 标记节点为独占节点类型
-        static final Node EXCLUSIVE = null;
+abstract static class Sync extends AbstractQueuedSynchronizer {
+        private static final long serialVersionUID = -5179523762034025860L;
 
-     	// 下面四个显示当前节点的状态
-        // 表示当前节点已取消等待
-        static final int CANCELLED =  1;
-        // 表示当前节点释放时，需要唤醒后继节点
-        static final int SIGNAL    = -1;
-        // 表示当前节点是一个等待条件的节点
-        static final int CONDITION = -2;
-        // 这个是对共享节点的头结点在释放时，应该传播到其他共享的节点
-        static final int PROPAGATE = -3;
-		 
-     	// 当前节点的状态，如果是大于0，则表示取消，小于表示等待，等于0什么都不代表
-        volatile int waitStatus;
+        // 获取锁的过程，有子类实现
+        abstract void lock();
 
-      	// 前继节点
-        volatile Node prev;
+        /**
+         * 非公平锁获取方式
+         */
+        final boolean nonfairTryAcquire(int acquires) {
+            final Thread current = Thread.currentThread();
+            int c = getState();
+            if (c == 0) {
+                if (compareAndSetState(0, acquires)) {
+                    setExclusiveOwnerThread(current);
+                    return true;
+                }
+            }
+            else if (current == getExclusiveOwnerThread()) {
+                int nextc = c + acquires;
+                if (nextc < 0) // overflow
+                    throw new Error("Maximum lock count exceeded");
+                setState(nextc);
+                return true;
+            }
+            return false;
+        }
 
-   		// 后继及诶单
-        volatile Node next;
+        /**
+         * 释放锁
+         */
+        protected final boolean tryRelease(int releases) {
+            int c = getState() - releases;
+            if (Thread.currentThread() != getExclusiveOwnerThread())
+                throw new IllegalMonitorStateException();
+            boolean free = false;
+            if (c == 0) {
+                free = true;
+                setExclusiveOwnerThread(null);
+            }
+            setState(c);
+            return free;
+        }
 
-        // 节点入队时的线程，入队时初始化，出队时为null
-        volatile Thread thread;
-		// nextWaiter是“区别当前CLH队列是 ‘独占锁’队列 还是 ‘共享锁’队列 的标记”
-    	// 若nextWaiter=SHARED，则CLH队列是“独占锁”队列；
-    	// 若nextWaiter=EXCLUSIVE，(即nextWaiter=null)，则CLH队列是“共享锁”队列。
-        Node nextWaiter;
+        // 是否当前线程独占锁
+        protected final boolean isHeldExclusively() {
+            return getExclusiveOwnerThread() == Thread.currentThread();
+        }
 
-        。。。。省略了一些方法 
+        final ConditionObject newCondition() {
+            return new ConditionObject();
+        }
+
+        // Methods relayed from outer class
+
+        final Thread getOwner() {
+            return getState() == 0 ? null : getExclusiveOwnerThread();
+        }
+
+        final int getHoldCount() {
+            return isHeldExclusively() ? getState() : 0;
+        }
+
+        final boolean isLocked() {
+            return getState() != 0;
+        }
+
+        /**
+         * Reconstitutes the instance from a stream (that is, deserializes it).
+         */
+        private void readObject(java.io.ObjectInputStream s)
+            throws java.io.IOException, ClassNotFoundException {
+            s.defaultReadObject();
+            setState(0); // reset to unlocked state
+        }
     }
-   
-	// 等待队列的头结点，头结点如果存在，则其状态不能是取消状态
-    private transient volatile Node head;
 
-	// 等待队列尾节点
-    private transient volatile Node tail;
-
-    // 同步队列的状态，如果是0表示未有线程获取锁，大于0已有线程获取锁
-    private volatile int state;
 ```
 
-通过上面ReentrantLock的UML类图可以看出，ReentrantLock类中锁的主要实现是有内部类Sync以及其俩个子类FairSync和NonfairSync来实现的。其中Sync是AQS的子类，实现了其中大部分抽象方法，但是由于公平锁和非公平锁的获取方式不同，因此Sync中lock方法没有实现，这就是FairSync和NonfairSync不同的地点。
 
-这里先分析公平锁的获取与释放，并对ReentrantLock中的方法做简单介绍
+上面继承自AQS，然后实现了一些方法，方便后续的FairSync和NoFairSync实现
+
+
+### 构造方法
+
+```java
+
+// 锁的实现
+private final Sync sync;
+
+
+// 默认使用非公平锁实现
+public ReentrantLock() {
+    sync = new NonfairSync();
+}
+
+
+// 设置是否使用公平锁
+public ReentrantLock(boolean fair) {
+    sync = fair ? new FairSync() : new NonfairSync();
+}
+```
+
+
+本篇文章先分析公平锁的获取与释放，并对ReentrantLock中的方法做简单介绍
 
 ### 公平锁的获取
 
+
+公平锁获取主要使用FairSync，具体代码如下
+
+```java
+static final class FairSync extends Sync {
+        private static final long serialVersionUID = -3000897897090466540L;
+
+        final void lock() {
+            acquire(1);
+        }
+
+        /**
+         * 公平锁获取：获取成功的条件如果下
+         * 1. 锁为未被占有，则判断当前节点是否是头节点，或者说前面没有节点等待获取锁
+         * 2. 锁已被占有，则判断是佛是当前线程获取的锁，如果是state加acquires
+         */
+        protected final boolean tryAcquire(int acquires) {
+            final Thread current = Thread.currentThread();
+            int c = getState();
+            if (c == 0) {
+                if (!hasQueuedPredecessors() &&
+                    compareAndSetState(0, acquires)) {
+                    setExclusiveOwnerThread(current);
+                    return true;
+                }
+            }
+            else if (current == getExclusiveOwnerThread()) {
+                int nextc = c + acquires;
+                if (nextc < 0)
+                    throw new Error("Maximum lock count exceeded");
+                setState(nextc);
+                return true;
+            }
+            return false;
+        }
+    }
+```
+
+
 公平锁的获取是通过lock来获取，源码如下
+
 
 ```java
 
-// FairSync
+// ReentrantLock
 public void lock() {
 	sync.lock();
 }
@@ -133,6 +233,7 @@ final void lock() {
 由于ReentrantLock(公平锁/非公平锁)是可重入锁，所以独占锁可以被同一个线程多此获取，每获取1次就将锁的状态+1。也就是说，初次获取锁时，通过acquire(1)将锁的状态值设为1；再次获取锁时，将锁的状态值设为2；依次类推，这就是为什么获取锁时，传入的参数是1的原因。
 
 另外**可重入**是指锁可以被单个线程多次获取。
+
 
 ### acquire()
 
@@ -153,7 +254,7 @@ public final void acquire(int arg) {
 2. 当前线程获取失败，通过addWaiter(Node.EXCLUSIVE)将当前线程插入到CLH队列末尾来等待获取锁。
 3. 插入成功后，会使用acquireQueued来获取锁，这里获取锁只会等待当前等待节点的前继节点为head节点才会获取成功。没有获取锁，线程会进入休眠状态。如果当前线程在休眠等待过程中被打断，acquireQueue会返回true，此时当前线程会调用selfInterrupt来给自己产生一个中断。
 
-大体的流程如上面介绍，下面会具体的分析每一步。
+大体的流程如上面介绍，具体的可以参考AQS源码分析的文章，这里主要介绍tryAcquire
 
 ### tryAcquire
 
@@ -245,6 +346,7 @@ protected final int getState() {
 这俩个是定义在AbstractOwnableSynchronizer这个抽象类中的，用于设置和获取获取当前锁的线程。但是我有点不明白为什么是抽象类，。源码如下
 
 ```java
+
 private transient Thread exclusiveOwnerThread;
 
 protected final void setExclusiveOwnerThread(Thread thread) {
@@ -591,7 +693,7 @@ public final boolean release(int arg) {
 
 #### tryRelease()
 
-这个函数的实现是在ReentrantLock中的Synch类中实现，源码如下：
+这个函数的实现是在ReentrantLock中的Sync类中实现，源码如下：
 
 ```java
 protected final boolean tryRelease(int releases) {

@@ -1,14 +1,14 @@
 ---
 title: LockSupport使用介绍以及原理分析
-abbrlink: 51727
-date: 2022-04-23 17:32:16
-updated: 2022-04-23 17:32:16
 tags:
   - 并发
   - lock
 categories:
   - java
   - lock
+abbrlink: 41442
+date: 2022-04-23 17:32:16
+updated: 2022-04-23 17:32:16
 ---
 
 LockSupport用来创建锁和其他同步类的基本线程阻塞原语。简而言之，当调用LockSupport.park时，表示当前线程将会等待，直至获得许可，当调用LockSupport.unpark时，必须把等待获得许可的线程作为参数进行传递，好让此线程继续运行。 

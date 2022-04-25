@@ -1,34 +1,45 @@
 ---
 title: java线程系列 JUC锁 05  Condition条件
 tags:
-  - Condition
+  - 并发
+  - lock
 categories:
   - java
   - juc
   - lock
 abbrlink: d14480c0
 date: 2019-03-18 11:56:00
+updated: 2019-03-18 11:56:00
 ---
 
 ## 简单介绍
 
 Condition的作用是对锁进行更精确的控制。Condition中的await()方法相当于Object的wait方法，Condition中的signal()方法相当于Object的notify()方法，Condition中的signalAll()相当于Object的notifyAll()方法。不同的是，Object中的wait()、notify()、notifyAll()方法是和同步锁(synchronized关键字)捆绑使用的；而Condition是需要与斥锁/共享锁捆绑使用的。互斥锁前面已经说过一个ReentrantLock，后还会说道ReentrantReadWriteLock共享锁。
+
 <!-- more -->
+
 ### Condition函数示例
 
 ```java
+
 // 造成当前线程在接到信号或被中断之前一直处于等待状态。
 void await()
+
 // 造成当前线程在接到信号、被中断或到达指定等待时间之前一直处于等待状态。
 boolean await(long time, TimeUnit unit)
+
 // 造成当前线程在接到信号、被中断或到达指定等待时间之前一直处于等待状态。
 long awaitNanos(long nanosTimeout)
+
 // 造成当前线程在接到信号之前一直处于等待状态。
 void awaitUninterruptibly()
+
 // 造成当前线程在接到信号、被中断或到达指定最后期限之前一直处于等待状态。
 boolean awaitUntil(Date deadline)
+
 // 唤醒一个等待线程。
 void signal()
+
 // 唤醒所有等待线程。
 void signalAll()
 ```
@@ -146,7 +157,7 @@ main continue
 
 通过示例1和示例2，我们知道Condition和Object的方法有一下对应关系：
 
-```
+```text
               Object      Condition  
 休眠          wait        await
 唤醒个线程     notify      signal
@@ -156,7 +167,8 @@ main continue
 Condition除了支持上面的功能之外，它更强大的地方在于：能够更加精细的控制多线程的休眠与唤醒。对于同一个锁，我们可以创建多个Condition，在不同的情况下使用不同的Condition。
 例如，假如多线程读/写同一个缓冲区：当向缓冲区中写入数据之后，唤醒"读线程"；当从缓冲区读出数据之后，唤醒"写线程"；并且当缓冲区满的时候，"写线程"需要等待；当缓冲区为空时，"读线程"需要等待。        
 
- 如果采用Object类中的wait(), notify(), notifyAll()实现该缓冲区，当向缓冲区写入数据之后需要唤醒"读线程"时，不可能通过notify()或notifyAll()明确的指定唤醒"读线程"，而只能通过notifyAll唤醒所有线程(但是notifyAll无法区分唤醒的线程是读线程，还是写线程)。  但是，通过Condition，就能明确的指定唤醒读线程。
+如果采用Object类中的wait(), notify(), notifyAll()实现该缓冲区，当向缓冲区写入数据之后需要唤醒"读线程"时，不可能通过notify()或notifyAll()明确的指定唤醒"读线程"，而只能通过notifyAll唤醒所有线程(但是notifyAll无法区分唤醒的线程是读线程，还是写线程)。但是，通过Condition，就能明确的指定唤醒读线程。
+
 看看下面的示例3，可能对这个概念有更深刻的理解。
 
 ### 示例3
@@ -289,27 +301,25 @@ t9 take 9
 
 **结果说明**：
 
-1. BoundedBuffer 是容量为5的缓冲，缓冲中存储的是Object对象，支持多线程的读/写缓冲。多个线程操作“一个BoundedBuffer对象”时，它们通过互斥锁lock对缓冲区items进行互斥访问；而且同一个BoundedBuffer对象下的全部线程共用“notFull”和“notEmpty”这两个Condition。
-   notFull用于控制写缓冲，notEmpty用于控制读缓冲。当缓冲已满的时候，调用put的线程会执行notFull.await()进行等待；当缓冲区不是满的状态时，就将对象添加到缓冲区并将缓冲区的容量count+1，最后，调用notEmpty.signal()缓冲notEmpty上的等待线程(调用notEmpty.await的线程)。 简言之，notFull控制“缓冲区的写入”，当往缓冲区写入数据之后会唤醒notEmpty上的等待线程。
-   同理，notEmpty控制“缓冲区的读取”，当读取了缓冲区数据之后会唤醒notFull上的等待线程。
+BoundedBuffer 是容量为5的缓冲，缓冲中存储的是Object对象，支持多线程的读/写缓冲。多个线程操作“一个BoundedBuffer对象”时，它们通过互斥锁lock对缓冲区items进行互斥访问；而且同一个BoundedBuffer对象下的全部线程共用“notFull”和“notEmpty”这两个Condition。notFull用于控制写缓冲，notEmpty用于控制读缓冲。当缓冲已满的时候，调用put的线程会执行notFull.await()进行等待；当缓冲区不是满的状态时，就将对象添加到缓冲区并将缓冲区的容量count+1，最后，调用notEmpty.signal()缓冲notEmpty上的等待线程(调用notEmpty.await的线程)。 简言之，notFull控制“缓冲区的写入”，当往缓冲区写入数据之后会唤醒notEmpty上的等待线程。同理，notEmpty控制“缓冲区的读取”，当读取了缓冲区数据之后会唤醒notFull上的等待线程。
 
-2. 在ConditionTest2的main函数中，启动10个“写线程”，向BoundedBuffer中不断的写数据(写入0-9)；同时，也启动10个“读线程”，从BoundedBuffer中不断的读数据。
+在ConditionTest2的main函数中，启动10个“写线程”，向BoundedBuffer中不断的写数据(写入0-9)；同时，也启动10个“读线程”，从BoundedBuffer中不断的读数据。
 
-3. 简单分析一下运行结果。
+简单分析一下运行结果。
 
    ```
-   	 1, p1线程向缓冲中写入1。    此时，缓冲区数据:   | 1 |   |   |   |   |
-        2, p4线程向缓冲中写入4。    此时，缓冲区数据:   | 1 | 4 |   |   |   |
-        3, p5线程向缓冲中写入5。    此时，缓冲区数据:   | 1 | 4 | 5 |   |   |
-        4, p0线程向缓冲中写入0。    此时，缓冲区数据:   | 1 | 4 | 5 | 0 |   |
-        5, p2线程向缓冲中写入2。    此时，缓冲区数据:   | 1 | 4 | 5 | 0 | 2 |
-        此时，缓冲区容量为5；缓冲区已满！如果此时，还有“写线程”想往缓冲中写入数据，
-        会调用put中的notFull.await()等待，直接缓冲区非满状态，才能继续运行。
-        6, t0线程从缓冲中取出数据1。此时，缓冲区数据:    |   | 4 | 5 | 0 | 2 |
-        7, p3线程向缓冲中写入3。    此时，缓冲区数据:   | 3 | 4 | 5 | 0 | 2 |
-        8, t1线程从缓冲中取出数据4。此时，缓冲区数据:    | 3 |   | 5 | 0 | 2 |
-        9, p6线程向缓冲中写入6。    此时，缓冲区数据:   | 3 | 6 | 5 | 0 | 2 |
-        ...
+1, p1线程向缓冲中写入1。    此时，缓冲区数据:   | 1 |   |   |   |   |
+2, p4线程向缓冲中写入4。    此时，缓冲区数据:   | 1 | 4 |   |   |   |
+3, p5线程向缓冲中写入5。    此时，缓冲区数据:   | 1 | 4 | 5 |   |   |
+4, p0线程向缓冲中写入0。    此时，缓冲区数据:   | 1 | 4 | 5 | 0 |   |
+5, p2线程向缓冲中写入2。    此时，缓冲区数据:   | 1 | 4 | 5 | 0 | 2 |
+此时，缓冲区容量为5；缓冲区已满！如果此时，还有“写线程”想往缓冲中写入数据，
+会调用put中的notFull.await()等待，直接缓冲区非满状态，才能继续运行。
+6, t0线程从缓冲中取出数据1。此时，缓冲区数据:    |   | 4 | 5 | 0 | 2 |
+7, p3线程向缓冲中写入3。    此时，缓冲区数据:   | 3 | 4 | 5 | 0 | 2 |
+8, t1线程从缓冲中取出数据4。此时，缓冲区数据:    | 3 |   | 5 | 0 | 2 |
+9, p6线程向缓冲中写入6。    此时，缓冲区数据:   | 3 | 6 | 5 | 0 | 2 |
+        .
    ```
 
 ## 源码分析
@@ -358,15 +368,10 @@ final ConditionObject newCondition() {
 而Condition自己也维护了一个队列，该队列的作用是维护一个等待signal信号的队列，两个队列的作用是不同，事实上，每个线程也仅仅会同时存在以上两个队列中的一个，流程是这样的：
 
 1. 首先，线程1调用lock.lock()时，由于此时锁并没有被其它线程占用，因此线程1直接获得锁并不会进入AQS同步队列中进行等待。
-
 2. 在线程1执行期间，线程2调用lock.lock()时由于锁已经被线程1占用，因此，线程2进入AQS同步队列中进行等待。
-
 3. 在线程1中执行condition.await()方法后，线程1释放锁并进入条件队列Condition中等待signal信号的到来。
-
 4. 线程2，因为线程1释放锁的关系，会唤醒AQS队列中的头结点，所以线程2会获取到锁。
-
 5. 线程2调用signal方法，这个时候Condition的等待队列中只有线程1一个节点，于是它被取出来，并被加入到AQS的等待队列中。注意，这个时候，线程1 并没有被唤醒。只是加入到了AQS等待队列中去了
-
 6. 待线程2执行完成之后并调用lock.unlock()释放锁之后，会唤醒此时在AQS队列中的头结点.所以线程1开始争夺锁(由于此时只有线程1在AQS队列中，因此没人与其争夺),如果获得锁继续执行。直到线程1释放锁整个过程执行完毕。
 
 可以看到，整个协作过程是靠结点在AQS的等待队列和Condition的等待队列中来回移动实现的，Condition作为一个条件类，很好的自己维护了一个等待信号的队列，并在适时的时候将结点加入到AQS的等待队列中来实现的唤醒操作。
@@ -446,6 +451,7 @@ private Node addConditionWaiter() {
     lastWaiter = node;
     return node;
 }
+
 // 删除所有非等待条件节点
 private void unlinkCancelledWaiters() {
     Node t = firstWaiter;
@@ -480,7 +486,8 @@ private void unlinkCancelledWaiters() {
 ```java
 /**
  *函数功能：释放锁，
- *如果失败，则抛异常并将此节点的类型设置为：CANCELLED，为之后从条件队列中移除此节点。
+ *如果失败，则抛异常
+ *并将此节点的类型设置为：CANCELLED，为之后从条件队列中移除此节点。
 */
 final int fullyRelease(Node node) {
     boolean failed = true;
@@ -567,16 +574,15 @@ final boolean transferAfterCancelledWait(Node node) {
         enq(node);
         return true;
     }
-	// 如果上面的设置节点状态失败，则可能产生了一个signal()，
-    // 那么在signal完成enq（）之前，线程不能继续操作。
-    // 不完全转移过程中的取消既罕见又短暂，所以只需旋转。
+	// 如果上面的设置节点状态失败，则可能产生了一个signal()并且没有被获取
+    // 在完成enq()之前，线程不能继续操作。不完全转移过程中的取消既罕见又短暂，所以只需旋转。
     while (!isOnSyncQueue(node))
         Thread.yield();
     return false;
 }
 ```
 
-至此，await中重要的函数已经分析完，其他的和获取公平锁一样，这里就不具体讲解。实际上，await就是讲等待队列上的节点单独放到一个条件队列上，如果希望再次获取锁，只有将此节点再次移动到等待队列上，那么当前线程就有机会获取到锁。
+至此，await中重要的函数已经分析完，其他的和获取公平锁一样，这里就不具体讲解。实际上，await就是将等待队列上的节点单独放到一个条件队列上，如果希望再次获取锁，只有将此节点再次移动到等待队列上，那么当前线程就有机会获取到锁。
 
 ### signal()
 
@@ -624,7 +630,7 @@ final boolean transferForSignal(Node node) {
 }
 ```
 
-可以看到，正常情况 ws > 0 || !compareAndSetWaitStatus(p, ws, Node.SIGNAL) 这个判断是不会为true的，所以，不会在这个时候唤醒该线程。但是如果此时被唤醒，但是因为前面还会判断当前节点是否可以获取锁来保证获取锁的正确性，因此在总体上不会出现安全问题。
+可以看到，正常情况 `ws > 0 || !compareAndSetWaitStatus(p, ws, Node.SIGNAL)`这个判断是不会为true的，所以，不会在这个时候唤醒该线程。但是如果此时被唤醒，但是因为前面还会判断当前节点是否可以获取锁来保证获取锁的正确性，因此在总体上不会出现安全问题。
 
 ## 总结
 
@@ -635,5 +641,5 @@ final boolean transferForSignal(Node node) {
 
 ### 参考
 
-1.  [Java多线程进阶（八）—— J.U.C之locks框架：AQS的Conditon等待(3)](https://segmentfault.com/a/1190000015807209)
+1. [Java多线程进阶（八）—— J.U.C之locks框架：AQS的Conditon等待(3)](https://segmentfault.com/a/1190000015807209)
 2. [Java多线程系列目录(共43篇)](https://www.cnblogs.com/skywang12345/p/java_threads_category.html)

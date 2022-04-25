@@ -1,6 +1,7 @@
 ---
 tags:
-  - AQS
+  - 并发
+  - lock
 categories:
   - java
   - juc
