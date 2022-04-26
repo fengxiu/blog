@@ -5,7 +5,6 @@ tags:
 categories:
   - java
   - spring
-  - springboot
 abbrlink: 62b625fe
 author: zhangke
 date: 2019-03-11 06:46:00

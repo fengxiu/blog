@@ -5,13 +5,12 @@ tags:
 categories:
   - java
   - spring
-  - spring 源码分析
-  - SpringCore
+
 author: fengxiutianya
 abbrlink: dd7af934
 date: 2019-01-14 04:52:00
+updated: 2019-01-14 04:52:00
 ---
-# spring源码解析之 05获取Document对象
 
 ### 概述
 
@@ -20,7 +19,7 @@ date: 2019-01-14 04:52:00
 
 ### LoadDocument源码分析:
 
-在 `XmlBeanDefinitionReader.doLoadDocument()` 方法中做了两件事情，一是调用 `getValidationModeForResource()` 获取 XML 的验证模式，二是调用 `DocumentLoader.loadDocument()` 获取 Document 对象。上篇博客已经分析了获取 XML 验证模式，这篇我们分析获取 Document 对象。
+在`XmlBeanDefinitionReader.doLoadDocument()` 方法中做了两件事情，一是调用 `getValidationModeForResource()` 获取 XML 的验证模式，二是调用 `DocumentLoader.loadDocument()` 获取 Document 对象。上篇博客已经分析了获取 XML 验证模式，这篇我们分析获取 Document 对象。
 <!-- more-->
 获取 Document 的策略由接口 DocumentLoader 定义，如下：
 

@@ -5,29 +5,19 @@ tags:
 categories:
   - java
   - spring
-  - spring 源码分析
-  - SpringCore
 author: fenxiutianya
 abbrlink: a158638e
 date: 2019-01-14 03:39:00
+updated: 2019-01-14 03:39:00
 ---
-# spring源码解析之 03统一资源加载
-
-### 概述
-
-1. 统一资源Resource
-2. 统一资源定位ResourceLoader
-
-### 1. 统一资源Resource
-
-java中有一个标准类 `java.net.URL`，该类在 Java SE 中的定位为统一资源定位器（Uniform Resource Locator），但是我们知道它的实现基本只限于网络形式发布的资源的查找和定位。虽然可以通过注册特定的处理器来扩展处理不同的地址前缀，但是这通常比较麻烦，而且不易于使用。另外，实际上资源的定义比较广泛，除了网络形式的资源，还有以二进制形式存在的、以文件形式存在的、以字节流形式存在的等等。而且它可以存在于任何场所，比如网络、文件系统、应用程序中。所以 `java.net.URL` 的局限性迫使 Spring 必须实现自己的资源加载策略，该资源加载策略需要满足如下要求：
+java中有一个标准类 `java.net.URL`，该类在 Java SE 中的定位为统一资源定位器（Uniform Resource Locator），但是我们知道它的实现基本只限于网络形式发布的资源的查找和定位。虽然可以通过注册特定的处理器来扩展处理不同的地址前缀，但是这通常比较麻烦，而且不易于使用。另外，实际上资源的定义比较广泛，除了网络形式的资源，还有以二进制形式存在的、以文件形式存在的、以字节流形式存在的等等。而且它可以存在于任何场所，比如网络、文件系统、应用程序中。所以 `java.net.URL` 的局限性迫使Spring必须实现自己的资源加载策略，该资源加载策略需要满足如下要求：
 
 1. **职能划分清楚**：资源的定义和资源的加载应该要有一个清晰的界限；
 2. **统一的抽象**：统一的资源定义和资源加载策略。资源加载后要返回统一的抽象给客户端，客户端要对资源进行怎样的处理，应该由抽象资源接口来界定。
 
 <!-- more -->
 
-`org.springframework.core.io.Resource` 为 Spring 框架所有资源的抽象和访问接口，它继承 `org.springframework.core.io.InputStreamSource`接口。作为所有资源的统一抽象，Source 定义了一些通用的方法，由子类 `AbstractResource` 提供统一的默认实现。定义如下：
+`org.springframework.core.io.Resource` 为Spring框架所有资源的抽象和访问接口，它继承 `org.springframework.core.io.InputStreamSource`接口。作为所有资源的统一抽象，Source定义了一些通用的方法，由子类 `AbstractResource` 提供统一的默认实现。定义如下：
 
 ```java
 public interface Resource extends InputStreamSource {
@@ -113,13 +103,13 @@ public interface Resource extends InputStreamSource {
 
 从上图可以看到，Resource 根据资源的不同类型提供不同的具体实现，如下：
 
-- FileSystemResource：对 `java.io.File` 类型资源的封装，只要是File类能操作的资源，基本都可以使用FileSystemResource来代替。支持文件和 URL 的形式，实现 WritableResource 接口，且从 Spring Framework 5.0 开始，FileSystemResource 使用NIO API进行读/写交互
-- ByteArrayResource：对字节数组提供的数据的封装。如果通过 InputStream 形式访问该类型的资源，该实现会根据字节数组的数据构造一个相应的 ByteArrayInputStream。
+- FileSystemResource：对 `java.io.File` 类型资源的封装，只要是File类能操作的资源，基本都可以使用FileSystemResource来代替。支持文件和 URL 的形式，实现 WritableResource 接口，且从Spring Framework 5.0开始，FileSystemResource 使用NIO API进行读/写交互
+- ByteArrayResource：对字节数组提供的数据的封装。如果通过InputStream形式访问该类型的资源，该实现会根据字节数组的数据构造一个相应的 ByteArrayInputStream。
 - UrlResource：对 `java.net.URL`类型资源的封装。内部委派 URL 进行具体的资源操作。
-- ClassPathResource：class path 类型资源的实现。使用给定的 ClassLoader 或者给定的 Class 来加载资源。
-- InputStreamResource：将给定的 InputStream 作为一种资源的 Resource 的实现类。
+- ClassPathResource：class path类型资源的实现。使用给定的ClassLoader或者给定的Class来加载资源。
+- InputStreamResource：将给定的InputStream作为一种资源的Resource的实现类。
 
-AbstractResource 为 Resource 接口的默认实现，它实现了 Resource 接口的大部分的公共实现，作为 Resource 接口中的重中之重，其定义如下：
+AbstractResource为Resource接口的默认实现，它实现了Resource接口的大部分的公共实现，作为Resource接口中的重中之重，其定义如下：
 
 ```java
 public abstract class AbstractResource implements Resource {
@@ -293,11 +283,11 @@ public abstract class AbstractResource implements Resource {
 
 如果我们想要实现自定义的 Resource，记住不要实现 Resource 接口，而应该继承 AbstractResource 抽象类，然后根据当前的具体资源特性覆盖相应的方法即可。
 
-### 2. 统一资源定位：ResourceLoader
+## 统一资源定位：ResourceLoader
 
-一开始就说了 Spring 将资源的定义和资源的加载区分开了，Resource 定义了统一的资源，那资源的加载则由 ResourceLoader 来统一定义。
+一开始就说了Spring将资源的定义和资源的加载区分开了，Resource定义了统一的资源，那资源的加载则由ResourceLoader来统一定义。
 
-`org.springframework.core.io.ResourceLoader` 为 Spring 资源加载的统一抽象，具体的资源加载则由相应的实现类来完成，所以我们可以将 ResourceLoader 称作为统一资源定位器。其定义如下：
+`org.springframework.core.io.ResourceLoader` 为Spring资源加载的统一抽象，具体的资源加载则由相应的实现类来完成，所以我们可以将 ResourceLoader 称作为统一资源定位器。其定义如下：
 
 ```java
 public interface ResourceLoader {
@@ -311,20 +301,21 @@ public interface ResourceLoader {
 
 ResourceLoader 接口提供两个方法：`getResource()`、`getClassLoader()`。
 
-`getResource()`根据所提供资源的路径 location 返回 Resource 实例，但是它不确保该 Resource 一定存在，需要调用 `Resource.exist()`方法判断。该方法支持以下模式的资源加载：
+`getResource()`根据所提供资源的路径location返回Resource实例，但是它不确保该 Resource 一定存在，需要调用 `Resource.exist()`方法判断。该方法支持以下模式的资源加载：
 
 - URL位置资源，如”file:C:/test.dat”
 - ClassPath位置资源，如”classpath:test.dat”
 - 相对路径资源，如”WEB-INF/test.dat”，此时返回的Resource实例根据实现不同而不同
 
-该方法的主要实现是在其子类 DefaultResourceLoader 中实现，具体过程我们在分析 DefaultResourceLoader 时做详细说明。
+该方法的主要实现是在其子类DefaultResourceLoader中实现，具体过程我们在分析DefaultResourceLoader时做详细说明。
 
-`getClassLoader()` ：获取 ResourceLoader 对象使用的ClassLoader，在分析 Resource 时，提到了一个类 `ClassPathResource` ，这个类是可以根据指定的 ClassLoader 来加载资源的。
+`getClassLoader()` ：获取ResourceLoader对象使用的ClassLoader，在分析Resource时，提到了一个类`ClassPathResource` ，这个类是可以根据指定的ClassLoader来加载资源的。
 
-作为 Spring 统一的资源加载器，它提供了统一的抽象，具体的实现则由相应的子类来负责实现，其类的类结构图如下：
+作为Spring统一的资源加载器，它提供了统一的抽象，具体的实现则由相应的子类来负责实现，其类的类结构图如下：
+
 ![resourceloader](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-6.png)
 
-#### DefaultResourceLoader
+###  DefaultResourceLoader
 
 DefaultResourceLoader 是 ResourceLoader 的默认实现，它接收 ClassLoader 作为构造函数的参数或者使用不带参数的构造函数，在使用不带参数的构造函数时，使用的 ClassLoader 为默认的 ClassLoader（一般为`Thread.currentThread().getContextClassLoader()`），可以通过 `ClassUtils.getDefaultClassLoader()`获取。当然也可以调用 `setClassLoader()`方法进行后续设置。如下
 

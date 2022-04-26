@@ -5,14 +5,11 @@ tags:
 categories:
   - java
   - spring
-  - spring 源码分析
-  - SpringCore
 author: fengxiutianya
 abbrlink: f89484e0
 date: 2019-01-14 04:46:00
+updated: 2019-01-14 04:46:00
 ---
-# spring 源码解析之 04（上）加载bean
-
 ### 概述
 
 1. spring 容器基本介绍
@@ -110,7 +107,7 @@ reader.loadBeanDefinitions(resource);
        }
    ```
 
-从指定的 xml 文件加载 Bean Definition，这里会先对Resource资源封装成EncodedResource。这里为什么需要将Resource封装成 EncodedResource呢？要是为了对 Resource 进行编码，保证内容读取的正确性。封装成 EncodedResource后，调用`loadBeanDefinitions()`，这个方法才是真正的逻辑实现。如下：
+从指定的xml文件加载Bean Definition，这里会先对Resource资源封装成EncodedResource。这里为什么需要将Resource封装成EncodedResource呢？要是为了对Resource 进行编码，保证内容读取的正确性。封装成EncodedResource后，调用`loadBeanDefinitions()`，这个方法才是真正的逻辑实现。如下：
 
    ```java
        public int loadBeanDefinitions(EncodedResource encodedResource) 

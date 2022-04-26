@@ -5,11 +5,10 @@ tags:
 categories:
   - java
   - spring
-  - spring 源码分析
-  - SpringCore
 author: fengxiutianya
 abbrlink: e7edce6c
 date: 2019-01-15 03:30:00
+updated: 2019-01-15 03:30:00
 ---
 ## 概述
 
@@ -28,9 +27,9 @@ Spring 在实现上述功能中，将整个流程分为两个阶段：容器初�
 <!-- more -->
 
 - **容器初始化阶段**：首先通过某种方式加载 Configuration Metadata (主要是依据 Resource、ResourceLoader 两个体系)，然后容器会对加载的 Configuration MetaData 进行解析和分析，并将分析的信息组装成 BeanDefinition，并将其保存注册到相应的 BeanDefinitionRegistry 中。至此，Spring IOC 的初始化工作完成。
-- **加载 bean 阶段**：经过容器初始化阶段后，应用程序中定义的bean信息已经全部加载到系统中，当我们显示或者隐式地调用 `getBean()` 时，则会触发加载bean阶段。在这阶段，容器会首先检查所请求的对象是否已经初始化完成了，如果没有，则会根据注册的bean信息实例化请求的对象，并为其注册依赖，然后将其返回给请求方。至此第二个阶段也已经完成。
+- **加载bean阶段**：经过容器初始化阶段后，应用程序中定义的bean信息已经全部加载到系统中，当我们显示或者隐式地调用 `getBean()` 时，则会触发加载bean阶段。在这阶段，容器会首先检查所请求的对象是否已经初始化完成了，如果没有，则会根据注册的bean信息实例化请求的对象，并为其注册依赖，然后将其返回给请求方。至此第二个阶段也已经完成。
 
-第一个阶段前面已经用了 10 多篇博客深入分析了（总结参考[初始化总结](taolove.top/posts/34/)）。所以从这篇开始分析第二个阶段：加载 bean 阶段。当我们显示或者隐式地调用 `getBean()` 时，则会触发加载 bean 阶段。如下：
+第一个阶段前面已经用了 10 多篇博客深入分析了（总结参考[初始化总结](/archives/573290f9.html)）。所以从这篇开始分析第二个阶段：加载 bean 阶段。当我们显示或者隐式地调用 `getBean()` 时，则会触发加载 bean 阶段。如下：
 
 ```java
 public Object getBean(String name) throws BeansException {
@@ -59,16 +58,16 @@ protected <T> T doGetBean(final String name, @Nullable final Class<T> requiredTy
     //  提取对应的名字
     final String beanName = transformedBeanName(name);
     Object bean;
-    /**
-		 * 检查缓存中或者实例工厂中是否有对应的实例
-		 * 为什么首先会使用这段代码呢 ？
-		 * 因为在创建单例bean的时候会存在依赖注入的情况，而在创建依赖的时候为了避免循环依赖
-		 * spring创建bean的原则是不等bean创建完成就会创建bean的ObjectFactor提早曝光，
-		 * （ObjectFactory用于产生对象，相当于一个创建特定对象的工厂） 也就是将ObjectFactory
-		 * 加入到缓存中，一旦下个bean创建时候需要依赖上个bean则直接使用
-		 * ObjectFactory：返回对应的object，也就是bean
-		 *
-		 */
+      /**
+        * 检查缓存中或者实例工厂中是否有对应的实例
+        * 为什么首先会使用这段代码呢
+        * 因为在创建单例bean的时候会存在依赖注入的情况，而在创建依赖的时候为了避免循环依赖
+        * spring创建bean的原则是不等bean创建完成就会创建bean的ObjectFactory提早曝光，
+        * （ObjectFactory用于产生对象，相当于一个创建特定对象的工厂） 也就是将ObjectFactory
+        * 加入到缓存中，一旦下个bean创建时候需要依赖上个bean则直接使用
+        * ObjectFactory：返回对应的object，也就是bean
+        *
+        */
     // 尝试从缓存中获取bean
     Object sharedInstance = getSingleton(beanName);
 
@@ -81,32 +80,32 @@ protected <T> T doGetBean(final String name, @Nullable final Class<T> requiredTy
              。。。省略日志
             }
         }
-        /**
-			 * 返回对应的实例，会出现以下三种情况
-			 * 1. 直接是对应的bean，这种情况可以直接返回
-			 * 2. FactoryBean的情况，这种情况下返回的不是bean本身
-			 * 		而是器创建的bean
-			 * 3. factory-method方法返回的bean，这是返回的不是bean本身
-			 * 		而是factory-method对应方法返回的bean
-			 */
+          /**
+            * 返回对应的实例，会出现以下三种情况
+            * 1. 直接是对应的bean，这种情况可以直接返回
+            * 2. FactoryBean的情况，这种情况下返回的不是bean本身
+            * 		而是器创建的bean
+            * 3. factory-method方法返回的bean，这是返回的不是bean本身
+            * 		而是factory-method对应方法返回的bean
+            */
         bean = getObjectForBeanInstance(sharedInstance, name, beanName, null);
     } else {
         /**
-			 * 只有在单例情况下才会尝试解决循环依赖，原型模式情况下不解决循环依赖，
-			 * 如果存在A中有B的属性，B中有A的属性，那么当依赖注入的时候，
-			 * 就会产生当A还未创建完的时候因为需要属性B的创建，
-			 * 此时转过去创建B，在创建B的时候，因为需要A属性，
-			 * 又转过去回创建A，造成循环依赖，也就是下面这种情况
-			 */
+            * 只有在单例情况下才会尝试解决循环依赖，原型模式情况下不解决循环依赖，
+            * 如果存在A中有B的属性，B中有A的属性，那么当依赖注入的时候，
+            * 就会产生当A还未创建完的时候因为需要属性B的创建，
+            * 此时转过去创建B，在创建B的时候，因为需要A属性，
+            * 又转过去回创建A，造成循环依赖，也就是下面这种情况
+            */
         if (isPrototypeCurrentlyInCreation(beanName)) {
             throw new BeanCurrentlyInCreationException(beanName);
         }
 
-        	/**
-			 * 先尝试从当前beanDefinitionMap中获取beanName对应的BeanDefinition，
-			 * 荣国没有，尝试从parentBeanFactory中获取，因为BeanFactory是可以
-			 * 有继承体系的。
-			 */
+      /**
+        * 先尝试从当前beanDefinitionMap中获取beanName对应的BeanDefinition，
+        * 如果没有，尝试从parentBeanFactory中获取，因为BeanFactory是可以
+        * 有继承体系的。
+        */
         BeanFactory parentBeanFactory = getParentBeanFactory();
         if (parentBeanFactory != null && !containsBeanDefinition(beanName)) {
             String nameToLookup = originalBeanName(name);
@@ -128,10 +127,10 @@ protected <T> T doGetBean(final String name, @Nullable final Class<T> requiredTy
         }
 
         try {
-            	/**
-				 * 将存储xml配置文件的GernericBeanDefinition转换为RootBeanDefinition
-				 * 如果指定BeanDefinition是子类型Bean，同时会合并父类的相关属性
-				 */
+/**
+* 将存储xml配置文件的GernericBeanDefinition转换为RootBeanDefinition
+* 如果指定BeanDefinition是子类型Bean，同时会合并父类的相关属性
+*/
             final RootBeanDefinition mbd = getMergedLocalBeanDefinition(beanName);
             checkMergedBeanDefinition(mbd, beanName, args);
 
@@ -154,9 +153,9 @@ protected <T> T doGetBean(final String name, @Nullable final Class<T> requiredTy
                     }
                 }
             }
-           		 /**
-				 * 下面就是开始进行bean的实例化
-				 */
+           /**
+            * 下面就是开始进行bean的实例化
+            */
 
             // singleton bean的创建
             if (mbd.isSingleton()) {
@@ -164,13 +163,13 @@ protected <T> T doGetBean(final String name, @Nullable final Class<T> requiredTy
                     try {
                         return createBean(beanName, mbd, args);
                     } catch (BeansException ex) {
-                        // 如果创建失败，需要移除缓存中的bean，因为在创建过程中，
-                       		 /**
-							 * 如果单例bean创建出现失败，需要移除缓存中缓存的此类型的bean
-							 * 创建失败还会存在这种类型的bean的原因是：单例bean中会存在循
-							 * 环依赖为了解决循环依赖，运行提前暴露没有完全创建成功的bean，
-							 * 所以缓存中会存在这种类型的bean，在创建失败后需要删除，。
-							 */
+// 如果创建失败，需要移除缓存中的bean，因为在创建过程中，
+/**
+* 如果单例bean创建出现失败，需要移除缓存中缓存的此类型的bean
+* 创建失败还会存在这种类型的bean的原因是：单例bean中会存在循
+* 环依赖为了解决循环依赖，运行提前暴露没有完全创建成功的bean，
+* 所以缓存中会存在这种类型的bean，在创建失败后需要删除，。
+*/
                         destroySingleton(beanName);
                         throw ex;
                     }
@@ -282,10 +281,10 @@ final String beanName = transformedBeanName(name);
 
 主要处理过程包括两步：
 
-1. 去除 FactoryBean 的修饰符。如果 name 以 “&” 为前缀，那么会去掉该 “&”，例如，`name = "&studentService"`，则会是 `name = "studentService"`。
+1. 去除FactoryBean的修饰符。如果name以“&”为前缀，那么会去掉该“&”，例如，`name = "&studentService"`，则会是 `name = "studentService"`。
 2. 取指定的 alias 所表示的最终 beanName。主要是一个循环获取 beanName 的过程，例如别名 A 指向名称为 B 的 bean 则返回 B，若别名A指向别名B，别名B指向名称为C的 bean，则返回 C。
 
-### **2.从单例 bean 缓存中获取 bean**
+### 2.从单例bean缓存中获取bean
 
 对应代码段如下：
 
@@ -306,7 +305,7 @@ if (sharedInstance != null && args == null) {
 
 我们知道单例模式的 bean 在整个过程中只会被创建一次，第一次创建后会将该 bean 加载到缓存中，后面在获取 bean 就会直接从单例缓存中获取。如果从缓存中得到了 bean，则需要调用 `getObjectForBeanInstance()` 对 bean 进行实例化处理，因为缓存中记录的是最原始的 bean 状态，我们得到的不一定是我们最终想要的 bean。比如上面说的FactoryBean。
 
-### **3.原型模式依赖检查与 parentBeanFactory**
+### 3.原型模式依赖检查与parentBeanFactory
 
 对应代码段
 
@@ -335,7 +334,7 @@ Spring只处理单例模式下得循环依赖，对于原型模式的循环依�
 
 如果容器缓存中没有相对应的 BeanDefinition 则会尝试从父类工厂（parentBeanFactory）中加载，然后再去递归调用 `getBean()`。
 
-### **4. 将存储xml配置文件中的GenericBeanDefinition转换为RootBeanDefinition**
+### 4. 将存储xml配置文件中的GenericBeanDefinition转换为RootBeanDefinition
 
 前面也说过，从xml文件中获取读取到的bean信息是存储在GenericBeanDefinition中的，但是所有的bean后续处理都是针对于RootBeanDefinition的，所以这里需要进行一个转换，转的同时如果父类Bean不为空的话，则会合并父类的属性。
 
@@ -427,7 +426,7 @@ if (mbd.isSingleton()) {
 }
 ```
 
-### **7 类型转换**
+### 7 类型转换
 
 在调用 `doGetBean()` 方法时，有一个 requiredType 参数，该参数的功能就是将返回的 bean 转换为 requiredType 类型。当然就一般而言我们是不需要进行类型转换的，也就是 requiredType 为空（比如 `getBean(String name)`），但有可能会存在这种情况，比如我们返回的 bean 类型为 String，我们在使用的时候需要将其转换为 Integer，那么这个时候 requiredType 就有用武之地了。当然我们一般是不需要这样做的。
 
