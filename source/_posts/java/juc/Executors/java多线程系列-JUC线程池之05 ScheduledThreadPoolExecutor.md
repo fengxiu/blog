@@ -9,11 +9,8 @@ categories:
   - Executors
 abbrlink: 3f86c9f8
 date: 2019-03-08 07:23:00
+updated: 2019-03-08 07:23:00
 ---
----
-# java多线程系列-JUC线程池之05 ScheduledThreadPoolExecutor
-
-## 简介
 
 自JDK1.5开始，JDK提供了ScheduledThreadPoolExecutor类来支持周期性任务的调度。在这之前的实现需要依靠Timer和TimerTask或者其它第三方工具来完成。但Timer有不少的缺陷：
 
@@ -21,6 +18,7 @@ date: 2019-03-08 07:23:00
 - 如果在执行任务期间某个TimerTask耗时较久，那么就会影响其它任务的调度；
 - Timer的任务调度是基于绝对时间的，对系统时间敏感；
 - Timer不会捕获执行TimerTask时所抛出的异常，由于Timer是单线程，所以一旦出现异常，则线程就会终止，其他任务也得不到执行。
+
 <!-- more -->
 ScheduledThreadPoolExecutor继承ThreadPoolExecutor来重用线程池的功能，它的实现方式如下：
 
@@ -42,11 +40,11 @@ ScheduledThreadPoolExecutor继承ThreadPoolExecutor来重用线程池的功能�
 
  ScheduledThreadPoolExecutor的类结构
 
-![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-172.png)
+![类图](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-172.png)
 
 ScheduledThreadPoolExecutor继承自ThreadPoolExecutor，实现了ScheduledExecutorService接口，该接口定义了schedule等任务调度的方法。
 
-同时ScheduledThreadPoolExecutor有两个重要的内部类：DelayedWorkQueue和ScheduledFutureTask。可以看到，DelayeddWorkQueue是一个阻塞队列，而ScheduledFutureTask继承自FutureTask，并且实现了Delayed接口。有关FutureTask的介绍请参考另一篇文章：[java多线程系列-JUC线程池之04 Future 和Callable](https://taolove.top/2018/07/24/juc/Executors/java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%B3%BB%E5%88%97-JUC%E7%BA%BF%E7%A8%8B%E6%B1%A0%E4%B9%8B04%20Future%20%E5%92%8CCallable/)
+同时ScheduledThreadPoolExecutor有两个重要的内部类：DelayedWorkQueue和ScheduledFutureTask。可以看到，DelayeddWorkQueue是一个阻塞队列，而ScheduledFutureTask继承自FutureTask，并且实现了Delayed接口。有关FutureTask的介绍请参考另一篇文章：[java多线程系列-JUC线程池之04 Future 和Callable](/archives/d4c4bc29.html)
 
 我们首先看一下ScheduledThreadPoolExecutor有3中构造方法：
 
@@ -71,9 +69,9 @@ public ScheduledThreadPoolExecutor(int corePoolSize,
 }
 ```
 
-因为ScheduledThreadPoolExecutor继承自ThreadPoolExecutor，所以这里都是调用的ThreadPoolExecutor类的构造方法。有关ThreadPoolExecutor可以参考这俩篇文章[java多线程系列-JUC线程池之02 ThreadPoolExecutor 执行流程分析](https://taolove.top/2018/07/23/juc/Executors/java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%B3%BB%E5%88%97-JUC%E7%BA%BF%E7%A8%8B%E6%B1%A0%E4%B9%8B02%20ThreadPoolExecutor%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/) 和[java多线程系列-JUC线程池之03 ThreadPoolExecutor 线程池的创建](https://taolove.top/2018/07/24/juc/Executors/java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%B3%BB%E5%88%97-JUC%E7%BA%BF%E7%A8%8B%E6%B1%A0%E4%B9%8B03%20ThreadPoolExecutor%20%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%84%E5%88%9B%E5%BB%BA/)
+因为ScheduledThreadPoolExecutor继承自ThreadPoolExecutor，所以这里都是调用的ThreadPoolExecutor类的构造方法。有关ThreadPoolExecutor可以参考这俩篇文章[java多线程系列-JUC线程池之02 ThreadPoolExecutor 执行流程分析](/archives/ca60f1d2.html) 和[java多线程系列-JUC线程池之03 ThreadPoolExecutor 线程池的创建](/archives/a1d13062.html)
 
-另外这里使用的是DelayedWorkQueue，使用这个的原因是DelayQueue队列中每个元素都有个过期时间，并且队列是个优先级队列，当从队列获取元素时候，只有过期元素才会出队列。具体可以参考这篇文章[并发队列-无界阻塞延时队列DelayQueue原理研究](https://taolove.top/2019/03/07/juc/collections/%E5%B9%B6%E5%8F%91%E9%98%9F%E5%88%97-%E6%97%A0%E7%95%8C%E9%98%BB%E5%A1%9E%E5%BB%B6%E6%97%B6%E9%98%9F%E5%88%97DelayQueue%E5%8E%9F%E7%90%86%E7%A0%94%E7%A9%B6/)
+另外这里使用的是DelayedWorkQueue，使用这个的原因是DelayQueue队列中每个元素都有个过期时间，并且队列是个优先级队列，当从队列获取元素时候，只有过期元素才会出队列。具体可以参考这篇文章[并发队列-无界阻塞延时队列DelayQueue原理研究](/archives/b9225de.html)
 
 下面来具体来分析是如何实现定时任务和周期性任务的调度：
 
@@ -83,26 +81,20 @@ schedule方法来进行延迟任务调度，schedule方法的代码如下：
 
 ```java
 public ScheduledFuture<?> schedule(Runnable command,
-                                   long delay,
-                                   TimeUnit unit) {
+ long delay,TimeUnit unit) {
     if (command == null || unit == null)
         throw new NullPointerException();
     RunnableScheduledFuture<?> t = decorateTask(command,
-        new ScheduledFutureTask<Void>(command, null,
-                                      triggerTime(delay, unit)));
+    new ScheduledFutureTask<Void>(command, null,triggerTime(delay, unit)));
     delayedExecute(t);
     return t;
 }
 
 
-public <V> ScheduledFuture<V> schedule(Callable<V> callable,
-                                       long delay,
-                                       TimeUnit unit) {
+public <V> ScheduledFuture<V> schedule(Callable<V> callable,long delay,TimeUnit unit) {
     if (callable == null || unit == null)
         throw new NullPointerException();
-    RunnableScheduledFuture<V> t = decorateTask(callable,
-        new ScheduledFutureTask<V>(callable,
-                                   triggerTime(delay, unit)));
+    RunnableScheduledFuture<V> t = decorateTask(callable,new ScheduledFutureTask<V>(callable,triggerTime(delay, unit)));
     delayedExecute(t);
     return t;
 }
@@ -132,7 +124,7 @@ protected <V> RunnableScheduledFuture<V> decorateTask(
 
 ### delayedExecute方法
 
-```
+```java
 private void delayedExecute(RunnableScheduledFuture<?> task) {
     // 如果线程池已经关闭，使用拒绝策略拒绝任务
     if (isShutdown())
@@ -141,9 +133,7 @@ private void delayedExecute(RunnableScheduledFuture<?> task) {
         // 添加到阻塞队列中
         super.getQueue().add(task);
         // 再一次判断线程池是否关闭，如果关闭则删除任务
-        if (isShutdown() &&
-            !canRunInCurrentRunState(task.isPeriodic()) &&
-            remove(task))
+        if (isShutdown() &&  !canRunInCurrentRunState(task.isPeriodic()) &&  remove(task))
             task.cancel(false);
         else
             // 确保线程池中至少有一个线程启动，即使corePoolSize为0
@@ -173,7 +163,7 @@ void ensurePrestart() {
 }
 ```
 
-调用了addWorker方法，可以在[java多线程系列-JUC线程池之02 ThreadPoolExecutor 执行流程分析](https://taolove.top/2018/07/23/juc/Executors/java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%B3%BB%E5%88%97-JUC%E7%BA%BF%E7%A8%8B%E6%B1%A0%E4%B9%8B02%20ThreadPoolExecutor%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/)中查看addWorker方法的介绍，线程池中的工作线程是通过该方法来启动并执行任务的。
+调用了addWorker方法，可以在[java多线程系列-JUC线程池之02 ThreadPoolExecutor 执行流程分析](/archives/ca60f1d2.html)中查看addWorker方法的介绍，线程池中的工作线程是通过该方法来启动并执行任务的。
 
 ### scheduleAtFixedRate方法
 
@@ -181,18 +171,14 @@ void ensurePrestart() {
 
 ```java
 public ScheduledFuture<?> scheduleAtFixedRate(Runnable command,
-                                              long initialDelay,
-                                              long period,
-                                              TimeUnit unit) {
+long initialDelay, long period,TimeUnit unit) {
     if (command == null || unit == null)
         throw new NullPointerException();
     if (period <= 0)
         throw new IllegalArgumentException();
     ScheduledFutureTask<Void> sft =
-        new ScheduledFutureTask<Void>(command,
-                                      null,
-                                      triggerTime(initialDelay, unit),
-                                      unit.toNanos(period));
+        new ScheduledFutureTask<Void>(command,null,
+         triggerTime(initialDelay,unit),unit.toNanos(period));
     RunnableScheduledFuture<Void> t = decorateTask(command, sft);
     sft.outerTask = t;
     delayedExecute(t);
@@ -206,18 +192,14 @@ public ScheduledFuture<?> scheduleAtFixedRate(Runnable command,
 
 ```java
 public ScheduledFuture<?> scheduleWithFixedDelay(Runnable command,
-                                                 long initialDelay,
-                                                 long delay,
-                                                 TimeUnit unit) {
+             long initialDelay, long delay,TimeUnit unit) {
     if (command == null || unit == null)
         throw new NullPointerException();
     if (delay <= 0)
         throw new IllegalArgumentException();
     ScheduledFutureTask<Void> sft =
         new ScheduledFutureTask<Void>(command,
-                                      null,
-                                      triggerTime(initialDelay, unit),
-                                      unit.toNanos(-delay));
+            null,triggerTime(initialDelay, unit), unit.toNanos(-delay));
     RunnableScheduledFuture<Void> t = decorateTask(command, sft);
     sft.outerTask = t;
     delayedExecute(t);
@@ -245,16 +227,12 @@ ScheduledFutureTask(Callable<V> callable, long ns) {
     this.sequenceNumber = sequencer.getAndIncrement();
 }
 
-
 ScheduledFutureTask(Runnable r, V result, long ns, long period) {
     super(r, result);
     this.time = ns;
     this.period = period;
     this.sequenceNumber = sequencer.getAndIncrement();
 }
-
-
-
 ```
 
 这里面有几个重要的属性，下面来解释一下：
@@ -267,7 +245,7 @@ ScheduledFutureTask(Runnable r, V result, long ns, long period) {
 
 这里的任务类型是ScheduledFutureTask，所以下面看一下ScheduledFutureTask的run方法：
 
-```
+```java
 public void run() {
     // 是否是周期性任务
     boolean periodic = isPeriodic();
@@ -296,14 +274,12 @@ public void run() {
 4. 计算下次执行该任务的具体时间；
 5. 重复执行任务。
 
-有关FutureTask的run方法可以看这篇文章[java多线程系列-JUC线程池之04 Future 和Callable](https://taolove.top/2018/07/24/juc/Executors/java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%B3%BB%E5%88%97-JUC%E7%BA%BF%E7%A8%8B%E6%B1%A0%E4%B9%8B04%20Future%20%E5%92%8CCallable/)，下面我们来说一下runAndReset方法，其实从名字就可以看出，就是运行之后，重新设置任务为初始状态，源码如下
+有关FutureTask的run方法可以看这篇文章[java多线程系列-JUC线程池之04 Future 和Callable](/archives/d4c4bc29.html)，下面我们来说一下runAndReset方法，其实从名字就可以看出，就是运行之后，重新设置任务为初始状态，源码如下
 
 ```java
     protected boolean runAndReset() {
         // 判断任务状态是否为NEW，如果不是直接返回
-        if (state != NEW ||
-            !UNSAFE.compareAndSwapObject(this, runnerOffset,
-                                         null, Thread.currentThread()))
+        if (state != NEW ||!UNSAFE.compareAndSwapObject(this, runnerOffset, null, Thread.currentThread()))
             return false;
         boolean ran = false;
         int s = state;
@@ -334,7 +310,7 @@ public void run() {
 
 ### setNextRunTime 用于设置下一次任务执行的时间
 
-```
+```java
 private void setNextRunTime() {
     long p = period;
     // 固定频率，上次执行时间加上周期时间
@@ -354,7 +330,6 @@ triggerTime方法用于获取下一次执行的具体时间：
 private long triggerTime(long delay, TimeUnit unit) {
     return triggerTime(unit.toNanos((delay < 0) ? 0 : delay));
 }
-
 
 long triggerTime(long delay) {
     return now() +
@@ -444,8 +419,7 @@ onShutdown方法是ThreadPoolExecutor中的钩子方法，在ThreadPoolExecutor�
                 RunnableScheduledFuture<?> t =
                     (RunnableScheduledFuture<?>)e;
                 // 如果有在 shutdown 后不继续的延迟任务或周期任务，则从队列中删除并取消任务
-                if ((t.isPeriodic() ? !keepPeriodic : !keepDelayed) ||
-                    t.isCancelled()) { // also remove if already cancelled
+                if ((t.isPeriodic() ? !keepPeriodic : !keepDelayed) || t.isCancelled()) { // also remove if already cancelled
                     if (q.remove(t))
                         t.cancel(false);
                 }

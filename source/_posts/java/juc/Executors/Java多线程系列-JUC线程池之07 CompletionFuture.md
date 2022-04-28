@@ -10,16 +10,19 @@ categories:
 author: zhangke
 abbrlink: 931a340
 date: 2019-01-04 16:49:00
+updated: 2019-01-04 16:49:00
 ---
 ### 概述
 1. 前言
 2. 准备工作
 3. CompleteableFuture基本使用
 4. CompletableFuture 类使用示例
-### 前言
-Java 5 并发库主要关注于异步任务的处理，它采用了这样一种模式，producer 线程创建任务并且利用阻塞队列将其传递给任务的 consumer。这种模型在 Java 7 和 8 中进一步发展，并且开始支持另外一种风格的任务执行，那就是将任务的数据集分解为子集，每个子集都可以由独立且同质的子任务来负责处理。
 
-这种风格的基础库也就是 fork/join 框架，它允许程序员规定数据集该如何进行分割，并且支持将子任务提交到默认的标准线程池中，也就是通用的**ForkJoinPool**。Java 8 中，fork/join 并行功能借助并行流的机制变得更加具有可用性。但是，不是所有的问题都适合这种风格的并行处理：所处理的元素必须是独立的，数据集要足够大，并且在并行加速方面，每个元素的处理成本要足够高，这样才能补偿建立 fork/join 框架所消耗的成本。CompletableFuture 类则是 Java 8 在并行流方面的创新。
+### 前言
+Java 5 并发库主要关注于异步任务的处理，它采用了这样一种模式，producer线程创建任务并且利用阻塞队列将其传递给任务的consumer。这种模型在Java7和8中进一步发展，并且开始支持另外一种风格的任务执行，那就是将任务的数据集分解为子集，每个子集都可以由独立且同质的子任务来负责处理。
+
+这种风格的基础库也就是fork/join框架，它允许程序员规定数据集该如何进行分割，并且支持将子任务提交到默认的标准线程池中，也就是通用的**ForkJoinPool**。Java8中，fork/join并行功能借助并行流的机制变得更加具有可用性。但是，不是所有的问题都适合这种风格的并行处理：所处理的元素必须是独立的，数据集要足够大，并且在并行加速方面，每个元素的处理成本要足够高，这样才能补偿建立 fork/join 框架所消耗的成本。CompletableFuture 类则是 Java 8 在并行流方面的创新。
+
 <!--  more -->
 
 ### 准备工作
@@ -28,7 +31,7 @@ Java 5 并发库主要关注于异步任务的处理，它采用了这样一种�
 
 #### 异步计算
 
-所谓异步调用其实就是实现一个可无需等待被调用函数的返回值而让操作继续运行的方法。在 Java 语言中，简单的讲就是另启一个线程来完成调用中的部分计算，使调用继续运行或返回，而不需要等待计算结果。但调用者仍需要取线程的计算结果。
+所谓异步调用其实就是实现一个可无需等待被调用函数的返回值而让操作继续运行的方法。在Java语言中，简单的讲就是另启一个线程来完成调用中的部分计算，使调用继续运行或返回，而不需要等待计算结果。但调用者仍需要取线程的计算结果。
 
 #### 回调函数
 
@@ -40,25 +43,25 @@ Java 5 并发库主要关注于异步任务的处理，它采用了这样一种�
 2. 提供函数实现的一方在初始化时候，将回调函数的函数指针注册给调用者；
 3. 当特定的事件或条件发生的时候，调用者使用函数指针调用回调函数对事件进行处理。
 
-回调函数通常与原始调用者处于同一层次，如图 1 所示：
-
-##### 图 1. 回调函数示例图
-
-![]()
 
 #### Future接口
 
-JDK5 新增了 Future 接口，用于描述一个异步计算的结果。虽然 Future 以及相关使用方法提供了异步执行任务的能力，但是对于结果的获取却是很不方便，只能通过阻塞或者轮询的方式得到任务的结果。阻塞的方式显然和我们的异步编程的初衷相违背，轮询的方式又会耗费无谓的 CPU 资源，而且也不能及时地得到计算结果，为什么不能用观察者设计模式呢？即当计算结果完成及时通知监听者。
+JDK5新增了Future接口，用于描述一个异步计算的结果。虽然Future以及相关使用方法提供了异步执行任务的能力，但是对于结果的获取却是很不方便，只能通过阻塞或者轮询的方式得到任务的结果。阻塞的方式显然和我们的异步编程的初衷相违背，轮询的方式又会耗费无谓的CPU资源，而且也不能及时地得到计算结果，为什么不能用观察者设计模式呢？即当计算结果完成及时通知监听者。
 
-有一些开源框架实现了我们的设想，例如 Netty 的 ChannelFuture 类扩展了 Future 接口，通过提供 addListener 方法实现支持回调方式的异步编程。Netty 中所有的 I/O 操作都是异步的,这意味着任何的 I/O 调用都将立即返回，而不保证这些被请求的 I/O 操作在调用结束的时候已经完成。取而代之地，你会得到一个返回的 ChannelFuture 实例，这个实例将给你一些关于 I/O 操作结果或者状态的信息。当一个 I/O 操作开始的时候，一个新的 Future 对象就会被创建。在开始的时候，新的 Future 是未完成的状态－－它既非成功、失败，也非被取消，因为 I/O 操作还没有结束。如果 I/O 操作以成功、失败或者被取消中的任何一种状态结束了，那么这个 Future 将会被标记为已完成，并包含更多详细的信息（例如：失败的原因）。请注意，即使是失败和被取消的状态，也是属于已完成的状态。阻塞方式的示例代码如清单 1 所示。
+有一些开源框架实现了我们的设想，例如Netty的ChannelFuture类扩展了Future接口，通过提供addListener方法实现支持回调方式的异步编程。Netty中所有的I/O操作都是异步的,这意味着任何的I/O调用都将立即返回，而不保证这些被请求的I/O操作在调用结束的时候已经完成。取而代之地，你会得到一个返回的ChannelFuture实例，这个实例将给你一些关于I/O操作结果或者状态的信息。当一个I/O操作开始的时候，一个新的Future对象就会被创建。在开始的时候，新的Future是未完成的状态－－它既非成功、失败，也非被取消，因为I/O操作还没有结束。如果I/O操作以成功、失败或者被取消中的任何一种状态结束了，那么这个Future将会被标记为已完成，并包含更多详细的信息（例如：失败的原因）。请注意，即使是失败和被取消的状态，也是属于已完成的状态。阻塞方式的示例代码如清单 1 所示。
 
 ##### 清单 1. 阻塞方式示例代码
 
 ```java
-`// Start the connection attempt.``ChannelFuture Future = bootstrap.connect(new InetSocketAddress(host, port));``// Wait until the connection is closed or the connection attempt fails.``Future.getChannel().getCloseFuture().awaitUninterruptibly();``// Shut down thread pools to exit.``bootstrap.releaseExternalResources();`
+// Start the connection attempt.
+ChannelFuture Future = bootstrap.connect(new InetSocketAddress(host, port));
+// Wait until the connection is closed or the connection attempt fails.
+Future.getChannel().getCloseFuture().awaitUninterruptibly();
+// Shut down thread pools to exit.
+bootstrap.releaseExternalResources();
 ```
 
-上面代码使用的是 awaitUninterruptibly 方法，源代码如清单 2 所示。
+上面代码使用的是awaitUninterruptibly方法，源代码如清单2所示。
 
 ##### 清单 2. awaitUninterruptibly 源代码
 
@@ -104,7 +107,7 @@ Future.addListener(new ChannelFutureListener(){
 bootstrap.releaseExternalResources();
 ```
 
-可以明显的看出，在异步模式下，上面这段代码没有阻塞，在执行 connect 操作后直接执行到** printTime("异步时间： ")**，随后 connect 完成，Future 的监听函数输出 connect 操作完成。
+可以明显的看出，在异步模式下，上面这段代码没有阻塞，在执行 connect 操作后直接执行到**printTime("异步时间")**，随后connect完成，Future的监听函数输出 connect 操作完成。
 
 非阻塞则是添加监听类 ChannelFutureListener，通过覆盖 ChannelFutureListener 的 operationComplete 执行业务逻辑。
 
@@ -120,7 +123,7 @@ bootstrap.releaseExternalResources();
 
 在Java 8中, 新增加了一个包含50个方法左右的类: [CompletableFuture](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html)，提供了非常强大的Future的扩展功能，可以帮助我们简化异步编程的复杂性，提供了函数式编程的能力，可以通过回调的方式处理计算结果，并且提供了转换和组合CompletableFuture的方法。
 
-如果想使用以前阻塞或者轮询方式来使用，依然可以通过 CompletableFuture 类来实现，因为CompleteableFuture实现了 CompletionStage 和 Future 接口方，因此也支持这种方式。
+如果想使用以前阻塞或者轮询方式来使用，依然可以通过CompletableFuture类来实现，因为CompleteableFuture实现了CompletionStage和Future 接口方，因此也支持这种方式。
 
 CompletableFuture 类声明了 CompletionStage 接口，CompletionStage 接口实际上提供了同步或异步运行计算的舞台，所以我们可以通过实现多个 CompletionStage 命令，并且将这些命令串联在一起的方式实现多个命令之间的触发。
 
@@ -148,12 +151,12 @@ CompletableFuture<Integer> future = CompletableFuture.supplyAsync(() -> {
 
 // get必须要捕捉异常，对异常进行处理
   try {
-            future.get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
+        future.get();
+    } catch (InterruptedException e) {
+        e.printStackTrace();
+    } catch (ExecutionException e) {
+        e.printStackTrace();
+    }
 ```
 
 尽管Future可以代表在另外的线程中执行的一段异步代码，但是你还是可以在本身线程中执行：

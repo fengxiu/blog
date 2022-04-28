@@ -10,10 +10,8 @@ categories:
 author: fengxiutianya
 abbrlink: e32c9fec
 date: 2019-03-04 07:44:00
+updated: 2019-03-04 07:44:00
 ---
-# ConcurrentHashMap源码分析
-
-### 概述
 
 本篇文章将要介绍的是ConcurrentHashMap，你可以将这个理解为线程安全的HashMap，但是他不是想HashTable一样对所有的方法都是用Synchronize来保证线程安全。至于是如何保证线程安全的，下文会对此进行详细的介绍，也是我们研究的主要点之一。
 
@@ -43,13 +41,13 @@ transient volatile Node<K,V>[] table;
 private transient volatile Node<K,V>[] nextTable;
 ```
 
-这是一个连接表，用于哈希表扩容，扩容完成后会被重置为 null。换句话说，当这个不为空的时候，也就是表示当前Hash表正在进行扩容
+这是一个连接表，用于哈希表扩容，扩容完成后会被重置为null。换句话说，当这个不为空的时候，也就是表示当前Hash表正在进行扩容
 
 ```java
 private transient volatile long baseCount;
 ```
 
-该属性保存着整个哈希表中存储的所有的结点的个数总和，有点类似于 HashMap 的 size 属性。
+该属性保存着整个哈希表中存储的所有的结点的个数总和，有点类似于HashMap的size属性。
 
 ```java
 private transient volatile int sizeCtl;
@@ -64,9 +62,9 @@ private transient volatile int sizeCtl;
 
 该属性的使用还是有点复杂的，在我们分析扩容源码的时候再给予更加详尽的描述，此处了解其可取的几个值都分别代表着什么样的含义即可。
 
-> 构造函数的实现也和HashMap 的实现类似，主要就是根据给定的参数来设置拉链法中桶的数量，不过有一点需要注意就是，每次只能是2的n次方，其他的就没什么特殊的，贴出源码供大家比较。
+构造函数的实现也和HashMap的实现类似，主要就是根据给定的参数来设置拉链法中桶的数量，不过有一点需要注意就是，每次只能是2的n次方，其他的就没什么特殊的，贴出源码供大家比较。
 
-```
+```java
 public ConcurrentHashMap(int initialCapacity) {
     if (initialCapacity < 0)
         throw new IllegalArgumentException();
@@ -77,11 +75,11 @@ public ConcurrentHashMap(int initialCapacity) {
 }
 ```
 
-##  2. put 方法实现并发添加
+## put方法实现并发添加
 
-下面我们主要来分析下 ConcurrentHashMap 的一个核心方法 put，我们也会一并解决掉该方法中涉及到的扩容、辅助扩容，初始化哈希表等方法。
+下面我们主要来分析下ConcurrentHashMap的一个核心方法put，我们也会一并解决掉该方法中涉及到的扩容、辅助扩容，初始化哈希表等方法。
 
-对于 HashMap 来说，多线程并发添加元素会导致数据丢失等并发问题，那么 ConcurrentHashMap 又是如何做到并发添加的呢？
+对于HashMap来说，多线程并发添加元素会导致数据丢失等并发问题，那么ConcurrentHashMap又是如何做到并发添加的呢？
 
 put操作的源码如下:
 
@@ -898,7 +896,7 @@ public void clear() {
 
 3. key-value不允许为空
 
-   这个只要是线程安全的HashMap都会这样要求，因为获取到
+   这个只要是线程安全的HashMap都会这样要求，因为获取到key值对应的value是null，可能会有俩层含义，不存在key或者key值对应的value为空，对于HashMap是可以分俩次判断，它不保证线程安全。但是对于ConcurrentHashMap来说，因为他是线程安全的，如果分俩次查询，需要保证原子性，则需要加锁，但是这样会降低ConcurrentHashMap的性能，毕竟null值也没什么作用，还不如在最开始就禁止。
 
 
 

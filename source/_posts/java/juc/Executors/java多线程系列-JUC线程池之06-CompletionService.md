@@ -6,13 +6,17 @@ categories:
   - juc
   - Executors
 date: 2019-07-08 20:09:20
+updated: 2019-07-08 20:09:20
 tags:
   - 线程池
   - JUC
 ---
 ## 简介
-前面提过，如果Future集合用于存放执行结果，执行任务，最后遍历Future集合获取结果；因为`Future.get()`方法是阻塞的，因此不能及时获取已完成任务的执行结果。所以JUC提供了一个`ExecutorService`来结果结果的取出，使得任务的提交和结果的获取都能做到异步，从而实现真正的异步。
+
+前面提过，如果Future集合用于存放执行结果，执行任务，最后遍历Future集合获取结果；因为`Future.get()`方法是阻塞的，因此不能及时获取已完成任务的执行结果。所以JUC提供了一个`ExecutorService`来获取结果，使得任务的提交和结果的获取都能做到异步，从而实现真正的异步。
+
 <!-- more -->
+
 ## 简单示例
 
 下面是一个使用ExecutorService的简单demo，这个例子演示了`poll`方法的使用，方法poll的作用是获取并移除表示下一个已完成任务的Future，如果不存在这样的任务，则返回null，方法poll是无阻塞的。
@@ -41,7 +45,7 @@ public class ExecutorServiceStudy {
 下面是我从javaDoc，翻译的ExecutorService的官方解释，如果您的英文比较好，可以直接看英文原文，毕竟我的英语也只是个二把刀
 
 ``` txt
-一个Service用于解耦任务的异步提交和任务完成结果的获取。生产者提交任务执行。消费者取出完成的任务并按照完成的顺序来获取结果。（注意这里的完成顺序不一定是任务的提交顺序）。例如，CompletionService可用于管理异步I / O，其中执行读取的任务在程序或系统的某个部分中提交，然后在读取完成时在程序的不同部分中执行，可能在不同于他们提交的顺序。通常，CompletiongService依赖一个单独饿线程池去执行任务，所有，CompletionService仅仅管理内部的任务完成队列。ExecutorCompletionService是它的一个默认实现。
+一个Service用于解耦任务的异步提交和任务完成结果的获取。生产者提交任务执行。消费者取出完成的任务并按照完成的顺序来获取结果。（注意这里的完成顺序不一定是任务的提交顺序）。例如，CompletionService可用于管理异步I/O，其中执行读取的任务在程序或系统的某个部分中提交，然后在读取完成时在程序的不同部分中执行，可能在不同于他们提交的顺序。通常，CompletiongService依赖一个单独的线程池去执行任务，所有CompletionService仅仅管理内部的任务完成队列。ExecutorCompletionService是它的一个默认实现。
 ```
 
 我们首先看看ExecutorService这个接口的定义：
@@ -77,6 +81,7 @@ public interface CompletionService<V> {
 ``` java
     // 线程池，用于执行任务
     private final Executor executor;
+
     // 存储是AbstractExecutorService的线程池，用于创建任务
     private final AbstractExecutorService aes;
 
@@ -89,7 +94,12 @@ public interface CompletionService<V> {
             super(task, null);
             this.task = task;
         }
-        protected void done() { completionQueue.add(task); }
+        // 扩展done方法，存储结果
+        protected void done() {
+
+         completionQueue.add(task);
+
+        }
         private final Future<V> task;
     }
 

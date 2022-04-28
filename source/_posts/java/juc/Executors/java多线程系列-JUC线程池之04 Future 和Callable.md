@@ -1,5 +1,5 @@
 ---
-title: java多线程系列-JUC线程池之04 Future 和Callable
+title: java多线程系列-JUC线程池之04 Future和Callable以及FutureTask实现
 tags:
   - 线程池
   - JUC
@@ -9,6 +9,7 @@ categories:
   - Executors
 abbrlink: d4c4bc29
 date: 2018-07-24 15:12:00
+updated: 2018-07-24 15:12:00
 ---
 ### 概要
 
@@ -21,7 +22,6 @@ date: 2018-07-24 15:12:00
 Executor框架使用Runnable作为其基本的任务表示形式。Runnable是一种有很大局限的抽象，虽然run能写入到日志文件或者将结果放入某个共享的数据结构，但它不能返回一个值或抛出一个受检查的异常。
 
 许多任务实际上都是存在延迟的计类如执行数据库插叙、网络上获取资源，或者计算某个复杂的功能，对于这些任务，Callable是一种更好的抽象：他认为主入口点（即call）将返回一个值，并可能抛出一个异常。
-<!-- more -->
 
 在Executor中包含了一些辅助的方法能将其他类型的任务封装为一个Callabe，其实主要是Runnable类型对象。
 
@@ -29,9 +29,11 @@ Runnable和Callable描述的都是抽象的计算任务。这些任务通常是�
 
 Future表示一个任务的生命周期，并定义相应的方法来判断是否已经完成或取消，以及获取任务的结果和取消任务等。并且在Future规范中的隐含意义是，任务声明周期只能前进，不能后退，就像ExecutorService的生命周期一样。当某个任务完成后，他就永远停留在完成状态上。
 
-**1. Callable**
+<!-- more -->
 
-Callable 是一个接口，它只包含一个call()方法。Callable是一个返回结果并且可能抛出异常的任务。为了便于理解，我们可以将Callable比作一个Runnable接口，而Callable的call()方法则类似于Runnable的run()方法。
+**Callable**
+
+Callable是一个接口，它只包含一个call()方法。Callable是一个返回结果并且可能抛出异常的任务。为了便于理解，我们可以将Callable比作一个Runnable接口，而Callable的call()方法则类似于Runnable的run()方法。
 
 Callable的源码如下：
 
@@ -43,7 +45,8 @@ public interface Callable<V> {
 
 **说明**：从中我们可以看出Callable支持泛型。 
 
-### 2. Future
+
+**Future**
 
 Future 是一个接口。它用于表示异步计算的结果。提供了检查计算是否完成的方法，以等待计算的完成，并获取计算的结果。
 
@@ -69,7 +72,7 @@ V  get(long timeout, TimeUnit unit)
 }
 ```
 
-### 2. ThreadPoolExecutor中submit分析
+### ThreadPoolExecutor中submit分析
 
 前面我们已经对ThreadPoolExecutor中execute进行了分析，在execute中执行的任务是没有返回结果。这在很大程度上限制了这个方法的使用，因此在ExecutorService中提供了submit方法，可以在任务执行完成后返回结果，这个方法有三个重载方法，源码如下：
 
@@ -117,11 +120,11 @@ protected <T> RunnableFuture<T> newTaskFor(Callable<T> callable) {
 
 这个方法是将提供的Runnable和Callable接口封装在FutureTask内，然后返回一个RunnableFuture对象，事实上，FutureTask实现了RunnablFuture这个接口，下面我们来具体看一下`FutureTask`
 
-###3.  FutureTask源码分析
+### FutureTask源码分析
 
 Future继承体系如下
 
-![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-170.png)
+![futuretask](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-170.png)
 
 从上面可以看出FutureTask实现了RunnableFuture，而这个接口就是讲Future和Runnable俩个接口集成在一起。所以上面newTaskFor方法返回RunnableFuture，这也体现了面向接口编程，方便以后进行扩展。
 
@@ -146,7 +149,7 @@ private volatile WaitNode waiters;
 ```java
 NEW      ：任务新创建状态   
 COMPLETING  ：任务完成状态
-NORMAL 		：正常完成状态
+NORMAL      ：正常完成状态
 EXCEPTIONAL ：异常完成状态
 CANCELLED    ：取消状态
 INTERRUPTING ：正在中断状态
@@ -155,7 +158,7 @@ INTERRUPTED  ：已经被中断状态
 
 状态只能从一个状态转变到另外一个状态，不能后退，状态的转换大致上有以下几种：
 
-```
+```java
 NEW -> COMPLETING -> NORMAL
 NEW -> COMPLETING -> EXCEPTIONAL
 NEW -> CANCELLED
@@ -174,7 +177,7 @@ public FutureTask(Callable<V> callable) {
 }
 
 public FutureTask(Runnable runnable, V result) {
-	//将给定的runnable接口封装成Callable类，
+    //将给定的runnable接口封装成Callable类，
    this.callable = Executors.callable(runnable, result);
    this.state = NEW;       // ensure visibility of callable
 }
@@ -188,8 +191,7 @@ public FutureTask(Runnable runnable, V result) {
 public void run() {
     //如果当前状态不处于NEW状态，则直接返回，
     if (state != NEW ||
-       !UNSAFE.compareAndSwapObject(this, runnerOffset,
-                                    null, Thread.currentThread()))
+       !UNSAFE.compareAndSwapObject(this, runnerOffset,null, Thread.currentThread()))
        return;
     try {
        // 将callable对象赋值给c。
@@ -246,8 +248,7 @@ protected void setException(Throwable t) {
 
 其实方法大体上是类似的，首先通过CAS变量设置任务状态，并设置执行的结果或异常到outcome中，然后唤醒所有的等待的线程，这个等待的线程是通过future.get()获取任务结果而造成的等待，这里我们先说这个方法，然后在来说唤醒等待。
 
- FutureTask的get函数源码
-
+**FutureTask的get函数源码**
 get是用来得到任务执行的结果，如果任务没有执行完成，就会暂停当前任务的执行：
 
 ```java
@@ -305,8 +306,7 @@ private int awaitDone(boolean timed, long nanos)
            q = new WaitNode();
        //将等待节点插入等待队列
        else if (!queued)
-           queued = UNSAFE.compareAndSwapObject(this, waitersOffset,
-                                                q.next = waiters, q);
+           queued = UNSAFE.compareAndSwapObject(this, waitersOffset,q.next= waiters, q);
        //如果是有等待时间限制
        else if (timed) {
            nanos = deadline - System.nanoTime();
@@ -353,7 +353,6 @@ private void finishCompletion() {
    //这个方法是一个空方法，如果希望任务执行完成后调用一个类似于callback回调，继承此类，
    //然后封装此方法
    done();
-
    callable = null;        // to reduce footprint
 }
 ```
@@ -429,4 +428,9 @@ public class ExecutorStudy {
 
 ### 总结
 
-我们来看看FutureTask的执行流程，首先创建一个任务，并将任务放置在队列中，等待被运行，这时任务处于NEW状态，如果任务执行完成，则进入完成状态，否则进入其他的状态。如果在执行期间，调用了get方法，线程就会被阻塞，让出cpu等待任务执行完成之后被唤醒。当然还有可能出现异常被唤醒。这就不在仔细解释。具体的可以看上面的流程分析。
+1. 通过Runable和Callable创建FutureTask对象
+2. 通过submit方法，提交任务执行，通过get调用获取结果
+   1. 如果已经完成，包括异常和正常结束，则直接返回
+   2. 如果调用get的时候，任务已经在执行，则通过Thread.yield让出线程，等待任务执行完成，不进入阻塞队列
+   3. 如果等待执行，则将当前线程插入阻塞队列，等待被唤醒
+3. 任务执行完成，设置异常或者完成状态，并返回结果，同时唤醒所有阻塞的线程。

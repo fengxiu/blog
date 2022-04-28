@@ -9,32 +9,32 @@ categories:
   - Executors
 abbrlink: 984191f2
 date: 2018-07-23 14:07:00
+updated: 2018-07-23 14:07:00
 ---
-## 概要
-本文只是先简单的介绍下线程池的整体架构，对整体有一个清晰的认识，接着演示一个简单的线程池使用案例。
-1. 线程池整体架构介绍
-2. 简单示例
-<!-- more -->
 
-## 线程池整体架构介绍
+本文只是先简单的介绍下线程池的整体架构，对整体有一个清晰的认识，接着演示一个简单的线程池使用案例。
 
 线程池类图如下：
-![Executor 框架](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-345.png)
 
+![Executor 框架](https://cdn.jsdelivr.net/gh/fengxiu/img/20220427111733.png)
+
+<!-- more -->
 ### Executor
 
-Executor将任务的执行和任务的创建分离开来。他提供了执行的接口，是来执行任务的。只要提交的任务实现了Runnable接口，就可以将此任务交给Executor来执行，这个接口只包含一个函数，代码如下:
+Executor执行提交的任务，解耦任务的执行和创建，它提供了执行的接口，是来执行任务的。只要提交的任务实现了Runnable接口，就可以将此任务交给Executor来执行，而不用在向之前一样显示的创建线程来执行任务。
+
+这个接口只包含一个函数，代码如下:
 
  ``` java
  public interface Executor{
      //执行提交的任务
-     void	execute(Runnable command)
+     void execute(Runnable command)
  }
  ```
 
 ### ExecutorService
 
-虽然可以通过Executor来实现任务的提交与运行。通常Executor的实现通常会创建线程来执行任务。但JVM只有在所有非守护线程全部终止后才会退出，因此如果无法正确的关闭Executor，那么JVM将无法结束。此外我们还希望线程池有一些关闭线程池，批量提交任务等功能，这个Executor是无法做的。因此使用ExecutorService接口来丰富线程池的功能，但是为什么这么设计，设计的合理性我自己看来是不合理的，如果你觉得我说的不对，可以在下面评论区评论发表意见。
+通过Executor来实现任务的提交与运行，Executor会创建线程来执行任务。但JVM只有在所有非守护线程全部终止后才会退出，因此如果无法正确的关闭Executor，那么JVM将无法结束。此外我们还希望线程池有一些关闭线程，批量提交任务等功能，这个Executor是无法做的。因此使用ExecutorService接口来丰富线程池的功能，但是为什么这么设计，设计的合理性我自己看来是不合理的，如果你觉得我说的不对，可以在下面评论区评论发表意见。
 ExecutorService源码如下：
 
 ```java
@@ -69,7 +69,7 @@ Future<? submit(Runnable task)
 1. 直接关闭，相当于断开电源
 2. 执行完所有当前线程上执行的任务，不在接收新的任务。然后关闭
 
-Executor接口定义的方法不足以满足这些要求的实现，所以有了ExecutorService接口。添加了一些用于生命周期管理的方法（同时还有一些用于任务提交的便利方法）。
+Executor接口定义的方法不足以满足这些要求的实现，所以有了ExecutorService接口，添加了一些用于生命周期管理的方法（同时还有一些用于任务提交的便利方法）。
 
 ExecutorService的生命周期有三种状态：运行、关闭和已终止。
 
@@ -88,7 +88,6 @@ ThreadPoolExecutor就是大名鼎鼎的"线程池"，它继承于AbstractExecuto
 ### ScheduledExecutorService
 
 ScheduledExecutorService是一个接口，它继承于于ExecutorService。它提供了**延时**和**周期执行**功能的ExecutorService。可以取代原有的定时任务类Timer。 ScheduledExecutorService提供了相应的函数接口，可以安排任务在给定的延迟后执行，也可以让任务周期的执行。
-
 **ScheduledExecutorService函数列表**
 
 ````Java
