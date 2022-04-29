@@ -203,5 +203,6 @@ a
 默认情况下，InnoDB不会回滚超时引发的错误异常，而等待超时这个异常会抛出给用户，让用户来觉得是commit还是rollback。
 
 ## 参考
+
 1. MySQL技术内幕(InnoDB存储引擎)第2版
 2. [Innodb锁机制：Next-Key Lock 浅谈](https://www.cnblogs.com/zhoujinyi/p/3435982.html)

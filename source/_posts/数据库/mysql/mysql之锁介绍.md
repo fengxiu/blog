@@ -12,7 +12,6 @@ categories:
 
 本文还未整理完成，目前主要整理的是mysql中锁的种类，以及基本的使用方式。
 
-
 ## 一致性读
 
 事务利用MVCC进行操作称为一致性读（Consistent Rcad)。或者一致性无锁读(有的资料也称之为快照读)。所有普通的SELECT语句在READ COMMITED、

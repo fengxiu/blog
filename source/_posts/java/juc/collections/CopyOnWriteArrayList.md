@@ -10,19 +10,21 @@ categories:
 author: fengxiutianya
 abbrlink: 843bee8d
 date: 2019-03-07 03:07:00
+updated: 2019-03-07 03:07:00
 ---
-# CopyOnWriteArrayList
 
 ## 概述
 
 Copy-On-Write简称COW，是一种用于程序设计中的优化策略。其基本思路是，从一开始大家都在共享同一个内容，当某个人想要修改这个内容的时候，才会真正把内容Copy出去形成一个新的内容然后再改，这是一种延时懒惰策略。从JDK1.5开始Java并发包里提供了两个使用CopyOnWrite机制实现的并发容器,它们是CopyOnWriteArrayList和CopyOnWriteArraySet。CopyOnWrite容器非常有用，可以在非常多的并发场景中使用到。
-<!-- more -->
+
 
 1. CopyOnWriteArrayList简介
 2. CopyOnWriteArrayList源码分析
 3. CopyOnWriteArrayList简单使用
 4. CopyOnWriteArrayList使用注意事项
 5. CopyOnWriteArraySet分析
+
+<!-- more -->
 
 ## 1. CopyOnWriteArrayList简介
 
