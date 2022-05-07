@@ -5,13 +5,11 @@ tags:
 categories:
   - java
   - spring
-
 author: fengxiutianya
 abbrlink: e84d4767
 date: 2019-01-14 04:47:00
 updated: 2019-01-14 04:47:00
 ---
-# spring源码解析之 04(下)获取验证模型
 
 ## 概述
 

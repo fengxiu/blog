@@ -1,21 +1,22 @@
 ---
-title: spring源码解析之 18parentBeanFactory 与依赖处理
+title: spring源码解析之 18 parentBeanFactory与依赖处理
 tags:
   - spring源码解析
 categories:
   - java
   - spring
-
 author: fengxiutianya
 abbrlink: 86d74f07
 date: 2019-01-15 03:32:00
+updated: 2019-01-15 03:32:00
 ---
-从上篇文章中我们可以得知，如果从单例缓存中没有获取到单例 bean，则会说明是下面俩种情况发生：
+从上篇文章中我们可以得知，如果从单例缓存中没有获取到单例bean，则会说明是下面俩种情况发生：
 
 1. 该bean的scope是singleton ,但是没有初始化完成
 2. 该bean的scope不是singleton
 
 本篇文章就来进行这部分的分析，这里先讲循环依赖检测、parentBeanFactory与依赖处理，剩下的scope处理，主要在下一篇文章中讲解，本文所分析的具体源码如下：
+
 <!-- more -->
 
 ```java
@@ -33,7 +34,7 @@ if (isPrototypeCurrentlyInCreation(beanName)) {
 // 则会尝试从parentBeanFactory中检测
 BeanFactory parentBeanFactory = getParentBeanFactory();
 
-// containsBeanDefinition 用于检测当前BeanFactory
+// containsBeanDefinition用于检测当前BeanFactory
 // 是否包含beanName的BeanDefinition
 if (parentBeanFactory != null && !containsBeanDefinition(beanName)) {
     // 递归到BeanFactory中寻找,这点和下面的创建过程大体类型，只不过委托给父类来查找
@@ -84,15 +85,15 @@ try {
 
 这段代码主要处理流程如下：
 
-1. 检测当前beanName对应的bean是否是Prototype循环依赖，如果是，则抛出 BeanCurrentlyInCreationException 异常。
-2. 如果beanDefinitionMap中不存在beanName对应的BeanDefinition，前面说过BeanFactory是有继承体系的，可以从父BeanFactory中获取，也即是上面尝试从 parentBeanFactory 中加载。
+1. 检测当前beanName对应的bean是否是Prototype循环依赖，如果是，则抛出BeanCurrentlyInCreationException异常。
+2. 如果beanDefinitionMap中不存在beanName对应的BeanDefinition，前面说过BeanFactory是有继承体系的，可以从父BeanFactory中获取，也即是上面尝试从parentBeanFactory中加载。
 3. 判断是否为类型检查，如果不是，需要标记处理。
-4. 从mergedBeanDefinitions中获取beanName对应的RootBeanDefinition，如果这个BeanDefinition是子 Bean的话，则会合并父类的相关属性。
+4. 从mergedBeanDefinitions中获取beanName对应的RootBeanDefinition，如果这个BeanDefinition是子Bean的话，则会合并父类的相关属性。
 5. 依赖处理，这里的依赖是指depend-on属性指定的依赖，和后面说道的内部依赖不一样。
 
-### **检测当前bean是否是Prototype类型的循环依赖**
+### 检测当前bean是否是Prototype类型的循环依赖
 
-在前面就提过，Spring 只解决单例模式下的循环依赖，对于原型模式的循环依赖则是抛出 BeanCurrentlyInCreationException 异常，所以首先检查该 beanName 是否处于原型模式下的循环依赖。如下：
+在前面就提过，Spring只解决单例模式下的循环依赖，对于原型模式的循环依赖则是抛出BeanCurrentlyInCreationException异常，所以首先检查该beanName是否处于原型模式下的循环依赖。如下：
 
 ```java
 if (isPrototypeCurrentlyInCreation(beanName)) {
@@ -100,7 +101,7 @@ if (isPrototypeCurrentlyInCreation(beanName)) {
 }
 ```
 
-调用 `isPrototypeCurrentlyInCreation()` 判断当前 bean 是否正在创建，如下：
+调用`isPrototypeCurrentlyInCreation()`判断当前bean是否正在创建，如下：
 
 ```java
 protected boolean isPrototypeCurrentlyInCreation(String beanName) {
@@ -111,7 +112,7 @@ protected boolean isPrototypeCurrentlyInCreation(String beanName) {
 }
 ```
 
-其实检测逻辑和单例模式一样，一个集合存放着正在创建的bean，从该集合中进行判断即可，只不过单例模式的集合为Set全局共享 ，而原型模式的则是ThreadLocal，线程私有，这也比较好理解，因为原型毕竟在需要的时候在创建，而且每个线程处理不同的逻辑，所以需要不同的对象，因此用ThreadLocal拉保存当前线程对应的正在创建的bean实例。prototypesCurrentlyInCreation 定义如下：
+其实检测逻辑和单例模式一样，一个集合存放着正在创建的bean，从该集合中进行判断即可，只不过单例模式的集合为Set全局共享，而原型模式的则是ThreadLocal，线程私有，这也比较好理解，因为原型毕竟在需要的时候在创建，而且每个线程处理不同的逻辑，所以需要不同的对象，因此用ThreadLocal拉保存当前线程对应的正在创建的bean实例。prototypesCurrentlyInCreation定义如下：
 
 ```java
 private final ThreadLocal<Object> prototypesCurrentlyInCreation = 
@@ -120,9 +121,9 @@ private final ThreadLocal<Object> prototypesCurrentlyInCreation =
 
 这里只是判断，你可能会疑惑这是什么时候加入进去的。后面再讲创建不同作用域的bean实例时会说到。
 
-### **检查父类 BeanFactory**
+### 检查父类BeanFactory
 
-若 `containsBeanDefinition` 中不存在 beanName 相对应的 BeanDefinition，则从 parentBeanFactory 中获取，这个是因为BeanFactory是可以有集成体系。源码如下：
+若 `containsBeanDefinition` 中不存在beanName相对应的BeanDefinition，则从parentBeanFactory中获取，这个是因为BeanFactory是可以有集成体系。源码如下：
 
 ```java
 // 获取 parentBeanFactory
@@ -159,11 +160,11 @@ protected String originalBeanName(String name) {
 }
 ```
 
-`transformedBeanName()` 是对 name 进行转换，获取真正的 beanName，因为我们传递的可能是 aliasName（这个过程在上一篇博客中分析 `transformedBeanName()` 有详细说明），如果 name 是以 “&” 开头的，则加上 “&”，因为在 `transformedBeanName()` 将 “&” 去掉了，这里加上。
+`transformedBeanName()` 是对 name 进行转换，获取真正的 beanName，因为我们传递的可能是 aliasName（这个过程在上一篇博客中分析 `transformedBeanName()` 有详细说明），如果 name 是以 “&” 开头的，则加上 “&”，因为在 `transformedBeanName()` 将“&” 掉了，这里加上。
 
-### **类型检查**
+### 类型检查
 
-参数 typeCheckOnly 是用来判断调用 `getBean()` 是否为类型检查获取 bean。如果不是仅做类型检查则是创建bean，则需要调用 `markBeanAsCreated()` 记录：
+参数 typeCheckOnly 是用来判断调用`getBean()`是否为类型检查获取bean。如果不是仅做类型检查则是创建bean，则需要调用`markBeanAsCreated()`记录：
 
 ```java
 protected void markBeanAsCreated(String beanName) {
@@ -184,7 +185,7 @@ protected void markBeanAsCreated(String beanName) {
 }
 ```
 
-### **获取 RootBeanDefinition**
+### 获取RootBeanDefinition
 
 ```java
 final RootBeanDefinition mbd = getMergedLocalBeanDefinition(beanName);
@@ -208,7 +209,7 @@ protected RootBeanDefinition getMergedLocalBeanDefinition(String beanName)
 
 首先直接从mergedBeanDefinitions缓存中获取相应的RootBeanDefinition，如果存在则直接返回，不存在则调用 `getMergedBeanDefinition()` 获取RootBeanDefinition，若获取的 BeanDefinition 为子 BeanDefinition，则需要合并父类的相关属性。具体的合并过程这里就不细说，如果你感兴趣的话可以仔细研究。
 
-### **处理depend-on依赖**
+### 处理depend-on依赖
 
 如果一个bean有依赖bean的话，那么在初始化该bean时是需要先初始化它所依赖的 bean。
 
@@ -236,7 +237,7 @@ if (dependsOn != null) {
 }
 ```
 
-这段代码逻辑是：通过迭代的方式依次对依赖 bean 进行检测、校验，如果检测通过，则调用 `getBean()` 实例化依赖 bean。
+这段代码逻辑是：通过迭代的方式依次对依赖bean进行检测、校验，如果检测通过，则调用`getBean()`实例化依赖bean。
 
 `isDependent()` 是校验是否存在循环依赖，也就是A->B，B->C，C->A这种情况。
 
@@ -248,7 +249,7 @@ protected boolean isDependent(String beanName, String dependentBeanName) {
 }
 ```
 
-同步加锁给 dependentBeanMap 对象，然后调用 `isDependent()` 校验。dependentBeanMap 对象保存的是依赖之间的映射关系：beanName – > 依赖beanName的集合
+同步加锁给dependentBeanMap对象，然后调用`isDependent()`校验。dependentBeanMap对象保存的是依赖之间的映射关系：beanName–>依赖beanName的集合
 
 ```java
 private boolean isDependent(String beanName, String dependentBeanName,
@@ -277,7 +278,7 @@ private boolean isDependent(String beanName, String dependentBeanName,
 }
 ```
 
-如果不存在循环依赖，则调用 `registerDependentBean()` 将该依赖进行记录，便于在销毁依赖bean之前对其进行销毁。
+如果不存在循环依赖，则调用`registerDependentBean()`将该依赖进行记录，便于在销毁依赖bean之前对其进行销毁。
 
 ```java
 public void registerDependentBean(String beanName, String dependentBeanName) {
@@ -303,6 +304,6 @@ public void registerDependentBean(String beanName, String dependentBeanName) {
 
 其实将就是该映射关系保存到两个集合中：dependentBeanMap、dependenciesForBeanMap。
 
-最后调用 `getBean()` 实例化依赖 bean。
+最后调用`getBean()`实例化依赖bean。
 
-至此，加载 bean 的第二个部分也分析完毕了，下篇开始分析第三个部分：不同作用域bean的创建。
+至此，加载bean的第二个部分也分析完毕了，下篇开始分析第三个部分：不同作用域bean的创建。

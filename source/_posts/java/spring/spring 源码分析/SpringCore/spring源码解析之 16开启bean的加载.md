@@ -18,12 +18,11 @@ updated: 2019-01-15 03:30:00
 ## spring Ioc功能简介
 
 ![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-12.png)
-
 (此图来自《Spring 揭秘》)
 
-Spring IOC 容器所起的作用如上图所示，它会以某种方式加载 Configuration Metadata，将其解析注册到容器内部，然后回根据这些信息绑定整个系统的对象，最终组装成一个可用的基于轻量级容器的应用系统。
+Spring IOC 容器所起的作用如上图所示，它会以某种方式加载Configuration Metadata，将其解析注册到容器内部，然后回根据这些信息绑定整个系统的对象，最终组装成一个可用的基于轻量级容器的应用系统。
 
-Spring 在实现上述功能中，将整个流程分为两个阶段：容器初始化阶段和加载bean 阶段。
+Spring在实现上述功能中，将整个流程分为两个阶段：容器初始化阶段和加载bean阶段。
 <!-- more -->
 
 - **容器初始化阶段**：首先通过某种方式加载 Configuration Metadata (主要是依据 Resource、ResourceLoader 两个体系)，然后容器会对加载的 Configuration MetaData 进行解析和分析，并将分析的信息组装成 BeanDefinition，并将其保存注册到相应的 BeanDefinitionRegistry 中。至此，Spring IOC 的初始化工作完成。
@@ -41,20 +40,19 @@ public Object getBean(String name) throws BeansException {
 
 - name：要获取 bean 的名字
 - requiredType：要获取 bean 的类型
-- args：创建 bean 时传递的参数。这个参数仅限于创建bean时使用
+- args：创建bean时传递的参数。这个参数仅限于创建bean时使用
 - typeCheckOnly：是否为类型检查,如果为类型检查，可以不创建bean
 
 下面我们对doGetBean进行分析
 
-## spring 获取bean流程及源码分析
+## spring获取bean流程及源码分析
 
 代码有点长，最好复制到编辑器中查看：
 
 ```java
 @SuppressWarnings("unchecked")
 protected <T> T doGetBean(final String name, @Nullable final Class<T> requiredType,
-                          @Nullable final Object[] args, boolean typeCheckOnly)
-        throws BeansException {
+                          @Nullable final Object[] args, boolean typeCheckOnly) throws BeansException {
     //  提取对应的名字
     final String beanName = transformedBeanName(name);
     Object bean;
@@ -127,17 +125,17 @@ protected <T> T doGetBean(final String name, @Nullable final Class<T> requiredTy
         }
 
         try {
-/**
-* 将存储xml配置文件的GernericBeanDefinition转换为RootBeanDefinition
-* 如果指定BeanDefinition是子类型Bean，同时会合并父类的相关属性
-*/
+        /**
+          * 将存储xml配置文件的GernericBeanDefinition转换为RootBeanDefinition
+          * 如果指定BeanDefinition是子类型Bean，同时会合并父类的相关属性
+          */
             final RootBeanDefinition mbd = getMergedLocalBeanDefinition(beanName);
             checkMergedBeanDefinition(mbd, beanName, args);
 
-         	   /**
-				 * 若存在依赖则需要实例化依赖的bean
-				 * 这里的依赖是指dependOn 属性中指定的依赖
-				 */
+     	   /**
+			 * 若存在依赖则需要实例化依赖的bean
+			 * 这里的依赖是指dependOn属性中指定的依赖
+			 */
             String[] dependsOn = mbd.getDependsOn();
             if (dependsOn != null) {
                 for (String dep : dependsOn) {
@@ -156,20 +154,19 @@ protected <T> T doGetBean(final String name, @Nullable final Class<T> requiredTy
            /**
             * 下面就是开始进行bean的实例化
             */
-
             // singleton bean的创建
             if (mbd.isSingleton()) {
                 sharedInstance = getSingleton(beanName, () -> {
                     try {
                         return createBean(beanName, mbd, args);
                     } catch (BeansException ex) {
-// 如果创建失败，需要移除缓存中的bean，因为在创建过程中，
-/**
-* 如果单例bean创建出现失败，需要移除缓存中缓存的此类型的bean
-* 创建失败还会存在这种类型的bean的原因是：单例bean中会存在循
-* 环依赖为了解决循环依赖，运行提前暴露没有完全创建成功的bean，
-* 所以缓存中会存在这种类型的bean，在创建失败后需要删除，。
-*/
+                        // 如果创建失败，需要移除缓存中的bean，因为在创建过程中，
+                        /**
+                          * 如果单例bean创建出现失败，需要移除缓存中缓存的此类型的bean
+                          * 创建失败还会存在这种类型的bean的原因是：单例bean中会存在循
+                          * 环依赖为了解决循环依赖，运行提前暴露没有完全创建成功的bean，
+                          * 所以缓存中会存在这种类型的bean，在创建失败后需要删除，。
+                          */
                         destroySingleton(beanName);
                         throw ex;
                     }
@@ -247,7 +244,7 @@ protected <T> T doGetBean(final String name, @Nullable final Class<T> requiredTy
 final String beanName = transformedBeanName(name);
 ```
 
-这里传递的是 name，不一定就是 beanName，可能是 aliasName，也有可能是 FactoryBean的name，所以这里需要调用 `transformedBeanName()` 方法对 name 进行一番转换，主要如下：
+这里传递的是name，不一定就是beanName，可能是aliasName，也有可能是FactoryBean的name，所以这里需要调用`transformedBeanName()`方法对name进行一番转换，主要如下：
 
 ```java
     protected String transformedBeanName(String name) {
@@ -282,7 +279,7 @@ final String beanName = transformedBeanName(name);
 主要处理过程包括两步：
 
 1. 去除FactoryBean的修饰符。如果name以“&”为前缀，那么会去掉该“&”，例如，`name = "&studentService"`，则会是 `name = "studentService"`。
-2. 取指定的 alias 所表示的最终 beanName。主要是一个循环获取 beanName 的过程，例如别名 A 指向名称为 B 的 bean 则返回 B，若别名A指向别名B，别名B指向名称为C的 bean，则返回 C。
+2. 取指定的alias所表示的最终beanName。主要是一个循环获取beanName的过程，例如别名A指向名称为B的bean则返回B，若别名A指向别名B，别名B指向名称为C的bean，则返回 C。
 
 ### 2.从单例bean缓存中获取bean
 
@@ -303,7 +300,7 @@ if (sharedInstance != null && args == null) {
 }
 ```
 
-我们知道单例模式的 bean 在整个过程中只会被创建一次，第一次创建后会将该 bean 加载到缓存中，后面在获取 bean 就会直接从单例缓存中获取。如果从缓存中得到了 bean，则需要调用 `getObjectForBeanInstance()` 对 bean 进行实例化处理，因为缓存中记录的是最原始的 bean 状态，我们得到的不一定是我们最终想要的 bean。比如上面说的FactoryBean。
+我们知道单例模式的bean在整个过程中只会被创建一次，第一次创建后会将该bean加载到缓存中，后面在获取bean就会直接从单例缓存中获取。如果从缓存中得到了bean，则需要调用 `getObjectForBeanInstance()` 对bean进行实例化处理，因为缓存中记录的是最原始的bean状态，我们得到的不一定是我们最终想要的bean。比如上面说的FactoryBean。
 
 ### 3.原型模式依赖检查与parentBeanFactory
 
@@ -330,9 +327,9 @@ if (parentBeanFactory != null && !containsBeanDefinition(beanName)) {
 }
 ```
 
-Spring只处理单例模式下得循环依赖，对于原型模式的循环依赖直接抛出异常。主要原因还是在于 Spring 解决循环依赖的策略有关。对于单例模式 Spring 在创建 bean 的时候并不是等 bean 完全创建完成后才会将 bean 添加至缓存中，而是不等 bean 创建完成就会将创建 bean 的 ObjectFactory 提早加入到缓存中，这样一旦下一个 bean 创建的时候需要依赖 bean 时则直接使用 ObjectFactroy。但是原型模式我们知道是没法使用缓存的，所以 Spring 对原型模式的循环依赖处理策略则是不处理（关于循环依赖后面会有单独文章说明）。
+Spring只处理单例模式下得循环依赖，对于原型模式的循环依赖直接抛出异常。主要原因还是在于Spring解决循环依赖的策略有关。对于单例模式Spring在创建bean的时候并不是等bean完全创建完成后才会将bean添加至缓存中，而是不等bean创建完成就会将创建bean的ObjectFactory提早加入到缓存中，这样一旦下一个bean创建的时候需要依赖bean时则直接使用ObjectFactroy。但是原型模式我们知道是没法使用缓存的，所以Spring对原型模式的循环依赖处理策略则是不处理（关于循环依赖后面会有单独文章说明）。
 
-如果容器缓存中没有相对应的 BeanDefinition 则会尝试从父类工厂（parentBeanFactory）中加载，然后再去递归调用 `getBean()`。
+如果容器缓存中没有相对应的BeanDefinition则会尝试从父类工厂（parentBeanFactory）中加载，然后再去递归调用`getBean()`。
 
 ### 4. 将存储xml配置文件中的GenericBeanDefinition转换为RootBeanDefinition
 
@@ -367,11 +364,11 @@ if (dependsOn != null) {
 }
 ```
 
-每个 bean 都不是单独工作的，它会依赖其他 bean，对于依赖的 bean ，会优先加载，所以在 Spring 的加载顺序中，在初始化某一个 bean 的时候首先会初始化这个 bean 的依赖。
+每个bean都不是单独工作的，它会依赖其他bean，对于依赖的bean ，会优先加载，所以在Spring的加载顺序中，在初始化某一个bean的时候首先会初始化这个bean的依赖。
 
 ### **6 作用域处理**
 
-Spring bean 的作用域默认为 singleton，当然还有其他作用域，如prototype、request、session 等，不同的作用域会有不同的初始化策略。对应的代码如下：
+Spring bean的作用域默认为singleton，当然还有其他作用域，如prototype、request、session 等，不同的作用域会有不同的初始化策略。对应的代码如下：
 
 ```java
 // singleton bean的创建
@@ -428,7 +425,7 @@ if (mbd.isSingleton()) {
 
 ### 7 类型转换
 
-在调用 `doGetBean()` 方法时，有一个 requiredType 参数，该参数的功能就是将返回的 bean 转换为 requiredType 类型。当然就一般而言我们是不需要进行类型转换的，也就是 requiredType 为空（比如 `getBean(String name)`），但有可能会存在这种情况，比如我们返回的 bean 类型为 String，我们在使用的时候需要将其转换为 Integer，那么这个时候 requiredType 就有用武之地了。当然我们一般是不需要这样做的。
+在调用 `doGetBean()` 方法时，有一个requiredType 参数，该参数的功能就是将返回的bean转换为requiredType类型。当然就一般而言我们是不需要进行类型转换的，也就是requiredType为空（比如 `getBean(String name)`），但有可能会存在这种情况，比如我们返回的bean类型为String，我们在使用的时候需要将其转换为Integer，那么这个时候requiredType就有用武之地了。当然我们一般是不需要这样做的。
 
-至此 `getBean()` 过程讲解完了。后续将会对该过程进行拆分，更加详细的说明，弄清楚其中的来龙去脉，所以这篇博客只能算是 Spring bean 加载过程的一个概览。
+至此`getBean()`过程讲解完了。后续将会对该过程进行拆分，更加详细的说明，弄清楚其中的来龙去脉，所以这篇博客只能算是Spring bean加载过程的一个概览。
 

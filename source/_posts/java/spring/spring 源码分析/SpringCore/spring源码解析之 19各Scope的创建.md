@@ -5,7 +5,6 @@ tags:
 categories:
   - java
   - spring
-
 author: fengxiutianya
 abbrlink: 24d11232
 date: 2019-01-15 03:33:00
@@ -26,11 +25,11 @@ if (mbd.isSingleton()) {
         } catch (BeansException ex) {
             // 如果创建失败，需要移除缓存中的bean，因为在创建过程中，
             /**
-			  * 如果单例bean创建出现失败，需要移除缓存中缓存的此类型的bean
-			  * 创建失败还会存在这种类型的bean的原因是：单例bean中会存在循
-			  * 环依赖为了解决循环依赖，运行提前暴露没有完全创建成功的bean，
-			  * 所以缓存中会存在这种类型的bean，在创建失败后需要删除，。
-			  */
+             * 如果单例bean创建出现失败，需要移除缓存中缓存的此类型的bean
+             * 创建失败还会存在这种类型的bean的原因是：单例bean中会存在循
+             * 环依赖为了解决循环依赖，运行提前暴露没有完全创建成功的bean，
+             * 所以缓存中会存在这种类型的bean，在创建失败后需要删除，。
+             */
             destroySingleton(beanName);
             throw ex;
         }
@@ -43,63 +42,63 @@ if (mbd.isSingleton()) {
 
 ```java
  public Object getSingleton(String beanName, ObjectFactory<?> singletonFactory) {
-		Assert.notNull(beanName, "Bean name must not be null");
-		// 全局变量需要同步
-		synchronized (this.singletonObjects) {
-			// 首先检查对一个的bean是否已经加载过，因为singleton模式其实就是复用已创建的bean
-			// 所以这一步是必须的
-			Object singletonObject = this.singletonObjects.get(beanName);
-			// 如果为空才可以进行singleton的bean的初始化
-			if (singletonObject == null) {
-				// 检查bean是否在销毁，如果销毁则抛出异常
-				if (this.singletonsCurrentlyInDestruction) {
-					// 省略抛出异常代码
-				}
-                
-				// 创建之前的处理工作，将当前正在创建的beanName加入到正在创建的Sdet集合中
-                // 用于判断beanMame是否在被创建
-				beforeSingletonCreation(beanName);
-				boolean newSingleton = false;
-				boolean recordSuppressedExceptions = 
-                    			(this.suppressedExceptions == null);
-				if (recordSuppressedExceptions) {
-					this.suppressedExceptions = new LinkedHashSet<>();
-				}
-				try {
-					// 初始化bean
-					singletonObject = singletonFactory.getObject();
-					newSingleton = true;
-				} catch (IllegalStateException ex) {
-                    // 判断单例缓存中是否存在对应的Bean
-                    singletonObject = this.singletonObjects.get(beanName);
-					if (singletonObject == null) {
-						throw ex;
-					}
-				} catch (BeanCreationException ex) {
-                    // 记录错误
-					if (recordSuppressedExceptions) {
-						for (Exception suppressedException : this.suppressedExceptions)
-                        {
-							ex.addRelatedCause(suppressedException);
-						}
-					}
-					throw ex;
-				} finally {
-					if (recordSuppressedExceptions) {
-						this.suppressedExceptions = null;
-					}
-					// 创建之后的处理工作：从正在创建set集合中删除当前的beanname，
-					afterSingletonCreation(beanName);
-				}
-				// 创建成功加入缓存
-				if (newSingleton) {
-					// 将结果记录至缓存并删除加载bean过程中所记录的各种辅助状态
-					addSingleton(beanName, singletonObject);
-				}
-			}
-			return singletonObject;
-		}
-	}
+    Assert.notNull(beanName, "Bean name must not be null");
+    // 全局变量需要同步
+    synchronized (this.singletonObjects) {
+        // 首先检查对一个的bean是否已经加载过，因为singleton模式其实就是复用已创建的bean
+        // 所以这一步是必须的
+        Object singletonObject = this.singletonObjects.get(beanName);
+        // 如果为空才可以进行singleton的bean的初始化
+        if (singletonObject == null) {
+            // 检查bean是否在销毁，如果销毁则抛出异常
+            if (this.singletonsCurrentlyInDestruction) {
+                // 省略抛出异常代码
+            }
+            
+            // 创建之前的处理工作，将当前正在创建的beanName加入到正在创建的Sdet集合中
+            // 用于判断beanMame是否在被创建
+            beforeSingletonCreation(beanName);
+            boolean newSingleton = false;
+            boolean recordSuppressedExceptions = 
+                            (this.suppressedExceptions == null);
+            if (recordSuppressedExceptions) {
+                this.suppressedExceptions = new LinkedHashSet<>();
+            }
+            try {
+                // 初始化bean
+                singletonObject = singletonFactory.getObject();
+                newSingleton = true;
+            } catch (IllegalStateException ex) {
+                // 判断单例缓存中是否存在对应的Bean
+                singletonObject = this.singletonObjects.get(beanName);
+                if (singletonObject == null) {
+                    throw ex;
+                }
+            } catch (BeanCreationException ex) {
+                // 记录错误
+                if (recordSuppressedExceptions) {
+                    for (Exception suppressedException : this.suppressedExceptions)
+                    {
+                        ex.addRelatedCause(suppressedException);
+                    }
+                }
+                throw ex;
+            } finally {
+                if (recordSuppressedExceptions) {
+                    this.suppressedExceptions = null;
+                }
+                // 创建之后的处理工作：从正在创建set集合中删除当前的beanname，
+                afterSingletonCreation(beanName);
+            }
+            // 创建成功加入缓存
+            if (newSingleton) {
+                // 将结果记录至缓存并删除加载bean过程中所记录的各种辅助状态
+                addSingleton(beanName, singletonObject);
+            }
+        }
+        return singletonObject;
+    }
+}
 
 ```
 

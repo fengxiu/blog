@@ -5,12 +5,11 @@ tags:
 categories:
   - java
   - spring
-
 author: fengxiutianya
 abbrlink: 48fb5eaf
 date: 2019-01-14 05:12:00
+updated: 2019-01-14 05:12:00
 ---
-# Spring源码解析之 08bean标签：BeanDefinition简单介绍与bean节点解析
 
 ### 概述
 

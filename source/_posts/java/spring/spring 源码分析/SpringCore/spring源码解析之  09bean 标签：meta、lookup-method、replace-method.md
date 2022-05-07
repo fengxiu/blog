@@ -5,12 +5,11 @@ tags:
 categories:
   - java
   - spring
-
 author: fengxiutianya
 abbrlink: 2b388fc7
 date: 2019-01-14 05:19:00
+updated: 2019-01-14 05:19:00
 ---
-# spring源码解析之 09bean 标签：meta、lookup-method、replace-method
 
 ### 概述
 
@@ -25,7 +24,7 @@ date: 2019-01-14 05:19:00
 
 ```xml
 <bean id="" class="">
-	<meta key="key1" value="aaaaa"/>
+    <meta key="key1" value="aaaaa"/>
 </bean>
 ```
 

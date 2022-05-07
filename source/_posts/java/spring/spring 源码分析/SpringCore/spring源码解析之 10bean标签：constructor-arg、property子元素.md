@@ -5,12 +5,11 @@ tags:
 categories:
   - java
   - spring
-
 author: fengxiutianya
 abbrlink: 1f68182f
 date: 2019-01-14 05:21:00
+updated: 2019-01-14 05:21:00
 ---
-# spring 源码解析之 10bean标签：constructor-arg、property子元素
 
 ### 概述
 

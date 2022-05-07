@@ -5,10 +5,10 @@ tags:
 categories:
   - java
   - spring
-
 author: fengxiutianya
 abbrlink: 20cd1d0c
 date: 2019-01-14 05:25:00
+updated: 2019-01-14 05:25:00
 ---
 # spring源码解析之 11bean标签：解析自定义标签
 

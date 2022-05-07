@@ -145,9 +145,9 @@ Redis集群是Redis提供的分布式数据库方案，集群通过分片（shar
 CLUSTER MEET <ip> <port
 ```
 
-向一个节点node发送CLUSTER MEET命令，可以让node节点与ip和port所指定的节点进行握手（handshake），当握手成功时，node节点就会将ip和port所指定的节点添加到node节点当前所在的集群中。
+向一个节点node发送`CLUSTER MEET`命令，可以让node节点与ip和port所指定的节点进行握手（handshake），当握手成功时，node节点就会将ip和port所指定的节点添加到node节点当前所在的集群中。
 
-加入加点的通信过程如下图
+加入节点的通信过程如下图
 
 ![节点通信图](https://cdn.jsdelivr.net/gh/fengxiu/img/20220425154813.png)
 
@@ -259,6 +259,8 @@ CRC16算法产生的hash值有16bit，该算法可以产生2^16-=65536个值。�
   集群节点越多，心跳包的消息体内携带的数据越多。如果节点过1000个，也会导致网络拥堵。因此redis作者，不建议redis cluster节点数量超过1000个。那么，对于节点数在1000以内的redis cluster集群，16384个槽位够用了。没有必要拓展到65536个。
 3. 槽位越小，节点少的情况下，压缩比高
   Redis主节点的配置信息中，它所负责的哈希槽是通过一张bitmap的形式来保存的，在传输过程中，会对bitmap进行压缩，但是如果bitmap的填充率`slots / N`很高的话(N表示节点数)，bitmap的压缩率就很低。如果节点数很少，而哈希槽数量很多的话，bitmap的压缩率就很低。文件压缩率指的是，文件压缩前后的大小比。
+
+详细的可以参考[为什么redis集群有16384个槽](https://www.cnblogs.com/rjzheng/p/11430592.html)
 
 ### 问题
 

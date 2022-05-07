@@ -5,23 +5,22 @@ tags:
 categories:
   - java
   - spring
-
 author: fengxiutianya
 abbrlink: 6a25672f
 date: 2019-01-14 05:11:00
+updated: 2019-01-14 05:11:00
 ---
-# spring 源码解析之bean标签:开启解析进程
 
-### 概述
+## 概述
 
 1. parseDefaultElement
 2. processBeanDefinition (bean标签的解析即注册)
 3. 解析BeanDefinition
 <!-- more-->
 
-### parseDefaultElement
+## parseDefaultElement
 
-Spring 中有两种解析 Bean 的方式。如果根节点或者子节点采用默认命名空间的话，则调用 `parseDefaultElement()` 进行默认标签解析，否则调用 `delegate.parseCustomElement()` 方法进行自定义解析。下面就这两个方法进行详细分析说明，先从默认标签解析过程开始，源码如下：
+Spring中有两种解析Bean 的方式。如果根节点或者子节点采用默认命名空间的话，则调用 `parseDefaultElement()` 进行默认标签解析，否则调用 `delegate.parseCustomElement()` 方法进行自定义解析。下面就这两个方法进行详细分析说明，先从默认标签解析过程开始，源码如下：
 
 ```java
 private void parseDefaultElement(Element ele, 
@@ -50,18 +49,16 @@ private void parseDefaultElement(Element ele,
 
 ### processBeanDefinition (bean标签的解析即注册)
 
-如果遇到标签为 bean 则调用 `processBeanDefinition()` 方法进行 bean 标签解析，如下：
+如果遇到标签为bean，则调用`processBeanDefinition()`方法进行bean标签解析，如下：
 
 ```java
-protected void processBeanDefinition(Element ele,
-                                     BeanDefinitionParserDelegate delegate) {
+protected void processBeanDefinition(Element ele,BeanDefinitionParserDelegate delegate) {
     BeanDefinitionHolder bdHolder = delegate.parseBeanDefinitionElement(ele);
     if (bdHolder != null) {
         bdHolder = delegate.decorateBeanDefinitionIfRequired(ele, bdHolder);
         try {
             // Register the final decorated instance.
-            BeanDefinitionReaderUtils.registerBeanDefinition(bdHolder,   
-					getReaderContext().getRegistry());
+            BeanDefinitionReaderUtils.registerBeanDefinition(bdHolder, getReaderContext().getRegistry());
         }
         catch (BeanDefinitionStoreException ex) {
             getReaderContext().error(
@@ -77,9 +74,9 @@ protected void processBeanDefinition(Element ele,
 
 整个过程分为四个步骤
 
-1. 调用 `BeanDefinitionParserDelegate.parseBeanDefinitionElement()` 进行元素解析，解析过程中如果失败，返回 null，错误由 `ProblemReporter` 处理。如果解析成功则返回 BeanDefinitionHolder 实例 bdHolder。BeanDefinitionHolder是对BeanDefinition简单装饰，里面持有bean name 和alias的 BeanDefinition。
+1. 调用 `BeanDefinitionParserDelegate.parseBeanDefinitionElement()` 进行元素解析，解析过程中如果失败，返回 null，错误由 `ProblemReporter` 处理。如果解析成功则返回BeanDefinitionHolder实例 bdHolder。BeanDefinitionHolder是对BeanDefinition简单装饰，里面持有bean name 和alias的 BeanDefinition。
 2. 若实例bdHolder不为空，则调用 `BeanDefinitionParserDelegate.decorateBeanDefinitionIfRequired()`进行自定义标签处理
-3. 解析完成后，则调用 `BeanDefinitionReaderUtils.registerBeanDefinition()` 对 bdHolder 进行注册
+3. 解析完成后，则调用`BeanDefinitionReaderUtils.registerBeanDefinition()`对bdHolder进行注册
 4. 发出响应事件，通知相关的监听器，完成 Bean 标签解析
 
 ### 解析BeanDefinition
@@ -88,8 +85,7 @@ protected void processBeanDefinition(Element ele,
 
 ```java
 @Nullable
-public BeanDefinitionHolder parseBeanDefinitionElement(Element ele, 
-                              @Nullable BeanDefinition containingBean) {
+public BeanDefinitionHolder parseBeanDefinitionElement(Element ele, @Nullable BeanDefinition containingBean) {
     // 解析id属性
     String id = ele.getAttribute(ID_ATTRIBUTE);
     // 解析name属性
@@ -97,8 +93,7 @@ public BeanDefinitionHolder parseBeanDefinitionElement(Element ele,
     // 分割name属性，同一个name属性中可以指定多个name，用分割符改开
     List<String> aliases = new ArrayList<>();
     if (StringUtils.hasLength(nameAttr)) {
-        String[] nameArr = StringUtils.tokenizeToStringArray(nameAttr, 
-				MULTI_VALUE_ATTRIBUTE_DELIMITERS);
+        String[] nameArr = StringUtils.tokenizeToStringArray(nameAttr,MULTI_VALUE_ATTRIBUTE_DELIMITERS);
         aliases.addAll(Arrays.asList(nameArr));
     }
 
