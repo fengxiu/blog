@@ -10,6 +10,7 @@ categories:
 author: fengxiutianya
 abbrlink: 5a89bec2
 date: 2019-01-15 03:34:00
+updated: 2019-01-15 03:34:00
 ---
 在上篇博客中有一个核心方法没有讲到 `createBean()` ，该方法的如下：
 
@@ -18,7 +19,8 @@ protected abstract Object createBean(String beanName, RootBeanDefinition mbd,
               @Nullable Object[] args) throws BeanCreationException;
 ```
 
-该方法定义在 AbstractBeanFactory 中。其含义是根据给定的 BeanDefinition 和 args实例化一个 bean 对象，如果该 BeanDefinition 存在父类，则该 BeanDefinition 已经合并了父类的属性。所有 Bean 实例的创建都会委托给该方法实现。
+该方法定义在AbstractBeanFactory中。其含义是根据给定的BeanDefinition和args实例化一个bean对象，如果该BeanDefinition存在父类，则该BeanDefinition已经合并了父类的属性。所有Bean实例的创建都会委托给该方法实现。
+
 <!-- more -->
 
 方法接受三个参数：
@@ -89,7 +91,7 @@ protected Object createBean(String beanName, RootBeanDefinition mbd,
 - Bean初始化扩展点的处理，类如后面要说的aop，就会在这里直接初始化一个bean，这后面的操作就不需要进行
 - 创建 bean
 
-### **解析指定 BeanDefinition 的 class**
+### 解析指定BeanDefinition的class
 
 ```java
 Class<?> resolvedClass = resolveBeanClass(mbd, beanName)
@@ -97,7 +99,7 @@ Class<?> resolvedClass = resolveBeanClass(mbd, beanName)
 
 这个方法主要是解析BeanDefinition的class 类，并将已经解析的Class存储在beandefinition中以供后面使用。如果解析的Class对象不为空，则会将该 BeanDefinition 进行克隆至mbdToUse，这样做的主要目的是为动态解析的 Class是无法保存到共享的BeanDefinition 中，这一步我是没看懂。
 
-### **处理 override 属性**
+### 处理override属性
 
 大家还记得 lookup-method 和 replace-method 这两个配置功能，在前面博客中已经详细分析了这两个标签的用法和解析过程，知道解析过程其实就是讲这两个配置存放在 BeanDefinition 中的 methodOverrides 属性中，我们知道在 bean 实例化的过程中如果检测到存在methodOverrides，则会动态地位为当前bean生成代理并使用对应的拦截器为bean做增强处理。具体的实现我们后续分析，现在先看 `mbdToUse.prepareMethodOverrides()` 都干了些什么事，如下：
 
@@ -135,9 +137,9 @@ protected void prepareMethodOverride(MethodOverride mo)
 }
 ```
 
-根据方法名称从Class对象中获取该方法个数，如果为 0 则抛出异常，如果为1则设置该重载方法没有被重载。若一个类中存在多个重载方法，则在方法调用的时候还需要根据参数类型来判断到底重载的是哪个方法。在设置重载的时候其实这里做了一个小小优化，那就是当`count == 1` 时，设置 `overloaded = false`，这样表示该方法没有重载，这样在后续调用的时候便可以直接找到方法而不需要进行方法参数的校验。其实 `mbdToUse.prepareMethodOverrides()` 并没有做什么实质性的工作，只是对 methodOverrides 属性做了一些简单的校验而已。
+根据方法名称从Class对象中获取该方法个数，如果为0 则抛出异常，如果为1则设置该重载方法没有被重载。若一个类中存在多个重载方法，则在方法调用的时候还需要根据参数类型来判断到底重载的是哪个方法。在设置重载的时候其实这里做了一个小小优化，那就是当`count == 1` 时，设置 `overloaded = false`，这样表示该方法没有重载，这样在后续调用的时候便可以直接找到方法而不需要进行方法参数的校验。其实 `mbdToUse.prepareMethodOverrides()` 并没有做什么实质性的工作，只是对 methodOverrides 属性做了一些简单的校验而已。
 
-### **实例化的前置处理**
+### 实例化的前置处理
 
 `resolveBeforeInstantiation()` 的作用是给InstantiationAwareBeanPostProcessor后置处理器返回一个代理对象的机会，这个后置处理器是BeanPostProcessor的一个子类，只是这里做了特殊的处理。其实在调用该方法之前Spring 一直都没有创建 bean ，那么这里返回一个 bean 的代理类有什么作用呢？作用体现在后面的 `if` 判断：
 

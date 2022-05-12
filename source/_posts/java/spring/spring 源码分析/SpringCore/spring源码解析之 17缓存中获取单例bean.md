@@ -1,5 +1,5 @@
 ---
-title: spring源码解析之 17缓存中获取单例bean
+title: spring源码解析之 17 缓存中获取单例bean
 tags:
   - spring源码解析
 categories:
@@ -56,8 +56,7 @@ protected Object getSingleton(String beanName, boolean allowEarlyReference) {
                 // 当某些方法需要提前初始化的时候会调用addSingletonFactory方法将对应的
                 // ObjectFactory初始化策略存储在singletonFactories
                 // 获取对应的bean的factoryBean,
-                ObjectFactory<?> singletonFactory = 
-                    this.singletonFactories.get(beanName);
+                ObjectFactory<?> singletonFactory = this.singletonFactories.get(beanName);
                 // 如果创建bean的ObjectFactory不为空，则创建对应的对象
                 if (singletonFactory != null) {
                     // 调用预先设定的getObject方法
@@ -80,8 +79,8 @@ protected Object getSingleton(String beanName, boolean allowEarlyReference) {
 首先解释上面用到的一些变量：
 
 - **singletonObjects** ：存放的是单例bean，已经完整实例化的bean，对应关系为`bean name --> bean instance`
-- **earlySingletonObjects**：存放的是早期的bean，对应关系也是`bean name --> bean instance`。它与singletonObjects区别在于earlySingletonObjects中存放的bean 不一定是完整的，从上面过程中我们可以了解，bean在创建过程中就已经加入到earlySingletonObjects中了，所以当在bean的创建过程中就可以通过 `getBean()` 方法获取。这个 Map 也是解决循环依赖的关键所在。
-- **singletonFactories**：存放的是 ObjectFactory，可以理解为创建单例 bean 的 factory，对应关系是 `bean name --> ObjectFactory`。在代码注释中也说了，这个和前面的earlySingletonObjects是互斥的。
+- **earlySingletonObjects**：存放的是早期的bean，对应关系也是`bean name --> bean instance`。它与singletonObjects区别在于earlySingletonObjects中存放的bean不一定是完整的，从上面过程中我们可以了解，bean在创建过程中就已经加入到earlySingletonObjects中了，所以当在bean的创建过程中就可以通过`getBean()`方法获取。这个Map也是解决循环依赖的关键所在。
+- **singletonFactories**：存放的是 ObjectFactory，可以理解为创建单例bean的factory，对应关系是`bean name --> ObjectFactory`。在代码注释中也说了，这个和前面的earlySingletonObjects是互斥的。
 - **registeredSingletons**:这个是用于保存所有已经注册的bean，这里先提前讲，后面会用到
 
 这里先总结一下上面的整个流程
@@ -139,8 +138,7 @@ public boolean isSingletonCurrentlyInCreation(String beanName) {
 为什么会有这么一段呢？因为我们从缓存中获取的bean是最原始的bean并不一定使我们最终想要的bean，所以需要调用`getObjectForBeanInstance()`进行处理，该方法的定义为获取给定bean实例的对象，该对象要么是bean实例本身，要么就是FactoryBean创建的对象，如下：
 
 ```java
-protected Object getObjectForBeanInstance(
-			Object beanInstance, String name, String beanName, @Nullable RootBeanDefinition mbd) {
+protected Object getObjectForBeanInstance(Object beanInstance, String name, String beanName, @Nullable RootBeanDefinition mbd) {
 
         // 根据传进来的name，这个是用户传进来的原始值，没有经过转换
 		// 判断是否是获取FactoryBean，如果是，则判断beanInstance
@@ -324,7 +322,7 @@ protected Object postProcessObjectFromFactoryBean(Object object, String beanName
 }
 ```
 
-该方法的定义为：对所有的 postProcessAfterInitialization 进行回调注册BeanPostProcessors，让他们能够后期处理从 FactoryBean 中获取的对象。下面是具体实现：
+该方法的定义为：对所有的postProcessAfterInitialization进行回调注册BeanPostProcessors，让他们能够后期处理从 FactoryBean 中获取的对象。下面是具体实现：
 
 ```java
 public Object applyBeanPostProcessorsAfterInitialization(Object existingBean, 

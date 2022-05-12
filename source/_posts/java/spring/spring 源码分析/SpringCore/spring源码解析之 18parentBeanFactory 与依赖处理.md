@@ -15,9 +15,11 @@ updated: 2019-01-15 03:32:00
 1. 该bean的scope是singleton ,但是没有初始化完成
 2. 该bean的scope不是singleton
 
-本篇文章就来进行这部分的分析，这里先讲循环依赖检测、parentBeanFactory与依赖处理，剩下的scope处理，主要在下一篇文章中讲解，本文所分析的具体源码如下：
+本篇文章就来进行这部分的分析，这里先讲循环依赖检测、parentBeanFactory与依赖处理，剩下的scope处理，主要在下一篇文章中讲解。
 
 <!-- more -->
+
+本文所分析的具体源码如下：
 
 ```java
 /**
@@ -148,7 +150,7 @@ if (parentBeanFactory != null && !containsBeanDefinition(beanName)) {
 }
 ```
 
-整个过程较为简单，都是委托 parentBeanFactory 的 `getBean()` 进行处理，只不过在获取之前对 name 进行简单的处理，主要是想获取原始的beanName，也就是传进来的name如下：
+整个过程较为简单，都是委托 parentBeanFactory的`getBean()`进行处理，只不过在获取之前对name进行简单的处理，主要是想获取原始的beanName，也就是传进来的name如下：
 
 ```java
 protected String originalBeanName(String name) {
@@ -207,11 +209,11 @@ protected RootBeanDefinition getMergedLocalBeanDefinition(String beanName)
 }
 ```
 
-首先直接从mergedBeanDefinitions缓存中获取相应的RootBeanDefinition，如果存在则直接返回，不存在则调用 `getMergedBeanDefinition()` 获取RootBeanDefinition，若获取的 BeanDefinition 为子 BeanDefinition，则需要合并父类的相关属性。具体的合并过程这里就不细说，如果你感兴趣的话可以仔细研究。
+首先直接从mergedBeanDefinitions缓存中获取相应的RootBeanDefinition，如果存在则直接返回，不存在则调用`getMergedBeanDefinition()`获取RootBeanDefinition，若获取的BeanDefinition为子BeanDefinition，则需要合并父类的相关属性。具体的合并过程这里就不细说，如果你感兴趣的话可以仔细研究。
 
 ### 处理depend-on依赖
 
-如果一个bean有依赖bean的话，那么在初始化该bean时是需要先初始化它所依赖的 bean。
+如果一个bean有依赖bean的话，那么在初始化该bean时是需要先初始化它所依赖的bean。
 
 ```java
 // 获取依赖。

@@ -5,14 +5,15 @@ tags:
 categories:
   - java
   - spring
-
 author: fengxiutianya
 abbrlink: 5e58b2ba
 date: 2019-01-15 06:39:00
+updated: 2019-01-15 06:39:00
 ---
-Spring 作为优秀的开源框架，它为我们提供了丰富的可扩展点，除了前面提到的 Aware 接口，还包括其他部分，其中一个很重要的就是 BeanPostProcessor。这篇文章主要介绍 BeanPostProcessor 的使用以及其实现原理。我们先看 BeanPostProcessor 的定位：
+Spring作为优秀的开源框架，它为我们提供了丰富的可扩展点，除了前面提到的Aware接口，还包括其他部分，其中一个很重要的就是BeanPostProcessor。这篇文章主要介绍BeanPostProcessor的使用以及其实现原理。我们先看BeanPostProcessor的定位：
 
-BeanPostProcessor 的作用：在Bean完成实例化后，如果我们需要对其进行一些配置、增加一些自己的处理逻辑，那么请使用 BeanPostProcessor。
+BeanPostProcessor的作用：在Bean完成实例化后，如果我们需要对其进行一些配置、增加一些自己的处理逻辑，那么请使用BeanPostProcessor。
+
 <!-- more -->
 
 ## BeanPostProcessor 实例
@@ -159,9 +160,9 @@ public interface BeanPostProcessor {
 }
 ```
 
-BeanPostProcessor 可以理解为是Spring 的一个工厂钩子（其实 Spring 提供一系列的钩子，如 Aware 、InitializingBean、DisposableBean），它是 Spring 提供的对象实例化阶段强有力的扩展点，允许 Spring 在实例化 bean 阶段对其进行定制化修改，比较常见的使用场景是处理标记接口实现类或者为当前对象提供代理实现（例如AOP）。
+BeanPostProcessor可以理解为是Spring的一个工厂钩子（其实Spring提供一系列的钩子，如Aware、InitializingBean、DisposableBean），它是Spring提供的对象实例化阶段强有力的扩展点，允许 Spring 在实例化 bean 阶段对其进行定制化修改，比较常见的使用场景是处理标记接口实现类或者为当前对象提供代理实现（例如AOP）。
 
-一般普通的 BeanFactory 是不支持自动注册 BeanPostProcessor 的，需要我们手动调用 `addBeanPostProcessor()` 进行注册，注册后的 BeanPostProcessor 适用于所有该 BeanFactory 创建的 bean，但是 ApplicationContext 可以在其 bean 定义中自动检测所有的 BeanPostProcessor 并自动完成注册，同时将他们应用到随后创建的任何 bean 中。
+一般普通的BeanFactory是不支持自动注册 BeanPostProcessor 的，需要我们手动调用 `addBeanPostProcessor()` 进行注册，注册后的 BeanPostProcessor 适用于所有该 BeanFactory 创建的 bean，但是 ApplicationContext 可以在其 bean 定义中自动检测所有的 BeanPostProcessor 并自动完成注册，同时将他们应用到随后创建的任何 bean 中。
 
 `postProcessBeforeInitialization()` 和 `postProcessAfterInitialization()` 两个方法都接收一个 Object 类型的 bean，一个 String 类型的 beanName，其中 bean 是已经实例化了的 instanceBean，能拿到这个你是不是可以对它为所欲为了？ 这两个方法是初始化 bean 的前后置处理器，他们应用 `invokeInitMethods()` 前后。如下图：
 
@@ -192,24 +193,23 @@ BeanPostProcessor 可以理解为是Spring 的一个工厂钩子（其实 Spring
  @Override
  public Object applyBeanPostProcessorsAfterInitialization(Object existingBean,
                                       String beanName) throws BeansException {
-
   Object result = existingBean;
   for (BeanPostProcessor beanProcessor : getBeanPostProcessors()) {
-   Object current = beanProcessor.postProcessAfterInitialization(result, beanName);
-   if (current == null) {
-    return result;
-   }
-   result = current;
+       Object current = beanProcessor.postProcessAfterInitialization(result, beanName);
+       if (current == null) {
+            return result;
+       }
+       result = current;
   }
   return result;
  }
 ```
 
-`getBeanPostProcessors()` 返回的是 beanPostProcessors 集合，该集合里面存放就是我们自定义的 BeanPostProcessor，如果该集合中存在元素则调用相应的方法，否则就直接返回 bean 了。这也是为什么使用 BeanFactory 容器是无法输出自定义 BeanPostProcessor 里面的内容，因为在 `BeanFactory.getBean()` 的过程中根本就没有将我们自定义的 BeanPostProcessor 注入进来，所以要想 BeanFactory 容器 的 BeanPostProcessor 生效我们必须手动调用 `addBeanPostProcessor()` 将定义的 BeanPostProcessor 注册到相应的 BeanFactory 中。但是 ApplicationContext 不需要手动，因为 ApplicationContext 会自动检测并完成注册。这个在后面讲解ApplicationConext源码时会具体进行分析。
+`getBeanPostProcessors()` 返回的是beanPostProcessors 集合，该集合里面存放就是我们自定义的 BeanPostProcessor，如果该集合中存在元素则调用相应的方法，否则就直接返回 bean 了。这也是为什么使用 BeanFactory 容器是无法输出自定义 BeanPostProcessor 里面的内容，因为在 `BeanFactory.getBean()` 的过程中根本就没有将我们自定义的 BeanPostProcessor 注入进来，所以要想 BeanFactory 容器 的 BeanPostProcessor 生效我们必须手动调用 `addBeanPostProcessor()` 将定义的 BeanPostProcessor 注册到相应的 BeanFactory 中。但是 ApplicationContext 不需要手动，因为 ApplicationContext 会自动检测并完成注册。这个在后面讲解ApplicationConext源码时会具体进行分析。
 
 至此，BeanPostProcessor 已经分析完毕了，这里简单总结下：
 
-1. BeanPostProcessor 的作用域是容器级别的，它只和所在的容器相关 ，当 BeanPostProcessor 完成注册后，它会应用于所有跟它在同一个容器内的 bean。
+1. BeanPostProcessor 的作用域是容器级别的，它只和所在的容器相关 ，当BeanPostProcessor完成注册后，它会应用于所有跟它在同一个容器内的 bean。
 2. BeanFactory 和 ApplicationContext 对 BeanPostProcessor 的处理不同，ApplicationContext 会自动检测所有实现了 BeanPostProcessor 接口的 bean，并完成注册，但是使用 BeanFactory 容器时则需要手动调用 `addBeanPostProcessor()` 完成注册
 3. ApplicationContext 的 BeanPostProcessor 支持 Ordered，而 BeanFactory 的 BeanPostProcessor 是不支持的，原因在于ApplicationContext 会对 BeanPostProcessor 进行 Ordered 检测并完成排序，而 BeanFactory 中的 BeanPostProcessor 只跟注册的顺序有关。
 

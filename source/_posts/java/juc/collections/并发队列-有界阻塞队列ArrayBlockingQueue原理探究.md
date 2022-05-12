@@ -9,30 +9,31 @@ categories:
   - collections
 abbrlink: 5fda9009
 date: 2019-03-06 19:05:00
+updated: 2019-03-06 19:05:00
 ---
-# 并发队列-有界阻塞队列ArrayBlockingQueue原理探究
 
 ## 概述
 
-`java.util.concurrent.ArrayBlockingQueue` 是一个线程安全的、基于数组、有界的、阻塞的、FIFO 队列。试图向已满队列中放入元素会导致操作受阻塞；试图从空队列中提取元素将导致类似阻塞。
+`java.util.concurrent.ArrayBlockingQueue` 是一个线程安全的、基于数组、有界的、阻塞的、FIFO队列。试图向已满队列中放入元素会导致操作受阻塞；试图从空队列中提取元素将导致类似阻塞。
 
-此类基于 `java.util.concurrent.locks.ReentrantLock` 来实现线程安全，所以提供了 `ReentrantLock` 所能支持的公平性选择
+此类基于`java.util.concurrent.locks.ReentrantLock` 来实现线程安全，所以提供了`ReentrantLock`所能支持的公平性选择
 
 1. ArrayBlockingQueue简介
 2. 源码分析
+
 <!-- more -->
 
 ## ArrayBlockingQueue简介
 
-ArrayBlockingQueue是数组实现的线程安全的有界的阻塞队列。线程安全是指，ArrayBlockingQueue内部通过“互斥锁”保护竞争资源，实现了多线程对竞争资源的互斥访问。而有界，则是指ArrayBlockingQueue对应的数组是有界限的。 阻塞队列，是指多线程访问竞争资源时，当竞争资源已被某线程获取时，其它要获取该资源的线程需要阻塞等待；而且，ArrayBlockingQueue是按 FIFO（先进先出）原则对元素进行排序，元素都是从尾部插入到队列，从头部开始返回。
+ArrayBlockingQueue是数组实现的线程安全的有界的阻塞队列。线程安全是指，ArrayBlockingQueue内部通过“互斥锁”保护竞争资源，实现了多线程对竞争资源的互斥访问。而有界，则是指ArrayBlockingQueue对应的数组是有界限的。 阻塞队列，是指多线程访问竞争资源时，当竞争资源已被某线程获取时，其它要获取该资源的线程需要阻塞等待；而且，ArrayBlockingQueue是按FIFO（先进先出）原则对元素进行排序，元素都是从尾部插入到队列，从头部开始返回。
 
 类图如下
 
-![upload successful](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-164.png)
+![类图](https://cdn.jsdelivr.net/gh/fengxiu/img/pasted-164.png)
 
 ## 源码分析
 
-首先看一下后面要用的属性，队列的操作主要有读、写，所以用了两个 `int` 类型的属性作为下一个读写位置的的指针。存放元素的数组是 `final` 修饰的，所以数组的大小是固定的。对于并发控制，是所有的访问都必须加锁，并用两个条件对象用于协调读写操作。
+首先看一下后面要用的属性，队列的操作主要有读、写，所以用了两个`int`类型的属性作为下一个读写位置的的指针。存放元素的数组是`final`修饰的，所以数组的大小是固定的。对于并发控制，是所有的访问都必须加锁，并用两个条件对象用于协调读写操作。
 
 ```java
 // 队列存放元素的容器

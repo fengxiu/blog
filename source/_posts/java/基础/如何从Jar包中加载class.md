@@ -5,9 +5,8 @@ categories:
 title: 如何从Jar包中加载class
 abbrlink: 7e5ec6ca
 date: 2020-09-13 10:09:53
+updated: 2020-09-13 10:09:53
 ---
-
-# 如何从Jar包中加载class
 
 <!--  
     1. 简单介绍
@@ -18,11 +17,12 @@ date: 2020-09-13 10:09:53
 
 之前在看java类加载机制的时候，就在想，JVM是如何在Jar包中找到某个具体的Class文件，如果是把Jar包解压到一个指定的文件中，那我还能理解，他是先解压然后在去解压后的文件中查找有没有具体的文件，但事实上，jvm在运行java程序时候，并没有将jar包解压。所以就比较好奇jvm是如何获取到具体的class文件。本篇文章主要对其进行探究。
 
-这里就不在叙述类加载机制，直接定位到具体加载Class文件资源的函数，代码如下：
 <!-- more -->
+
+这里就不在叙述类加载机制，直接定位到具体加载Class文件资源的函数，代码如下：
+
 ``` java
-protected Class<?> findClass(final String name)
-    throws ClassNotFoundException{
+protected Class<?> findClass(final String name) throws ClassNotFoundException{
     final Class<?> result;
     try {
         result = AccessController.doPrivileged(

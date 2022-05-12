@@ -5,10 +5,7 @@ categories:
   - java
   - jvm
 tags:
-  - JVM
-  - GC
-  - GC日志
-  - serial
+  - 垃圾回收
 date: 2019-04-17 11:03:00
 updated: 2019-04-17 11:03:00
 ---

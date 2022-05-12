@@ -5,12 +5,14 @@ tags:
 categories:
   - java
   - spring
-
 author: zhangke
 abbrlink: f61178aa
 date: 2019-01-15 03:35:00
+updated: 2019-01-15 03:35:00
 ---
-这篇我们关注创建 bean 过程中的第一个步骤：实例化 bean，对应的方法为：`createBeanInstance()`，如下：
+
+这篇我们关注创建bean过程中的第一个步骤：实例化bean，对应的方法为：`createBeanInstance()`，如下：
+
 <!-- more -->
 
 ```java

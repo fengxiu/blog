@@ -5,14 +5,14 @@ tags:
 categories:
   - java
   - spring
-
 author: fengxiutianya
 abbrlink: f5ea748a
 date: 2019-01-15 06:40:00
+updated: 2019-01-15 06:40:00
 ---
-# spring源码解析之 28深入分析InitializingBean 接口和 init-method
+# spring源码解析之 28 深入分析InitializingBean接口和init-method
 
- 已经分析 Aware 接口和 BeanPostProcessor 接口，这篇分析 InitializingBean接口和 init-method 方法。
+已经分析Aware接口和 BeanPostProcessor 接口，这篇分析 InitializingBean接口和 init-method 方法。
 
 ## InitializingBean
 
@@ -74,8 +74,7 @@ name : chenssy 2 号
 上面提到 bean 初始化阶段（`initializeBean()` ） Spring 容器会主动检查当前 bean 是否已经实现了 InitializingBean 接口，如果实现了则会掉用其 `afterPropertiesSet()` ,这个主动检查、调用的动作是由 `invokeInitMethods()` 来完成的。
 
 ```JAVA
-protected void invokeInitMethods(String beanName, final Object bean,
-                                 @Nullable RootBeanDefinition mbd)
+protected void invokeInitMethods(String beanName, final Object bean,@Nullable RootBeanDefinition mbd)
     throws Throwable {
 
     // 是否实现 InitializingBean

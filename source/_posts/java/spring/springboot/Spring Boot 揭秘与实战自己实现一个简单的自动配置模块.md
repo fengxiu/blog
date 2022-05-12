@@ -5,6 +5,7 @@ tags:
 categories:
   - java
   - spring
+  - springboot
 abbrlink: 62b625fe
 author: zhangke
 date: 2019-03-11 06:46:00
@@ -174,7 +175,7 @@ authorResolver方法的作用，即 AuthorProperties 的参数赋值到AuthorSer
 
 ### spring.factories 不要遗漏
 
-我们需要实现自定义自动装配，就需要自定义 spring.factories 参数。所以，我们需要在 `src/main/resources/ META-INF/spring.factories `中配置信息，值得注意的是，这个文件要自己创建。
+我们需要实现自定义自动装配，就需要自定义spring.factories 参数。所以，我们需要在 `src/main/resources/ META-INF/spring.factories `中配置信息，值得注意的是，这个文件要自己创建。
 
 ```yml
 # CUSTOM
@@ -284,8 +285,6 @@ public class autoConfigureTest {
 
 ### 参考
 
-[Spring Boot 揭秘与实战 自己实现一个简单的自动配置模块](https://juejin.im/post/586a6bc4da2f600055be89be)
-
-[spring boot 官网配置元数据](https://docs.spring.io/spring-boot/docs/current/reference/html/configuration-metadata.html#configuration-metadata-additional-metadata)
-
-[配置元数据](https://blog.csdn.net/L_Sail/article/details/70342023)
+1. [Spring Boot揭秘与实战 自己实现一个简单的自动配置模块](https://juejin.im/post/586a6bc4da2f600055be89be)
+2. [spring boot 官网配置元数据](https://docs.spring.io/spring-boot/docs/current/reference/html/configuration-metadata.html#configuration-metadata-additional-metadata)
+3. [配置元数据](https://blog.csdn.net/L_Sail/article/details/70342023)

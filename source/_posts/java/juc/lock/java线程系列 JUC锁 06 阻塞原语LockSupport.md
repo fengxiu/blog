@@ -1,3 +1,4 @@
+---
 title: java线程系列 JUC锁 06 阻塞原语LockSupport
 tags:
   - 并发

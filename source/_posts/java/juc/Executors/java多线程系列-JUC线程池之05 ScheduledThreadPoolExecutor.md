@@ -80,8 +80,7 @@ public ScheduledThreadPoolExecutor(int corePoolSize,
 schedule方法来进行延迟任务调度，schedule方法的代码如下：
 
 ```java
-public ScheduledFuture<?> schedule(Runnable command,
- long delay,TimeUnit unit) {
+public ScheduledFuture<?> schedule(Runnable command,long delay,TimeUnit unit) {
     if (command == null || unit == null)
         throw new NullPointerException();
     RunnableScheduledFuture<?> t = decorateTask(command,

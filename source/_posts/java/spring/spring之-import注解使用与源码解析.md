@@ -1,12 +1,13 @@
 ---
 layout: blog
 title: spring之@import注解使用与源码解析
-date: 2022-03-10 14:39:08
 tags:
-    - spring
-    - java
-categories: 
-    - spring 
+    - spring源码分析
+categories:
+  - java
+  - spring
+date: 2022-03-10 14:39:08
+updated: 2022-03-10 14:39:08
 ---
 
 本篇文章记录对@Import注解学习的整个过程。首先文章会介绍@Import注解的使用，接着分析下spring是如何处理@Import注解，最后通过@EnableAsync来举例说明该类型注解实现的原理。

@@ -13,12 +13,12 @@ date: 2019-01-15 03:37:00
 ---
 `doCreateBean()` 主要用于完成 bean 的创建和初始化工作，我们可以将其分为四个过程：
 
-- `createBeanInstance()` 实例化 bean
+- `createBeanInstance()` 实例化bean
 - `populateBean()` 属性填充
-- 循环依赖的处理
-- `initializeBean()` 初始化 bean
+-  循环依赖的处理
+- `initializeBean()` 初始化bean
 
-第一个过程实例化 bean 已经在前面两篇博客分析完毕了，这篇博客开始分析属性填充，也就是 `populateBean()`，该函数的作用是将 BeanDefinition 中的属性值赋值给 BeanWrapper 实例对象(对于 BeanWrapper 我们后续专门写文分析)。
+第一个过程实例化 bean 已经在前面两篇博客分析完毕了，这篇博客开始分析属性填充，也就是 `populateBean()`，该函数的作用是将BeanDefinition中的属性值赋值给BeanWrapper实例对象(对于BeanWrapper 我们后续专门写文分析)。
 <!-- more -->
 
 ```java

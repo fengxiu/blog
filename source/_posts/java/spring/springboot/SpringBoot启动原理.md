@@ -1,4 +1,6 @@
 ---
+tags:
+  - springboot
 categories:
   - java
   - spring
@@ -6,8 +8,8 @@ categories:
 title: SpringBoot源码分析之spring-boot-loader可执行文件解析
 abbrlink: 54f801f1
 date: 2020-03-11 06:46:00
+updated: 2020-03-11 06:46:00
 ---
-# SpringBoot源码分析之spring-boot-loader可执行文件解析
 
 <!-- 
    1.  为什么会有这个
@@ -18,14 +20,15 @@ date: 2020-03-11 06:46:00
 
 spring-boot-loader模块使得springboot应用具备打包为可执行jar或war文件的能力。只需要引入Maven插件或者Gradle插件就可以自动生成。
 
-​Java中并没有标准的方法加载嵌入式的jar文件，通常都是在一个jar文件中。这种情况下，如果你要通过命令行的形式发布一个没有打包的独立程序的话，可能会出现问题。
+Java中并没有标准的方法加载嵌入式的jar文件，通常都是在一个jar文件中。这种情况下，如果你要通过命令行的形式发布一个没有打包的独立程序的话，可能会出现问题。
 
-​为了解决这种问题，很多人员使用"shaded jars"方式，即将所有的class文件都打包在一个jar包里面，也就是通常所有的"uber jar"。这种方式下，开发人员很难去判断哪个依赖的文件库是被程序真正使用到的。更普遍的问题是，在不同的jar文件中，如果有相同名称的文件则会冲突。spring boot采用了一种不同的方式，让我们可以直接从命令行启动jar。这也就是spring-boot-loader模块提供的功能。
+为了解决这种问题，很多人员使用"shaded jars"方式，即将所有的class文件都打包在一个jar包里面，也就是通常所有的"uberjar"。这种方式下，开发人员很难去判断哪个依赖的文件库是被程序真正使用到的。更普遍的问题是，在不同的jar文件中，如果有相同名称的文件则会冲突。spring boot采用了一种不同的方式，让我们可以直接从命令行启动jar。这也就是spring-boot-loader模块提供的功能。
 
 这里补充一点，如果你对jar文件或者Manifest不是很清楚的话，可以看这篇文章.
 [java 打包技术之jar文件](/posts/2f7bd7dc/)
 <!-- more -->
-<!-- （这里说明一下，在传统的可执行jar文件中会有/META-INF/MANIFEST.MF文件，这里主要介绍两个属性：Main-Class和classpath，Main-Class是可执行jar的启动类，classpath则可以指定依赖的类库。） -->
+
+这里说明一下，在传统的可执行jar文件中会有/META-INF/MANIFEST.MF文件，这里主要介绍两个属性：Main-Class和classpath，Main-Class是可执行jar的启动类，classpath则可以指定依赖的类库。
 
 ## SpringBoot loader插件提供的可执行文件结构
 
@@ -70,7 +73,7 @@ Build-Jdk: 1.8.0_251
 Main-Class: org.springframework.boot.loader.JarLauncher
 ```
 
-从中可以看得到，它的Main-Class是org.springframework.boot.loader.JarLauncher，即当使用java -jar执行jar包的时候会调用JarLunch的main方法，而不是调用应用本身定义的SpringApplication注解的类。
+从中可以看得到，它的Main-Class是org.springframework.boot.loader.JarLauncher，即当使用`java -jar`执行jar包的时候会调用JarLunch的main方法，而不是调用应用本身定义的SpringApplication注解的类。
 
 从这里应该可以猜测出，Springboot-Loader模块打包出的jar具备可执行能力跟这个类有很大的关系。它是SpringBoot定义的一个工具类，用于执行应用定义的SpringApplication类。相当于SpringBoot Loader提供了一套标准用于执行SpringBoot打包出来的jar。
 
@@ -166,6 +169,7 @@ private static void resetCachedUrlHandlers() {
 ```
 
 查看系统是否注册了指定的URL处理器，如果没有则使用org.springframework.boot.loader.jar.Handler自定义的。这里具体的操作可以看
+
 <!-- TODO:加一篇URL 处理 -->
 
 #### createClassLoader(getClassPathArchives())
@@ -181,6 +185,7 @@ protected boolean isNestedArchive(Archive.Entry entry) {
    }
    return entry.getName().startsWith(BOOT_INF_LIB);
 }
+
 // 这个方法主要用来处理获取Class path，需要满足上面定义的isNestedArchive
 protected List<Archive> getClassPathArchives() throws Exception {
    List<Archive> archives = 

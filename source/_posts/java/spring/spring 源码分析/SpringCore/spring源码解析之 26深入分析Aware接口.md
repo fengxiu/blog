@@ -5,14 +5,14 @@ tags:
 categories:
   - java
   - spring
-
 author: fengxiutianya
 abbrlink: fa9db44e
 date: 2019-01-15 06:38:00
+updated: 2019-01-15 06:38:00
 ---
 我们经过前面的解析，已经知道了如何创建一个bean。但是在在上一篇博客bean的初始化中，说道bean的初始化initializeBean会做以下三件事，分别是：
 
-1. 激活 Aware 方法
+1. 激活Aware方法
 2. 后置处理器的应用
 3. 激活自定义的 init 方法
 
@@ -43,9 +43,9 @@ public interface Aware {
 }
 ```
 
-Aware 接口为 Spring 容器的核心接口，是一个具有标识作用的超级接口，实现了该接口的 bean 是具有被 Spring 容器通知的能力，通知的方式是采用回调的方式。
+Aware 接口为 Spring 容器的核心接口，是一个具有标识作用的超级接口，实现了该接口的bean是具有被 Spring 容器通知的能力，通知的方式是采用回调的方式。
 
-Aware 接口是一个空接口，实际的方法签名由各个子接口来确定，且该接口通常只会有一个接收单参数的 set 方法，该 set 方法的命名方式为 set + 去掉接口名中的 Aware 后缀，即 XxxAware 接口，则方法定义为 setXxx()，例如 BeanNameAware（setBeanName），ApplicationContextAware（setApplicationContext）。
+Aware 接口是一个空接口，实际的方法签名由各个子接口来确定，且该接口通常只会有一个接收单参数的 set 方法，该set方法的命名方式为 set + 去掉接口名中的 Aware 后缀，即 XxxAware 接口，则方法定义为 setXxx()，例如 BeanNameAware（setBeanName），ApplicationContextAware（setApplicationContext）。
 
 在上面的描述中也特别说明了如果仅仅是实现了Aware接口，是没有任何作用。而我们自己如果想实现一个类似于BeanNameAware的接口，就需要以下几个步骤
 

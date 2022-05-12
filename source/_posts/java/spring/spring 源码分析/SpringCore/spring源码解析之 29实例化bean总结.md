@@ -5,14 +5,16 @@ tags:
 categories:
   - java
   - spring
-
 abbrlink: a375b501
 date: 2019-01-15 06:54:00
+updated: 2019-01-15 06:54:00
 ---
-在 Spring bean 解析篇深入分析了一个配置文件经历了哪些过程转变成了 BeanDefinition，但是这个 BeanDefinition 并不是我们真正想要的想要的 bean，因为它还仅仅只是承载了我们需要的目标 bean 的信息，从 BeanDefinition 到我们需要的目标还需要一个漫长的 bean 的初始化阶段，在Spring bean 实例化阶段已经详细分析了初始化 bean 的过程，所以这里做一个概括性的总结。
+在`Spring bean`解析篇深入分析了一个配置文件经历了哪些过程转变成了BeanDefinition，但是这个BeanDefinition并不是我们真正想要的想要的bean，因为它还仅仅只是承载了我们需要的目标bean的信息，从BeanDefinition 到我们需要的目标还需要一个漫长的 bean 的初始化阶段，在Spring bean 实例化阶段已经详细分析了初始化 bean 的过程，所以这里做一个概括性的总结。
 
-bean 的初始化节点由第一次调用 `getBean()`(显式或者隐式)开启，所以我们从这个方法开始。
+bean的初始化节点由第一次调用`getBean()`(显式或者隐式)开启，所以我们从这个方法开始。
+
 <!-- more -->
+
 ```java
 public Object getBean(String name) throws BeansException {
     return doGetBean(name, null, null, false);
@@ -196,18 +198,18 @@ protected <T> T doGetBean(final String name, @Nullable final Class<T> requiredTy
 2. 创建 bean 实例对象
 3. 从 bean 实例中获取对象
 
-## 从缓存中获取 bean
+## 从缓存中获取bean
 
-Spring 中根据 scope 可以将 bean 分为以下几类：singleton、prototype 和 其他，这样分的原因在于 Spring 在对不同 scope 处理的时候是这么处理的。
+Spring中根据scope可以将 bean 分为以下几类：singleton、prototype 和 其他，这样分的原因在于 Spring 在对不同 scope 处理的时候是这么处理的。
 
 - singleton：在 Spring 的 IoC 容器中只存在一个对象实例，所有该对象的引用都共享这个实例。Spring 容器只会创建该 bean 定义的唯一实例，这个实例会被保存到缓存中，并且对该bean的所有后续请求和引用都将返回该缓存中的对象实例。
 - prototype：每次对该bean的请求都会创建一个新的实例
 - 其他：其他包括 request、session、global session：
-  - request：每次 http 请求将会有各自的 bean 实例。
-  - session：在一个 http session 中，一个 bean 定义对应一个 bean 实例。
+  - request：每次http请求将会有各自的bean实例。
+  - session：在一个http session 中，一个bean定义对应一个bean实例。
   - global session：在一个全局的 http session 中，一个 bean 定义对应一个 bean 实例。
 
-所以从缓存中获取的 bean 一定是 singleton bean，这也是 Spring 为何只解决 singleton bean 的循环依赖。调用 `getSingleton()` 从缓存中获取 singleton bean。
+所以从缓存中获取的bean一定是singleton bean，这也是Spring为何只解决singleton bean的循环依赖。调用`getSingleton()`从缓存中获取singleton bean。
 
 ```java
 public Object getSingleton(String beanName) {
