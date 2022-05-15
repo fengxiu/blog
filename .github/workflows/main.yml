@@ -42,15 +42,15 @@ jobs:
         run: |
           npm i -g hexo-cli # 安装hexo
           npm i
-      - name: generate
-        run: |
-          hexo clean && hexo generate && hexo clean
-          git config --global user.name 'fengxiu'
-          git config --global user.email 'fengxiu.zk@alibaba-inc.com'
-          echo  $(date)  > date.txt
-          git add -A 
-          git commit -m "${{ github.event.head_commit.message }}-generate-abbrlink" 
-          git push origin master
+      # - name: generate
+      #   run: |
+      #     hexo clean && hexo generate && hexo clean
+      #     git config --global user.name 'fengxiu'
+      #     git config --global user.email 'fengxiu.zk@alibaba-inc.com'
+      #     echo  $(date)  > date.txt
+      #     git add -A 
+      #     git commit -m "${{ github.event.head_commit.message }}-generate-abbrlink" 
+      #     git push origin master
     # Deploy hexo blog website.
       - name: Deploy
         id: deploy
