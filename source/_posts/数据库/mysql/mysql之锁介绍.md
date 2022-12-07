@@ -40,6 +40,7 @@ select ... LOCK IN SHARE MODE
 SELECT ... FRO UPDATE
 ```
 
+<!-- more -->
 ## 意向锁
 
 意向锁，主要用来判断当前表是否被加锁，不会对修改读取有任何阻塞操作。
