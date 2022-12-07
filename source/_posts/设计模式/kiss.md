@@ -1,5 +1,5 @@
 ---
-title: post
+title: KISS
 date: 2022-12-07 11:16:38
 updated: 2022-12-07 11:16:38
 tags:
@@ -22,6 +22,7 @@ KISS是Keep It Stupid Simple或Keep It Simple，Stupid的缩写
 
 这种代码混乱是开发人员在输入代码时意识到其原始解决方案存在异常情况的结果。如果开发人员进一步分解问题，这些异常情况就会得到解决。
 
+<!-- more -->
 ## 我将如何从KISS中获益
 
 * 您将能够更快地解决更多问题。
