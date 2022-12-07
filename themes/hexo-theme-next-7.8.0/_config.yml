@@ -190,7 +190,7 @@ social:
   #Skype: skype:yourname?call|chat || skype
 
 social_icons:
-  enable: true
+  enable: false
   icons_only: false
   transition: false
 
@@ -383,7 +383,7 @@ reading_progress:
 
 # Bookmark Support
 bookmark:
-  enable: false
+  enable: true
   # Customize the color of the bookmark.
   color: "#222"
   # If auto, save the reading progress when closing the page or clicking the bookmark-icon.
@@ -481,7 +481,7 @@ yandex_site_verification:
 baidu_site_verification:
 
 # Enable baidu push so that the blog will push the url to baidu automatically which is very helpful for SEO.
-baidu_push: false
+baidu_push: true
 
 
 # ---------------------------------------------------------------
@@ -499,7 +499,7 @@ math:
   # Default (true) will load mathjax / katex script on demand.
   # That is it only render those page which has `mathjax: true` in Front-matter.
   # If you set it to false, it will load mathjax / katex srcipt EVERY PAGE.
-  per_page: true
+  per_page: false
 
   # hexo-renderer-pandoc (or hexo-renderer-kramed) required for full MathJax support.
   mathjax:
@@ -569,7 +569,7 @@ comments:
   style: tabs
   # Choose a comment system to be displayed by default.
   # Available values: changyan | disqus | disqusjs | gitalk | livere | valine
-  active:  valine | disqus
+  active:  disqus
   # Setting `true` means remembering the comment system selected by the visitor.
   storage: true
   # Lazyload all comment systems.
@@ -579,9 +579,6 @@ comments:
     disqus:
      text: "评论"
      order: -1
-    valine:
-     text: "评论"
-     order: -2
 
 # Disqus
 disqus:
@@ -603,7 +600,7 @@ disqusjs:
   # api: https://disqus.skk.moe/disqus/
   api:
   apikey: # Register new application from https://disqus.com/api/applications/
-  shortname: # See: https://disqus.com/admin/settings/general/
+  shortname: fengxiu  # See: https://disqus.com/admin/settings/general/
 
 # Changyan
 changyan:
