@@ -2,17 +2,17 @@
 title: 任务
 date: 2019-03-11 02:40:00
 ---
-## 记录接下来要学习的内容
+记录个人学习
 
-### java
+<!-- ### java
 
 1. [Unsafe](https://mp.weixin.qq.com/s/h3MB8p0sEA7VnrMXFq9NBA)
 2. [分布式锁](https://mp.weixin.qq.com/s/y_Uw3P2Ll7wvk_j5Fdlusw)
 3. [JMM](https://www.infoq.cn/profile/1278512)
 4. [MappedByteBuffer VS FileChannel 孰强孰弱](https://juejin.im/post/5cd82323f265da038932b1e6)
 5. [内存相关](https://spongecaptain.cool/SimpleClearFileIO/2.%20DMA%20%E4%B8%8E%E9%9B%B6%E6%8B%B7%E8%B4%9D%E6%8A%80%E6%9C%AF.html)
-5. [堆外内存 之 DirectByteBuffer 详解](https://www.jianshu.com/p/007052ee3773)
-6. [Java NIO epoll bug 以及 Netty 的解决之道](http://songkun.me/2019/07/26/2019-07-26-java-nio-epoll-bug-and-netty-solution/)
+6. [堆外内存 之 DirectByteBuffer 详解](https://www.jianshu.com/p/007052ee3773)
+7. [Java NIO epoll bug 以及 Netty 的解决之道](http://songkun.me/2019/07/26/2019-07-26-java-nio-epoll-bug-and-netty-solution/)
 
 ### JUC
 
@@ -117,4 +117,4 @@ date: 2019-03-11 02:40:00
 1. **查询执行流程和优化**
 
 
-[前端安全系列（二）：如何防止CSRF攻击？](https://tech.meituan.com/2018/10/11/fe-security-csrf.html)
+[前端安全系列（二）：如何防止CSRF攻击？](https://tech.meituan.com/2018/10/11/fe-security-csrf.html) -->
