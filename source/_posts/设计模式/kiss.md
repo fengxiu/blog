@@ -1,11 +1,12 @@
 ---
 title: KISS
+tags:
+  - kiss
+categories:
+  - 设计模式
+abbrlink: 65466
 date: 2022-12-07 11:16:38
 updated: 2022-12-07 11:16:38
-tags:
-    - kiss
-categories:
- - 设计模式
 ---
 
 翻译自<https://people.apache.org/~fhanik/kiss.html>
