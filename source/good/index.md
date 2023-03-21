@@ -11,6 +11,8 @@ date: 2019-03-11 02:40:00
 
 ## java
 
+1. [theadLocal InheritableThreadLocal TransmittableThreadLocal](https://mp.weixin.qq.com/s/a6IGrOtn1mi0r05355L5Ng)
+
 ### 日志
 
 1. [log4j2解析，异步日志](https://bryantchang.github.io/categories/Log4j//)
