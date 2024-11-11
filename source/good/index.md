@@ -22,3 +22,8 @@ date: 2019-03-11 02:40:00
 ### IO
 
 1. [epoll原理讲解](https://www.cnblogs.com/zhiminyu/p/17612577.html)
+
+
+### 文章
+
+1. [如何理解业务系统的复杂性](https://cloud.tencent.com/developer/article/2273369)
