@@ -12,9 +12,11 @@ date: 2019-03-11 02:40:00
 4. [凤凰架构-分布式架构需要的内容，周志明](https://icyfenix.cn/)
 
 
+
 ## java
 
 1. [theadLocal InheritableThreadLocal TransmittableThreadLocal](https://mp.weixin.qq.com/s/a6IGrOtn1mi0r05355L5Ng)
+2. [spring源码](https://www.jianshu.com/u/83d13e631c12)
 
 ### 日志
 
