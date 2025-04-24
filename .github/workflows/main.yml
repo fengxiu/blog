@@ -40,6 +40,8 @@ jobs:
       ## 安装依赖
       - name: Install
         run: |
+          npm config set user 0
+          npm config set unsafe-perm true
           npm i -g hexo-cli --unsafe-perm=true --allow-root # 安装hexo
           # npm i
       
