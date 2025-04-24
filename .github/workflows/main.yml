@@ -42,7 +42,7 @@ jobs:
         run: |
           npm i -g hexo-cli --unsafe-perm=true --allow-root # 安装hexo
           npm i
-      
+  
       # - name: generate
       #   run: |
       #     hexo clean && hexo generate && hexo clean
