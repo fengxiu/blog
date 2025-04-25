@@ -29,10 +29,14 @@ jobs:
             ${{ runner.OS }}-npm-cache
       - name: Install Dependencies
         run: npm install
+        working-directory: ./blog
+
       - name: Build
         run: npm run build
+        working-directory: ./blog
+
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: peaceiris/actions-gh-pages@v3
         with:
           personal_token: ${{ secrets.PERSONAL_TOKEN }}
           publish_dir: ./blog/public
