@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "npm install -g hexo-cli && npm install && hexo clean && hexo s",
-    "deploy": "npm install -g hexo-cli && npm install && hexo clean && hexo generate"
+    "build": "npm install -g hexo-cli && npm install && hexo clean && hexo generate"
   },
   "hexo": {
     "version": "6.1.0"
