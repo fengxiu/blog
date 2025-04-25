@@ -42,5 +42,7 @@ jobs:
           personal_token: ${{ secrets.ACTION_DEPLOY_KEY }}
           publish_dir: ./blog/public
           external_repository: fengxiu/blogpage # 更改为你的 GitHub Pages 仓库, username 是你的用户名
-          publish_branch: main # GitHub Pages 分支
-          
+          publish_branch: master # GitHub Pages 分支
+          user_name: fengxiu  # (or delete this input setting to use bot account)
+          user_email: zhangkefengxiu@gmail.com  # (or delete this input setting to use bot account)
+          commit_message: ${{ github.event.head_commit.message }}
