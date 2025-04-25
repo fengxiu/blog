@@ -9,7 +9,7 @@ date: 2023-03-06 21:36:35
 updated: 2023-03-06 21:36:39
 ---
 
-前面一篇文章多次讲到SPI机制，本篇文章主要介绍下sentinel中使用到的SPI。如果对SPI不太懂，可以参考这篇文章
+前面一篇文章多次讲到SPI机制，本篇文章主要介绍下sentinel中使用到的SPI。如果对SPI不太懂，可以参考这篇文章[SPI]()
 
 在sentinel-core模块的resources资源目录下，有一个 META-INF/services 目录，该目录下定义了sentinel的SPI扩展点，目前有以下三个，同时实现了自定义的SPI加载器SpiLoader，下面的扩展点都是使用这个加载器进行加载。
 
