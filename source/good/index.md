@@ -6,7 +6,7 @@ date: 2019-03-11 02:40:00
 
 ## 好的网站
 
-1. [技术文章摘抄，有不少专辑](https://learn.lianglianglee.com/)
+1. [技术文章摘抄，有不少专辑redis、mysql，架构](https://learn.lianglianglee.com/)
 2. [周志明的架构课](https://learn.lianglianglee.com/%E4%B8%93%E6%A0%8F/%E5%91%A8%E5%BF%97%E6%98%8E%E7%9A%84%E6%9E%B6%E6%9E%84%E8%AF%BE)
 3. [入理解 Sentinel（完）](https://learn.lianglianglee.com/%E4%B8%93%E6%A0%8F/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%20Sentinel%EF%BC%88%E5%AE%8C%EF%BC%89)
 4. [凤凰架构-分布式架构需要的内容，周志明](https://icyfenix.cn/)
